@@ -1,0 +1,102 @@
+.notfound {
+  //   min-height: 80vh;
+  // background-color: tan;
+  margin: 120px 0 20px 0;
+  @include displayCenter(center, center);
+  &__wrapper {
+    text-align: center;
+    h4 {
+      font-size: 50px;
+      // background: var(--neon_background_six);
+      // background-clip: text;
+      // -webkit-text-fill-color: transparent;
+      color: var(--white_pure);
+    }
+    .fluid__wrapper {
+      position: relative;
+
+      h1 {
+        font-size: 150px;
+        color: var(--white_pure);
+        animation: glow 1s ease-in-out infinite alternate;
+      }
+      // .robo_coin_wrapper {
+      //   position: absolute;
+      //   left: 50%;
+      //   top: 65px;
+      //   transform: translate(-50%, -50%);
+      //   width: 96px;
+      //   margin: 0 auto 0 8px;
+      //   .robo_coin {
+      //     @include image(contain);
+      //   }
+      // }
+      // .fluid {
+      //   max-width: 450px;
+      //   margin: auto;
+      //   .fluid__image {
+      //     @include image(contain);
+      //   }
+      // }
+    }
+    button {
+      margin: 30px 0 10px 0;
+      svg {
+        transition: $transition !important;
+        margin-right: 15px;
+        font-size: 20px;
+      }
+      &:hover {
+        color: var(--white_dull) !important;
+        svg {
+          transform: translateX(-5px);
+        }
+      }
+    }
+  }
+
+  @include mQ($sm) {
+    &__wrapper {
+      .fluid__wrapper {
+        h1 {
+          &:before {
+            left: -66px;
+            top: -23px;
+            font-size: 71px;
+          }
+          &:after {
+            left: 33px;
+            top: -23px;
+            font-size: 71px;
+          }
+        }
+        .robo_coin_wrapper {
+          top: 62px;
+          width: 55px;
+          margin: 0 auto 0 6px;
+        }
+      }
+      h4 {
+        font-size: 22px;
+      }
+      button {
+        margin: 10px 0 0 0;
+        padding: 5px 10px;
+        font-size: 9px !important;
+        svg {
+          margin-right: 5px;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+  @include mQ(355px) {
+    &__wrapper {
+      .fluid__wrapper {
+        .robo_coin_wrapper {
+          top: 47px;
+        }
+      }
+    }
+  }
+}

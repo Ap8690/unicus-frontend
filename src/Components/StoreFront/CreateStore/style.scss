@@ -1,0 +1,106 @@
+.create-store{
+  padding: 120px 150px;
+  @media screen and (max-width: 890px) {
+    padding: 120px 25px;
+  }
+  .CreateStoreBtn {
+    float: right;
+  }
+  label {
+    color: var(--text_default_pure);
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 600;
+    margin-top: 0.3rem;
+  }
+
+  input,
+  select {
+    padding: 12px;
+    font-size: 18px;
+    // background: rgba(196, 196, 196, 0.4);
+    background: rgba(196, 196, 196, 0.1);
+    border: 1px solid #0b203e;
+    border-radius: 10px;
+    border-radius: 5px !important;
+    color: var(--text_default_pure) !important;
+  }
+select option {
+  background: var(--theme_bg);
+}
+
+  input::placeholder {
+    font-size: 18px;
+    line-height: 20px;
+    color: var(--text_default_pure);
+    opacity: 0.3;
+  }
+  
+}
+.add_nft {
+  
+  &__right {
+    margin-top: 20px;
+    padding-left: 100px;
+
+    // @include mQ($lg) {
+    //   padding-left: 0px;
+    // }
+
+    // font-family: Poppins;
+    font-style: normal;
+    font-weight: bold;
+
+    
+
+    span {
+      color: #dc3545 !important;
+      font-size: 11px;
+    }
+  }
+
+  // @include mQ($sm) {
+  //   &__left {
+  //     .preview_card {
+  //       padding: 10px;
+  //     }
+  //   }
+  // }
+}
+.logo-sub {
+  font-size: 12px;
+  width: 80%;
+}
+
+.logo-img {
+  width: 400px;
+  height: 300px;
+  @media screen and (max-width: 890px) {
+    width: 300px;
+    height: 220px;
+  }
+}
+.upload-img{
+  position: relative;
+  bottom: 220px;
+  right: 60px;
+  margin-bottom: -120px;
+  transition: 0.2s;
+  &:hover{
+    transform: scale(1.05);
+    transition: 0.2s;
+  }
+   @media screen and (max-width: 890px) {
+       bottom: 160px;
+       right: 18px;
+   }
+}
+.progress-spinner{
+  position: relative;
+  left: 34%;
+  margin-right: -40px;
+  @media screen and (max-width: 890px) {
+    top:20px;
+    left: 37%;
+  }
+}

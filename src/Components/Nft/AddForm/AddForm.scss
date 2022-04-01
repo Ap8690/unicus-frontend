@@ -1,0 +1,102 @@
+.add_nft {
+    padding: 50px 0 0 0;
+    margin-top: 170px;
+
+    &__left {
+        h5 {
+            color: var(--text_default_pure);
+            margin-bottom: 20px;
+        }
+
+        .preview_card {
+            // border: 1px solid var(--white_dull);
+            padding: 30px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+
+            box-shadow: var(--box_shadow_one);
+
+            .prevImg {
+                width: 100%;
+                border-radius: 10px;
+                overflow: hidden;
+                height: 320px;
+                // border: 1px solid var(--white_dull);
+                background: rgba(24, 13, 13, 0.2);
+
+                // background-color: transparent;
+                img {
+                    @include image(cover);
+                    border-radius: 10px;
+                }
+            }
+
+            h6 {
+                margin: 10px 0;
+            }
+        }
+    }
+
+    &__right {
+        margin-top: 20px;
+        padding-left: 100px;
+
+        @include mQ($lg) {
+            padding-left: 0px;
+        }
+
+        // font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+
+        label {
+            color: var(--text_default_pure);
+            font-size: 18px;
+            line-height: 22px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 0.3rem;
+        }
+
+        input,
+        select {
+            padding: 12px;
+            font-size: 18px;
+            // background: rgba(196, 196, 196, 0.4);
+            background: rgba(196, 196, 196, 0.1);
+            border: 1px solid #0b203e;
+            border-radius: 10px;
+            border-radius: 5px !important;
+            color: var(--text_default_pure) !important;
+        }
+
+        input::placeholder {
+            font-size: 18px;
+            line-height: 20px;
+            color: var(--text_default_pure);
+            opacity: 0.3;
+        }
+
+        span {
+            color: #dc3545 !important;
+            font-size: 11px;
+        }
+    }
+
+    @include mQ($sm) {
+        &__left {
+            .preview_card {
+                padding: 10px;
+            }
+        }
+    }
+}
+
+.fileName {
+    font-size: 11px;
+}
+
+.fileNameError {
+    font-size: 11px;
+    color: #dc3545 !important;
+}

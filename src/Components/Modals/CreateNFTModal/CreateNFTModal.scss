@@ -1,0 +1,26 @@
+.success__body.create_nft_modal {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.nftmodal {
+    flex-direction: column;
+    gap: 20px;
+
+    img {
+        max-width: 300px !important;
+        max-height: 300px !important;
+    }
+}
+
+.nftmodal-dialog .modal-dialog{
+    max-width: fit-content;
+}
+
+// .profile_section {
+//     svg {
+//         width: 30px !important;
+//       height: 30px !important;
+//     }
+// }

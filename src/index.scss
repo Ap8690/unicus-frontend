@@ -1,0 +1,417 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import './Styles/config';
+@import './Styles/utils';
+@import './Components/Header/Header';
+@import './Components/Footer/Footer';
+@import './Components/ArrowUp/ArrowUp';
+@import './Pages/NotFound/notFound';
+
+@import './Components/Nft/AddForm/AddForm';
+@import './Components/Nft/CreateNFTBanner/CreateNFTBanner.scss';
+@import './Components/Contact/ContactForm.scss';
+@import './Components/Modals/WalletsPopup/WalletsPopup';
+@import './Components/Modals/CreateNFTModal/CreateNFTModal.scss';
+@import './Components/MarketPlace/NFTCard/NFTCard';
+@import './Components/Portfolio/Dashboard/Dashboard.scss';
+@import './Components/NFTById/NFTById';
+@import './Components/NFTById/NFTByIdCard';
+@import './Components/Artists/Artists.scss';
+@import './Components/StoreFront/CreateStore/style.scss';
+// @import './Components/Storefront/SettingsList/style.scss';
+
+.fix-UI {
+    text-align: left !important;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.forgotpassword {
+    text-decoration: underline;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.background {
+    background: #00d6b3 !important;
+}
+
+.disconnect-wallet {
+    text-align: center;
+    margin-top: -1.5rem;
+}
+
+.navLinks {
+    color: white !important;
+    padding: 0 !important;
+}
+
+.cl-white {
+    color: white !important;
+}
+
+.imageGridBox.flex.items-center {
+    margin-top: 60px;
+}
+
+@media screen and (max-width: 1400px) {
+    // .imageGridBox.flex.items-center {
+    //     display: none;
+    // }
+}
+
+.mb-new {
+    margin-top: 50px !important;
+}
+
+.nft__image img {
+    background: var(--transparent_card_secondary);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+svg {
+    color: var(--white_pure);
+}
+
+.accordionGridOffers {
+    display: grid;
+    height: 70px;
+    place-items: center;
+    // border-bottom: 1px solid whitesmoke;
+    grid-template-columns: 1fr 1fr 1fr !important;
+}
+
+.add_nft .form-control:focus {
+    background-color: var(--search__bar) !important;
+}
+
+select.shadow-none.form-control option {
+    color: black !important;
+}
+
+.nft_banner .wrapper input::placeholder {
+    color: var(--text_default_pure);
+}
+
+.form-control:focus {
+    background-color: inherit !important;
+}
+
+// linear-gradient(113.49deg, #b9cce9 -21.3%, #00398e 38.12%)
+
+.insidecommingNow {
+    display: none;
+}
+
+.commingSoon {
+    &:hover {
+        background-color: #ac6666 !important;
+        border: #ac6666 !important;
+
+        .insidecommingSoon {
+            display: none;
+        }
+
+        .insidecommingNow {
+            display: block;
+        }
+    }
+}
+
+.waiting-for-response {
+    background: #182951;
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 50vh;
+    position: fixed;
+    z-index: 10000;
+    top: 25%;
+    left: 36%;
+    padding: 100px 120px;
+    border-radius: 9px;
+
+    .success__body {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column !important
+    }
+}
+
+.form-control:focus {
+    color: #ffffff !important;
+}
+
+input:focus::-webkit-input-placeholder {
+    color: white;
+}
+
+.form_controll_edit_profile__new:focus {
+    color: var(--text_default_pure) !important;
+}
+
+.form_controll_edit_profile__new:focus::-webkit-input-placeholder {
+    color: inherit !important;
+}
+
+.form__Search__all__header {
+    color: var(--searchInputTextColor) !important;
+}
+
+.form__Search__all__header:focus {
+    color: var(--searchInputTextColor) !important;
+}
+
+.form__Search__all__header:focus::-webkit-input-placeholder {
+    color: inherit !important;
+}
+
+.form__Search__all__header::-webkit-input-placeholder {
+    color: inherit !important;
+}
+
+.form__scroll_down__white::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+
+.gap-20 {
+    gap: 20px !important;
+}
+
+.testingcicd {
+    display: block;
+}
+
+.widthauto {
+    max-width: 700px !important;
+}
+
+.mt-05 {
+    margin-top: -0.5rem;
+}
+
+.auction_card {
+    background: #80828f !important;
+
+    .btn_outlined {
+        border: 2px solid #8c13f1 !important;
+
+        &:hover {
+            background: #8c13f1 !important;
+        }
+    }
+}
+
+.btn-share {
+    display: flex;
+    gap: 10px;
+    --btn-color: #275efe;
+    position: relative;
+    padding: 16px 32px;
+    font-family: Roboto, sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1;
+    color: white;
+    background: none;
+    border: none;
+    outline: none;
+    overflow: hidden;
+    cursor: pointer;
+    filter: drop-shadow(0 2px 8px rgba(#275efe, 0.32));
+
+    &::before {
+        position: absolute;
+        content: "";
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        background: var(--btn-color);
+        border-radius: 24px;
+    }
+}
+
+// @import url('https://fonts.googleapis.com/css?family=Mukta:700');
+
+$bg: #f3f8fa;
+$white: #fff;
+$black: #282936;
+
+@mixin transition($property: all, $duration: 0.45s, $ease: cubic-bezier(0.65, 0, .076, 1)) {
+    transition: $property $duration $ease;
+}
+
+button {
+    &.learn-more {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+        border: 0;
+        vertical-align: middle;
+        text-decoration: none;
+        background: transparent;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+        width: 12rem;
+        height: auto;
+
+        .circle {
+            @include transition(all, 0.45s, cubic-bezier(0.65, 0, .076, 1));
+            position: relative;
+            display: block;
+            margin: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: $black;
+            border-radius: 1.625rem;
+
+            .icon {
+                @include transition(all, 0.45s, cubic-bezier(0.65, 0, .076, 1));
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                margin: auto;
+                background: $white;
+
+                &.arrow {
+                    @include transition(all, 0.45s, cubic-bezier(0.65, 0, .076, 1));
+                    left: 0.625rem;
+                    width: 1.125rem;
+                    height: 0.125rem;
+                    background: none;
+
+                    &::before {
+                        position: absolute;
+                        content: '';
+                        top: -0.25rem;
+                        right: 0.0625rem;
+                        width: 0.625rem;
+                        height: 0.625rem;
+                        border-top: 0.125rem solid #fff;
+                        border-right: 0.125rem solid #fff;
+                        transform: rotate(45deg);
+                    }
+                }
+            }
+        }
+
+        .button-text {
+            @include transition(all, 0.45s, cubic-bezier(0.65, 0, .076, 1));
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 0.75rem 0;
+            margin: 0 0 0 1.85rem;
+            color: $black;
+            font-weight: 700;
+            line-height: 1.6;
+            text-align: center;
+            text-transform: uppercase;
+        }
+    }
+
+    &:hover {
+        .circle {
+            width: -100%;
+
+            .icon {
+                &.arrow {
+                    background: $white;
+                    transform: translate(1rem, 0);
+                }
+            }
+        }
+
+        .button-text {
+            color: $white;
+        }
+    }
+}
+
+.globalModal {
+    position: absolute;
+    background: darkred;
+    left: 15px;
+    right: 0;
+}
+
+.navbar .nav__ .navbar__left .globalModal a {
+    padding: 0 !important;
+}
+
+input.shadow-none.form-control.globalSearch.form-control {
+    color: #fff;
+}
+
+input.shadow-none.form-control.globalSearch.form-control::placeholder {
+    // color: #fff;
+    opacity: 0.4 !important;
+}
+
+input.form-control.shadow-none.input_box::placeholder {
+    color: #fff !important;
+    opacity: 0.4 !important;
+}
+
+p.txt__gray.id {
+    color: white;
+}
+
+.MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+    border: var(--default_border_box);
+    background: var(--secondary_theme);
+}
+
+label#demo-simple-select-label {
+    color: white;
+}
+
+div#demo-simple-select {
+    color: white;
+}
+
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiSelect-icon.MuiSelect-iconOutlined.css-hfutr2-MuiSvgIcon-root-MuiSelect-icon {
+    color: white;
+}
+
+.addNewWallet:hover {
+    cursor: pointer;
+    
+    span {
+        display: inline !important;
+    }
+}
+
+.hover {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.addNewWallet span:before {
+    content: '';
+    border-top: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #ffffffe6;
+    position: absolute;
+    bottom: 10px;
+    left: -1.6%;
+    transform: rotateZ(45deg);
+}
+
+.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+    border: var(--default_border_box);
+}

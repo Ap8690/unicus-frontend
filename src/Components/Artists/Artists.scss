@@ -1,0 +1,76 @@
+.artists_details_wrapper {
+  .artist_card {
+    border-radius: 10px;
+    @include neonEffectModal(10px, var(--neon_background_seven));
+    background: var(--secondary_theme);
+
+    .user_image {
+      width: 200px;
+      height: 200px;
+      margin: auto;
+      @include displayCenter(center, center);
+
+      img {
+        border-radius: 50%;
+        @include image(cover);
+      }
+    }
+  }
+
+  .artist_nfts {
+
+    // margin-top: 100px;
+    h1 {
+      width: fit-content;
+    }
+  }
+
+  @include mQ($sm) {
+    // margin-top: -150px !important;
+  }
+}
+
+.filters {
+  @include displayCenter(center, space-between);
+  overflow-x: scroll;
+  // background-color: red;
+  padding: 20px 0 10px 10px;
+  margin: 0 0 50px 0;
+
+  .filter_wrapper {
+    margin-right: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    p {
+      border-radius: 33px;
+      padding: 5px 25px;
+      @include neonEffectFour(33px);
+      background: var(--secondary_theme);
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.input_box {
+  width:480px !important; 
+}
+
+@media only screen and (max-width:540px) {
+  .input_box {
+    width:360px !important;
+  }
+}
+
+@media only screen and (max-width:420px) {
+  .input_box {
+    width:260px !important;
+  }
+}

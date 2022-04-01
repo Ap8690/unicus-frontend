@@ -1,0 +1,31 @@
+.contact_form {
+  margin-top: 20px;
+  label {
+    color: var(--white_pure);
+  }
+  input,
+  textarea {
+    font-size: 15px;
+    padding: 15px;
+    background-color: black !important;
+    border-radius: 5px !important;
+    border: 0;
+    color: var(--white_pure) !important;
+    @include mQ($sm) {
+      padding: 10px !important;
+    }
+  }
+  span {
+    color: #dc3545 !important;
+    font-size: 11px;
+  }
+  .btn_brand {
+    width: 100%;
+    padding: 15px 10px !important;
+    @include mQ($sm) {
+      padding: 10px !important;
+      margin-top: 10px !important;
+      margin-bottom: 0 !important;
+    }
+  }
+}

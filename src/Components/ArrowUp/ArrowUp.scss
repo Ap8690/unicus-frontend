@@ -1,0 +1,28 @@
+.arrow_up {
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  z-index: 2;
+  border-radius: 5px;
+  @include displayCenter(center, center);
+  background: var(--primary_theme);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  .icon {
+    transition: all 0.3s ease-in-out;
+    color: var(--white_dull);
+    font-size: 28px;
+  }
+  &:hover {
+    box-shadow: var(--btn_box_shadow);
+  }
+  @include mQ($sm) {
+    right: -5px;
+  }
+}
+.hide {
+  display: none;
+}
