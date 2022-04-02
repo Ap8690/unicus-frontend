@@ -90,6 +90,8 @@ import AddAccount from '../../Modals/AddAccount/AddAccount'
 import defaultProfileImage from '../../../Assets/default-profile-image.svg'
 import pen from '../../../Assets/pen.png'
 
+import {getUserWallet} from "../../../Utilities/Util";
+
 const Dashboard = (props: any) => {
     const shareUrl = 'http://github.com'
     const title = 'GitHub'
@@ -245,7 +247,7 @@ const Dashboard = (props: any) => {
     }
 
     async function addAccount() {
-        const account = await web3.eth.getAccounts()
+        const account = getUserWallet()
         console.log(account[0])
         axios
             .get(

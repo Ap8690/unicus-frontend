@@ -57,6 +57,13 @@ import { Cloudinary } from '@cloudinary/url-gen'
 import { getUserInfo } from '../../Redux/Profile/actions'
 import { useDispatch } from 'react-redux'
 
+import {
+    connectWallet,
+    getUserWallet
+} 
+from "../../Utilities/Util";
+
+
 const NFTById = (props: any) => {
     const dispatch = useDispatch()
     const location = useLocation()
@@ -388,10 +395,8 @@ const NFTById = (props: any) => {
                         return null
                     }
                     // await getAccount();
-                    await window.ethereum.request({
-                        method: "eth_requestAccounts",
-                    }).then(async () => {
-                        const accounts = await web3.eth.getAccounts()
+                    connectWallet().then(async () => {
+                        const accounts = getUserWallet()
                         if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                             console.log(accounts[0])
                             const axiosConfig: any = {
@@ -600,10 +605,8 @@ const NFTById = (props: any) => {
                         return null
                     }
                     // await getAccount();
-                    await window.ethereum.request({
-                        method: "eth_requestAccounts",
-                    }).then(async () => {
-                        const accounts = await web3.eth.getAccounts()
+                    connectWallet().then(async () => {
+                        const accounts = getUserWallet()
                         if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                             console.log(accounts[0])
                             const axiosConfig: any = {
@@ -784,10 +787,8 @@ const NFTById = (props: any) => {
                     return null
                 }
 
-                await window.ethereum.request({
-                    method: "eth_requestAccounts",
-                }).then(async () => {
-                    const accounts = await web3.eth.getAccounts()
+                connectWallet().then(async () => {
+                    const accounts = getUserWallet()
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
@@ -959,10 +960,8 @@ const NFTById = (props: any) => {
                     return null
                 }
 
-                await window.ethereum.request({
-                    method: "eth_requestAccounts",
-                }).then(async () => {
-                    const accounts = await web3.eth.getAccounts()
+                connectWallet().then(async () => {
+                    const accounts = getUserWallet()
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
@@ -1129,10 +1128,8 @@ const NFTById = (props: any) => {
                     return null
                 }
 
-                await window.ethereum.request({
-                    method: "eth_requestAccounts",
-                }).then(async () => {
-                    const accounts = await web3.eth.getAccounts()
+                connectWallet().then(async () => {
+                    const accounts = getUserWallet()
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
@@ -1320,10 +1317,8 @@ const NFTById = (props: any) => {
                     return null
                 }
 
-                await window.ethereum.request({
-                    method: "eth_requestAccounts",
-                }).then(async () => {
-                    const accounts = await web3.eth.getAccounts()
+                connectWallet().then(async () => {
+                    const accounts = getUserWallet()
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {

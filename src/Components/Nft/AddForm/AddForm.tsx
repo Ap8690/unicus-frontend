@@ -25,6 +25,12 @@ import MetaMaskNotFound from '../../Modals/MetaMaskNotFound/MetaMaskNotFound'
 import { withRouter } from 'react-router-dom'
 import { bscChain, ethChain, polygonChain } from '../../../config'
 
+// utilities
+import {
+    connectWallet,
+    getUserWallet
+} from "../../../Utilities/Util";
+
 const AddForm = (props: any) => {
     const dispatch = useDispatch()
     // redux State
@@ -93,7 +99,7 @@ const AddForm = (props: any) => {
     const closeMetaMaskModal = () => {
         setMetamaskNotFound(false)
     }
-
+ 
     const stripePayment = async (e: any) => {
         setAddNFTModalOpen(false)
         setNftLoading(true)
@@ -301,7 +307,8 @@ const AddForm = (props: any) => {
             setMetamaskNotFound(true)
             return null
         }
-
+        connectWallet().then(async () => {
+        
         var contractAddress
         if (networkID === bscChain) {
             contractAddress = "0x2f376c69feEC2a4cbb17a001EdB862573898E95a"
@@ -347,15 +354,14 @@ const AddForm = (props: any) => {
             setNftLoading(false)
             setdefaultErrorMessage("File type not supported")
             setdefaultErrorModal(true)
+            return;
         })
         var tokenHash = response.data
         var tokenUri = 'https://unicus.mypinata.cloud/ipfs/' + tokenHash
 
         try {
-            await window.ethereum.request({
-                method: "eth_requestAccounts",
-            }).then(async () => {
-                const accounts = await web3.eth.getAccounts()
+                const accounts = await getUserWallet();
+                console.log("User Account",accounts)
                 if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                     console.log(accounts[0])
                     const axiosConfig: any = {
@@ -462,12 +468,18 @@ const AddForm = (props: any) => {
                 clearValue()
                 props.history.push('/portfolio')
                 window.location.reload()
-            }
-        })
+            }           
         } catch (error) {
             console.log(error)
             setNftLoading(false)
         }
+
+    })
+    .catch((err) => {
+        console.log(err.message);
+        setNftLoading(false)
+                           
+    })
     }
 
     const handlePriceChange = (e: any) => {

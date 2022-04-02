@@ -4,7 +4,7 @@
 //   const finalAdd = `${add1}....${add2}`
 //   return finalAdd
 // }
-
+import web3 from '../web3';
 export const STOREFRONT_URL = "https://unicus-storefront-backend.herokuapp.com";
 
 //export const STOREFRONT_URL = "http://localhost:4000";
@@ -74,4 +74,16 @@ export const getTheTimeDifference = (sec: number) => {
   } else {
     return false
   }
+}
+
+export const connectWallet = async () => {
+  const accounts = await window.ethereum.request({
+    method: "eth_requestAccounts",
+  });
+  return accounts;
+}
+
+export const getUserWallet = async () => {
+  const accounts = await web3.eth.getAccounts();
+  return accounts;
 }

@@ -22,6 +22,10 @@ import { userInfo } from 'os'
 import ViewModal from '../Modals/ViewModal/ViewModal'
 import { bscChain, ethChain, polygonChain } from '../../config'
 // import {getNftType} from '../../../Redux/Profile/actions'
+import {
+    getUserWallet,
+    connectWallet
+} from "../../Utilities/Util";
 
 const NFTCollection = ({ item, transID }: any) => {
     const {
@@ -186,10 +190,8 @@ const NFTCollection = ({ item, transID }: any) => {
                     return null
                 }
 
-                await window.ethereum.request({
-                    method: "eth_requestAccounts",
-                }).then(async () => {
-                    const accounts = await web3.eth.getAccounts()
+                connectWallet().then(async () => {
+                    const accounts = getUserWallet()
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
@@ -392,10 +394,8 @@ const NFTCollection = ({ item, transID }: any) => {
                     return null
                 }
 
-                await window.ethereum.request({
-                    method: "eth_requestAccounts",
-                }).then(async () => {
-                    const accounts = await web3.eth.getAccounts()
+                connectWallet().then(async () => {
+                    const accounts = getUserWallet()
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
