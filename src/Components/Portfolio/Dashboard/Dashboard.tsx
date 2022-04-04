@@ -247,7 +247,7 @@ const Dashboard = (props: any) => {
     }
 
     async function addAccount() {
-        const account = getUserWallet()
+        const account = await getUserWallet();
         console.log(account[0])
         axios
             .get(

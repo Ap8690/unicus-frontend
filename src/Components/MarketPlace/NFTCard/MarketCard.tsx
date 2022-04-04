@@ -12,7 +12,7 @@ import {numberFormate} from '../../../Utilities/Util'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import ViewModal from '../../Modals/ViewModal/ViewModal'
-import { ethChain, polygonChain } from '../../../config'
+import { bscChain, ethChain, polygonChain } from '../../../config'
 // import WalletsPopup from '../../Modals/WalletsPopup/WalletsPopup'
 // import DisConnect from '../../Modals/DisConnect/DisConnect'
 // import {useEffect, useState} from 'react'
@@ -44,11 +44,11 @@ const MarketCard = ({item}: any) => {
   }, [])
 
   useEffect(() => {
-    if(item.chain == 56) {
+    if(item.chain == bscChain) {
       setcontractAddress("0x2f376c69feEC2a4cbb17a001EdB862573898E95a")
-    } else if (item.chain == 1) {
+    } else if (item.chain == ethChain) {
       setcontractAddress("0x424bb7731c056a52b45CBD613Ef08c69c628735f")
-    } else if (item.chain == 137) {
+    } else if (item.chain == polygonChain) {
       setcontractAddress("0x1549EabD2a47762413ee1A11e667E67A5825ff44")
     }
   }, [])
@@ -84,7 +84,7 @@ const MarketCard = ({item}: any) => {
         <div>
         <Link
   to={{
-    pathname: (item.auctionType === "Sale") ? `/sale${item.chain}/${contractAddress}/${item.tokenId}` : `/auction${item.chain}/${contractAddress}/${item.tokenId}`
+    pathname: (item.auctionType === "Sale") ? `/sale/${item.chain}/${contractAddress}/${item.tokenId}` : `/auction/${item.chain}/${contractAddress}/${item.tokenId}`
   }}>
             <button
               onClick={() => dispatch(getNftType(0))}

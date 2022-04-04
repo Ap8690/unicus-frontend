@@ -396,7 +396,7 @@ const NFTById = (props: any) => {
                     }
                     // await getAccount();
                     connectWallet().then(async () => {
-                        const accounts = getUserWallet()
+                        const accounts = await getUserWallet()
                         if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                             console.log(accounts[0])
                             const axiosConfig: any = {
@@ -606,7 +606,7 @@ const NFTById = (props: any) => {
                     }
                     // await getAccount();
                     connectWallet().then(async () => {
-                        const accounts = getUserWallet()
+                        const accounts = await getUserWallet()
                         if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                             console.log(accounts[0])
                             const axiosConfig: any = {
@@ -788,7 +788,7 @@ const NFTById = (props: any) => {
                 }
 
                 connectWallet().then(async () => {
-                    const accounts = getUserWallet()
+                    const accounts = await getUserWallet()
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
@@ -961,7 +961,7 @@ const NFTById = (props: any) => {
                 }
 
                 connectWallet().then(async () => {
-                    const accounts = getUserWallet()
+                    const accounts = await getUserWallet()
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
@@ -1129,7 +1129,7 @@ const NFTById = (props: any) => {
                 }
 
                 connectWallet().then(async () => {
-                    const accounts = getUserWallet()
+                    const accounts = await getUserWallet();
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
@@ -1318,7 +1318,7 @@ const NFTById = (props: any) => {
                 }
 
                 connectWallet().then(async () => {
-                    const accounts = getUserWallet()
+                    const accounts = await getUserWallet()
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
@@ -1502,7 +1502,7 @@ const NFTById = (props: any) => {
                                         }}
                                     >
                                         <div className='flex justify-content-between'>
-                                            <h6>Contact Address</h6>
+                                            <h6>Contract Address</h6>
                                             {price &&
                                                 (price === 'BNB' ? (
                                                     <a href='https://bscscan.com/address/0x2f376c69feEC2a4cbb17a001EdB862573898E95a#code'>
@@ -2495,4 +2495,4 @@ const NFTById = (props: any) => {
     )
 }
 
-export default withRouter(NFTById)
+export default withRouter(NFTById) 

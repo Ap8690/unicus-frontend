@@ -191,7 +191,9 @@ const NFTCollection = ({ item, transID }: any) => {
                 }
 
                 connectWallet().then(async () => {
-                    const accounts = getUserWallet()
+                    const accounts = await getUserWallet()
+                    console.log("acc", accounts[0]);
+                    
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
@@ -395,7 +397,7 @@ const NFTCollection = ({ item, transID }: any) => {
                 }
 
                 connectWallet().then(async () => {
-                    const accounts = getUserWallet()
+                    const accounts = await getUserWallet();
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
                         const axiosConfig: any = {
@@ -504,12 +506,12 @@ const NFTCollection = ({ item, transID }: any) => {
     }
 
     useEffect(() => {
-        if(item.chain == 56) {
-          setcontractAddress("0x2f376c69feEC2a4cbb17a001EdB862573898E95a")
-        } else if (item.chain == 1) {
-          setcontractAddress("0x424bb7731c056a52b45CBD613Ef08c69c628735f")
-        } else if (item.chain == 137) {
-          setcontractAddress("0x1549EabD2a47762413ee1A11e667E67A5825ff44")
+        if (item.chain == bscChain) {
+          setcontractAddress("0x2f376c69feEC2a4cbb17a001EdB862573898E95a");
+        } else if (item.chain == ethChain) {
+          setcontractAddress("0x424bb7731c056a52b45CBD613Ef08c69c628735f");
+        } else if (item.chain == polygonChain) {
+          setcontractAddress("0x1549EabD2a47762413ee1A11e667E67A5825ff44");
         }
     }, [])
 
