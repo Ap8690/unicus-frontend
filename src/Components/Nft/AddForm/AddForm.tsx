@@ -346,16 +346,17 @@ const AddForm = (props: any) => {
         }
         console.log(accessToken)
 
-        const response: any = await axios.post(
-            'https://backend.unicus.one/pinata_upload',
-            formData,
-            axiosConfig
-        ).catch((err: any) => {
-            setNftLoading(false)
-            setdefaultErrorMessage("File type not supported")
-            setdefaultErrorModal(true)
-            return;
-        })
+        const response: any = await axios
+          .post(`${backendUrl}/nft/upload-pinata`, formData, axiosConfig)
+          .catch((err: any) => {
+            setNftLoading(false);
+            setdefaultErrorMessage(err.message);
+            setdefaultErrorModal(true);
+          });
+        if (!response) {
+          setdefaultErrorMessage("Network Error");
+          return;
+        }
         var tokenHash = response.data
         var tokenUri = 'https://unicus.mypinata.cloud/ipfs/' + tokenHash
 
