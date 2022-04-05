@@ -19,7 +19,7 @@ import {auctionAbiP, auctionAddressP} from './Polygon/auction'
 import {PROVIDER} from '../constants'
 import { bscChain, ethChain, polygonChain } from '../../config'
 
-const RPC_URLS = {
+export const RPC_URLS = {
   1: 'https://mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0',
   4: 'https://rinkeby.infura.io/v3/7834b610dbc84b509297a8789ca345e0',
   137: 'https://polygon-mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0',

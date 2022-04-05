@@ -119,49 +119,99 @@ const data = [
     blockExplorerUrls: ['https://bscscan.com/'],
   },
 ]
+//mainnet
+// const bnb = [
+//   {
+//     chainId: bscChainHex,
+//     chainName: 'Binance Smart Chain',
+//     nativeCurrency: {
+//       name: 'BNB',
+//       symbol: 'BNB',
+//       decimals: 18,
+//     },
+//     rpcUrls: ['https://bsc-dataseed.binance.org/'],
+//     blockExplorerUrls: ['https://bscscan.com/'],
+//   },
+// ]
+
+//testnet
 const bnb = [
   {
     chainId: bscChainHex,
-    chainName: 'Binance Smart Chain',
+    chainName: "Binance Testnet",
     nativeCurrency: {
-      name: 'BNB',
-      symbol: 'BNB',
+      name: "BNB",
+      symbol: "BNB",
       decimals: 18,
     },
-    rpcUrls: ['https://bsc-dataseed.binance.org/'],
-    blockExplorerUrls: ['https://bscscan.com/'],
+    rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545"],
+    blockExplorerUrls: ["https://bscscan.com/"],
   },
-]
+];
 
+//mainnet
+// const ethereum = [
+//   {
+//     chainId: ethChainHex,
+//     chainName: 'Ethereum ',
+//     nativeCurrency: {
+//       name: 'ETH',
+//       symbol: 'ETH',
+//       decimals: 18,
+//     },
+//     rpcUrls: ['https://mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0'],
+//     blockExplorerUrls: ['https://etherscan.io/'],
+//   },
+// ]
+
+//testnet
 const ethereum = [
   {
     chainId: ethChainHex,
-    chainName: 'Ethereum ',
+    chainName: "Rinkeby Ethereum Testnet",
     nativeCurrency: {
-      name: 'ETH',
-      symbol: 'ETH',
+      name: "ETH",
+      symbol: "ETH",
       decimals: 18,
     },
-    rpcUrls: ['https://mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0'],
-    blockExplorerUrls: ['https://etherscan.io/'],
+    rpcUrls: ["https://rinkeby.infura.io/v3/7834b610dbc84b509297a8789ca345e0"],
+    blockExplorerUrls: ["https://etherscan.io/"],
   },
-]
+];
 
+//mainnet
+// const polygon = [
+//   {
+//     chainId: polygonChainHex,
+//     chainName: 'Polygon',
+//     nativeCurrency: {
+//       name: 'MATIC',
+//       symbol: 'MATIC',
+//       decimals: 18,
+//     },
+//     rpcUrls: [
+//       'https://polygon-mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0',
+//     ],
+//     blockExplorerUrls: ['https://polygonscan.com/'],
+//   },
+// ]
+
+//testnet
 const polygon = [
   {
     chainId: polygonChainHex,
-    chainName: 'Polygon',
+    chainName: "Polygon Testnet",
     nativeCurrency: {
-      name: 'MATIC',
-      symbol: 'MATIC',
+      name: "MATIC",
+      symbol: "MATIC",
       decimals: 18,
     },
     rpcUrls: [
-      'https://polygon-mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0',
+      "https://polygon-mumbai.infura.io/v3/7834b610dbc84b509297a8789ca345e0",
     ],
-    blockExplorerUrls: ['https://polygonscan.com/'],
+    blockExplorerUrls: ["https://polygonscan.com/"],
   },
-]
+];
 
 // actions
 export const AddNetworks = (network: any) => async (dispatch: any) => {
