@@ -580,7 +580,7 @@ const Header = (props: any) => {
                   {/* {!userInfo &&  */}
                   {Object.keys(props.store).length !== 0 ? (
                     <a
-                      href={`http://${props.store.domain[0]}.unicus.one`}
+                      href={props.store && props.store.domain.length>0? `http://${props.store.domain[0]}.unicus.one`:""}
                       target="_blank"
                     >
                       <Button
