@@ -10,7 +10,7 @@ const CreateNft = (props: any) => {
   useEffect(() => {
     console.log(userInfo.length > 0 && localStorage.getItem("userInfo"))
     if (!(userInfo.length > 0) && !localStorage.getItem("userInfo")) {
-      props.history.push('/market-place')
+      props.history.push('/')
     }
   }, [userInfo, localStorage.getItem("userInfo")])
   

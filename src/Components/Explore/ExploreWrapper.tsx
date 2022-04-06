@@ -67,7 +67,7 @@ const ExploreWrapper = (props: any) => {
                 else{
                     console.log("store 1");
                     
-                    history.push("/market-place");
+                    history.push("/");
                 }
               })
               .catch((err) => {

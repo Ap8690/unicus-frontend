@@ -186,7 +186,7 @@ const Dashboard = (props: any) => {
             .then((res: any) => {
                 console.log(res.data)
                 dispatch(getUserInfo(res.data))
-                localStorage.setItem('userInfo', res.data)
+                localStorage.setItem('userInfo', JSON.stringify(res.data))
             })
     }
 

@@ -62,7 +62,7 @@ const Header = (props: any) => {
     const [defaultErrorModal, setdefaultErrorModal] = useState<any>(false)
     const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>('')
     const [globalSearch, setglobalSearch] = useState<any>('')
-    const [redirectUrl,setRedirectUrl] = useState("/market-place")
+    const [redirectUrl,setRedirectUrl] = useState("/")
     const [storeRegistration, setStoreRegistration] = useState(false);
 
     const handledefaultErrorModal = () => {
@@ -74,8 +74,7 @@ const Header = (props: any) => {
             if (event.target.name !== 'title') {
                 setglobalModalPopup(false)
             }
-        })
-        
+        })        
     }, [])
 
     const handleGlobalSearch = (e: any) => {
@@ -206,6 +205,8 @@ const Header = (props: any) => {
         dispatch(getMetamaskProvider())
         const userInfo: any = localStorage.getItem('userInfo')
         const accessToken = localStorage.getItem('accessToken')
+        console.log("us00", userInfo);
+        
         if (userInfo) {
             dispatch(getUserInfo(JSON.parse(userInfo)))
         }
@@ -238,7 +239,7 @@ const Header = (props: any) => {
 
     useEffect(() => {
         if (
-            pathname === '/' ||
+            pathname === '/info' ||
             pathname === '/login' ||
             pathname === '/about' ||
             pathname === '/community' ||
@@ -320,7 +321,7 @@ const Header = (props: any) => {
                       Home
                     </span>
                   </a>
-                  <LinkContainer to="/market-place">
+                  <LinkContainer to="/">
                     <Nav.Link>
                       <span
                         style={{
@@ -579,7 +580,7 @@ const Header = (props: any) => {
                   {/* {!userInfo &&  */}
                   {Object.keys(props.store).length !== 0 ? (
                     <a
-                      href={`http://${props.store.domain}.unicus.one`}
+                      href={`http://${props.store.domain[0]}.unicus.one`}
                       target="_blank"
                     >
                       <Button

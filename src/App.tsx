@@ -29,7 +29,7 @@ import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 
 const Redirected = () => {
-    return <Redirect to="/market-place" />
+    return <Redirect to="/" />
 }
 
 function App() {
@@ -65,20 +65,15 @@ function App() {
     return (
       <div className="app">
         <Router>
-          <Header store={store}/>
+          <Header store={store} />
           <ToastContainer limit={3} />
           <Switch>
-            <Route path="/market-place" component={Explore} />
-            <Route path="/" component={Redirected} exact={true} />
-            {/* <Route path='/explore' component={Explore} /> */}
+            <Route path="/" exact={true} component={Explore} />
             <Route path="/create-multiple-nft" component={CreateMultipleNft} />
             <Route path="/login/:token/:email" component={Explore} />
             <Route path="/collections" component={Collections} />
             <Route path="/login/:token/:email/:store" component={Explore} />
-            <Route
-                        path='/reset-password/:token/:email'
-                        component={Explore}
-                    />
+            <Route path="/reset-password/:token/:email" component={Explore} />
             <Route
               path="/create-store"
               render={() => {

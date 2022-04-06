@@ -46,6 +46,8 @@ const WalletsPopup = (props: any) => {
 
     const connectToMetaMask = async () => {
         if (metaMaskProvider) {
+          console.log("web3", await web3.eth.getAccounts());
+          
             await web3.eth.getAccounts().then((walletAddress) => {
                 axios
                     .post(`${backendUrl}/auth/login`, {
@@ -71,10 +73,11 @@ const WalletsPopup = (props: any) => {
                     })
                     .catch((err: any) => {
                         if (!walletAddress[0]) {
-                            setdefaultErrorMessage(
-                                'Login your Metamask Account'
-                            )
-                            setdefaultErrorModal(true)
+                            dispatch(connToMetaMask());
+                            // setdefaultErrorMessage(
+                            //     'Login your Metamask Account'
+                            // )
+                            // setdefaultErrorModal(true)
                         } else if (
                             err.response &&
                             err.response.data.msg.includes(

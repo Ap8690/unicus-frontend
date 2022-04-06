@@ -12,6 +12,7 @@ export const mintNFTE = "0x9529eB4956EC7a33C12980a62c4D8135f7Ca1887"
 // export const polygonChainHex = "0x89"
 // export const backendUrl = "https://nft-backend.unicus.one"
 export const backendUrl = "https://unicus-backend-qa.herokuapp.com";
+// export const backendUrl = "http://localhost:4000";
 
 // testnet
 export const bscChain = "97"

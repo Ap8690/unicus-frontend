@@ -47,7 +47,7 @@ const CreateStore = (store) => {
 
   useEffect(() => {
     if (Object.keys(store).length !== 0) {
-      history.replace("/market-place");
+      history.replace("/");
       return;
     }
   }, [store]);
@@ -114,7 +114,7 @@ const CreateStore = (store) => {
           toast("Redirecting to your store");
         }, 1000);
         setTimeout(function(){
-        history.push("/market-place")
+        history.push("/")
         window.open(
           `http://${res.data.createStore.domain}.unicus.one/my-store/general`,
           " _blank"

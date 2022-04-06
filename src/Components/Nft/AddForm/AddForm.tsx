@@ -457,6 +457,7 @@ const AddForm = (props: any) => {
                         console.log(res.data)
                     })
                     .catch((err: any) => {
+                        console.log(err);
                         setNftLoading(false)
                         setdefaultErrorMessage("Collection name already exists")
                         setdefaultErrorModal(true)

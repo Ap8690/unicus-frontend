@@ -44,7 +44,7 @@ const LoginPopUp = (props: any) => {
 
                 props.LoginPopUpClose();
                 if (props.location.pathname.includes("login")) {
-                  props.history.push("/market-place");
+                  props.history.push("/");
                 }
                 else{
                     props.history.push(props.redirectUrl)
@@ -60,7 +60,7 @@ const LoginPopUp = (props: any) => {
     function closeRedirect() {
         props.LoginPopUpClose()
         if(props.location.pathname.includes('login')) {
-            props.history.push('/market-place')
+            props.history.push('/')
         }
     }
 
