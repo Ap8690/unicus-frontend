@@ -415,3 +415,10 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiSelect-icon.MuiSelect-iconOutli
 .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
     border: var(--default_border_box);
 }
+
+.not-found-message {
+    height: 175px;
+    @include displayCenter(center,center);
+    font-size: 20px;
+    font-style: italic;
+}

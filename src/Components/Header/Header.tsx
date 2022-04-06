@@ -321,7 +321,7 @@ const Header = (props: any) => {
                       Home
                     </span>
                   </a>
-                  <LinkContainer to="/">
+                  <LinkContainer to="/" activeClassName="">
                     <Nav.Link>
                       <span
                         style={{
