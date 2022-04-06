@@ -468,7 +468,7 @@ const AddForm = (props: any) => {
                 setNftLoading(false)
                 setNftSuccess(true)
                 clearValue()
-                // props.history.push('/portfolio')
+                props.history.push('/portfolio')
                 // window.location.reload()
             }           
         } catch (error) {
