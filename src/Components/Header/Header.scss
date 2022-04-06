@@ -86,7 +86,7 @@
     //   }
     // }
     .active {
-        color: red !important;
+        color: var(--text_default_pure) !important;
         font-weight: 700 !important;
     }
 
