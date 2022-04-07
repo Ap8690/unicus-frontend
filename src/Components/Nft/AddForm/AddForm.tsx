@@ -264,7 +264,7 @@ const AddForm = (props: any) => {
 
                                 await axios
                                     .post(
-                                        `${backendUrl}/nft`,
+                                        `${backendUrl}/nft/create`,
                                         newObject,
                                         newaxiosConfig
                                     )
@@ -449,7 +449,7 @@ const AddForm = (props: any) => {
 
                 await axios
                     .post(
-                        `${backendUrl}/nft`,
+                        `${backendUrl}/nft/create`,
                         newObject,
                         newaxiosConfig
                     )
