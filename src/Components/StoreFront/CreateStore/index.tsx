@@ -107,8 +107,8 @@ const CreateStore = (store) => {
           `${STOREFRONT_URL}/store/create`,
           {store: generals, user: userInfo}, axiosConfig
         );
+      setLoading(false);      
       if (res) {  
-        setLoading(false);      
         toast.success("Store Created");
         setTimeout(function () {
           toast("Redirecting to your store");
