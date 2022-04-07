@@ -11,9 +11,18 @@ export const bscChainHex = "0x38"
 export const ethChainHex = "0x1"
 export const polygonChainHex = "0x89"
 // export const backendUrl = "https://nft-backend.unicus.one"
-export const backendUrl = "https://unicus-storefront-backend.herokuapp.com";
+// export const backendUrl = "https://unicus-storefront-backend.herokuapp.com";
 // export const backendUrl = "http://localhost:4000";
-
+export const backendUrl =
+  process.env.REACT_APP_ENV === "local"
+    ? "http://localhost:4000"
+    : process.env.REACT_APP_ENV === "development"
+    ? "https://unicus-storefront-backend-test.herokuapp.com"
+    : process.env.REACT_APP_ENV === "staging"
+    ? "https://unicus-storefront-backend-qa.herokuapp.com"
+    : process.env.REACT_APP_ENV === "demo"
+    ? "https://unicus-storefront-backend-demo.herokuapp.com"
+    : "https://unicus-storefront-backend.herokuapp.com";
 // testnet
 // export const bscChain = "97"
 // export const ethChain = "4"
