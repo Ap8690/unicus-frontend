@@ -11,8 +11,8 @@ export const bscChainHex = "0x38"
 export const ethChainHex = "0x1"
 export const polygonChainHex = "0x89"
 // export const backendUrl = "https://nft-backend.unicus.one"
-// export const backendUrl = "https://unicus-backend-qa.herokuapp.com";
-export const backendUrl = "http://localhost:4000";
+export const backendUrl = "https://unicus-storefront-backend-qa.herokuapp.com";
+// export const backendUrl = "http://localhost:4000";
 
 // testnet
 // export const bscChain = "97"

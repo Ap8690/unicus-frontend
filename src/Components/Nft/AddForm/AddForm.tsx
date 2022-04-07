@@ -264,7 +264,7 @@ const AddForm = (props: any) => {
 
                                 await axios
                                     .post(
-                                        `${backendUrl}/nft`,
+                                        `${backendUrl}/nft/create`,
                                         newObject,
                                         newaxiosConfig
                                     )
@@ -449,7 +449,7 @@ const AddForm = (props: any) => {
 
                 await axios
                     .post(
-                        `${backendUrl}/nft`,
+                        `${backendUrl}/nft/create`,
                         newObject,
                         newaxiosConfig
                     )
@@ -469,7 +469,7 @@ const AddForm = (props: any) => {
                 setNftSuccess(true)
                 clearValue()
                 props.history.push('/portfolio')
-                window.location.reload()
+                // window.location.reload()
             }           
         } catch (error) {
             console.log(error)

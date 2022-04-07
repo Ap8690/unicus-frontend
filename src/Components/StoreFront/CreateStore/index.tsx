@@ -107,8 +107,8 @@ const CreateStore = (store) => {
           `${STOREFRONT_URL}/store/create`,
           {store: generals, user: userInfo}, axiosConfig
         );
+      setLoading(false);      
       if (res) {  
-        setLoading(false);      
         toast.success("Store Created");
         setTimeout(function () {
           toast("Redirecting to your store");
@@ -116,7 +116,7 @@ const CreateStore = (store) => {
         setTimeout(function(){
         history.push("/")
         window.open(
-          `http://${res.data.createStore.domain}.unicus.one/my-store/general`,
+          `http://${res.data.createStore.domain}/my-store/general`,
           " _blank"
         );
       }, 3000)
@@ -125,6 +125,7 @@ const CreateStore = (store) => {
       }
     } catch (err) {
       console.log("err", err.message, err.response);
+      setLoading(false);      
       if (err.response) {
         if (err.response.status == 401){
           toast.error("Login expired. Please Login again.");
