@@ -125,6 +125,7 @@ const CreateStore = (store) => {
       }
     } catch (err) {
       console.log("err", err.message, err.response);
+      setLoading(false);      
       if (err.response) {
         if (err.response.status == 401){
           toast.error("Login expired. Please Login again.");
