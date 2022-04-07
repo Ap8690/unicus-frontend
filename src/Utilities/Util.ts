@@ -5,10 +5,19 @@
 //   return finalAdd
 // }
 import web3 from '../web3';
-export const STOREFRONT_URL = "https://unicus-storefront-backend-qa.herokuapp.com";
+// export const STOREFRONT_URL = "https://unicus-storefront-backend-qa.herokuapp.com";
 
-//export const STOREFRONT_URL = "http://localhost:4000";
-
+export const STOREFRONT_URL =
+  process.env.REACT_APP_ENV === "local"
+    ? "http://localhost:4000"
+    : process.env.REACT_APP_ENV === "development"
+    ? "https://unicus-storefront-backend-test.herokuapp.com"
+    : process.env.REACT_APP_ENV === "staging"
+    ? "https://unicus-storefront-backend-qa.herokuapp.com"
+    : process.env.REACT_APP_ENV === "demo"
+    ? "https://unicus-storefront-backend-demo.herokuapp.com"
+    : "https://unicus-storefront-backend.herokuapp.com";
+    
 export const numberFormate = (number: number | string) => {
   return Number(number)?.toLocaleString(navigator.language, {
     minimumFractionDigits: 10,
