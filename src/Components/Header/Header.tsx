@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { NavLink } from "react-router-dom";
 import {
     Container,
     Nav,
@@ -321,8 +322,8 @@ const Header = (props: any) => {
                       Home
                     </span>
                   </a>
-                  <LinkContainer to="/">
-                    <Nav.Link>
+                  {/* <LinkContainer to="/"> */}
+                    <Nav.Link as={NavLink} exact to="/">
                       <span
                         style={{
                           color: showScroll ? "#fff" : "",
@@ -331,7 +332,7 @@ const Header = (props: any) => {
                         Explore
                       </span>
                     </Nav.Link>
-                  </LinkContainer>
+                  {/* </LinkContainer> */}
                   {/* <LinkContainer to="/collections">
                     <Nav.Link>
                       <span
@@ -345,8 +346,8 @@ const Header = (props: any) => {
                   </LinkContainer> */}
                   {header ? (
                     <>
-                      <LinkContainer to="/about">
-                        <Nav.Link>
+                      {/* <LinkContainer to="/about"> */}
+                        <Nav.Link as={NavLink} exact to="/about">
                           <span
                             style={{
                               color: showScroll ? "#fff" : "",
@@ -355,9 +356,9 @@ const Header = (props: any) => {
                             About
                           </span>
                         </Nav.Link>
-                      </LinkContainer>
-                      <LinkContainer to="/community">
-                        <Nav.Link>
+                      {/* </LinkContainer> */}
+                      {/* <LinkContainer to="/community"> */}
+                        <Nav.Link as={NavLink} exact to="/community">
                           <span
                             style={{
                               color: showScroll ? "#fff" : "",
@@ -366,9 +367,9 @@ const Header = (props: any) => {
                             Community
                           </span>
                         </Nav.Link>
-                      </LinkContainer>
-                      <LinkContainer to="/token">
-                        <Nav.Link>
+                      {/* </LinkContainer> */}
+                      {/* <LinkContainer to="/token"> */}
+                        <Nav.Link as={NavLink} exact to="/token">
                           <span
                             style={{
                               color: showScroll ? "#fff" : "",
@@ -377,7 +378,7 @@ const Header = (props: any) => {
                             Unicus Token
                           </span>
                         </Nav.Link>
-                      </LinkContainer>
+                      {/* </LinkContainer> */}
                     </>
                   ) : (
                     <>
@@ -392,9 +393,8 @@ const Header = (props: any) => {
                           </span>
                         </Nav.Link>
                       ) : (
-                        <LinkContainer to="/create-nft">
-                          {/* <Nav.Link onClick={() => setCreateNFTModalOpen(true)}>Create NFT</Nav.Link> */}
-                          <Nav.Link>
+                        
+                          <Nav.Link as={NavLink} exact to="/create-nft">
                             <span
                               style={{
                                 color: showScroll ? "#fff" : "",
@@ -403,10 +403,9 @@ const Header = (props: any) => {
                               Create NFT
                             </span>
                           </Nav.Link>
-                        </LinkContainer>
                       )}
-                      <LinkContainer to="/auctions">
-                        <Nav.Link>
+                      {/* <LinkContainer to="/auctions"> */}
+                        <Nav.Link as={NavLink} exact to="/auctions">
                           <span
                             style={{
                               color: showScroll ? "#fff" : "",
@@ -415,9 +414,9 @@ const Header = (props: any) => {
                             Auctions
                           </span>
                         </Nav.Link>
-                      </LinkContainer>
-                      <LinkContainer to="/artists">
-                        <Nav.Link>
+                      {/* </LinkContainer> */}
+                      {/* <LinkContainer to="/artists"> */}
+                        <Nav.Link as={NavLink} exact to="/artists">
                           <span
                             style={{
                               color: showScroll ? "#fff" : "",
@@ -426,7 +425,7 @@ const Header = (props: any) => {
                             Artists
                           </span>
                         </Nav.Link>
-                      </LinkContainer>
+                      {/* </LinkContainer> */}
                     </>
                   )}
                   <form
