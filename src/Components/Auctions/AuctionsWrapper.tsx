@@ -106,7 +106,7 @@ const AuctionsWrapper = () => {
                             className="filter_wrapper"
                             onClick={(event) => {
                                 event.preventDefault();
-                                setCategory("all");
+                                setCategory("All");
                             }}
                         >
                             <p>All</p>
