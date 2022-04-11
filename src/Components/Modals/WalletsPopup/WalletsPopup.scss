@@ -270,6 +270,10 @@
         h4 {
             font-size: 20px;
             overflow: hidden;
+            .sub-heading {
+                font-size:12px;
+                font-weight: 400;
+            }
         }
 
         @include mQ($sm) {

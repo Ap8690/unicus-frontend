@@ -11,6 +11,7 @@ import { backendUrl } from "../../../config";
 import NFTCreateLoading from "../../Modals/NFTCreateLoading/NFTCreateLoading";
 import NFTCreateSuccess from "../../Modals/NFTCreateSuccess/NFTCreateSuccess";
 import DefaultModal from "../../Modals/DefaultModal/DefaultModal";
+import AiFillDelete from "../../../Assets/react-icons/AiFillDelete.svg";
 // import {setTimeout} from 'timers'
 import axios from "axios";
 import getContracts from "../../../Redux/Blockchain/contracts";
@@ -487,10 +488,15 @@ const AddForm = (props: any) => {
                                     "Collection name already exists"
                                 );
                                 setdefaultErrorModal(true);
-                                
+
                                 if (err && err.response) {
-                                    console.log("err.message ", err.response.data.msg);
-                                    setdefaultErrorMessage(err.response.data.msg);
+                                    console.log(
+                                        "err.message ",
+                                        err.response.data.msg
+                                    );
+                                    setdefaultErrorMessage(
+                                        err.response.data.msg
+                                    );
                                     setdefaultErrorModal(true);
                                 }
                                 setNftLoading(false);
@@ -718,6 +724,26 @@ const AddForm = (props: any) => {
                                     >
                                         Add Attributes
                                     </a>
+                                    <div className="d-flex">
+                                        {inputFieldsList &&
+                                            inputFieldsList.map((item, idx) => {
+                                                return (
+                                                    <>
+                                                        <p className="me-2 mt-2">{item && (item.propertyName || item.propertyType) && `${idx + 1}.`}</p>
+                                                        <p className="me-2 mt-2">
+                                                            {
+                                                                item.propertyName &&
+                                                                `Name: ${item.propertyName}`}{" "}
+                                                        </p>
+                                                        <p className="me-2 mt-2">
+                                                            {
+                                                                item.propertyType &&
+                                                                `Type: ${item.propertyType}`}
+                                                        </p>
+                                                    </>
+                                                );
+                                            })}
+                                    </div>
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">

@@ -96,7 +96,7 @@ const WalletsPopup = (props: any) => {
                       ) {
                           setdefaultErrorMessage(err.response.data.msg);
                           setdefaultErrorModal(true);
-                      } else if(err.response && err.response.data.msg.includes("Please Register or add your wallet to your account first")) {
+                      } else if(err.response && err.response.data.msg.includes("Please Register or Login then add your wallet to your account first to use metamask login.")) {
                         console.log(err.response.data.msg)
                         setdefaultErrorMessage(err.response.data.msg);
                           setdefaultErrorModal(true);
@@ -202,6 +202,13 @@ const WalletsPopup = (props: any) => {
                         </div>
                     </div>
                     <div className="success__body mb-4">
+                      <div className="wallet" onClick={RegisterPopUpShowFunc}>
+                            <h5>
+                                {props.storeRegistration
+                                    ? "Store Manager Registration"
+                                    : "First Time? Register"}
+                            </h5>
+                        </div>
                         <div className="wallet" onClick={LoginPopUpShowFunc}>
                             <h5>
                                 {props.storeRegistration
@@ -209,17 +216,11 @@ const WalletsPopup = (props: any) => {
                                     : "Login"}
                             </h5>
                         </div>
-                        <div className="wallet" onClick={RegisterPopUpShowFunc}>
-                            <h5>
-                                {props.storeRegistration
-                                    ? "Store Manager Registration"
-                                    : "Register"}
-                            </h5>
-                        </div>
+                        
                     </div>
                     <div className="buy__cpt__header">
                         <div className="buy__cpt__header__tile mb-3">
-                            <h4>Connect Using Wallet</h4>
+                            <h4>Connect Using Wallet<br/><span className="sub-heading">(use Address only which is already linked to your account)</span></h4>
                         </div>
                         <div
                             className="buy__cpt__header__close"
