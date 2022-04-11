@@ -269,6 +269,7 @@
 
         h4 {
             font-size: 20px;
+            overflow: hidden;
         }
 
         @include mQ($sm) {

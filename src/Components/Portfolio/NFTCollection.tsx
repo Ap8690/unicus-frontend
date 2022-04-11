@@ -505,6 +505,8 @@ const NFTCollection = ({ item, transID }: any) => {
         }
     }
 
+    
+
     useEffect(() => {
         if (item.chain == bscChain) {
           setcontractAddress("0x2f376c69feEC2a4cbb17a001EdB862573898E95a");
@@ -562,7 +564,7 @@ const NFTCollection = ({ item, transID }: any) => {
                         </div>
                     ) : (
                         <div className='d-flex align-items-center justify-content-between gap-20'>
-                            <button className='btn_brand btn_outlined'>
+                            <button className='btn_brand btn_outlined' onClick={() => console.log("AA")}>
                                 <BsFillHandbagFill />
                                 End Auction
                             </button>

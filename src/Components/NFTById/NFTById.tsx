@@ -167,8 +167,7 @@ const NFTById = (props: any) => {
                 .then(async (res: any) => {
                     setauctionInfo(res.data[0])
                     await axios
-                        .get(`${backendUrl}/nft/getNftById/${res.data[0].tokenId}/${JSON.parse(localStorage.getItem("userInfo")) ? JSON.parse(localStorage.getItem("userInfo"))._id
- : "none"}/${location.pathname.split("/")[2]}`)
+                        .get(`${backendUrl}/nft/getNftById/${res.data[0].tokenId}/${JSON.parse(localStorage.getItem("userInfo")) ? JSON.parse(localStorage.getItem("userInfo"))._id : "none"}/${location.pathname.split("/")[2]}`)
                         .then(async (res: any) => {
                             setnftInfo(res.data.nft)
                             console.log(sessionStorage.getItem(res.data.nft._id), sessionStorage.getItem(res.data.nft._id) === 'true')
@@ -191,8 +190,7 @@ const NFTById = (props: any) => {
                 .get(
                     `${backendUrl}/nft/getNftById/${location.pathname
                         .split('/')
-                        .pop()}/${JSON.parse(localStorage.getItem("userInfo")) ? JSON.parse(localStorage.getItem("userInfo"))._id
- : "none"}/${location.pathname.split("/")[2]}`
+                        .pop()}/${JSON.parse(localStorage.getItem("userInfo")) ? JSON.parse(localStorage.getItem("userInfo"))._id : "none"}/${location.pathname.split("/")[2]}`
                 )
                 .then(async (res: any) => {
                     setnftInfo(res.data.nft)
@@ -857,16 +855,16 @@ const NFTById = (props: any) => {
         try {
             setNftLoading(true)
             setdisableButton(true)
-            if (nowDate < endDate) {
-                setNftLoading(false)
-                console.log(nowDate, endDate)
-                console.log(nowDate > endDate)
-                setdisableButton(false)
-                setdefaultErrorMessage("Auction Not Ended Yet")
-                setdefaultErrorModal(true)
-                return console.log('Auction Not ended Yet')
-            }
-            var token
+            // if (nowDate < endDate) {
+            //     setNftLoading(false)
+            //     console.log(nowDate, endDate)
+            //     console.log(nowDate > endDate)
+            //     setdisableButton(false)
+            //     setdefaultErrorMessage("Auction Not Ended Yet")
+            //     setdefaultErrorModal(true)
+            //     return console.log('Auction Not ended Yet')
+            // }
+            var token;
             if (networkID === bscChain) {
                 token = 'BNB'
             } else if (networkID === ethChain) {
@@ -960,7 +958,8 @@ const NFTById = (props: any) => {
                     return null
                 }
 
-                connectWallet().then(async () => {
+                connectWallet()
+                .then(async () => {
                     const accounts = await getUserWallet()
                     if(userInfo.wallets.length === 0 || !userInfo.wallets.includes(accounts[0])) {
                         console.log(accounts[0])
@@ -989,34 +988,41 @@ const NFTById = (props: any) => {
                                 throw "Wallet already in use"
                             })
                     }
-                const res = await auction.methods
-                    .endAuction(auctionInfo.auctionId)
-                    .send({ from: accounts[0] })
-                if (res?.transactionHash) {
-                    axios
-                        .post(
-                            `${backendUrl}/auction/end`,
-                            {
-                                nftId: auctionInfo.nftId,
-                                name: auctionInfo.name,
-                                auctionId: auctionInfo._id,
-                                userInfo: userInfo.username,
-                                endAuctionHash: res.transactionHash,
-                            },
-                            axiosConfig
-                        )
-                        .then((res) => {
-                            console.log(res.data)
-                        })
+                    const res = await auction.methods
+                        .endAuction(auctionInfo.auctionId)
+                        .send({ from: accounts[0] })
+                    if (res?.transactionHash) {
+                        axios
+                            .post(
+                                `${backendUrl}/auction/end`,
+                                {
+                                    nftId: auctionInfo.nftId,
+                                    name: auctionInfo.name,
+                                    auctionId: auctionInfo._id,
+                                    userInfo: userInfo.username,
+                                    endAuctionHash: res.transactionHash,
+                                },
+                                axiosConfig
+                            )
+                            .then((res) => {
+                                console.log(res.data)
+                            })
+                        setNftLoading(false)
+                        setdisableButton(false)
+                        setNftSuccess(true)
+                        setHash(res?.transactionHash)
+                        setSuccessTitle('NFT Auction Ended')
+                        props.history.push('/portfolio')
+                        window.location.reload()
+                    }
+                })
+                .catch((walletError) => {
                     setNftLoading(false)
                     setdisableButton(false)
-                    setNftSuccess(true)
-                    setHash(res?.transactionHash)
-                    setSuccessTitle('NFT Auction Ended')
-                    props.history.push('/portfolio')
-                    window.location.reload()
-                }
-            })
+                    setdefaultErrorMessage(walletError.message)
+                    setdefaultErrorModal(true)
+                    throw walletError
+                });
             }
         } catch (error) {
             console.log(error)
