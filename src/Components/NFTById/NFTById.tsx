@@ -1443,6 +1443,12 @@ const NFTById = (props: any) => {
                                                         </div>
                                                     )
                                                 })}
+                                                
+                                                {
+                                                    nftInfo &&
+                                                    nftInfo.tokenId &&
+                                                    (`Token ID: ${nftInfo.tokenId}`)
+                                                }
                                         </div>
                                     </AccordionDetails>
                                 </Accordion>
