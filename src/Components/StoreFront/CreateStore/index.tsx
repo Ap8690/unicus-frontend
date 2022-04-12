@@ -116,7 +116,7 @@ const CreateStore = (store) => {
         setTimeout(function(){
         history.push("/")
         window.open(
-          `http://${res.data.createStore.domain}/my-store/general`,
+          `https://${res.data.createStore.domain}/my-store/general`,
           " _blank"
         );
       }, 3000)
