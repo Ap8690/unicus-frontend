@@ -5,7 +5,9 @@
 //   return finalAdd
 // }
 import web3 from '../web3';
-// export const STOREFRONT_URL = "https://unicus-storefront-backend-qa.herokuapp.com";
+
+ 
+//export const STOREFRONT_URL = "http://localhost:4000";
 
 export const STOREFRONT_URL =
   process.env.REACT_APP_ENV === "local"
