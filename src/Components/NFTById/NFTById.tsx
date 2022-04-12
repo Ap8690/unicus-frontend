@@ -872,185 +872,6 @@ const NFTById = (props: any) => {
                     return null;
                 }
 
-                connectWallet().then(async () => {
-                    const accounts = await getUserWallet();
-                    if (
-                        userInfo.wallets.length === 0 ||
-                        !userInfo.wallets.includes(accounts[0])
-                    ) {
-                        console.log(accounts[0]);
-                        const axiosConfig: any = {
-                            headers: {
-                                Authorization: "Bearer " + accessToken,
-                            },
-                        };
-                        await axios
-                            .get(
-                                `${backendUrl}/users/addWallet/${accounts[0]}`,
-                                axiosConfig
-                            )
-                            .then(async (res: any) => {
-                                console.log(res);
-                                dispatch(getUserInfo(res.data.user));
-                                localStorage.setItem(
-                                    "userInfo",
-                                    JSON.stringify(res.data.user)
-                                );
-                            })
-                            .catch((err) => {
-                                setNftLoading(false);
-                                setdisableButton(false);
-                                setdefaultErrorMessage(
-                                    "Current Metamask account is not linked with this user"
-                                );
-                                setdefaultErrorModal(true);
-                                throw "Wallet already in use";
-                            });
-                    }
-                    const res = await marketPlace.methods
-                        .EndSale(auctionInfo.auctionId)
-                        .send({ from: accounts[0] });
-                    if (res?.transactionHash) {
-                        axios
-                            .post(
-                                `${backendUrl}/auction/end`,
-                                {
-                                    nftId: auctionInfo.nftId,
-                                    auctionId: auctionInfo._id,
-                                    userInfo: userInfo.username,
-                                    endAuctionHash: res.transactionHash,
-                                },
-                                axiosConfig
-                            )
-                            .then((res) => {
-                                console.log(res.data);
-                            });
-                        setNftLoading(false);
-                        setNftSuccess(true);
-                        setHash(res?.transactionHash);
-                        setSuccessTitle("NFT Sale Ended");
-                        setdisableButton(false);
-                        props.history.push("/portfolio");
-                        window.location.reload();
-                    }
-                });
-            }
-        } catch (error) {
-            console.log(error);
-            setNftLoading(false);
-            setdisableButton(false);
-        }
-    }
-
-    async function endAuction(e: any) {
-        setloadingMessage("Ending Auction");
-        e.preventDefault();
-        try {
-            setNftLoading(true);
-            setdisableButton(true);
-            // if (nowDate < endDate) {
-            //     setNftLoading(false)
-            //     console.log(nowDate, endDate)
-            //     console.log(nowDate > endDate)
-            //     setdisableButton(false)
-            //     setdefaultErrorMessage("Auction Not Ended Yet")
-            //     setdefaultErrorModal(true)
-            //     return console.log('Auction Not ended Yet')
-            // }
-            var token;
-            if (networkID === bscChain) {
-                token = "BNB";
-            } else if (networkID === ethChain) {
-                token = "ETH";
-            } else if (networkID === polygonChain) {
-                token = "Matic";
-            }
-
-            var data = {
-                auctionId: auctionInfo.auctionId,
-                tokenId: auctionInfo.tokenId,
-                network: networkID,
-            };
-            console.log(data);
-
-            const body: any = {
-                token,
-                product,
-            };
-
-            const headers = {
-                "Content-Type": "application/json",
-            };
-
-            if (nftInfo.uploadedBy === "61e559cb515235e5d16373fe") {
-                const gasPrice = await axios
-                    .post("https://batchmint.herokuapp.com/forendauction", data)
-                    .then((response) => {
-                        console.log(response.data);
-                    });
-
-                const product = {
-                    name: token,
-                    price: gasPrice,
-                    productBy: "UnicusOne",
-                };
-                setproduct(product);
-
-                return fetch(`https://stripeusnicus.herokuapp.com/payment`, {
-                    method: "POST",
-                    headers,
-                    body: JSON.stringify(body),
-                }).then(async (stripeRes: any) => {
-                    const { status } = stripeRes;
-                    if (status === 200) {
-                        console.log("STATUS ", status);
-
-                        axios
-                            .post(
-                                "https://batchmint.herokuapp.com/endauction",
-                                data
-                            )
-                            .then((createSaleAPI: any) => {
-                                console.log(createSaleAPI.data);
-                                axios
-                                    .post(
-                                        `${backendUrl}/auction/end`,
-                                        {
-                                            nftId: auctionInfo.nftId,
-                                            name: auctionInfo.name,
-                                            auctionId: auctionInfo.auctionId,
-                                            userInfo: userAddress
-                                                ? userAddress
-                                                : userInfo.username,
-                                            endAuctionHash: "endAuctionHash",
-                                        },
-                                        axiosConfig
-                                    )
-                                    .then((res) => {
-                                        console.log(res.data);
-                                    });
-
-                                setNftSuccess(true);
-                                setNftLoading(false);
-                                setdisableButton(false);
-                                props.history.push("/portfolio");
-                                window.location.reload();
-                            })
-                            .catch((error) => {
-                                setNftLoading(false);
-                                setdisableButton(false);
-                                console.log(error);
-                            });
-                    }
-                });
-            } else {
-                if (!window.ethereum) {
-                    setdisableButton(false);
-                    setNftLoading(false);
-                    setMetamaskNotFound(true);
-                    return null;
-                }
-
                 connectWallet()
                     .then(async () => {
                         const accounts = await getUserWallet();
@@ -1087,8 +908,8 @@ const NFTById = (props: any) => {
                                     throw "Wallet already in use";
                                 });
                         }
-                        const res = await auction.methods
-                            .endAuction(auctionInfo.auctionId)
+                        const res = await marketPlace.methods
+                            .EndSale(auctionInfo.auctionId)
                             .send({ from: accounts[0] });
                         if (res?.transactionHash) {
                             axios
@@ -1096,7 +917,6 @@ const NFTById = (props: any) => {
                                     `${backendUrl}/auction/end`,
                                     {
                                         nftId: auctionInfo.nftId,
-                                        name: auctionInfo.name,
                                         auctionId: auctionInfo._id,
                                         userInfo: userInfo.username,
                                         endAuctionHash: res.transactionHash,
@@ -1107,10 +927,10 @@ const NFTById = (props: any) => {
                                     console.log(res.data);
                                 });
                             setNftLoading(false);
-                            setdisableButton(false);
                             setNftSuccess(true);
                             setHash(res?.transactionHash);
-                            setSuccessTitle("NFT Auction Ended");
+                            setSuccessTitle("NFT Sale Ended");
+                            setdisableButton(false);
                             props.history.push("/portfolio");
                             window.location.reload();
                         }
@@ -1122,6 +942,204 @@ const NFTById = (props: any) => {
                         setdefaultErrorModal(true);
                         throw walletError;
                     });
+            }
+        } catch (error) {
+            console.log(error);
+            setNftLoading(false);
+            setdisableButton(false);
+        }
+    }
+
+    async function endAuction(e: any) {
+        setloadingMessage("Ending Auction");
+        e.preventDefault();
+        try {
+            setNftLoading(true);
+            setdisableButton(true);
+            console.log(endDate, nowDate);
+            if (nowDate < endDate) {
+                setNftLoading(false);
+                setdisableButton(false);
+                setdefaultErrorMessage(
+                    "Auction is still Live. You can't end an auction before it is expired."
+                );
+                setdefaultErrorModal(true);
+                return console.log("Auction Not ended Yet");
+            } else {
+                var token;
+                if (networkID === bscChain) {
+                    token = "BNB";
+                } else if (networkID === ethChain) {
+                    token = "ETH";
+                } else if (networkID === polygonChain) {
+                    token = "Matic";
+                }
+
+                var data = {
+                    auctionId: auctionInfo.auctionId,
+                    tokenId: auctionInfo.tokenId,
+                    network: networkID,
+                };
+                console.log(data);
+
+                const body: any = {
+                    token,
+                    product,
+                };
+
+                const headers = {
+                    "Content-Type": "application/json",
+                };
+
+                if (nftInfo.uploadedBy === "61e559cb515235e5d16373fe") {
+                    const gasPrice = await axios
+                        .post(
+                            "https://batchmint.herokuapp.com/forendauction",
+                            data
+                        )
+                        .then((response) => {
+                            console.log(response.data);
+                        });
+
+                    const product = {
+                        name: token,
+                        price: gasPrice,
+                        productBy: "UnicusOne",
+                    };
+                    setproduct(product);
+
+                    return fetch(
+                        `https://stripeusnicus.herokuapp.com/payment`,
+                        {
+                            method: "POST",
+                            headers,
+                            body: JSON.stringify(body),
+                        }
+                    ).then(async (stripeRes: any) => {
+                        const { status } = stripeRes;
+                        if (status === 200) {
+                            console.log("STATUS ", status);
+
+                            axios
+                                .post(
+                                    "https://batchmint.herokuapp.com/endauction",
+                                    data
+                                )
+                                .then((createSaleAPI: any) => {
+                                    console.log(createSaleAPI.data);
+                                    axios
+                                        .post(
+                                            `${backendUrl}/auction/end`,
+                                            {
+                                                nftId: auctionInfo.nftId,
+                                                name: auctionInfo.name,
+                                                auctionId:
+                                                    auctionInfo.auctionId,
+                                                userInfo: userAddress
+                                                    ? userAddress
+                                                    : userInfo.username,
+                                                endAuctionHash:
+                                                    "endAuctionHash",
+                                            },
+                                            axiosConfig
+                                        )
+                                        .then((res) => {
+                                            console.log(res.data);
+                                        });
+
+                                    setNftSuccess(true);
+                                    setNftLoading(false);
+                                    setdisableButton(false);
+                                    props.history.push("/portfolio");
+                                    window.location.reload();
+                                })
+                                .catch((error) => {
+                                    setNftLoading(false);
+                                    setdisableButton(false);
+                                    console.log(error);
+                                });
+                        }
+                    });
+                } else {
+                    if (!window.ethereum) {
+                        setdisableButton(false);
+                        setNftLoading(false);
+                        setMetamaskNotFound(true);
+                        return null;
+                    }
+
+                    connectWallet()
+                        .then(async () => {
+                            const accounts = await getUserWallet();
+                            if (
+                                userInfo.wallets.length === 0 ||
+                                !userInfo.wallets.includes(accounts[0])
+                            ) {
+                                console.log(accounts[0]);
+                                const axiosConfig: any = {
+                                    headers: {
+                                        Authorization: "Bearer " + accessToken,
+                                    },
+                                };
+                                await axios
+                                    .get(
+                                        `${backendUrl}/users/addWallet/${accounts[0]}`,
+                                        axiosConfig
+                                    )
+                                    .then(async (res: any) => {
+                                        console.log(res);
+                                        dispatch(getUserInfo(res.data.user));
+                                        localStorage.setItem(
+                                            "userInfo",
+                                            JSON.stringify(res.data.user)
+                                        );
+                                    })
+                                    .catch((err) => {
+                                        setNftLoading(false);
+                                        setdisableButton(false);
+                                        setdefaultErrorMessage(
+                                            "Current Metamask account is not linked with this user"
+                                        );
+                                        setdefaultErrorModal(true);
+                                        throw "Wallet already in use";
+                                    });
+                            }
+                            const res = await auction.methods
+                                .endAuction(auctionInfo.auctionId)
+                                .send({ from: accounts[0] });
+                            if (res?.transactionHash) {
+                                axios
+                                    .post(
+                                        `${backendUrl}/auction/end`,
+                                        {
+                                            nftId: auctionInfo.nftId,
+                                            name: auctionInfo.name,
+                                            auctionId: auctionInfo._id,
+                                            userInfo: userInfo.username,
+                                            endAuctionHash: res.transactionHash,
+                                        },
+                                        axiosConfig
+                                    )
+                                    .then((res) => {
+                                        console.log(res.data);
+                                    });
+                                setNftLoading(false);
+                                setdisableButton(false);
+                                setNftSuccess(true);
+                                setHash(res?.transactionHash);
+                                setSuccessTitle("NFT Auction Ended");
+                                props.history.push("/portfolio");
+                                window.location.reload();
+                            }
+                        })
+                        .catch((walletError) => {
+                            setNftLoading(false);
+                            setdisableButton(false);
+                            setdefaultErrorMessage(walletError.message);
+                            setdefaultErrorModal(true);
+                            throw walletError;
+                        });
+                }
             }
         } catch (error) {
             console.log(error);
@@ -1562,18 +1580,21 @@ const NFTById = (props: any) => {
                                                 nftInfo.tags.length > 0 &&
                                                 nftInfo.tags.map((tag: any) => {
                                                     return (
-                                                        <div className="gridBbox">
-                                                            <h6>
-                                                                {
-                                                                    tag.propertyType
-                                                                }
-                                                            </h6>
-                                                            <h6>
-                                                                {
-                                                                    tag.propertyName
-                                                                }
-                                                            </h6>
-                                                        </div>
+                                                        tag.propertyName &&
+                                                        tag.propertyType && (
+                                                            <div className="gridBbox">
+                                                                <h6>
+                                                                    {
+                                                                        tag.propertyType
+                                                                    }
+                                                                </h6>
+                                                                <h6>
+                                                                    {
+                                                                        tag.propertyName
+                                                                    }
+                                                                </h6>
+                                                            </div>
+                                                        )
                                                     );
                                                 })}
 
