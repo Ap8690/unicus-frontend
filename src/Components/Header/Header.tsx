@@ -43,6 +43,7 @@ import ProfileDropDown from '../ProfileDropDown/ProfileDropDown'
 import axios from 'axios'
 import MaterialSwitch from '../Toggle/MaterialSwitch'
 import { bscChain, ethChain, polygonChain } from '../../config'
+import { sslFix } from '../../Utilities/Util';
 
 const Header = (props: any) => {
     // redux state
@@ -544,7 +545,7 @@ const Header = (props: any) => {
                                         objectFit: "fill",
                                         borderRadius: "100%",
                                       }}
-                                      src={item.cloudinaryUrl}
+                                      src={sslFix(item.cloudinaryUrl)}
                                     />
                                   )}
                                   <span

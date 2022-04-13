@@ -3,6 +3,7 @@ import {ReactComponent as AiFillEye} from '../../Assets/react-icons/AiFillEye.sv
 import ViewModal from '../Modals/ViewModal/ViewModal'
 // redux imports
 import { useState, useEffect } from 'react'
+import { sslFix } from '../../Utilities/Util'
 
 const ArtistCard = ({item}: any) => {
 
@@ -23,36 +24,78 @@ const ArtistCard = ({item}: any) => {
 
   return (
     <>
-      <div className={(item.sellerInfo && projectLoaded) ? 'auction_card nft_card loading' : (projectLoaded ? 'nft_card loading' : 'nft_card')}>
-        <div className='nft_card_image_wrapper'>
-        <Link to={item.sellerInfo ? `/nft/${item.chain}/${contractAddress}/${item.tokenId}` : `/nft/${item.chain}/${contractAddress}/${item.tokenId}`}>
-        {(!projectLoaded && item.cloudinaryUrl.split('.').pop() !== "mp4") && (
-            <div className='nft_card_image skeleton'></div>
+      <div
+        className={
+          item.sellerInfo && projectLoaded
+            ? "auction_card nft_card loading"
+            : projectLoaded
+            ? "nft_card loading"
+            : "nft_card"
+        }
+      >
+        <div className="nft_card_image_wrapper">
+          <Link
+            to={
+              item.sellerInfo
+                ? `/nft/${item.chain}/${contractAddress}/${item.tokenId}`
+                : `/nft/${item.chain}/${contractAddress}/${item.tokenId}`
+            }
+          >
+            {!projectLoaded &&
+              item.cloudinaryUrl.split(".").pop() !== "mp4" && (
+                <div className="nft_card_image skeleton"></div>
+              )}
+            {
+              <div
+                className="nft_card_image"
+                style={
+                  projectLoaded && item.cloudinaryUrl.split(".").pop() !== "mp4"
+                    ? {}
+                    : { display: "none" }
+                }
+              >
+                <img
+                  src={sslFix(item.cloudinaryUrl)}
+                  onLoad={() => setprojectLoaded(true)}
+                  alt={item.name}
+                />
+              </div>
+            }
+            {item.cloudinaryUrl.split(".").pop() == "mp4" && (
+              <div className="nft_card_image">
+                <video width="100%" autoPlay loop>
+                  <source src={sslFix(item.cloudinaryUrl)} type="video/mp4" />
+                </video>
+              </div>
             )}
-        {(<div className='nft_card_image' style={(projectLoaded && item.cloudinaryUrl.split('.').pop() !== "mp4") ? {} : {display: 'none'}}>
-          <img src={item.cloudinaryUrl} onLoad={() => setprojectLoaded(true)} alt={item.name} />
-        </div>)}
-        {item.cloudinaryUrl.split('.').pop() == "mp4" && (
-          <div className='nft_card_image'>
-            <video width="100%" autoPlay loop>
-              <source src={item.cloudinaryUrl} type="video/mp4" />
-            </video>
-          </div>
-        )}
-        </Link>
+          </Link>
         </div>
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem', marginTop: '-0.25rem'}}>
-            <h6 title={item?.name}>{item?.name}</h6>
-            <span className="hover" onClick={() => setviewModal(true)} style={{display: 'flex', alignItems: 'center', gap: '7px'}}><AiFillEye /> {item.views}</span>
-          </div>
-<ViewModal
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "0.5rem",
+            marginTop: "-0.25rem",
+          }}
+        >
+          <h6 title={item?.name}>{item?.name}</h6>
+          <span
+            className="hover"
+            onClick={() => setviewModal(true)}
+            style={{ display: "flex", alignItems: "center", gap: "7px" }}
+          >
+            <AiFillEye /> {item.views}
+          </span>
+        </div>
+        <ViewModal
           show={viewModal}
           handleClose={() => setviewModal(false)}
           nftId={item.sellerInfo ? item.nftId : item._id}
-      />
+        />
       </div>
     </>
-  )
+  );
 }
 
 

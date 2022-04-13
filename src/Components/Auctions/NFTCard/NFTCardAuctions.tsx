@@ -8,6 +8,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import {getNftType} from '../../../Redux/Profile/actions'
 import ViewModal from '../../Modals/ViewModal/ViewModal'
 import { ethChain, polygonChain } from "../../../config"
+import { sslFix } from "../../../Utilities/Util"
 
 const NFTCardAuctions = ({item}: AuctionCardProps) => {
   const {walletType, networkID, userAddress, userInfo} = useSelector(
@@ -52,56 +53,91 @@ const NFTCardAuctions = ({item}: AuctionCardProps) => {
 
   return (
     <>
-      <div className={projectLoaded ? 'nft_card' : 'nft_card loading'}>
+      <div className={projectLoaded ? "nft_card" : "nft_card loading"}>
         <Link
-        to={{
-          pathname: `/auction/${item.chain}/${contractAddress}/${item.tokenId}`
-        }}
-      >
-        <div className='nft_card_image_wrapper'>
-        {(!projectLoaded && item.cloudinaryUrl.split('.').pop() !== "mp4") && (
-            <div className='nft_card_image skeleton'></div>
+          to={{
+            pathname: `/auction/${item.chain}/${contractAddress}/${item.tokenId}`,
+          }}
+        >
+          <div className="nft_card_image_wrapper">
+            {!projectLoaded &&
+              item.cloudinaryUrl.split(".").pop() !== "mp4" && (
+                <div className="nft_card_image skeleton"></div>
+              )}
+            {
+              <div
+                className="nft_card_image"
+                style={
+                  projectLoaded && item.cloudinaryUrl.split(".").pop() !== "mp4"
+                    ? {}
+                    : { display: "none" }
+                }
+              >
+                <img
+                  src={sslFix(item.cloudinaryUrl)}
+                  onLoad={() => setprojectLoaded(true)}
+                  alt={item.name}
+                />
+              </div>
+            }
+            {item.cloudinaryUrl.split(".").pop() == "mp4" && (
+              <div className="nft_card_image">
+                <video width="100%" autoPlay loop>
+                  <source src={sslFix(item.cloudinaryUrl)} type="video/mp4" />
+                </video>
+              </div>
             )}
-        {(<div className='nft_card_image' style={(projectLoaded && item.cloudinaryUrl.split('.').pop() !== "mp4") ? {} : {display: 'none'}}>
-          <img src={item.cloudinaryUrl} onLoad={() => setprojectLoaded(true)} alt={item.name} />
-        </div>)}
-        {item.cloudinaryUrl.split('.').pop() == "mp4" && (
-          <div className='nft_card_image'>
-            <video width="100%" autoPlay loop>
-              <source src={item.cloudinaryUrl} type="video/mp4" />
-            </video>
           </div>
-        )}
-        </div>
         </Link>
         <h6 title={item?.name}>{item?.name}</h6>
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem', marginTop: '-0.25rem'}}>
-          <h6>{(item && item?.lastBid) ? ((item?.lastBid)/Math.pow(10, 18)).toFixed(4) : ((item?.startBid)/Math.pow(10, 18)).toFixed(4)} {price}</h6>
-          <span className="hover" onClick={() => setviewModal(true)} style={{display: 'flex', alignItems: 'center', gap: '7px'}}><AiFillEye /> {item.views}</span>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "0.5rem",
+            marginTop: "-0.25rem",
+          }}
+        >
+          <h6>
+            {item && item?.lastBid
+              ? (item?.lastBid / Math.pow(10, 18)).toFixed(4)
+              : (item?.startBid / Math.pow(10, 18)).toFixed(4)}{" "}
+            {price}
+          </h6>
+          <span
+            className="hover"
+            onClick={() => setviewModal(true)}
+            style={{ display: "flex", alignItems: "center", gap: "7px" }}
+          >
+            <AiFillEye /> {item.views}
+          </span>
         </div>
         <Link
-        to={{
-          pathname: `/auction/${item.chain}/${contractAddress}/${item.tokenId}`
-        }}
-      >
-        <div>
+          to={{
+            pathname: `/auction/${item.chain}/${contractAddress}/${item.tokenId}`,
+          }}
+        >
+          <div>
             <button
               onClick={() => dispatch(getNftType(1))}
-              className='btn_brand'
+              className="btn_brand"
             >
               <BsFillHandbagFill />
-              {item.sellerInfo === userInfo.username ? "End Auction" : "Place a Bid"}
+              {item.sellerInfo === userInfo.username
+                ? "End Auction"
+                : "Place a Bid"}
             </button>
-        </div>
+          </div>
         </Link>
       </div>
       <ViewModal
-          show={viewModal}
-          handleClose={() => setviewModal(false)}
-          nftId={item.nftId}
+        show={viewModal}
+        handleClose={() => setviewModal(false)}
+        nftId={item.nftId}
       />
     </>
-  )
+  );
 }
 
 export default NFTCardAuctions

@@ -23,6 +23,9 @@ export const numberFormate = (number: number | string) => {
   })
 }
 
+export const sslFix=(url:string)=>{
+  return url.replace("http", "https")
+}
 export const createBonus = (
   totalAmount: number | string,
   bonusRatio: number

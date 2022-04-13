@@ -24,7 +24,8 @@ import { bscChain, ethChain, polygonChain } from '../../config'
 // import {getNftType} from '../../../Redux/Profile/actions'
 import {
     getUserWallet,
-    connectWallet
+    connectWallet,
+    sslFix
 } from "../../Utilities/Util";
 
 const NFTCollection = ({ item, transID }: any) => {
@@ -520,190 +521,229 @@ const NFTCollection = ({ item, transID }: any) => {
     }
 
     return (
-        <>
-            <div
-                className={(item.sellerInfo && projectLoaded) ? 'auction_card nft_card loading' : (projectLoaded ? 'nft_card loading' : 'nft_card')}
-            >
-                <Link
-                    to={
-                        item.sellerInfo
-                            ? `/nft/${item.chain}/${contractAddress}/${item.tokenId}`
-                            : `/nft/${item.chain}/${contractAddress}/${item.tokenId}`
-                    }
-                >
-                    <div className='nft_card_image_wrapper'>
-                        {(!projectLoaded && item.cloudinaryUrl.split('.').pop() !== "mp4") && (
-                            <div className='nft_card_image skeleton'></div>
-                            )}
-                        {(<div className='nft_card_image' style={(projectLoaded && item.cloudinaryUrl.split('.').pop() !== "mp4") ? {} : {display: 'none'}}>
-                        <img src={item.cloudinaryUrl} onLoad={() => setprojectLoaded(true)} alt={item.name} />
-                        </div>)}
-                        {item.cloudinaryUrl.split('.').pop() == "mp4" && (
-                        <div className='nft_card_image'>
-                            <video width="100%" autoPlay loop>
-                            <source src={item.cloudinaryUrl} type="video/mp4" />
-                            </video>
-                        </div>
-                        )}
-                    </div>
-                </Link>
-                
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem', marginTop: '-0.25rem'}}>
-                    <h6 title={item?.name}>{item?.name}</h6>
-                    <span className="hover" onClick={() => setviewModal(true)} style={{display: 'flex', alignItems: 'center', gap: '7px'}}><AiFillEye /> {item.views}</span>
-                </div>
-                {item.sellerInfo ? (
-                    item.auctionType === 'Sale' ? (
-                        <div className='d-flex align-items-center justify-content-between gap-20'>
-                            <button className='btn_brand btn_outlined'>
-                                <BsFillHandbagFill />
-                                End Sale
-                            </button>
-                        </div>
-                    ) : (
-                        <div className='d-flex align-items-center justify-content-between gap-20'>
-                            <button className='btn_brand btn_outlined'>
-                                <BsFillHandbagFill />
-                                End Auction
-                            </button>
-                        </div>
-                    )
-                ) : (
-                    <div className='d-flex align-items-center justify-content-between gap-20'>
-                        <button
-                            className='btn_brand btn_outlined'
-                            onClick={() => getType(0)}
-                        >
-                            <BsFillHandbagFill />
-                            Sell
-                        </button>
-                        <button
-                            className='btn_brand btn_outlined'
-                            onClick={() => getType(1)}
-                        >
-                            <BsFillTagFill />
-                            Auction
-                        </button>
-                    </div>
+      <>
+        <div
+          className={
+            item.sellerInfo && projectLoaded
+              ? "auction_card nft_card loading"
+              : projectLoaded
+              ? "nft_card loading"
+              : "nft_card"
+          }
+        >
+          <Link
+            to={
+              item.sellerInfo
+                ? `/nft/${item.chain}/${contractAddress}/${item.tokenId}`
+                : `/nft/${item.chain}/${contractAddress}/${item.tokenId}`
+            }
+          >
+            <div className="nft_card_image_wrapper">
+              {!projectLoaded &&
+                item.cloudinaryUrl.split(".").pop() !== "mp4" && (
+                  <div className="nft_card_image skeleton"></div>
                 )}
-            </div>
-            <ViewModal
-                show={viewModal}
-                handleClose={() => setviewModal(false)}
-                nftId={item.sellerInfo ? item.nftId : item._id}
-            />
-            <DefaultModal
-                title={type === 0 ? 'Input Price' : 'Input Price and Time'}
-                show={popUpShow}
-                handleClose={() => setPopUpShow(false)}
-                type='success'
-            >
-                <div className='success__body'>
-                    {type === 0 ? (
-                        <>
-                            <Form className='mt-5 input_price'>
-                                <Form.Group className='mb-3'>
-                                    <Form.Label>Price</Form.Label>
-                                    <Form.Control
-                                        type='tel'
-                                        className='form-control shadow-none'
-                                        placeholder={`0.00 ${networkID === bscChain ? 'BNB' : (networkID === ethChain ? 'ETH' : 'Matic')}`}
-                                        value={price}
-                                        onChange={(e) => handlePriceChange(e)}
-                                    />
-                                </Form.Group>
-                                <button
-                                    type='submit'
-                                    className='btn_brand mt-3'
-                                    onClick={createSaleForNFT}
-                                >
-                                    Submit
-                                </button>
-                            </Form>
-                        </>
-                    ) : type === 1 ? (
-                        <>
-                            <Form className='mt-5 input_price'>
-                                <Form.Group className='mb-3'>
-                                    <Form.Label>Price</Form.Label>
-                                    <Form.Control
-                                        type='tel'
-                                        className='form-control shadow-none'
-                                        placeholder={`0.00 ${networkID === bscChain ? 'BNB' : (networkID === ethChain ? 'ETH' : 'Matic')}`}
-                                        value={auctionPrice}
-                                        onChange={(e) =>
-                                            handlePriceChangeTwo(e)
-                                        }
-                                    />
-                                </Form.Group>
-                                <Form.Group className='mb-3'>
-                                    <Form.Label>Duration</Form.Label>
-                                    <select
-                                        className='shadow-none form-control'
-                                        onChange={handleDurationChange}
-                                    >
-                                        <option hidden={true}>
-                                            Select Duration
-                                        </option>
-                                        <option value='1'>1 Day</option>
-                                        <option value='2'>2 Days</option>
-                                        <option value='3'>3 Days</option>
-                                        <option value='4'>4 Days</option>
-                                        <option value='5'>5 Days</option>
-                                        <option value='6'>6 Days</option>
-                                        <option value='7'>7 Days</option>
-                                        <option value='8'>8 Days</option>
-                                        <option value='9'>9 Days</option>
-                                        <option value='10'>10 Days</option>
-                                    </select>
-                                </Form.Group>
-                                <button
-                                    type='submit'
-                                    className='btn_brand'
-                                    onClick={createAuctionForNFT}
-                                >
-                                    Submit
-                                </button>
-                            </Form>
-                        </>
-                    ) : null}
+              {
+                <div
+                  className="nft_card_image"
+                  style={
+                    projectLoaded &&
+                    item.cloudinaryUrl.split(".").pop() !== "mp4"
+                      ? {}
+                      : { display: "none" }
+                  }
+                >
+                  <img
+                    src={sslFix(item.cloudinaryUrl)}
+                    onLoad={() => setprojectLoaded(true)}
+                    alt={item.name}
+                  />
                 </div>
-            </DefaultModal>
-            <DefaultModal
-                show={nftLoading}
-                handleClose={() => setNftLoading(false)}
-                type='loading'
+              }
+              {item.cloudinaryUrl.split(".").pop() == "mp4" && (
+                <div className="nft_card_image">
+                  <video width="100%" autoPlay loop>
+                    <source src={sslFix(item.cloudinaryUrl)} type="video/mp4" />
+                  </video>
+                </div>
+              )}
+            </div>
+          </Link>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "0.5rem",
+              marginTop: "-0.25rem",
+            }}
+          >
+            <h6 title={item?.name}>{item?.name}</h6>
+            <span
+              className="hover"
+              onClick={() => setviewModal(true)}
+              style={{ display: "flex", alignItems: "center", gap: "7px" }}
             >
-                <NFTCreateLoading
-                    message={
-                        type === 1
-                            ? 'Creating Auction for your Asset'
-                            : 'Your Asset is getting listed for Sale'
-                    }
-                />
-            </DefaultModal>
-            <DefaultModal
-                show={nftSuccess}
-                handleClose={() => setNftSuccess(false)}
-                type='success'
-            >
-                <NFTCreateSuccess
-                    title={true}
-                    titleInfo={successTitle}
-                    hash={hash}
-                />
-            </DefaultModal>
-            <DefaultErrorModal
-                DefaultErrorModalShow={defaultErrorModal}
-                DefaultErrorModalClose={() => setdefaultErrorModal(false)}
-                DefaultErrorMessage={defaultErrorMessage}
-            />
-            <MetaMaskNotFound
-                show={MetamaskNotFound}
-                handleClose={() => setMetamaskNotFound(false)}
-            />
-        </>
-    )
+              <AiFillEye /> {item.views}
+            </span>
+          </div>
+          {item.sellerInfo ? (
+            item.auctionType === "Sale" ? (
+              <div className="d-flex align-items-center justify-content-between gap-20">
+                <button className="btn_brand btn_outlined">
+                  <BsFillHandbagFill />
+                  End Sale
+                </button>
+              </div>
+            ) : (
+              <div className="d-flex align-items-center justify-content-between gap-20">
+                <button className="btn_brand btn_outlined">
+                  <BsFillHandbagFill />
+                  End Auction
+                </button>
+              </div>
+            )
+          ) : (
+            <div className="d-flex align-items-center justify-content-between gap-20">
+              <button
+                className="btn_brand btn_outlined"
+                onClick={() => getType(0)}
+              >
+                <BsFillHandbagFill />
+                Sell
+              </button>
+              <button
+                className="btn_brand btn_outlined"
+                onClick={() => getType(1)}
+              >
+                <BsFillTagFill />
+                Auction
+              </button>
+            </div>
+          )}
+        </div>
+        <ViewModal
+          show={viewModal}
+          handleClose={() => setviewModal(false)}
+          nftId={item.sellerInfo ? item.nftId : item._id}
+        />
+        <DefaultModal
+          title={type === 0 ? "Input Price" : "Input Price and Time"}
+          show={popUpShow}
+          handleClose={() => setPopUpShow(false)}
+          type="success"
+        >
+          <div className="success__body">
+            {type === 0 ? (
+              <>
+                <Form className="mt-5 input_price">
+                  <Form.Group className="mb-3">
+                    <Form.Label>Price</Form.Label>
+                    <Form.Control
+                      type="tel"
+                      className="form-control shadow-none"
+                      placeholder={`0.00 ${
+                        networkID === bscChain
+                          ? "BNB"
+                          : networkID === ethChain
+                          ? "ETH"
+                          : "Matic"
+                      }`}
+                      value={price}
+                      onChange={(e) => handlePriceChange(e)}
+                    />
+                  </Form.Group>
+                  <button
+                    type="submit"
+                    className="btn_brand mt-3"
+                    onClick={createSaleForNFT}
+                  >
+                    Submit
+                  </button>
+                </Form>
+              </>
+            ) : type === 1 ? (
+              <>
+                <Form className="mt-5 input_price">
+                  <Form.Group className="mb-3">
+                    <Form.Label>Price</Form.Label>
+                    <Form.Control
+                      type="tel"
+                      className="form-control shadow-none"
+                      placeholder={`0.00 ${
+                        networkID === bscChain
+                          ? "BNB"
+                          : networkID === ethChain
+                          ? "ETH"
+                          : "Matic"
+                      }`}
+                      value={auctionPrice}
+                      onChange={(e) => handlePriceChangeTwo(e)}
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Duration</Form.Label>
+                    <select
+                      className="shadow-none form-control"
+                      onChange={handleDurationChange}
+                    >
+                      <option hidden={true}>Select Duration</option>
+                      <option value="1">1 Day</option>
+                      <option value="2">2 Days</option>
+                      <option value="3">3 Days</option>
+                      <option value="4">4 Days</option>
+                      <option value="5">5 Days</option>
+                      <option value="6">6 Days</option>
+                      <option value="7">7 Days</option>
+                      <option value="8">8 Days</option>
+                      <option value="9">9 Days</option>
+                      <option value="10">10 Days</option>
+                    </select>
+                  </Form.Group>
+                  <button
+                    type="submit"
+                    className="btn_brand"
+                    onClick={createAuctionForNFT}
+                  >
+                    Submit
+                  </button>
+                </Form>
+              </>
+            ) : null}
+          </div>
+        </DefaultModal>
+        <DefaultModal
+          show={nftLoading}
+          handleClose={() => setNftLoading(false)}
+          type="loading"
+        >
+          <NFTCreateLoading
+            message={
+              type === 1
+                ? "Creating Auction for your Asset"
+                : "Your Asset is getting listed for Sale"
+            }
+          />
+        </DefaultModal>
+        <DefaultModal
+          show={nftSuccess}
+          handleClose={() => setNftSuccess(false)}
+          type="success"
+        >
+          <NFTCreateSuccess title={true} titleInfo={successTitle} hash={hash} />
+        </DefaultModal>
+        <DefaultErrorModal
+          DefaultErrorModalShow={defaultErrorModal}
+          DefaultErrorModalClose={() => setdefaultErrorModal(false)}
+          DefaultErrorMessage={defaultErrorMessage}
+        />
+        <MetaMaskNotFound
+          show={MetamaskNotFound}
+          handleClose={() => setMetamaskNotFound(false)}
+        />
+      </>
+    );
 }
 
 export default NFTCollection
