@@ -116,9 +116,9 @@ const CreateStore = (store) => {
         setTimeout(function(){
         history.push("/")
         window.open(
-          `https://${res.data.createStore.domain}/my-store/general`,
-          " _blank"
+          `https://${res.data.createStore.domain}/my-store/general`
         );
+        window.location.reload()
       }, 3000)
       } else {
         throw "Failed";

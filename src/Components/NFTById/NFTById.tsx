@@ -933,7 +933,13 @@ const NFTById = (props: any) => {
                         props.history.push("/portfolio");
                         window.location.reload();
                     }
-                });
+                }).catch((walletError) => {
+                        setNftLoading(false);
+                        setdisableButton(false);
+                        setdefaultErrorMessage(walletError.message);
+                        setdefaultErrorModal(true);
+                        throw walletError;
+                    });
             }
         } catch (error) {
             console.log(error);
@@ -1043,7 +1049,8 @@ const NFTById = (props: any) => {
                             });
                     }
                 });
-            } else {
+            } 
+            else {
                 if (!window.ethereum) {
                     setdisableButton(false);
                     setNftLoading(false);
@@ -1225,7 +1232,8 @@ const NFTById = (props: any) => {
                             });
                     }
                 });
-            } else {
+            } 
+            else {
                 if (!window.ethereum) {
                     setdisableButton(false);
                     setNftLoading(false);
@@ -1233,68 +1241,76 @@ const NFTById = (props: any) => {
                     return null;
                 }
 
-                connectWallet().then(async () => {
+                connectWallet()
+                  .then(async () => {
                     const accounts = await getUserWallet();
                     if (
-                        userInfo.wallets.length === 0 ||
-                        !userInfo.wallets.includes(accounts[0])
+                      userInfo.wallets.length === 0 ||
+                      !userInfo.wallets.includes(accounts[0])
                     ) {
-                        console.log(accounts[0]);
-                        const axiosConfig: any = {
-                            headers: {
-                                Authorization: "Bearer " + accessToken,
-                            },
-                        };
-                        await axios
-                            .get(
-                                `${backendUrl}/users/addWallet/${accounts[0]}`,
-                                axiosConfig
-                            )
-                            .then(async (res: any) => {
-                                console.log(res);
-                                dispatch(getUserInfo(res.data.user));
-                                localStorage.setItem(
-                                    "userInfo",
-                                    JSON.stringify(res.data.user)
-                                );
-                            })
-                            .catch((err) => {
-                                setNftLoading(false);
-                                setdisableButton(false);
-                                setdefaultErrorMessage(
-                                    "Current Metamask account is not linked with this user"
-                                );
-                                setdefaultErrorModal(true);
-                                throw "Wallet already in use";
-                            });
+                      console.log(accounts[0]);
+                      const axiosConfig: any = {
+                        headers: {
+                          Authorization: "Bearer " + accessToken,
+                        },
+                      };
+                      await axios
+                        .get(
+                          `${backendUrl}/users/addWallet/${accounts[0]}`,
+                          axiosConfig
+                        )
+                        .then(async (res: any) => {
+                          console.log(res);
+                          dispatch(getUserInfo(res.data.user));
+                          localStorage.setItem(
+                            "userInfo",
+                            JSON.stringify(res.data.user)
+                          );
+                        })
+                        .catch((err) => {
+                          setNftLoading(false);
+                          setdisableButton(false);
+                          setdefaultErrorMessage(
+                            "Current Metamask account is not linked with this user"
+                          );
+                          setdefaultErrorModal(true);
+                          throw "Wallet already in use";
+                        });
                     }
                     const res = await auction.methods
-                        .cancelAuction(auctionInfo.auctionId)
-                        .send({ from: accounts[0] });
+                      .cancelAuction(auctionInfo.auctionId)
+                      .send({ from: accounts[0] });
                     if (res?.transactionHash) {
-                        axios
-                            .post(
-                                `${backendUrl}/auction/cancel`,
-                                {
-                                    nftId: auctionInfo.nftId,
-                                    auctionId: auctionInfo._id,
-                                    userInfo: userInfo.username,
-                                    transactionHash: res.transactionHash,
-                                },
-                                axiosConfig
-                            )
-                            .then((res) => {
-                                console.log(res.data);
-                            });
-                        setNftLoading(false);
-                        setNftSuccess(true);
-                        setdisableButton(false);
-                        setHash(res?.transactionHash);
-                        setSuccessTitle("NFT Auction Cancelled");
-                        props.history.push("/portfolio");
-                        window.location.reload();
+                      axios
+                        .post(
+                          `${backendUrl}/auction/cancel`,
+                          {
+                            nftId: auctionInfo.nftId,
+                            auctionId: auctionInfo._id,
+                            userInfo: userInfo.username,
+                            transactionHash: res.transactionHash,
+                          },
+                          axiosConfig
+                        )
+                        .then((res) => {
+                          console.log(res.data);
+                        });
+                      setNftLoading(false);
+                      setNftSuccess(true);
+                      setdisableButton(false);
+                      setHash(res?.transactionHash);
+                      setSuccessTitle("NFT Auction Cancelled");
+                      props.history.push("/portfolio");
+                      window.location.reload();
                     }
-                });
+                  })
+                  .catch((walletError) => {
+                    setNftLoading(false);
+                    setdisableButton(false);
+                    setdefaultErrorMessage(walletError.message);
+                    setdefaultErrorModal(true);
+                    throw walletError;
+                  });;
             }
         } catch (error) {
             console.log(error);
@@ -1586,38 +1602,7 @@ const NFTById = (props: any) => {
                                         </div>
                                     </AccordionDetails>
                                 </Accordion>
-                                <Accordion className="accordion">
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
-                                        style={{
-                                            background:
-                                                "rgba(196, 196, 196, 0.1)",
-                                            border: "1px solid #0b203e66",
-                                        }}
-                                    >
-                                        <Typography className="flex">
-                                            <BsGrid1X2Fill /> About
-                                        </Typography>
-                                    </AccordionSummary>
-                                    {/* <AccordionDetails className="pt-10">
-                    <h6>
-                      A happily grizzly bear named Ether , has his world turned upside down after he meets NFT world. It turns out that Ether can be different from other forest bears: wearing clothes, smoking cigarettes and doing whatever he wants.
-                    </h6>
-                    <h6>
-                      We decided to keep up with the automatically generated collections. Therefore, there have been changes in our collection. EtherBears #1 to #265 are handcrafted and unique. Starting from EtherBear #266, automatically generated bears with prescribed properties will be minted.
-                    </h6>
-                    <h6>
-                      I invite you to see what happens. Here will only ever be 5000 EtherBears in the world, and we've minted 5000/5000!
-                    </h6>
-                    <div className="aboutIcons">
-                    <CgWebsite/>
-                    <FaDiscord/>
-                    <FaTwitter/>
-                    </div>
-                  </AccordionDetails> */}
-                                </Accordion>
+                                
                                 <Accordion
                                     className="accordion"
                                     style={{
