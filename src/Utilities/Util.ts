@@ -24,7 +24,7 @@ export const numberFormate = (number: number | string) => {
 }
 
 export const sslFix=(url:string)=>{
-  const x = url.replace("http", "https")
+  const x = url.replace("http://", "https://")
   return x
   
 }
