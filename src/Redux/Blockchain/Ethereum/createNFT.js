@@ -1,5 +1,5 @@
 // mainnet
-export const createNFTAddressE = "0x424bb7731c056a52b45CBD613Ef08c69c628735f";
+export const createNFTAddressE = "0x112f5D47b0f0810CFc07FA6Bf97306583f74D9aE";
 
 // testnet
 // export const createNFTAddressE = "0x9529eB4956EC7a33C12980a62c4D8135f7Ca1887";

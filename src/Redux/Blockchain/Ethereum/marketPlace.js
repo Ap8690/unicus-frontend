@@ -1,5 +1,5 @@
 // mainnet
-export const marketPlaceAddressE = "0xf9E7d76503Bd2a5677DCc795BF81f7fa3520f246";
+export const marketPlaceAddressE = "0xc84CCe52ACD5a887fb9C2cD9579F012E9B523058";
 
 // testnet
 // export const marketPlaceAddressE = "0x27c57e3041d881e810743A2038aDBE5555016Cf6";

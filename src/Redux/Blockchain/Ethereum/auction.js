@@ -1,5 +1,5 @@
 // mainnet
-export const auctionAddressE = "0x1319C0D6Ec6558F26d53821F8912FfFfADb6FdD5";
+export const auctionAddressE = "0x8b073AF7a15511d803d7C0C03361d9b3016aE155";
 
 // testnet
 // export const auctionAddressE = "0xc90Ae164BCdD963352374DFD22d209Ca0C368444";
