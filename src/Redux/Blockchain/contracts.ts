@@ -64,6 +64,9 @@ export const getMetamaskProvider = () => async (dispatch: any) => {
   }
 }
 
+// sequence
+ export const sequence 
+
 const getContracts = (walletType: string, networkID: string) => {
   let web3: any = new Web3(RPC_URLS[bscChain])
 
