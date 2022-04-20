@@ -20,6 +20,7 @@ const CreateStore = (store) => {
   const [loadingImage, setLoadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [showError, setShowError] = useState(false);
   const { accessToken, userInfo } = useSelector(
         (state: any) => state.profile
       );
@@ -27,6 +28,8 @@ const CreateStore = (store) => {
   const options = useMemo(() => countryList().getData(), []);
   const inputFile = useRef(null);
   const history = useHistory();
+  const regex = new RegExp(/^[a-z][a-z0-9-\s]*$/i);
+
   const uploadImage = () => {
     // `current` points to the mounted file input element
     inputFile.current.click();
@@ -80,7 +83,16 @@ const CreateStore = (store) => {
     setLoadingImage(false);
   };
   const handleStoreName = (e) => {
-    setGeneral({ ...generals, storeName: e });
+    setShowError(false);
+    if(e==""){
+      setGeneral({ ...generals, storeName: e });
+    }
+    else if(regex.test(e)){      
+    setGeneral({ ...generals, storeName: e })
+  }else{
+    setShowError(true)
+  };
+
   };
 
   const handleEmail = (e) => {
@@ -118,7 +130,7 @@ const CreateStore = (store) => {
         history.push("/")
         tab.location.href=
           `https://${res.data.createStore.domain}/my-store/general`
-          
+
         window.location.reload();
       }, 3000)
       } else {
@@ -189,7 +201,8 @@ const CreateStore = (store) => {
                     alt=""
                     onClick={uploadImage}
                   />
-                  {(!generals.logoUrl || generals.logoUrl == "") && !loadingImage ? (
+                  {(!generals.logoUrl || generals.logoUrl == "") &&
+                  !loadingImage ? (
                     <div
                       className="text-center cursor-pointer upload-img"
                       style={{}}
@@ -229,6 +242,10 @@ const CreateStore = (store) => {
                 <p style={{ float: "right" }} className="mt-2 mb-4">
                   {generals.storeName ? generals.storeName.length : "0"}/25
                 </p>
+                {showError? <p className="mt-3 redpopup">
+                  Please enter store name. Only letters, numbers and - is
+                  allowed.
+                </p>:""}
                 <Form.Group className="mt-4 mb-4">
                   <Form.Label>E-Mail</Form.Label>
                   <Form.Control
