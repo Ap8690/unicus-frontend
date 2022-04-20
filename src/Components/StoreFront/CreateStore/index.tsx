@@ -109,16 +109,17 @@ const CreateStore = (store) => {
         );
       setLoading(false);      
       if (res) {  
+        let tab = window.open()
         toast.success("Store Created");
         setTimeout(function () {
           toast("Redirecting to your store");
         }, 1000);
         setTimeout(function(){
         history.push("/")
-        window.open(
-          `https://${res.data.createStore.domain}/my-store/general`,
-          " _blank"
-        );
+        tab.location.href=
+          `https://${res.data.createStore.domain}/my-store/general`
+          
+        window.location.reload();
       }, 3000)
       } else {
         throw "Failed";
