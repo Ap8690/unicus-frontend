@@ -3,6 +3,8 @@ import WalletLink from 'walletlink'
 import detectEthereumProvider from '@metamask/detect-provider'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import {MEWethereum} from './mewConfig'
+import { sequence } from "0xsequence";
+
 
 // svgs
 import CC_LOGO from '../../Assets/CC_Logo.svg'
@@ -65,7 +67,11 @@ export const getMetamaskProvider = () => async (dispatch: any) => {
 }
 
 // sequence
- export const sequence 
+ export const sequenceProvider =()=>{
+   const wallet = new sequence.Wallet();
+
+   const provider = new web3.providers.Web3Provider(wallet);
+ }
 
 const getContracts = (walletType: string, networkID: string) => {
   let web3: any = new Web3(RPC_URLS[bscChain])
@@ -85,6 +91,8 @@ const getContracts = (walletType: string, networkID: string) => {
     case 'MEW':
       web3 = new Web3(MEWethereum)
       break
+    case 'Sequence':
+      web3 = new Web3() 
     default:
       web3 = new Web3(RPC_URLS[bscChain])
       break
