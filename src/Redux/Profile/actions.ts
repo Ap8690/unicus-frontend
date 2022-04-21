@@ -381,6 +381,10 @@ export const connToSequence = ()=>async(dispatch:any)=>{
   }
 }
 
+export const connToTronlink =()=>{
+  
+}
+
 export const disConnectWallet = () => async () => {
   localStorage.removeItem('walletType')
   localStorage.removeItem('userInfo')

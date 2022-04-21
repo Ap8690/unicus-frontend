@@ -120,6 +120,12 @@ const WalletsPopup = (props: any) => {
     dispatch(connToSequence());
   };
 
+  //   Connecting to TronLink
+  const connectToTronLink = async () => {
+    props.handleClose();
+    dispatch(connToTronLink());
+  };
+
   const handledefaultErrorModal = () => {
     setdefaultErrorModal(false);
   };
@@ -260,3 +266,7 @@ const WalletsPopup = (props: any) => {
 }
 
 export default withRouter(WalletsPopup)
+function connToTronLink(): any {
+  throw new Error('Function not implemented.')
+}
+

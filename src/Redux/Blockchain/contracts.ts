@@ -4,8 +4,7 @@ import detectEthereumProvider from '@metamask/detect-provider'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import {MEWethereum} from './mewConfig'
 import { sequence } from "0xsequence";
-import { provider} from "web3-core";
-
+import TronWeb from 'tronweb'
 
 
 // svgs
@@ -22,6 +21,9 @@ import {createNFTAbiP, createNFTAddressP} from './Polygon/createNFT'
 import {auctionAbiP, auctionAddressP} from './Polygon/auction'
 import {PROVIDER} from '../constants'
 import { bscChain, ethChain, polygonChain } from '../../config'
+import { auctionAbiT, auctionAddressT } from './Tron/auction'
+import { createNFTAddressT, createNFTAbiT } from './Tron/createNFT'
+import { marketPlaceAddressT, marketPlaceAbiT } from './Tron/marketPlace'
 
 export const RPC_URLS = {
   1: 'https://mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0',
@@ -31,6 +33,11 @@ export const RPC_URLS = {
   97: 'https://data-seed-prebsc-1-s1.binance.org:8545',
   56: 'https://bsc-dataseed.binance.org/',
 }
+const fullNode = "https://api.trongrid.io";
+const solidityNode = "https://api.trongrid.io";
+const eventServer = "https://api.trongrid.io";
+const privateKey ="";
+const tronWeb = new TronWeb(fullNode, solidityNode, eventServer, privateKey);
 
 // coinbase
 export const walletLink = new WalletLink({
@@ -72,9 +79,14 @@ export const getMetamaskProvider = () => async (dispatch: any) => {
  export const sequenceProvider = new sequence.Wallet();
 
 
-const getContracts = (walletType: string, networkID: string) => {
+const getContracts = async (walletType: string, networkID: string) => {
+   let marketPlace,
+     createNFT,
+     auction,
+     marketAddress,
+     createAddress,
+     auctionAddress;
   let web3: any = new Web3(RPC_URLS[bscChain])
-
   switch (walletType) {
     case 'MetaMask':
       if (metaMaskProvider) {
@@ -93,17 +105,20 @@ const getContracts = (walletType: string, networkID: string) => {
     // case 'Sequence':
     //   web3 = new Web3(sequenceProvider.getProvider(). as provider)
     //   break
+    case 'Tron':
+      marketAddress = marketPlaceAddressT
+      marketAddress = marketPlaceAddressT
+      createAddress = createNFTAddressT
+      marketPlace = await tronWeb.contract(marketPlaceAbiT, marketPlaceAddressT)
+      createNFT = await tronWeb.contract(createNFTAbiT, createNFTAddressT);
+      auction = await tronWeb.contract(auctionAbiT, auctionAddressT);
+      break
     default:
       web3 = new Web3(RPC_URLS[networkID])
       break
   }
 
-  let marketPlace,
-    createNFT,
-    auction,
-    marketAddress,
-    createAddress,
-    auctionAddress
+ 
 
   switch (networkID) {
     case ethChain:
@@ -129,7 +144,7 @@ const getContracts = (walletType: string, networkID: string) => {
       marketPlace = new web3.eth.Contract(marketPlaceAbiP, marketPlaceAddressP)
       createNFT = new web3.eth.Contract(createNFTAbiP, createNFTAddressP)
       auction = new web3.eth.Contract(auctionAbiP, auctionAddressP)
-      break
+      break      
 
     default:
       marketAddress = marketPlaceAddressB
