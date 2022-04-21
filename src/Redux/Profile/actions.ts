@@ -25,7 +25,7 @@ import { withRouter } from 'react-router-dom'
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { createBrowserHistory } from 'history';
-import { bscChain, bscChainHex, ethChain, ethChainHex, polygonChainHex } from '../../config'
+import { avalancheChainHex, bscChain, bscChainHex, ethChain, ethChainHex, polygonChainHex } from '../../config'
 
 export const getNftType = (id: number) => async (dispatch: any) => {
   dispatch({
@@ -212,6 +212,24 @@ const polygon = [
     blockExplorerUrls: ["https://polygonscan.com/"],
   },
 ];
+
+// testnet
+const avalanche = [
+  {
+    chainId: avalancheChainHex,
+    chainName: 'Avalanche',
+    nativeCurrency: {
+      name: 'AVAX',
+      symbol: 'AVAX',
+      decimals: 18,
+    },
+    rpcUrls: [
+      'https://api.avax-test.network/ext/bc/C/rpc',
+    ],
+    blockExplorerUrls: ['https://polygonscan.com/'],
+  },
+]
+
 
 // actions
 export const AddNetworks = (network: any) => async (dispatch: any) => {
