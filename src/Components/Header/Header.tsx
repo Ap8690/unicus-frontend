@@ -16,13 +16,14 @@ import WalletsPopup from '../Modals/WalletsPopup/WalletsPopup'
 import CreateNFTModal from '../Modals/CreateNFTModal/CreateNFTModal'
 import DefaultErrorModal from '../Modals/DefaultErrorModal'
 import { Avatar } from '@mui/material'
-import { backendUrl } from '../../config'
+import { backendUrl, tronChain } from '../../config'
 
 // Svgs
 import Logo from '../../Assets/LandingPage/logo_white.png'
 import eth from '../../Assets/ethereum.svg'
 import Bnb from '../../Assets/bnb.svg'
 import polygon from '../../Assets/polygon.svg'
+import tron from "../../Assets/trx.svg"
 import web3 from '../../web3'
 import { useLocation, withRouter } from 'react-router-dom'
 
@@ -152,51 +153,64 @@ const Header = (props: any) => {
     }
 
     const popover = (
-        <Popover id='popover-basic' className='networks_modal'>
-            <div className='popover-header'>Networks</div>
-            <div className='popover-body gfg'>
-                <div
-                    className='net'
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    onClick={() => {
-                        selectNetwork('ethereum', ethChain)
-                    }}
-                >
-                    <img style={{ width: '70%' }} src={eth} alt='' />
-                </div>
-                <div
-                    className='net'
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    onClick={() => {
-                        selectNetwork('bnb', bscChain)
-                    }}
-                >
-                    <img style={{ width: '70%' }} src={Bnb} alt='' />
-                </div>
-                <div
-                    className='net'
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    onClick={() => {
-                        selectNetwork('polygon', polygonChain)
-                    }}
-                >
-                    <img style={{ width: '70%' }} src={polygon} alt='' />
-                </div>
-            </div>
-        </Popover>
-    )
+      <Popover id="popover-basic" className="networks_modal">
+        <div className="popover-header">Networks</div>
+        <div className="popover-body gfg">
+          <div
+            className="net"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={() => {
+              selectNetwork("ethereum", ethChain);
+            }}
+          >
+            <img style={{ width: "70%" }} src={eth} alt="" />
+          </div>
+          <div
+            className="net"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={() => {
+              selectNetwork("bnb", bscChain);
+            }}
+          >
+            <img style={{ width: "70%" }} src={Bnb} alt="" />
+          </div>
+          <div
+            className="net"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={() => {
+              selectNetwork("polygon", polygonChain);
+            }}
+          >
+            <img style={{ width: "70%" }} src={polygon} alt="" />
+          </div>
+          <div
+            className="net"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={() => {
+              selectNetwork("tron", tronChain);
+            }}
+          >
+            <img style={{ width: "70%" }} src={tron} alt="" />
+          </div>
+        </div>
+      </Popover>
+    );
 
     useEffect(() => {
         setregisteredWallet(registerWallet)
@@ -637,7 +651,9 @@ const Header = (props: any) => {
                               ? Bnb
                               : netID === ethChain
                               ? eth
-                              : ""
+                              : netID === tronChain
+                              ? tron
+                              :""
                           }
                           alt=""
                         />

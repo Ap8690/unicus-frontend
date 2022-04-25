@@ -6,6 +6,7 @@ export const mintNFTE = "0x9529eB4956EC7a33C12980a62c4D8135f7Ca1887"
 // export const bscChain = "56"
 // export const ethChain = "1"
 // export const polygonChain = "137"
+export const tronChain = "8766"
 
 // export const bscChainHex = "0x38"
 // export const ethChainHex = "0x1"

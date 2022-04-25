@@ -3,6 +3,9 @@ import WalletLink from 'walletlink'
 import detectEthereumProvider from '@metamask/detect-provider'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import {MEWethereum} from './mewConfig'
+import { sequence } from "0xsequence";
+import TronWeb from 'tronweb'
+
 
 // svgs
 import CC_LOGO from '../../Assets/CC_Logo.svg'
@@ -17,7 +20,10 @@ import {marketPlaceAbiP, marketPlaceAddressP} from './Polygon/marketPlace'
 import {createNFTAbiP, createNFTAddressP} from './Polygon/createNFT'
 import {auctionAbiP, auctionAddressP} from './Polygon/auction'
 import {PROVIDER} from '../constants'
-import { bscChain, ethChain, polygonChain } from '../../config'
+import { bscChain, ethChain, polygonChain, tronChain } from '../../config'
+import { auctionAbiT, auctionAddressT } from './Tron/auction'
+import { createNFTAddressT, createNFTAbiT } from './Tron/createNFT'
+import { marketPlaceAddressT, marketPlaceAbiT } from './Tron/marketPlace'
 
 export const RPC_URLS = {
   1: 'https://mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0',
@@ -27,6 +33,19 @@ export const RPC_URLS = {
   97: 'https://data-seed-prebsc-1-s1.binance.org:8545',
   56: 'https://bsc-dataseed.binance.org/',
 }
+//mainnet
+// const fullNode = "https://api.trongrid.io";
+// const solidityNode = "https://api.trongrid.io";
+// const eventServer = "https://api.trongrid.io";
+// const privateKey ="";
+
+//testnet
+const fullNode = "";
+const solidityNode = "";
+const eventServer = "";
+const privateKey = "";
+//@ts-ignore
+export const tronWeb = window.tronWeb? window.tronWeb: new TronWeb(fullNode, solidityNode, eventServer, privateKey);
 
 // coinbase
 export const walletLink = new WalletLink({
@@ -64,9 +83,19 @@ export const getMetamaskProvider = () => async (dispatch: any) => {
   }
 }
 
-const getContracts = (walletType: string, networkID: string) => {
-  let web3: any = new Web3(RPC_URLS[bscChain])
+// sequence
+ export const sequenceProvider = new sequence.Wallet();
 
+
+const getContracts = (walletType: string, networkID: string) => {
+   let marketPlace,
+     createNFT,
+     auction,
+     marketAddress,
+     createAddress,
+     auctionAddress;
+  let web3: any = new Web3(RPC_URLS[bscChain])
+  
   switch (walletType) {
     case 'MetaMask':
       if (metaMaskProvider) {
@@ -82,17 +111,16 @@ const getContracts = (walletType: string, networkID: string) => {
     case 'MEW':
       web3 = new Web3(MEWethereum)
       break
+    // case 'Sequence':
+    //   web3 = new Web3(sequenceProvider.getProvider(). as provider)
+    //   break
+    
     default:
-      web3 = new Web3(RPC_URLS[bscChain])
+      web3 = new Web3(RPC_URLS[networkID])
       break
   }
 
-  let marketPlace,
-    createNFT,
-    auction,
-    marketAddress,
-    createAddress,
-    auctionAddress
+ 
 
   switch (networkID) {
     case ethChain:
@@ -113,22 +141,33 @@ const getContracts = (walletType: string, networkID: string) => {
       break
     case polygonChain:
       marketAddress = marketPlaceAddressP
-      marketAddress = marketPlaceAddressP
       createAddress = createNFTAddressP
+      auctionAddress = auctionAddressP;
       marketPlace = new web3.eth.Contract(marketPlaceAbiP, marketPlaceAddressP)
       createNFT = new web3.eth.Contract(createNFTAbiP, createNFTAddressP)
       auction = new web3.eth.Contract(auctionAbiP, auctionAddressP)
+      break 
+    case tronChain:
+      marketAddress = marketPlaceAddressT;
+      createAddress = createNFTAddressT;
+      auctionAddress = auctionAddressT;
+      marketPlace = tronWeb.contract(marketPlaceAbiT, marketPlaceAddressT);
+      createNFT = tronWeb.contract(createNFTAbiT, createNFTAddressT);
+      auction = tronWeb.contract(auctionAbiT, auctionAddressT);
       break
 
     default:
       marketAddress = marketPlaceAddressB
-      marketAddress = marketPlaceAddressB
       createAddress = createNFTAddressB
+      auctionAddress = auctionAddressB;
       marketPlace = new web3.eth.Contract(marketPlaceAbiB, marketPlaceAddressB)
       createNFT = new web3.eth.Contract(createNFTAbiB, createNFTAddressB)
       auction = new web3.eth.Contract(auctionAbiB, auctionAddressB)
       break
   }
+
+  console.log("getCon", marketPlace.methods, createNFT.methods);
+  
 
   return {
     web3,

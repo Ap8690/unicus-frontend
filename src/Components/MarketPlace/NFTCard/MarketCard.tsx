@@ -23,10 +23,6 @@ const MarketCard = ({item}: any) => {
   )
 
   // redux state
-  const {web3, marketPlace, auction, createNFT} = getContracts(
-    walletType,
-    networkID
-  )
   const dispatch = useDispatch()
   const [price, setprice] = useState("")
   const [contractAddress, setcontractAddress] = useState("")

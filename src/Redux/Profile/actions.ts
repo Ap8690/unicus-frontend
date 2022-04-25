@@ -17,6 +17,7 @@ import getContracts, {
   walletLink,
   metaMaskProvider,
   walletConnectorProvider,
+  sequenceProvider,
 } from '../Blockchain/contracts'
 import {MEWethereum} from '../Blockchain/mewConfig'
 import Web3 from 'web3'
@@ -26,6 +27,9 @@ import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 import { bscChain, bscChainHex, ethChain, ethChainHex, polygonChainHex } from '../../config'
+import web3 from '../../web3'
+
+let connecting = false;
 
 export const getNftType = (id: number) => async (dispatch: any) => {
   dispatch({
@@ -292,6 +296,7 @@ export const connToMetaMask = () => async (dispatch: any, getState: any) => {
       method: 'eth_requestAccounts',
     })
 
+
     localStorage.setItem('walletType', 'Metamask')
     dispatch({
       type: CONNECT_WALLET,
@@ -358,14 +363,54 @@ export const connToMEW = () => async (dispatch: any) => {
   }
 }
 
+export const connToSequence = ()=>async(dispatch:any)=>{
+  try{
+    const accounts = await sequenceProvider.connect() 
+    console.log("sequqnce acc", accounts);
+    console.log("web3 seq", await web3.eth.getAccounts());
+
+    localStorage.setItem("walletType", "Sequence");
+    dispatch({
+      type: CONNECT_WALLET,
+      payload: accounts.session.accountAddress,
+      walletType: "Sequence",
+    });
+
+  }
+  catch(err){
+    console.log(err);
+    
+  }
+}
+
+export const connToTronlink = () => async (dispatch: any) => {
+  try {
+    if (connecting) return;
+    let tries = 0;
+    connecting = true;
+    setTimeout(function initTimer() {
+      //@ts-ignore
+      if (!window.tronWeb || !window?.tronWeb?.defaultAddress?.base58)
+        {return ++tries < 50 ? setTimeout(initTimer, 100) : (connecting = false);}
+      //@ts-ignore
+      const address = window.tronWeb.defaultAddress.base58;
+      console.log("tronadd", address);
+    }, 100);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const disConnectWallet = () => async () => {
   localStorage.removeItem('walletType')
   localStorage.removeItem('userInfo')
   localStorage.removeItem('accessToken')
   localStorage.removeItem('userAddress')
   // web3.currentProvider._handleDisconnect()
+  metaMaskProvider.disconnect()
   walletConnectorProvider.disconnect()
   walletLink.disconnect()
+  sequenceProvider.disconnect()
 }
 
 export const getProfileInformation =
