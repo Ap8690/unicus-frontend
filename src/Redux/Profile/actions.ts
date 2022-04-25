@@ -29,6 +29,8 @@ import { createBrowserHistory } from 'history';
 import { bscChain, bscChainHex, ethChain, ethChainHex, polygonChainHex } from '../../config'
 import web3 from '../../web3'
 
+let connecting = false;
+
 export const getNftType = (id: number) => async (dispatch: any) => {
   dispatch({
     type: GET_TYPE_OF_NFT,
@@ -381,9 +383,23 @@ export const connToSequence = ()=>async(dispatch:any)=>{
   }
 }
 
-export const connToTronlink =()=>{
-  
-}
+export const connToTronlink = () => async (dispatch: any) => {
+  try {
+    if (connecting) return;
+    let tries = 0;
+    connecting = true;
+    setTimeout(function initTimer() {
+      //@ts-ignore
+      if (!window.tronWeb || !window?.tronWeb?.defaultAddress?.base58)
+        {return ++tries < 50 ? setTimeout(initTimer, 100) : (connecting = false);}
+      //@ts-ignore
+      const address = window.tronWeb.defaultAddress.base58;
+      console.log("tronadd", address);
+    }, 100);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const disConnectWallet = () => async () => {
   localStorage.removeItem('walletType')

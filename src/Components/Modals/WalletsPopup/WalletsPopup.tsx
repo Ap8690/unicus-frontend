@@ -13,12 +13,13 @@ import mew_wallet from '../../../Assets/mew.svg'
 // redux imports
 import { useDispatch } from 'react-redux'
 import {
-    connToMetaMask,
-    connToCoinbase,
-    connToWalletConnector,
-    connToMEW,
-    connToSequence,
-} from '../../../Redux/Profile/actions'
+  connToMetaMask,
+  connToCoinbase,
+  connToWalletConnector,
+  connToMEW,
+  connToSequence,
+  connToTronlink
+} from "../../../Redux/Profile/actions";
 
 // providers
 import { metaMaskProvider } from '../../../Redux/Blockchain/contracts'
@@ -120,10 +121,10 @@ const WalletsPopup = (props: any) => {
     dispatch(connToSequence());
   };
 
-  //   Connecting to TronLink
-  const connectToTronLink = async () => {
+   //   Connecting to TronLink
+  const connectToTronLink = () => {
     props.handleClose();
-    dispatch(connToTronLink());
+    dispatch(connToTronlink());
   };
 
   const handledefaultErrorModal = () => {
@@ -163,6 +164,9 @@ const WalletsPopup = (props: any) => {
       dispatch(connToWalletConnector());
     } else if (res === "MEW") {
       dispatch(connToMEW());
+    }
+    else if(res === "Tron"){
+      dispatch(connToTronlink());
     }
   }, []);
 
@@ -236,8 +240,8 @@ const WalletsPopup = (props: any) => {
               <h5>MEW</h5>
               <Image src={mew_wallet} alt="" />
             </div>
-            <div className="wallet" onClick={connectToSequence}>
-              <h5>Sequence</h5>
+            <div className="wallet" onClick={connectToTronLink}>
+              <h5>TronLink</h5>
               <Image src={mew_wallet} alt="" />
             </div>
           </div>
@@ -266,7 +270,3 @@ const WalletsPopup = (props: any) => {
 }
 
 export default withRouter(WalletsPopup)
-function connToTronLink(): any {
-  throw new Error('Function not implemented.')
-}
-
