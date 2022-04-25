@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getNftType } from "../../../Redux/Profile/actions";
 import ViewModal from "../../Modals/ViewModal/ViewModal";
-import { ethChain, polygonChain } from "../../../config";
+import { bscChain, ethChain, polygonChain } from "../../../config";
 
 const NFTCardAuctions = ({ item }: AuctionCardProps) => {
     const { walletType, networkID, userAddress, userInfo } = useSelector(
@@ -34,12 +34,12 @@ const NFTCardAuctions = ({ item }: AuctionCardProps) => {
     }, []);
 
     useEffect(() => {
-        if (item.chain == 56) {
+        if (item.chain.toString() == bscChain) {
             setcontractAddress("0x2f376c69feEC2a4cbb17a001EdB862573898E95a");
-        } else if (item.chain == 1) {
-            setcontractAddress("0x424bb7731c056a52b45CBD613Ef08c69c628735f");
-        } else if (item.chain == 137) {
-            setcontractAddress("0x1549EabD2a47762413ee1A11e667E67A5825ff44");
+        } else if (item.chain.toString() == ethChain) {
+          setcontractAddress("0x424bb7731c056a52b45CBD613Ef08c69c628735f");
+        } else if (item.chain.toString() == polygonChain) {
+          setcontractAddress("0x1549EabD2a47762413ee1A11e667E67A5825ff44");
         } 
         // else if (item.chain == 97) {
         //     setcontractAddress("0x451853f88ec565F04F40d74DBbC45C9C8Ff32793");

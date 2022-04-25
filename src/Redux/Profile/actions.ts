@@ -322,8 +322,10 @@ export const connToCoinbase = () => async (dispatch: any) => {
 export const connToWalletConnector =
   () => async (dispatch: any, getState: any) => {
     try {
+      console.log("IN");
       const accounts = await walletConnectorProvider.enable()
       localStorage.setItem('walletType', 'WalletConnect')
+      console.log("ACCOUNT ",accounts);
       dispatch({
         type: CONNECT_WALLET,
         payload: accounts[0],
