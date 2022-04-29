@@ -41,14 +41,9 @@ const NFTCardAuctions = ({ item }: AuctionCardProps) => {
         } else if (item.chain.toString() == polygonChain) {
           setcontractAddress("0x1549EabD2a47762413ee1A11e667E67A5825ff44");
         } 
-        // else if (item.chain == 97) {
-        //     setcontractAddress("0x451853f88ec565F04F40d74DBbC45C9C8Ff32793");
-        // }
+        
     }, []);
-    useEffect(() => {
-        console.log("contract address ", contractAddress);
-        console.log("chain ", item.chain);
-    }, [contractAddress]);
+   
 
     useEffect(() => {
         if (time?.timeleft > 0) {

@@ -24,10 +24,15 @@ import { withRouter } from "react-router-dom";
 import { bscChain, ethChain, polygonChain } from "../../../config";
 
 // utilities
-import { connectWallet, getUserWallet, METAMASK, TRONLINK } from "../../../Utilities/Util";
+import {
+  connectWallet,
+  getUserWallet,
+  METAMASK,
+  TRONLINK,
+} from "../../../Utilities/Util";
 import WalletNotFound from "../../Modals/MetaMaskNotFound/WalletNotFound";
 import { createNFTAddressT } from "../../../Redux/Blockchain/Tron/createNFT";
-
+import { toast } from "react-toastify";
 
 const AddForm = (props: any) => {
   const dispatch = useDispatch();
@@ -48,6 +53,7 @@ const AddForm = (props: any) => {
   const [royaltyError, setRoyaltyError] = useState<boolean>(false);
   const { createNFT } = getContracts(walletType, networkID);
   // Modals
+  const [nftModalMessage, setNftModalMessage] = useState("");
   const [nftLoading, setNftLoading] = useState<boolean>(false);
   const [MetamaskNotFound, setMetamaskNotFound] = useState(false);
   const [product, setproduct] = useState<any>({});
@@ -286,13 +292,49 @@ const AddForm = (props: any) => {
       return null;
     }
     //@ts-expect-error
-    if(networkID === tronChain && !window.tronWeb){
-        setNftLoading(false);
-        setMetamaskNotFound(true);
-        return null;
+    if (networkID === tronChain && !window.tronWeb) {
+      setNftLoading(false);
+      setMetamaskNotFound(true);
+      return null;
     }
     connectWallet(networkID)
       .then(async () => {
+        const accounts = await getUserWallet(networkID);
+        console.log("User Account", accounts[0]);
+        if (networkID === tronChain && !accounts[0]) {
+          setdefaultErrorModal(true);
+          setdefaultErrorMessage("Login to TronLink");
+          return;
+        }
+        if (
+          userInfo.wallets.length === 0 ||
+          !userInfo.wallets.includes(accounts[0])
+        ) {
+          console.log(accounts[0]);
+          const axiosConfig: any = {
+            headers: {
+              Authorization: "Bearer " + accessToken,
+            },
+          };
+          setNftModalMessage("Adding current wallet address to your account.");
+          await axios
+            .get(`${backendUrl}/users/addWallet/${accounts[0]}`, axiosConfig)
+            .then(async (res: any) => {
+              console.log(res);
+              dispatch(getUserInfo(res.data.user));
+              localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+            })
+            .catch((err) => {
+              console.log(err);
+
+              setNftLoading(false);
+              setdefaultErrorMessage(
+                "Unable to connect current account. Please try again."
+              );
+              setdefaultErrorModal(true);
+              throw "Wallet already in use.Please try different address.";
+            });
+        }
         var contractAddress;
         if (networkID === bscChain) {
           contractAddress = "0x2f376c69feEC2a4cbb17a001EdB862573898E95a";
@@ -300,13 +342,11 @@ const AddForm = (props: any) => {
           contractAddress = "0x424bb7731c056a52b45CBD613Ef08c69c628735f";
         } else if (networkID === polygonChain) {
           contractAddress = "0x1549EabD2a47762413ee1A11e667E67A5825ff44";
-        }
-        else if( networkID ===  tronChain){
+        } else if (networkID === tronChain) {
           contractAddress = createNFTAddressT;
         }
-
+        setNftModalMessage("Uploading the NFT.");
         setNftLoading(true);
-
         console.log(imageSrc);
         let formData = new FormData();
         formData.append("name", title);
@@ -332,13 +372,14 @@ const AddForm = (props: any) => {
           },
         };
 
-        const response: any = await axios
-          .post(`${backendUrl}/nft/upload-pinata`, formData, axiosConfig)
-          .catch((err: any) => {
-            setNftLoading(false);
-            setdefaultErrorMessage(err.message);
-            setdefaultErrorModal(true);
-          });
+        // const response: any = await axios
+        //   .post(`${backendUrl}/nft/upload-pinata`, formData, axiosConfig)
+        //   .catch((err: any) => {
+        //     setNftLoading(false);
+        //     setdefaultErrorMessage(err.message);
+        //     setdefaultErrorModal(true);
+        //   });
+        const response = { data: "ss" };
         if (!response) {
           setdefaultErrorMessage("Network Error");
           return;
@@ -347,38 +388,13 @@ const AddForm = (props: any) => {
         var tokenUri = "https://unicus.mypinata.cloud/ipfs/" + tokenHash;
 
         try {
-          const accounts = await getUserWallet(networkID);
-          console.log("User Account", accounts[0]);
-          if (
-            userInfo.wallets.length === 0 ||
-            !userInfo.wallets.includes(accounts[0])
-          ) {
-            console.log(accounts[0]);
-            const axiosConfig: any = {
-              headers: {
-                Authorization: "Bearer " + accessToken,
-              },
-            };
-            await axios
-              .get(`${backendUrl}/users/addWallet/${accounts[0]}`, axiosConfig)
-              .then(async (res: any) => {
-                console.log(res);
-                dispatch(getUserInfo(res.data.user));
-                localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-              })
-              .catch((err) => {
-                setNftLoading(false);
-                setdefaultErrorMessage(
-                  "Current account is not linked with this user"
-                );
-                setdefaultErrorModal(true);
-                throw "Wallet already in use";
-              });
-          }
+          setNftModalMessage("An Awesome Asset is getting Minted");
+          console.log("cret", createNFT);
+
           const res = await createNFT.methods
             .batchMint([tokenUri], [royalty])
-            .send({ from: accounts[0]})
-            
+            .send({ from: accounts[0] });
+
           console.log(res, res.events.Minted.returnValues._NftId);
           if (res?.transactionHash) {
             formData.append("jsonIpfs", tokenUri);
@@ -467,6 +483,7 @@ const AddForm = (props: any) => {
       })
       .catch((err) => {
         console.log(err.message);
+        toast.error("Mint failed.");
         setNftLoading(false);
       });
   };
@@ -506,8 +523,6 @@ const AddForm = (props: any) => {
     list[index][name] = value;
     setInputFieldsList(list);
   };
-
-  console.log(imageSrc[0] && imageSrc[0].path.split(".").pop() == "mp4");
 
   return (
     <>
@@ -686,7 +701,7 @@ const AddForm = (props: any) => {
           handleClose={() => setNftLoading(false)}
           type="loading"
         >
-          <NFTCreateLoading message="An Awesome Asset is getting Minted" />
+          <NFTCreateLoading message={nftModalMessage} />
         </DefaultModal>
         <DefaultModal
           show={nftSuccess}

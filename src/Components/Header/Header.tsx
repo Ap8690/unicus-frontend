@@ -88,7 +88,6 @@ const Header = (props: any) => {
 
     const handleGlobalLink = (e: any, item: any) => {
         e.preventDefault()
-        console.log(e.target.id)
         setglobalModalPopup(false)
         if (e.target.id == 'globalNft') {
             props.history.push(`/nft/${item.nftId}`)
@@ -121,7 +120,6 @@ const Header = (props: any) => {
                             profileUrl: res.data.users[i].profileUrl,
                         })
                     }
-                    console.log(metadata)
                     setglobalModal(metadata)
                 })
         } else {
@@ -224,7 +222,6 @@ const Header = (props: any) => {
         dispatch(getMetamaskProvider())
         const userInfo: any = localStorage.getItem('userInfo')
         const accessToken = localStorage.getItem('accessToken')
-        console.log("us00", userInfo);
         
         if (userInfo) {
             dispatch(getUserInfo(JSON.parse(userInfo)))

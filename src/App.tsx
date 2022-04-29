@@ -42,12 +42,10 @@ function App() {
           Authorization: "Bearer " + accessToken,
         },
       };
-      console.log("accesstoken", accessToken);
       
       if(accessToken) {
         const res = await axios.get(`${STOREFRONT_URL}/store/getStoreByUser`, axiosConfig);
         if(res.data.store){
-        console.log("store", res.data);
         setStore(res.data.store)
         }
       }

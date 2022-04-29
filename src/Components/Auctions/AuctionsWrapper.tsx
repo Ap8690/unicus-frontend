@@ -25,7 +25,6 @@ const AuctionsWrapper = () => {
 
     async function fetchItems() {
         if (skiploading) {
-            console.log(sortBy);
             await axios
                 .get(
                     `${backendUrl}/auction/getAllAuction/${skip}/${networkID}/${encodeURIComponent(
@@ -33,14 +32,12 @@ const AuctionsWrapper = () => {
                     )}`
                 )
                 .then((res: any) => {
-                    console.log(sortBy);
 
                     settotalAuctions(res.data.totalAuctions);
                     const newData = metadata;
                     newData.push(...res.data.data);
                     setmetadata(newData);
                     setMetadataSorted(newData);
-                    console.log(newData);
                     if (res.data.msg) {
                         setNFTSLoaded(true);
                     } else {
@@ -85,7 +82,6 @@ const AuctionsWrapper = () => {
                 }
             });
             setMetadataSorted(metadataSorted);
-            console.log(metadataSorted.length);
         }
     }, [category, metadata]);
     return (

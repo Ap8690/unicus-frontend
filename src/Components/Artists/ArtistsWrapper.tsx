@@ -31,7 +31,6 @@ const ArtistsWrapper = (props: any) => {
                     `${backendUrl}/users/${skip}`
                 )
                 .then((res: any) => {
-                  console.log(res.data.users)
                     const newData = metadata
                     newData.push(...res.data.users)
                     setmetadata(newData)

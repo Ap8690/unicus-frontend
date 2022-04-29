@@ -52,7 +52,6 @@ const WalletsPopup = (props: any) => {
 
   const connectToMetaMask = async () => {
     if (metaMaskProvider) {
-      console.log("web3", await web3.eth.getAccounts());
 
       await web3.eth.getAccounts().then((walletAddress) => {
         axios

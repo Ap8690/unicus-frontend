@@ -41,12 +41,12 @@ export const RPC_URLS = {
 
 //testnet
 const HttpProvider = TronWeb.providers.HttpProvider;
-const fullNode = new HttpProvider("https://api.shasta.trongrid.io");
-const solidityNode = new HttpProvider("https://api.shasta.trongrid.io");
-const eventServer = new HttpProvider("https://api.shasta.trongrid.io");
-const privateKey = "";
+const fullNode = new HttpProvider("https://api.trongrid.io");
+const solidityNode = new HttpProvider("https://api.trongrid.io");
+const eventServer = new HttpProvider("https://api.trongrid.io");
+const privateKey = "01";
 //@ts-ignore
-export const tronWeb =  window.tronWeb? window.tronWeb: new TronWeb(fullNode, solidityNode, eventServer, privateKey)
+export const tronWeb =  window.tronWeb? window.tronWeb: new TronWeb({fullNode, privateKey})
 // coinbase
 export const walletLink = new WalletLink({
   appName: 'Unicus',

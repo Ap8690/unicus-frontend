@@ -56,18 +56,15 @@ const CollectionsWrapper = (props: any) => {
 
     async function fetchItems() {
         if (skiploading) {
-            console.log(sortBy)
             await axios
                 .get(
                     `${backendUrl}/nft/getAllCollections/${skip}`
                 )
                 .then((res: any) => {
-                    console.log(sortBy)
                     settotalAuctions(res.data.totalAuctions)
                     const newData = metadata
                     newData.push(...res.data.data)
                     setmetadata(newData)
-                    console.log(newData)
                     if (res.data.msg) {
                         setNFTSLoaded(true)
                     } else {
@@ -75,8 +72,6 @@ const CollectionsWrapper = (props: any) => {
                     }
                 })
                 .catch((error) => {
-                    console.log(sortBy)
-                    console.log(error)
                     setskiploading(false)
                 })
         }

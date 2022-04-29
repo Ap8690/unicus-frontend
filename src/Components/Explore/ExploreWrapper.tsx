@@ -34,7 +34,6 @@ const ExploreWrapper = (props: any) => {
     const [verifiedMessage, setverifiedMessage] = useState<any>('')
 
     useEffect(() => {
-        console.log("store", props.location.pathname.split("/")[4]=="true");
         
         if (
             props.location.pathname.includes('/login') &&
@@ -65,7 +64,6 @@ const ExploreWrapper = (props: any) => {
                     history.push("/create-store")
                 }
                 else{
-                    console.log("store 1");
                     
                     history.push("/");
                 }
@@ -84,18 +82,15 @@ const ExploreWrapper = (props: any) => {
 
     async function fetchItems() {
         if (skiploading) {
-            console.log(sortBy)
             await axios
                 .get(
                     `${backendUrl}/auction/getAllExplore/${skip}/${networkID}/${encodeURIComponent(JSON.stringify(sortBy))}`
                 )
                 .then((res: any) => {
-                    console.log(sortBy)
                     settotalAuctions(res.data.totalAuctions)
                     const newData = metadata
                     newData.push(...res.data.data)
                     setmetadata(newData)
-                    console.log(newData)
                     if (res.data.msg) {
                         setNFTSLoaded(true)
                     } else {
@@ -103,7 +98,6 @@ const ExploreWrapper = (props: any) => {
                     }
                 })
                 .catch((error) => {
-                    console.log(sortBy)
                     console.log(error)
                     setskiploading(false)
                 })
@@ -111,7 +105,6 @@ const ExploreWrapper = (props: any) => {
     }
 
     useEffect(() => {
-        console.log(sortBy)
         if (networkID === localStorage.getItem('networkID') || networkID === bscChain) {
             fetchItems()
         } else {
