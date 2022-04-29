@@ -4,6 +4,8 @@
 //   const finalAdd = `${add1}....${add2}`
 //   return finalAdd
 // }
+import { tronChain } from '../config';
+import { tronWeb } from '../Redux/Blockchain/contracts';
 import web3 from '../web3';
 // export const STOREFRONT_URL = "https://unicus-storefront-backend.herokuapp.com";
 
@@ -84,14 +86,35 @@ export const getTheTimeDifference = (sec: number) => {
   }
 }
 
-export const connectWallet = async () => {
+export const connectWallet = async (network) => {
+  let address;
+  if(network== tronChain){
+    address = tronWeb.defaultAddress.base58
+  }else{
   const accounts = await window.ethereum.request({
     method: "eth_requestAccounts",
   });
+  address = accounts[0]
+}
+  return address;
+}
+
+export const getUserWallet = async (network) => {
+  let accounts =[];
+  if(network === tronChain){
+    //@ts-ignore
+      const address = window.tronWeb.defaultAddress.base58;
+      accounts.push(address);
+  }else{
+    accounts = await web3.eth.getAccounts();
+  }
   return accounts;
 }
 
-export const getUserWallet = async () => {
-  const accounts = await web3.eth.getAccounts();
-  return accounts;
+export interface WalletsPopupProps {
+  show: boolean;
+  handleClose: () => void;
 }
+
+export const METAMASK = "MetaMask";
+export const TRONLINK = "TronLink";

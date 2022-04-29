@@ -102,7 +102,7 @@ const Dashboard = (props: any) => {
         networkID,
         userInfo,
         accessToken,
-    } = useSelector((state: any) => state.profile) //   clipboard
+    } = useSelector((state: any) => state.profile)//   clipboard
     const { portfolioNFTS, portfolioNFTSLoaded, lastPortId } = useSelector(
         (state: any) => state.marketPlace
     )
@@ -247,7 +247,7 @@ const Dashboard = (props: any) => {
     }
 
     async function addAccount() {
-        const account = await getUserWallet();
+        const account = await getUserWallet(networkID);
         console.log(account[0])
         axios
             .get(

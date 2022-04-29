@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { Image, Modal } from "react-bootstrap";
 import { ReactComponent as CgClose } from "../../../Assets/react-icons/CgClose.svg";
-import MetaMaskNotFound from "../MetaMaskNotFound/MetaMaskNotFound";
 import { backendUrl, tronChain } from "../../../config";
 
 // image
@@ -23,7 +22,7 @@ import {
 } from "../../../Redux/Profile/actions";
 
 // providers
-import { metaMaskProvider, tronWeb } from "../../../Redux/Blockchain/contracts";
+import { metaMaskProvider } from "../../../Redux/Blockchain/contracts";
 import LoginPopUp from "../Auth/Login";
 import RegisterPopUp from "../Auth/Register";
 import axios from "axios";
@@ -38,7 +37,8 @@ import web3 from "../../../web3";
 import DefaultErrorModal from "../DefaultErrorModal";
 import { withRouter } from "react-router-dom";
 import Cookies from "js-cookie";
-import {connectWallet} from "../../../Utilities/Util";
+import WalletNotFound from "../MetaMaskNotFound/WalletNotFound";
+import { METAMASK, TRONLINK } from "../../../Utilities/Util";
 
 const WalletsPopup = (props: any) => {
   const [meatMaskShow, setMeatMaskShow] = useState(false);
@@ -134,8 +134,8 @@ const WalletsPopup = (props: any) => {
     //@ts-expect-error
     const tronWeb = window.tronWeb
     if(!tronWeb){
-      setdefaultErrorMessage("Please Install TronLink");
-      setdefaultErrorModal(true);
+      openMetaMaskModal();
+      return
     }
     const address = tronWeb.defaultAddress.base58
     console.log("tronBal",await tronWeb.trx.getBalance(address))
@@ -297,7 +297,7 @@ const WalletsPopup = (props: any) => {
           </div>
         </div>
       </Modal>
-      <MetaMaskNotFound show={meatMaskShow} handleClose={closeMetaMaskModal} />
+      <WalletNotFound show={meatMaskShow} handleClose={closeMetaMaskModal}/>
       <LoginPopUp
         storeRegistration={props.storeRegistration}
         redirectUrl={props.redirectUrl}

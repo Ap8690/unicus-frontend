@@ -5,7 +5,7 @@ import UploadField from "../UploadField";
 import { useSelector } from "react-redux";
 import { getUserInfo } from "../../../Redux/Profile/actions";
 import { useDispatch } from "react-redux";
-import { backendUrl } from "../../../config";
+import { backendUrl, tronChain } from "../../../config";
 // img
 // import PrevIMg from '../../../Assets/nft/pre_img.jpg'
 import NFTCreateLoading from "../../Modals/NFTCreateLoading/NFTCreateLoading";
@@ -13,19 +13,21 @@ import NFTCreateSuccess from "../../Modals/NFTCreateSuccess/NFTCreateSuccess";
 import DefaultModal from "../../Modals/DefaultModal/DefaultModal";
 // import {setTimeout} from 'timers'
 import axios from "axios";
-import getContracts from "../../../Redux/Blockchain/contracts";
+import getContracts, { tronWeb } from "../../../Redux/Blockchain/contracts";
 import Attributes from "../../Modals/Attributes/Attributes";
 import StripeCheckout from "react-stripe-checkout";
 import { Modal } from "react-bootstrap";
 import { ReactComponent as CgClose } from "../../../Assets/react-icons/CgClose.svg";
 import DefaultErrorModal from "../../Modals/DefaultErrorModal";
-import MetaMaskNotFound from "../../Modals/MetaMaskNotFound/MetaMaskNotFound";
 // import mintingContract from '../../../contracts/minting'
 import { withRouter } from "react-router-dom";
 import { bscChain, ethChain, polygonChain } from "../../../config";
 
 // utilities
-import { connectWallet, getUserWallet } from "../../../Utilities/Util";
+import { connectWallet, getUserWallet, METAMASK, TRONLINK } from "../../../Utilities/Util";
+import WalletNotFound from "../../Modals/MetaMaskNotFound/WalletNotFound";
+import { createNFTAddressT } from "../../../Redux/Blockchain/Tron/createNFT";
+
 
 const AddForm = (props: any) => {
   const dispatch = useDispatch();
@@ -275,7 +277,7 @@ const AddForm = (props: any) => {
       });
   };
 
-  const metamaskPayment = async (e: any) => {
+  const cryptoPayment = async (e: any) => {
     e.preventDefault();
     setAddNFTModalOpen(false);
     if (!window.ethereum) {
@@ -283,7 +285,13 @@ const AddForm = (props: any) => {
       setMetamaskNotFound(true);
       return null;
     }
-    connectWallet()
+    //@ts-expect-error
+    if(networkID === tronChain && !window.tronWeb){
+        setNftLoading(false);
+        setMetamaskNotFound(true);
+        return null;
+    }
+    connectWallet(networkID)
       .then(async () => {
         var contractAddress;
         if (networkID === bscChain) {
@@ -292,6 +300,9 @@ const AddForm = (props: any) => {
           contractAddress = "0x424bb7731c056a52b45CBD613Ef08c69c628735f";
         } else if (networkID === polygonChain) {
           contractAddress = "0x1549EabD2a47762413ee1A11e667E67A5825ff44";
+        }
+        else if( networkID ===  tronChain){
+          contractAddress = createNFTAddressT;
         }
 
         setNftLoading(true);
@@ -320,7 +331,6 @@ const AddForm = (props: any) => {
             Authorization: "Bearer " + accessToken,
           },
         };
-        console.log(accessToken);
 
         const response: any = await axios
           .post(`${backendUrl}/nft/upload-pinata`, formData, axiosConfig)
@@ -337,8 +347,8 @@ const AddForm = (props: any) => {
         var tokenUri = "https://unicus.mypinata.cloud/ipfs/" + tokenHash;
 
         try {
-          const accounts = await getUserWallet();
-          console.log("User Account", accounts);
+          const accounts = await getUserWallet(networkID);
+          console.log("User Account", accounts[0]);
           if (
             userInfo.wallets.length === 0 ||
             !userInfo.wallets.includes(accounts[0])
@@ -359,7 +369,7 @@ const AddForm = (props: any) => {
               .catch((err) => {
                 setNftLoading(false);
                 setdefaultErrorMessage(
-                  "Current Metamask account is not linked with this user"
+                  "Current account is not linked with this user"
                 );
                 setdefaultErrorModal(true);
                 throw "Wallet already in use";
@@ -367,7 +377,8 @@ const AddForm = (props: any) => {
           }
           const res = await createNFT.methods
             .batchMint([tokenUri], [royalty])
-            .send({ from: accounts[0] });
+            .send({ from: accounts[0]})
+            
           console.log(res, res.events.Minted.returnValues._NftId);
           if (res?.transactionHash) {
             formData.append("jsonIpfs", tokenUri);
@@ -718,9 +729,9 @@ const AddForm = (props: any) => {
             <div className="success__body create_nft_modal">
               <div
                 className="wallet nftmodal newChange"
-                onClick={metamaskPayment}
+                onClick={cryptoPayment}
               >
-                <h5>Pay Using Metamask</h5>
+                <h5>Pay Using Crypto Wallet</h5>
               </div>
               <StripeCheckout
                 stripeKey="pk_test_51KF19SSJRtNPAiEbZ3zKUbnGW3P98lNQPTczCPnVNiPrWopONiFKsLMQ4jaG1WYJfLlFv0pqQqp3h8DbZbRhMr6000maVwfsWr"
@@ -745,7 +756,7 @@ const AddForm = (props: any) => {
           DefaultErrorModalClose={() => handledefaultErrorModal()}
           DefaultErrorMessage={defaultErrorMessage}
         />
-        <MetaMaskNotFound
+        <WalletNotFound
           show={MetamaskNotFound}
           handleClose={closeMetaMaskModal}
         />

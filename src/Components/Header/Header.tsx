@@ -44,6 +44,7 @@ import ProfileDropDown from '../ProfileDropDown/ProfileDropDown'
 import axios from 'axios'
 import MaterialSwitch from '../Toggle/MaterialSwitch'
 import { bscChain, ethChain, polygonChain } from '../../config'
+import { toast } from 'react-toastify';
 
 const Header = (props: any) => {
     // redux state
@@ -150,6 +151,9 @@ const Header = (props: any) => {
     const selectNetwork = (type: any, id: string) => {
         dispatch(AddNetworks(type))
         dispatch(getNetwork(id))
+        toast(`Your are now on ${type} chain`, {
+          className:"toast-custom",
+        });
     }
 
     const popover = (
@@ -177,7 +181,7 @@ const Header = (props: any) => {
               justifyContent: "center",
             }}
             onClick={() => {
-              selectNetwork("bnb", bscChain);
+              selectNetwork("binance", bscChain);
             }}
           >
             <img style={{ width: "70%" }} src={Bnb} alt="" />
@@ -691,8 +695,7 @@ const Header = (props: any) => {
         />
         <DisConnect
           show={openDisconnectModal}
-          handleClose={() => setOpenDisconnectModal(false)}
-        />
+          handleClose={() => setOpenDisconnectModal(false)} />
         <RegisterWallet
           RegisterWalletShow={registeredWallet}
           RegisterWalletClose={() => dispatch(getRegisterWallet(false))}
