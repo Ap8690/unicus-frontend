@@ -26,8 +26,9 @@ import { withRouter } from 'react-router-dom'
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { createBrowserHistory } from 'history';
-import { bscChain, bscChainHex, ethChain, ethChainHex, polygonChainHex } from '../../config'
+import { backendUrl, bscChain, bscChainHex, ethChain, ethChainHex, polygonChainHex } from '../../config'
 import web3 from '../../web3'
+import Cookies from "js-cookie";
 
 let connecting = false;
 
@@ -390,13 +391,14 @@ export const connToTronlink = () => async (dispatch: any) => {
     if (connecting) return;
     let tries = 0;
     connecting = true;
-    setTimeout(function initTimer() {
+    setTimeout(async function initTimer() {
       //@ts-ignore
       if (!window.tronWeb || !window?.tronWeb?.defaultAddress?.base58)
         {return ++tries < 50 ? setTimeout(initTimer, 100) : (connecting = false);}
       //@ts-ignore
       const address = window.tronWeb.defaultAddress.base58;
       console.log("tronadd", address);
+      
     }, 100);
   } catch (err) {
     console.log(err);
@@ -408,8 +410,13 @@ export const disConnectWallet = () => async () => {
   localStorage.removeItem('userInfo')
   localStorage.removeItem('accessToken')
   localStorage.removeItem('userAddress')
+  Cookies.remove("userInfo", {
+    domain: "unicus.one",
+  });
+  Cookies.remove("accessToken", {
+    domain: "unicus.one",
+  });
   // web3.currentProvider._handleDisconnect()
-  metaMaskProvider.disconnect()
   walletConnectorProvider.disconnect()
   walletLink.disconnect()
   sequenceProvider.disconnect()

@@ -40,12 +40,13 @@ export const RPC_URLS = {
 // const privateKey ="";
 
 //testnet
-const fullNode = "";
-const solidityNode = "";
-const eventServer = "";
+const HttpProvider = TronWeb.providers.HttpProvider;
+const fullNode = "https://api.shasta.trongrid.io";
+const solidityNode = "https://api.shasta.trongrid.io";
+const eventServer = "https://api.shasta.trongrid.io";
 const privateKey = "";
 //@ts-ignore
-export const tronWeb = window.tronWeb? window.tronWeb: new TronWeb(fullNode, solidityNode, eventServer, privateKey);
+export const tronWeb =  new TronWeb(fullNode, solidityNode, eventServer, privateKey);
 
 // coinbase
 export const walletLink = new WalletLink({
@@ -148,12 +149,17 @@ const getContracts = (walletType: string, networkID: string) => {
       auction = new web3.eth.Contract(auctionAbiP, auctionAddressP)
       break 
     case tronChain:
+      try{
       marketAddress = marketPlaceAddressT;
       createAddress = createNFTAddressT;
       auctionAddress = auctionAddressT;
       marketPlace = tronWeb.contract(marketPlaceAbiT, marketPlaceAddressT);
       createNFT = tronWeb.contract(createNFTAbiT, createNFTAddressT);
       auction = tronWeb.contract(auctionAbiT, auctionAddressT);
+      }
+      catch(err){
+        console.log(err);
+      }
       break
 
     default:
@@ -166,7 +172,6 @@ const getContracts = (walletType: string, networkID: string) => {
       break
   }
 
-  console.log("getCon", marketPlace.methods, createNFT.methods);
   
 
   return {

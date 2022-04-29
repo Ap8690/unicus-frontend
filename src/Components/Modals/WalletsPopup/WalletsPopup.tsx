@@ -2,13 +2,14 @@ import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { Image, Modal } from "react-bootstrap";
 import { ReactComponent as CgClose } from "../../../Assets/react-icons/CgClose.svg";
 import MetaMaskNotFound from "../MetaMaskNotFound/MetaMaskNotFound";
-import { backendUrl } from "../../../config";
+import { backendUrl, tronChain } from "../../../config";
 
 // image
 import MetaMaskFox from "../../../Assets/MetaMask.svg";
 import Coinbase_wallet from "../../../Assets/coinbase_Wallet.svg";
 import walletConnect_wallet from "../../../Assets/LandingPage/WalletConnectCircle.svg";
 import mew_wallet from "../../../Assets/mew.svg";
+import tronLink from "../../../Assets/tron-link.svg"
 
 // redux imports
 import { useDispatch } from "react-redux";
@@ -22,14 +23,16 @@ import {
 } from "../../../Redux/Profile/actions";
 
 // providers
-import { metaMaskProvider } from "../../../Redux/Blockchain/contracts";
+import { metaMaskProvider, tronWeb } from "../../../Redux/Blockchain/contracts";
 import LoginPopUp from "../Auth/Login";
 import RegisterPopUp from "../Auth/Register";
 import axios from "axios";
 import {
-    getUserInfo,
-    getaccessToken,
-    getuserAddress,
+  AddNetworks,
+  getNetwork,
+  getUserInfo,
+  getaccessToken,
+  getuserAddress,
 } from "../../../Redux/Profile/actions";
 import web3 from "../../../web3";
 import DefaultErrorModal from "../DefaultErrorModal";
@@ -63,8 +66,12 @@ const WalletsPopup = (props: any) => {
             localStorage.setItem("accessToken", res.data.accessToken);
             dispatch(getUserInfo(res.data.user));
             localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-            Cookies.set("accessToken", res.data.accessToken);
-            Cookies.set("userInfo", JSON.stringify(res.data.user));
+            Cookies.set("accessToken", res.data.accessToken, {
+              domain: "unicus.one",
+            });
+            Cookies.set("userInfo", JSON.stringify(res.data.user), {
+              domain: "unicus.one",
+            });
             props.handleClose();
             props.history.push(props.redirectUrl);
           })
@@ -123,9 +130,51 @@ const WalletsPopup = (props: any) => {
   };
 
    //   Connecting to TronLink
-  const connectToTronLink = () => {
-    props.handleClose();
-    dispatch(connToTronlink());
+  const connectToTronLink =async () => {
+    //@ts-expect-error
+    const tronWeb = window.tronWeb
+    if(!tronWeb){
+      setdefaultErrorMessage("Please Install TronLink");
+      setdefaultErrorModal(true);
+    }
+    const address = tronWeb.defaultAddress.base58
+    console.log("tronBal",await tronWeb.trx.getBalance(address))
+    
+    if(address){
+    await axios
+      .post(`${backendUrl}/auth/login`, {
+        walletAddress: address,
+      })
+      .then((res) => {
+        dispatch(AddNetworks("tron"));
+        dispatch(getNetwork(tronChain));
+        dispatch(getaccessToken(res.data.accessToken));
+        dispatch(getuserAddress(address));
+        localStorage.setItem("accessToken", res.data.accessToken);
+        dispatch(getUserInfo(res.data.user));
+        localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+        Cookies.set("accessToken", res.data.accessToken, {
+          domain: "unicus.one",
+        });
+        Cookies.set("userInfo", JSON.stringify(res.data.user), {
+          domain: "unicus.one",
+        });
+        props.handleClose();
+        props.history.push(props.redirectUrl);
+      }).catch((err)=>{
+        if(err.resposne && (err.response.data.msg.includes("verify") || err.response.data.msg.includes("Contact"))){
+          setdefaultErrorMessage(err.response.data.msg);
+          setdefaultErrorModal(true);
+        }
+        else{
+          setwalletAddress(walletAddress[0]);
+          setRegisterPopUpShow(true);
+        }
+        props.handleClose()
+      });   
+    }else{
+      dispatch(connToTronlink());
+    }
   };
 
   const handledefaultErrorModal = () => {
@@ -243,7 +292,7 @@ const WalletsPopup = (props: any) => {
             </div>
             <div className="wallet" onClick={connectToTronLink}>
               <h5>TronLink</h5>
-              <Image src={mew_wallet} alt="" />
+              <Image src={tronLink} alt="" />
             </div>
           </div>
         </div>
