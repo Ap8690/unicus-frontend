@@ -372,14 +372,13 @@ const AddForm = (props: any) => {
           },
         };
 
-        // const response: any = await axios
-        //   .post(`${backendUrl}/nft/upload-pinata`, formData, axiosConfig)
-        //   .catch((err: any) => {
-        //     setNftLoading(false);
-        //     setdefaultErrorMessage(err.message);
-        //     setdefaultErrorModal(true);
-        //   });
-        const response = { data: "ss" };
+        const response: any = await axios
+          .post(`${backendUrl}/nft/upload-pinata`, formData, axiosConfig)
+          .catch((err: any) => {
+            setNftLoading(false);
+            setdefaultErrorMessage(err.message);
+            setdefaultErrorModal(true);
+          });
         if (!response) {
           setdefaultErrorMessage("Network Error");
           return;
@@ -389,7 +388,6 @@ const AddForm = (props: any) => {
 
         try {
           setNftModalMessage("An Awesome Asset is getting Minted");
-          console.log("cret", createNFT);
 
           const res = await createNFT.methods
             .batchMint([tokenUri], [royalty])
@@ -440,7 +438,6 @@ const AddForm = (props: any) => {
             );
             const JSONdata = await cloudinaryRes.json();
 
-            console.log(JSONdata.url);
             formData.append("cloudinaryUrl", JSONdata.url);
             var object: any = {};
             formData.forEach((value, key: any) => (object[key] = value));
