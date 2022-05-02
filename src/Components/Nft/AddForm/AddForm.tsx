@@ -475,7 +475,7 @@ const AddForm = (props: any) => {
         } catch (error) {
           console.log(error);
           setNftLoading(false);
-          setdefaultErrorMessage(err.message);
+          setdefaultErrorMessage(error.message);
           setdefaultErrorModal(true);
         }
       })
