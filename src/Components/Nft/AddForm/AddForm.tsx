@@ -13,7 +13,7 @@ import NFTCreateSuccess from "../../Modals/NFTCreateSuccess/NFTCreateSuccess";
 import DefaultModal from "../../Modals/DefaultModal/DefaultModal";
 // import {setTimeout} from 'timers'
 import axios from "axios";
-import getContracts, { tronWeb } from "../../../Redux/Blockchain/contracts";
+import getContracts, { setNotification, tronWeb } from "../../../Redux/Blockchain/contracts";
 import Attributes from "../../Modals/Attributes/Attributes";
 import StripeCheckout from "react-stripe-checkout";
 import { Modal } from "react-bootstrap";
@@ -387,26 +387,53 @@ const AddForm = (props: any) => {
         var tokenUri = "https://unicus.mypinata.cloud/ipfs/" + tokenHash;
 
         try {
+          toast.success("NFT Uploaded...");
           setNftModalMessage("An Awesome Asset is getting Minted");
 
+          console.log("con", createNFT);
+          
           const res = await createNFT.methods
             .batchMint([tokenUri], [royalty])
             .send({ from: accounts[0] });
 
-          console.log(res, res.events.Minted.returnValues._NftId);
-          if (res?.transactionHash) {
-            formData.append("jsonIpfs", tokenUri);
-            formData.append("nftType", imageSrc[0].type);
-            formData.append("chain", networkID);
-            formData.append("contractAddress", contractAddress);
-            formData.append("owner", userInfo._id);
+            let tranIsSuccess = false;
+          console.log("mint result",res);
+          let cloudinaryFormData = new FormData();
+          formData.append("jsonIpfs", tokenUri);
+          formData.append("nftType", imageSrc[0].type);
+          formData.append("chain", networkID);
+          formData.append("contractAddress", contractAddress);
+          formData.append("owner", userInfo._id);
+          formData.append("uploadedBy", userInfo._id); // Admin ID if metamask then userId
+          formData.append("mintedBy", userInfo._id); // USER ID
+          formData.append("mintedInfo", userInfo.username);
+          formData.append("userInfo", userInfo.username);
+          if (networkID === tronChain) {
+            formData.append("tokenId", res);
+            cloudinaryFormData.append(
+              "public_id",
+              res
+            );
+            setNftModalMessage("Waiting for transaction confirmation.(It can take upto a min to confirm)");
+            const success = await setNotification(res)
+            console.log("ss", success);
+            
+            if(!success){
+              tranIsSuccess = false
+              throw Error("Transaction Failed")
+            }else{
+            tranIsSuccess = true;
+            }
+          } else if (res?.transactionHash) {
             formData.append("tokenId", res.events.Minted.returnValues._NftId); //returnValues NFTId
-            formData.append("uploadedBy", userInfo._id); // Admin ID if metamask then userId
-            formData.append("mintedBy", userInfo._id); // USER ID
-            formData.append("mintedInfo", userInfo.username);
-            formData.append("userInfo", userInfo.username);
+            cloudinaryFormData.append(
+              "public_id",
+              res.events.Minted.returnValues._NftId
+            );
+            tranIsSuccess = true;
+          }
 
-            let cloudinaryFormData = new FormData();
+          if(tranIsSuccess){
             cloudinaryFormData.append("file", imageSrc[0]);
 
             if (
@@ -424,10 +451,7 @@ const AddForm = (props: any) => {
               );
             }
 
-            cloudinaryFormData.append(
-              "public_id",
-              res.events.Minted.returnValues._NftId
-            );
+            
             console.log(cloudinaryFormData);
             const cloudinaryRes = await fetch(
               "https://api.cloudinary.com/v1_1/dhmglymaz/auto/upload/",
@@ -460,25 +484,32 @@ const AddForm = (props: any) => {
               .catch((err: any) => {
                 console.log(err);
                 setdefaultErrorMessage("Collection name already exists");
-                setdefaultErrorModal(true);
 
                 if (err && err.response) {
                   console.log("err.message ", err.response.data.msg);
                   setdefaultErrorMessage(err.response.data.msg);
-                  setdefaultErrorModal(true);
                 }
+                else{
+                   setdefaultErrorMessage(err);
+                }
+                setdefaultErrorModal(true);
                 setNftLoading(false);
               });
 
-            // window.location.reload()
           }
+          else{
+              setNftLoading(false)
+              setdefaultErrorMessage("Couldn't add NFT to the site. You can manually add it in my profile section.");
+              setdefaultErrorModal(true);
+          }
+
         } catch (error) {
-          console.log(error);
-          setNftLoading(false);
-          if(error.message){
-            setdefaultErrorMessage(error);
-          }else{
+          console.log(error, error.message);
           setdefaultErrorMessage(error);
+          setNftLoading(false);
+          toast.dismiss()
+          if(error.message){
+            setdefaultErrorMessage(error.message);
           }
           setdefaultErrorModal(true);
         }
@@ -526,6 +557,15 @@ const AddForm = (props: any) => {
     setInputFieldsList(list);
   };
 
+  //@ts-ignore
+  useEffect(async() => {
+//                 const success = await setNotification(
+//                   "1c21d23c9bc85afa16d64db27acb4ee885db59ed71c358e7971e8818eaccfadc"
+//                 );
+// console.log("succ", success);
+    
+  }, [])
+  
   return (
     <>
       <div className="add_nft" style={{ marginTop: "90px" }}>
@@ -647,7 +687,6 @@ const AddForm = (props: any) => {
 
                 <Form.Group className="mb-3">
                   <a
-                    href="javascript:void(0)"
                     className="btn_brand"
                     onClick={() => setAttributeModal(true)}
                   >

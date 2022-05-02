@@ -23,6 +23,7 @@ import { bscChain, ethChain, polygonChain } from "../../config";
 // import {getNftType} from '../../../Redux/Profile/actions'
 import { getUserWallet, connectWallet } from "../../Utilities/Util";
 import WalletNotFound from "../Modals/MetaMaskNotFound/WalletNotFound";
+import { createNFTAddressT } from "../../Redux/Blockchain/Tron/createNFT";
 
 const NFTCollection = ({ item, transID }: any) => {
     const {
@@ -97,6 +98,9 @@ const NFTCollection = ({ item, transID }: any) => {
                 token = "ETH";
             } else if (networkID === polygonChain) {
                 token = "Matic";
+            }
+            else if (networkID === tronChain){
+              token = "Trx "
             }
 
             var data = {
@@ -858,11 +862,13 @@ const NFTCollection = ({ item, transID }: any) => {
 
     useEffect(() => {
         if (item.chain == bscChain) {
-            setcontractAddress("0x2f376c69feEC2a4cbb17a001EdB862573898E95a");
+          setcontractAddress("0x2f376c69feEC2a4cbb17a001EdB862573898E95a");
         } else if (item.chain == ethChain) {
-            setcontractAddress("0x424bb7731c056a52b45CBD613Ef08c69c628735f");
+          setcontractAddress("0x424bb7731c056a52b45CBD613Ef08c69c628735f");
         } else if (item.chain == polygonChain) {
-            setcontractAddress("0x1549EabD2a47762413ee1A11e667E67A5825ff44");
+          setcontractAddress("0x1549EabD2a47762413ee1A11e667E67A5825ff44");
+        } else if (networkID === tronChain) {
+          setcontractAddress(createNFTAddressT);
         }
     }, []);
 
@@ -1009,6 +1015,8 @@ const NFTCollection = ({ item, transID }: any) => {
                                                 ? "BNB"
                                                 : networkID === ethChain
                                                 ? "ETH"
+                                                : networkID === tronChain
+                                                ? "TRX"
                                                 : "Matic"
                                         }`}
                                         value={price}

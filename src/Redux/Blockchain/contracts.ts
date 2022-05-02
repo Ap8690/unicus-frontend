@@ -24,6 +24,7 @@ import { bscChain, ethChain, polygonChain, tronChain } from '../../config'
 import { auctionAbiT, auctionAddressT } from './Tron/auction'
 import { createNFTAddressT, createNFTAbiT } from './Tron/createNFT'
 import { marketPlaceAddressT, marketPlaceAbiT } from './Tron/marketPlace'
+import { toast } from 'react-toastify'
 
 export const RPC_URLS = {
   1: 'https://mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0',
@@ -41,12 +42,12 @@ export const RPC_URLS = {
 
 //testnet
 const HttpProvider = TronWeb.providers.HttpProvider;
-const fullNode = new HttpProvider("https://api.trongrid.io");
-const solidityNode = new HttpProvider("https://api.trongrid.io");
-const eventServer = new HttpProvider("https://api.trongrid.io");
+const fullNode = new HttpProvider("https://shasta.api.trongrid.io");
+const solidityNode = new HttpProvider("https://shasta.api.trongrid.io");
+const eventServer = new HttpProvider("https://shasta.api.trongrid.io");
 const privateKey = "01";
 //@ts-ignore
-export const tronWeb =  window.tronWeb? window.tronWeb: new TronWeb({fullNode, privateKey})
+export const tronWeb =  window.tronWeb? window.tronWeb: new TronWeb({fullNode,solidityNode, privateKey})
 // coinbase
 export const walletLink = new WalletLink({
   appName: 'Unicus',
@@ -183,5 +184,65 @@ const getContracts = (walletType: string, networkID: string) => {
     auctionAddress,
   }
 }
+
+export async function setNotification(tx: string) {
+  console.log("notify started", tx);
+  
+  toast(
+    `Transaction sent successfully! Waiting for confirmation. Click here to view on Tronscan`,
+    {
+      toastId: tx,
+      type: "warning",
+      autoClose: 30000,
+      closeOnClick: false,
+      closeButton: true,
+      onClick: (event) => {
+        const _url: string = "https://tronscan.org/#/transaction/";
+        window.open(_url + tx, "_blank");
+      },
+    }
+  );
+  return await awaitTx(tx)
+    .then((res: any) => {
+      console.log("tx-res", res);
+
+      if (res.receipt.result === "SUCCESS") {
+        toast.dismiss(tx);
+        toast("Transaction confirmed successfully", {
+          type: "success",
+        });
+        return true;
+      } else {
+        toast.dismiss(tx);
+        toast("Error sending transaction " + (res.receipt.result || ""), {
+          type: "error",
+        });
+        return false;
+      }
+    })
+    .catch((err) => {
+      console.log("trx-err", err);
+      
+      toast.dismiss(tx);
+      toast.error(err);
+      return false;
+    });
+}
+
+export const awaitTx = (tx: any) => {
+  return new Promise((resolve, reject) => {
+      let i = 0;
+      (function check() {
+        //@ts-ignore
+        window.tronWeb.trx.getTransactionInfo(tx).then((res: any) => {
+          res && "id" in res
+            ? resolve(res)
+            : i++ < 300
+            ? setTimeout(check, 10 * 1000)
+            : reject();
+        }, reject);
+      })();
+  });
+};
 
 export default getContracts
