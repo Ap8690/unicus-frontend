@@ -45,6 +45,7 @@ import axios from 'axios'
 import MaterialSwitch from '../Toggle/MaterialSwitch'
 import { bscChain, ethChain, polygonChain } from '../../config'
 import { toast } from 'react-toastify';
+import { selectNetwork } from '../../Utilities/Util';
 
 const Header = (props: any) => {
     // redux state
@@ -146,13 +147,7 @@ const Header = (props: any) => {
 
     const [netID, setNetID] = useState<any>(null)
 
-    const selectNetwork = (type: any, id: string) => {
-        dispatch(AddNetworks(type))
-        dispatch(getNetwork(id))
-        toast(`Your are now on ${type} chain`, {
-          className:"toast-custom",
-        });
-    }
+    
 
     const popover = (
       <Popover id="popover-basic" className="networks_modal">
@@ -166,7 +161,7 @@ const Header = (props: any) => {
               justifyContent: "center",
             }}
             onClick={() => {
-              selectNetwork("ethereum", ethChain);
+              selectNetwork(ethChain);
             }}
           >
             <img style={{ width: "70%" }} src={eth} alt="" />
@@ -179,7 +174,7 @@ const Header = (props: any) => {
               justifyContent: "center",
             }}
             onClick={() => {
-              selectNetwork("binance", bscChain);
+              selectNetwork(bscChain);
             }}
           >
             <img style={{ width: "70%" }} src={Bnb} alt="" />
@@ -192,7 +187,7 @@ const Header = (props: any) => {
               justifyContent: "center",
             }}
             onClick={() => {
-              selectNetwork("polygon", polygonChain);
+              selectNetwork(polygonChain);
             }}
           >
             <img style={{ width: "70%" }} src={polygon} alt="" />
@@ -205,7 +200,7 @@ const Header = (props: any) => {
               justifyContent: "center",
             }}
             onClick={() => {
-              selectNetwork("tron", tronChain);
+              selectNetwork(tronChain);
             }}
           >
             <img style={{ width: "70%" }} src={tron} alt="" />

@@ -4,8 +4,11 @@
 //   const finalAdd = `${add1}....${add2}`
 //   return finalAdd
 // }
-import { tronChain } from '../config';
+import { toast } from 'react-toastify';
+import { bscChain, ethChain, tronChain } from '../config';
 import { tronWeb } from '../Redux/Blockchain/contracts';
+import { AddNetworks, getNetwork } from '../Redux/Profile/actions';
+import { store } from '../Redux/Store';
 import web3 from '../web3';
 // export const STOREFRONT_URL = "https://unicus-storefront-backend.herokuapp.com";
 
@@ -15,7 +18,7 @@ export const STOREFRONT_URL =
     : process.env.REACT_APP_ENV === "development"
     ? "https://unicus-storefront-backend-test.herokuapp.com"
     : process.env.REACT_APP_ENV === "staging"
-    ? "https://unicus-storefront-backend-qa.herokuapp.com"
+    ? "https://backend.qa.unicu.one"
     : process.env.REACT_APP_ENV === "demo"
     ? "https://unicus-storefront-backend-demo.herokuapp.com"
     : "https://unicus-storefront-backend.herokuapp.com";
@@ -88,7 +91,9 @@ export const getTheTimeDifference = (sec: number) => {
 
 export const connectWallet = async (network) => {
   let address;
-  if(network== tronChain){
+  if(network.toString() === tronChain){
+
+    // tronLink.request({ method: "tron_requestAccounts" });
     address = tronWeb.defaultAddress.base58
   }else{
   const accounts = await window.ethereum.request({
@@ -101,7 +106,7 @@ export const connectWallet = async (network) => {
 
 export const getUserWallet = async (network) => {
   let accounts =[];
-  if(network === tronChain){
+  if(network.toString() === tronChain){
     //@ts-ignore
       const address = window.tronWeb.defaultAddress.base58;
       accounts.push(address);
@@ -111,6 +116,23 @@ export const getUserWallet = async (network) => {
   return accounts;
 }
 
+export const selectNetwork = (id: string) => {
+  const type =
+    id.toString() === bscChain
+      ? "Binance"
+      : id.toString() === ethChain
+      ? "ETH"
+      : id.toString() === tronChain
+      ? "TRX"
+      : "Matic";
+  //@ts-ignore
+  store.dispatch(AddNetworks(type));
+  //@ts-ignore
+  store.dispatch(getNetwork(id));
+  toast(`Your are now on ${type} chain`, {
+    className: "toast-custom",
+  });
+};
 export interface WalletsPopupProps {
   show: boolean;
   handleClose: () => void;
@@ -118,3 +140,7 @@ export interface WalletsPopupProps {
 
 export const METAMASK = "MetaMask";
 export const TRONLINK = "TronLink";
+
+
+
+
