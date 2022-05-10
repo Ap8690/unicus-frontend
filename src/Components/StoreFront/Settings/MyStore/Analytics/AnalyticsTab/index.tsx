@@ -2,8 +2,8 @@ import axios from 'axios';
 import React, { useState } from "react";
 import { Row, Col, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { IAnalytics } from '../../../../../Models/Analytics';
-import { BASE_URL } from '../../../../../Utilities/Util';
+import { IAnalytics } from '../../../../../../Models/Analytics';
+import { BASE_URL } from '../../../../../../Utilities/Util';
 
 const AnalyticsTab = (analytics:IAnalytics) => {
   //@ts-ignore

@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Row, Col,Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { IMyAccount } from "../../../../Models/MyAccount";
-import { BASE_URL } from "../../../../Utilities/Util";
+import { backendUrl } from "../../../../../config";
+import { IMyAccount } from "../../../../../Models/MyAccount";
 import SwitchWidget from "./../../SwitchWidget";
 import './NotificationSettings.scss'
 
@@ -26,13 +26,13 @@ const NotificationSettings = () => {
   }, []);
 
   const post = async () => {
-    const res = await axios.get(`${BASE_URL}/my-account`);
+    const res = await axios.get(`${backendUrl}/my-account`);
     console.log("resultGen", res.data);
     setMyAccount(res.data.result);
   };
   const handleSave = async () => {
     try {
-      const res = await axios.post(`${BASE_URL}/my-account`, myAccount);
+      const res = await axios.post(`${backendUrl}/my-account`, myAccount);
       if (res) {
         toast.success("Saved Changes");
       } else {

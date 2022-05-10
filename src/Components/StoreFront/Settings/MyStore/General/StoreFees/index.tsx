@@ -3,8 +3,8 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { IGeneral } from "../../../../../Models/General";
-import { BASE_URL } from "../../../../../Utilities/Util";
+import { IGeneral } from "../../../../../../Models/General";
+import { BASE_URL } from "../../../../../../Utilities/Util";
 import SwitchWidget from "../../../SwitchWidget";
 
 const StoreFees = (general: IGeneral) => {

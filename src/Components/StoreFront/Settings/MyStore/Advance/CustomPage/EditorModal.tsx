@@ -1,7 +1,7 @@
 import { Editor } from '@tinymce/tinymce-react';
 import React, { useEffect, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
-import { defaultPrivacyText } from '../../../../../Utilities/Util';
+import { defaultPrivacyText } from '../../../../../../Utilities/Util';
 
 const EditorModal = ({show, setShow, key, advance, setAdvance, title}) => {
   const [editedValue, setEditedValue] = useState(advance[key])

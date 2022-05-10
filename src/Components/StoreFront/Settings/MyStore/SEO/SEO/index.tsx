@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useState, useRef, useEffect } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { ISeo } from "../../../../../Models/Seo";
-import { BASE_URL } from "../../../../../Utilities/Util";
+import { ISeo } from "../../../../../../Models/Seo";
+import { BASE_URL } from "../../../../../../Utilities/Util";
 import placeholder from "./../../../../../Assets/MyStore/placeholder-logo.svg";
 import "./seoTab.scss"
 import { v4 as uuid } from "uuid";

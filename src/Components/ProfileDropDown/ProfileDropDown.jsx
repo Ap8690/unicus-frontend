@@ -36,6 +36,7 @@ const ProfileDropDown = ({ setOpenDisconnectModal, userName, general }) => {
     // console.log(userInfo.profileUrl !== '')
 
     useEffect(() => {
+      console.log("uer", userInfo);
         function toggle() {
             console.log('TEST', darkChecked)
 

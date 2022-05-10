@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Row, Col, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { ISeo } from "../../../../../Models/Seo";
-import { BASE_URL } from "../../../../../Utilities/Util";
+import { ISeo } from "../../../../../../Models/Seo";
+import { BASE_URL } from "../../../../../../Utilities/Util";
 import SwitchWidget from "../../../SwitchWidget";
 
 const RSS = (seo: ISeo) => {

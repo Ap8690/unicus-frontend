@@ -2,8 +2,8 @@ import axios from 'axios';
 import React, { useState } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { toast } from 'react-toastify';
-import { IAdvance } from '../../../../../Models/Advance';
-import { BASE_URL } from '../../../../../Utilities/Util';
+import { IAdvance } from '../../../../../../Models/Advance';
+import { BASE_URL } from '../../../../../../Utilities/Util';
 
 const SiteUrl = (advance: IAdvance) => {
   //@ts-ignore

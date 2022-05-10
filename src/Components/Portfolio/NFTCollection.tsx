@@ -71,7 +71,7 @@ const NFTCollection = ({ item, transID }: any) => {
   const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
   const [nftSuccess, setNftSuccess] = useState<boolean>(false);
   const [hash, setHash] = useState<any>("");
-  const [contractAddress, setcontractAddress] = useState("");
+  const [contractAddress, setcontractAddress] = useState("0");
   const [successTitle, setSuccessTitle] = useState<string>("");
   const [projectLoaded, setprojectLoaded] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("Loading...");
@@ -925,13 +925,13 @@ const NFTCollection = ({ item, transID }: any) => {
   };
 
   useEffect(() => {
-    if (item.chain == bscChain) {
+    if (item.chain.toString() == bscChain) {
       setcontractAddress(createNFTAddressB);
-    } else if (item.chain == ethChain) {
+    } else if (item.chain.toString() == ethChain) {
       setcontractAddress(createNFTAddressE);
-    } else if (item.chain == polygonChain) {
+    } else if (item.chain.toString() == polygonChain) {
       setcontractAddress(createNFTAddressP);
-    } else if (item.chain === tronChain) {
+    } else if (item.chain.toString() === tronChain) {
       setcontractAddress(createNFTAddressT);
     }
   }, []);

@@ -3,9 +3,9 @@ import React, { useRef, useEffect, useState, useMemo } from 'react'
 import { v4 as uuid } from "uuid";
 import { Row, Col, Button, Form } from 'react-bootstrap'
 import { toast } from "react-toastify";
-import { IGeneral } from '../../../../../Models/General'
-import { BASE_URL } from '../../../../../Utilities/Util'
-import placeHolder from "./../../../../../Assets/MyStore/placeholder-logo.svg"
+import { IGeneral } from '../../../../../../Models/General'
+import { BASE_URL } from '../../../../../../Utilities/Util'
+import placeHolder from "./../../../../../../Assets/MyStore/placeholder-logo.svg"
 import "./name.scss"
 import { CircularProgress } from '@mui/material';
 import countryList from "react-select-country-list";

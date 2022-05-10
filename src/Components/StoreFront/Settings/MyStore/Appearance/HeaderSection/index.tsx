@@ -2,8 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Table, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { IAppearance } from '../../../../../Models/Appearance';
-import { BASE_URL } from '../../../../../Utilities/Util';
+import { IAppearance } from '../../../../../../Models/Appearance';
+import { BASE_URL } from '../../../../../../Utilities/Util';
 
 const HeaderSection = (appearance: IAppearance) => {
   //@ts-ignore

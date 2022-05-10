@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Row, Col } from 'react-bootstrap';
-import { IAdvance } from '../../../../Models/Advance';
-import { BASE_URL } from '../../../../Utilities/Util';
+import { backendUrl } from '../../../../../config';
+import { IAdvance } from '../../../../../Models/Advance';
 import Categories from './Categories';
 import CustomPage from './CustomPage';
 import KYC from './KYC';
@@ -17,7 +17,7 @@ const Advance = () => {
   }, []);
 
   const post = async () => {
-    const res = await axios.get(`${BASE_URL}/advance`);
+    const res = await axios.get(`${backendUrl}/advance`);
     console.log("resultAdvance", res.data.result);
     setAdvance(res.data.result);
   };

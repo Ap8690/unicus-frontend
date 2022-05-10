@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import ViewModal from '../../Modals/ViewModal/ViewModal';
-import { ReactComponent as AiFillEye } from "../../Assets/react-icons/AiFillEye.svg";
+import { ReactComponent as AiFillEye } from "../../../Assets/react-icons/AiFillEye.svg";
 import { sslFix } from '../../../Utilities/Util';
 import { bscChain, ethChain, polygonChain } from '../../../config';
 import { createNFTAddressB } from '../../../Redux/Blockchain/Binance/createNFT';

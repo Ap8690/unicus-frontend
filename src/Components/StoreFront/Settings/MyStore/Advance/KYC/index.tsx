@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { IAdvance } from "../../../../../Models/Advance";
-import { BASE_URL } from "../../../../../Utilities/Util";
+import { backendUrl } from "../../../../../../config";
+import { IAdvance } from "../../../../../../Models/Advance";
 import SwitchWidget from "../../../SwitchWidget";
 
 const KYC = (advance: IAdvance) => {
@@ -30,7 +30,7 @@ useEffect(() => {
 }, [showSellerKyc, showBuyerKyc]);
   const handleSave = async () => {
     try {
-      const res = await axios.post(`${BASE_URL}/advance`, advances);
+      const res = await axios.post(`${backendUrl}/advance`, advances);
       if (res) {
         toast.success("Saved Changes");
       } else {

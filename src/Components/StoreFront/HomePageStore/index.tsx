@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Row,Col,Button } from 'react-bootstrap'
-import DottedImage from "./../../Assets/DottedImage.png"
+import DottedImage from "../../../Assets/DottedImage.png"
 import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 

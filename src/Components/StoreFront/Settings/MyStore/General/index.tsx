@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Row, Col } from 'react-bootstrap';
-import { IGeneral } from '../../../../Models/General';
-import { BASE_URL } from '../../../../Utilities/Util';
+import { backendUrl } from '../../../../../config';
+import { IGeneral } from '../../../../../Models/General';
 import BasicSettings from './BasicSettings';
 import ContactUs from './ContactUs';
 import Cookies from './Cookie';
@@ -22,7 +22,7 @@ const General = () => {
   }, []);
 
   const post = async () => {
-    const res = await axios.get(`${BASE_URL}/general`);
+    const res = await axios.get(`${backendUrl}/general`);
     console.log("resultGen", res.data);
     setGeneral(res.data.result);
   };

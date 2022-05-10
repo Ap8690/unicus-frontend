@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Row, Col } from 'react-bootstrap';
-import { IAppearance } from '../../../../Models/Appearance';
-import { BASE_URL } from '../../../../Utilities/Util';
+import { IAppearance } from '../../../../../Models/Appearance';
+import { BASE_URL } from '../../../../../Utilities/Util';
 import Featured from './Featured';
 import HeaderSection from './HeaderSection';
 import Others from './Others';

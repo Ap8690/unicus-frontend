@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import "./style.scss";
-import generalLogo from "./../../../Assets/MyStore/general-logo.svg";
-import placeholder from "./../../../Assets/MyStore/placeholder-dp.svg";
+import generalLogo from "./../../../../Assets/MyStore/general-logo.svg";
 import { useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
 

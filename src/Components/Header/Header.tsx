@@ -333,15 +333,15 @@ const Header = (props: any) => {
                     </span>
                   </a>
                   {/* <LinkContainer to="/"> */}
-                    <Nav.Link as={NavLink} exact to="/">
-                      <span
-                        style={{
-                          color: showScroll ? "#fff" : "",
-                        }}
-                      >
-                        Explore
-                      </span>
-                    </Nav.Link>
+                  <Nav.Link as={NavLink} exact to="/">
+                    <span
+                      style={{
+                        color: showScroll ? "#fff" : "",
+                      }}
+                    >
+                      Explore
+                    </span>
+                  </Nav.Link>
                   {/* </LinkContainer> */}
                   {/* <LinkContainer to="/collections">
                     <Nav.Link>
@@ -357,43 +357,48 @@ const Header = (props: any) => {
                   {header ? (
                     <>
                       {/* <LinkContainer to="/about"> */}
-                        <Nav.Link as={NavLink} exact to="/about">
-                          <span
-                            style={{
-                              color: showScroll ? "#fff" : "",
-                            }}
-                          >
-                            About
-                          </span>
-                        </Nav.Link>
+                      <Nav.Link as={NavLink} exact to="/about">
+                        <span
+                          style={{
+                            color: showScroll ? "#fff" : "",
+                          }}
+                        >
+                          About
+                        </span>
+                      </Nav.Link>
                       {/* </LinkContainer> */}
                       {/* <LinkContainer to="/community"> */}
-                        <Nav.Link as={NavLink} exact to="/community">
-                          <span
-                            style={{
-                              color: showScroll ? "#fff" : "",
-                            }}
-                          >
-                            Community
-                          </span>
-                        </Nav.Link>
+                      <Nav.Link as={NavLink} exact to="/community">
+                        <span
+                          style={{
+                            color: showScroll ? "#fff" : "",
+                          }}
+                        >
+                          Community
+                        </span>
+                      </Nav.Link>
                       {/* </LinkContainer> */}
                       {/* <LinkContainer to="/token"> */}
-                        <Nav.Link as={NavLink} exact to="/token">
-                          <span
-                            style={{
-                              color: showScroll ? "#fff" : "",
-                            }}
-                          >
-                            Unicus Token
-                          </span>
-                        </Nav.Link>
+                      <Nav.Link as={NavLink} exact to="/token">
+                        <span
+                          style={{
+                            color: showScroll ? "#fff" : "",
+                          }}
+                        >
+                          Unicus Token
+                        </span>
+                      </Nav.Link>
                       {/* </LinkContainer> */}
                     </>
                   ) : (
                     <>
                       {!userInfo ? (
-                        <Nav.Link onClick={() => {setOpen(true); setStoreRegistration(false)}}>
+                        <Nav.Link
+                          onClick={() => {
+                            setOpen(true);
+                            setStoreRegistration(false);
+                          }}
+                        >
                           <span
                             style={{
                               color: showScroll ? "#fff" : "",
@@ -403,38 +408,37 @@ const Header = (props: any) => {
                           </span>
                         </Nav.Link>
                       ) : (
-                        
-                          <Nav.Link as={NavLink} exact to="/create-nft">
-                            <span
-                              style={{
-                                color: showScroll ? "#fff" : "",
-                              }}
-                            >
-                              Create NFT
-                            </span>
-                          </Nav.Link>
+                        <Nav.Link as={NavLink} exact to="/create-nft">
+                          <span
+                            style={{
+                              color: showScroll ? "#fff" : "",
+                            }}
+                          >
+                            Create NFT
+                          </span>
+                        </Nav.Link>
                       )}
                       {/* <LinkContainer to="/auctions"> */}
-                        <Nav.Link as={NavLink} exact to="/auctions">
-                          <span
-                            style={{
-                              color: showScroll ? "#fff" : "",
-                            }}
-                          >
-                            Auctions
-                          </span>
-                        </Nav.Link>
+                      <Nav.Link as={NavLink} exact to="/auctions">
+                        <span
+                          style={{
+                            color: showScroll ? "#fff" : "",
+                          }}
+                        >
+                          Auctions
+                        </span>
+                      </Nav.Link>
                       {/* </LinkContainer> */}
                       {/* <LinkContainer to="/artists"> */}
-                        <Nav.Link as={NavLink} exact to="/artists">
-                          <span
-                            style={{
-                              color: showScroll ? "#fff" : "",
-                            }}
-                          >
-                            Artists
-                          </span>
-                        </Nav.Link>
+                      <Nav.Link as={NavLink} exact to="/artists">
+                        <span
+                          style={{
+                            color: showScroll ? "#fff" : "",
+                          }}
+                        >
+                          Artists
+                        </span>
+                      </Nav.Link>
                       {/* </LinkContainer> */}
                     </>
                   )}
@@ -587,9 +591,13 @@ const Header = (props: any) => {
                 <div className="navbar__right">
                   {/* <Toggle /> */}
                   {/* {!userInfo &&  */}
-                  {Object.keys(props.store).length !== 0 ? (
+                  {props.store && Object.keys(props.store).length !== 0 ? (
                     <a
-                      href={props.store.domain && props.store.domain.length>0? `https://${props.store.domain[0]}`:""}
+                      href={
+                        props.store.domain && props.store.domain.length > 0
+                          ? `https://${props.store.domain[0]}`
+                          : ""
+                      }
                       target="_blank"
                     >
                       <Button
@@ -603,7 +611,13 @@ const Header = (props: any) => {
                       </Button>
                     </a>
                   ) : !userInfo ? (
-                    <Nav.Link onClick={() => {setOpen(true); setRedirectUrl("/create-store"); setStoreRegistration(true);}}>
+                    <Nav.Link
+                      onClick={() => {
+                        setOpen(true);
+                        setRedirectUrl("/create-store");
+                        setStoreRegistration(true);
+                      }}
+                    >
                       <Button
                         variant="outline-light"
                         className="me-3"
@@ -649,7 +663,7 @@ const Header = (props: any) => {
                               ? eth
                               : netID === tronChain
                               ? tron
-                              :""
+                              : ""
                           }
                           alt=""
                         />
@@ -659,7 +673,10 @@ const Header = (props: any) => {
                   {!userInfo ? (
                     <button
                       className="btn_brand btn_outlined"
-                      onClick={() => {setOpen(true); setStoreRegistration(false)}}
+                      onClick={() => {
+                        setOpen(true);
+                        setStoreRegistration(false);
+                      }}
                     >
                       <BsWallet2 />
                       Connect
@@ -667,7 +684,10 @@ const Header = (props: any) => {
                   ) : (
                     <ProfileDropDown
                       setOpenDisconnectModal={setOpenDisconnectModal}
-                      userName={userInfo.username && userInfo.username.substring(0, 1)}
+                      userName={
+                        userInfo.username && userInfo.username.substring(0, 1)
+                      }
+                      general={undefined}
                     />
                   )}
                 </div>
@@ -682,12 +702,16 @@ const Header = (props: any) => {
         <WalletsPopup
           show={open}
           storeRegistration={storeRegistration}
-          handleClose={() => {setOpen(false); setStoreRegistration(false)}}
+          handleClose={() => {
+            setOpen(false);
+            setStoreRegistration(false);
+          }}
           redirectUrl={redirectUrl}
         />
         <DisConnect
           show={openDisconnectModal}
-          handleClose={() => setOpenDisconnectModal(false)} />
+          handleClose={() => setOpenDisconnectModal(false)}
+        />
         <RegisterWallet
           RegisterWalletShow={registeredWallet}
           RegisterWalletClose={() => dispatch(getRegisterWallet(false))}

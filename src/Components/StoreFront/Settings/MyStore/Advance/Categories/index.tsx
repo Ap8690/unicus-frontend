@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Row, Col ,Form, Button} from 'react-bootstrap';
-import { IAdvance } from '../../../../../Models/Advance';
+import { IAdvance } from "../../../../../../Models/Advance";
 import './Categories.scss'
 
 const Categories = (advance: IAdvance) => {

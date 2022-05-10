@@ -10,16 +10,16 @@ import {
 } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { ReactComponent as BsWallet2 } from "../../Assets/react-icons/BsWallet2.svg";
+import { ReactComponent as BsWallet2 } from "../../../Assets/react-icons/BsWallet2.svg";
 
 import { Avatar } from "@mui/material";
 
 // Svgs
-import eth from "../../Assets/ethereum.svg";
-import Bnb from "../../Assets/bnb.svg";
-import polygon from "../../Assets/polygon.svg";
+import eth from "../../../Assets/ethereum.svg";
+import Bnb from "../../../Assets/bnb.svg";
+import polygon from "../../../Assets/polygon.svg";
 import { useLocation, withRouter } from "react-router-dom";
-import unicusLogo from "../../Assets/unicus-logo.png";
+import unicusLogo from "../../../Assets/unicus-logo.png";
 
 // redux imports
 import { useSelector, useDispatch } from "react-redux";

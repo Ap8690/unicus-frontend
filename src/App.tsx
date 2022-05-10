@@ -26,7 +26,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios'
 import { Helmet } from "react-helmet";
 import Cookies from "js-cookie";
-import { defaultPrivacyText, sslFix, STOREFRONT_URL, UNICUS_STORE } from './Utilities/Util'
+import { defaultPrivacyText, sslFix, UNICUS_STORE } from './Utilities/Util'
 import { useDispatch, useSelector } from 'react-redux'
 import { Suspense, useEffect, useState } from 'react'
 import { backendUrl } from './config'
@@ -41,13 +41,14 @@ import StoreHeader from './Components/StoreFront/StoreHeader/StoreHeader'
 
 function App() {
   const { accessToken, userInfo } = useSelector((state: any) => state.profile);
-  const [store, setStore] = useState<IStore>();
-  const [userStore, setUserStore]=useState()
+  //@ts-ignore
+  const [store, setStore] = useState<IStore>({});
+  const [userStore, setUserStore]=useState({})
   const [showStore, setShowStore] = useState(true);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    if(window.location.host === UNICUS_STORE){
+    if(window.location.host !== UNICUS_STORE){
       getStore()
     }else{
     init();
@@ -58,7 +59,7 @@ function App() {
     // document.documentElement.setAttribute("data-theme", "green");
   }, []);
   useEffect(() => {
-    if (store.appearance && store.appearance.storeLoader) {
+    if (store && store.appearance && store.appearance.storeLoader) {
       localStorage.setItem("storeLoader", store.appearance.storeLoader);
     }
   }, [store]);
@@ -100,7 +101,7 @@ function App() {
       };
       
       if(accessToken) {
-        const res = await axios.get(`${STOREFRONT_URL}/store/getStoreByUser`, axiosConfig);
+        const res = await axios.get(`${backendUrl}/store/getStoreByUser`, axiosConfig);
         if(res.data.store){
         setUserStore(res.data.store)
         }
@@ -119,7 +120,7 @@ function App() {
 
     return (
       <div>
-        {true ? (
+        {false ? (
           <div className="app">
             <Router>
               <Header store={userStore} />
@@ -172,7 +173,7 @@ function App() {
           </div>
         ) : (
           <div className="app">
-            {store.general ? (
+            {store && store.general ? (
               <Helmet>
                 <meta charSet="utf-8" />
                 <meta
@@ -215,7 +216,7 @@ function App() {
                           <Route
                             path="/"
                             render={() => {
-                              return <HomePage {...store}/>;
+                              return <HomePage {...store} />;
                             }}
                             exact={true}
                           />

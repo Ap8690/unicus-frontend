@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Row, Col } from 'react-bootstrap';
-import { ISeo } from '../../../../Models/Seo';
-import { BASE_URL } from '../../../../Utilities/Util';
+import { ISeo } from '../../../../../Models/Seo';
+import { BASE_URL } from '../../../../../Utilities/Util';
 import MetaTags from './MetaTags';
 import RobotTxt from './RobotTxt';
 import RSS from './RSSFeed';

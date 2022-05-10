@@ -6,7 +6,14 @@
     background: var(--transparent_card_primary);
     //   border: 1px solid var(--white_dull);
     @include neonEffectThreeCard(10px);
-    min-width: 25vw;
+    width: 22vw !important;
+
+    &.simple {
+        width: 280px !important;
+        // @include mQ($sm){
+        //     max-width: 55vw;
+        // }
+    }
 
     .nft_card_image_wrapper {
         position: relative;
@@ -19,6 +26,10 @@
             height: 380px;
             overflow: hidden;
             position: relative;
+
+            &.simple {
+                height: 250px;
+            }
 
             img {
                 transition: $transition;

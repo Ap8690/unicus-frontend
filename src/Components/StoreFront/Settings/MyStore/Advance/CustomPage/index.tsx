@@ -2,10 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { IAdvance } from '../../../../../Models/Advance';
-import { BASE_URL, defaultPrivacyText } from '../../../../../Utilities/Util';
+import { IAdvance } from '../../../../../../Models/Advance';
 import { Editor } from "@tinymce/tinymce-react";
 import EditorModal from './EditorModal';
+import { backendUrl } from '../../../../../../config';
 
 
 const CustomPage = (advance: IAdvance) => {
@@ -22,7 +22,7 @@ const CustomPage = (advance: IAdvance) => {
   }, [key]);
   const handleSave = async () => {
     try {
-      const res = await axios.post(`${BASE_URL}/advance`, advances);
+      const res = await axios.post(`${backendUrl}/advance`, advances);
       if (res) {
         toast.success("Saved Changes");
       } else {

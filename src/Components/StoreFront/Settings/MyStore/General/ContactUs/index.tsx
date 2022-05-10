@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { IGeneral } from "../../../../../Models/General";
-import { BASE_URL } from "../../../../../Utilities/Util";
+import { IGeneral } from "../../../../../../Models/General";
+import { BASE_URL } from "../../../../../../Utilities/Util";
 import SwitchWidget from "../../../SwitchWidget";
 import validator from "validator";
 

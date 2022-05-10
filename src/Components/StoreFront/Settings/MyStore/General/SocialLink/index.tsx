@@ -20,8 +20,8 @@ import {
 } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { ISocialLinks } from "../../../../../Models/SocialLink";
-import { BASE_URL } from "../../../../../Utilities/Util";
+import { ISocialLinks } from "../../../../../../Models/SocialLink";
+import { BASE_URL } from "../../../../../../Utilities/Util";
 const SocialLink = () => {
   //@ts-ignore
   const [socialLinks, setSocialLinks] = useState<ISocialLinks>({})

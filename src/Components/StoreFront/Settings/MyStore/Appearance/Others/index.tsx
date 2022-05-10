@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect} from 'react'
 import { Row, Col, Button } from 'react-bootstrap';
-import placeHolder from "./../../../../../Assets/MyStore/placeholder-logo.svg";
+import placeHolder from "./../../../../../../Assets/MyStore/placeholder-logo.svg";
 import SwitchWidget from "../../../SwitchWidget";
-import { IAppearance } from '../../../../../Models/Appearance';
+import { IAppearance } from '../../../../../../Models/Appearance';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { BASE_URL } from '../../../../../Utilities/Util';
+import { BASE_URL } from '../../../../../../Utilities/Util';
 import { v4 as uuid } from "uuid";
 import { CircularProgress } from '@mui/material';
 

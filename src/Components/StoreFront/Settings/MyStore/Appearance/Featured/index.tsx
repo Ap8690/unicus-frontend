@@ -2,8 +2,8 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Row, Col, Button, Table } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { IAppearance } from '../../../../../Models/Appearance';
-import { BASE_URL } from '../../../../../Utilities/Util';
+import { IAppearance } from '../../../../../../Models/Appearance';
+import { BASE_URL } from '../../../../../../Utilities/Util';
 
 const Featured = (appearance: IAppearance) => {
   //@ts-ignore

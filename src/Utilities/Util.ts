@@ -13,7 +13,7 @@ import { store } from '../Redux/Store';
 import web3 from '../web3';
 // export const STOREFRONT_URL = "https://unicus-storefront-backend.herokuapp.com";
 
-export const STOREFRONT_URL =
+export const BASE_URL =
   process.env.REACT_APP_ENV === "local"
     ? "http://localhost:4000"
     : process.env.REACT_APP_ENV === "development"
@@ -221,7 +221,7 @@ export const TRONLINK = "TronLink";
 
 export const UNICUS_STORE =
   process.env.REACT_APP_ENV === "local"
-    ? "http://localhost:4000"
+    ? "http://localhost:3000"
     : process.env.REACT_APP_ENV === "development"
     ? "marketplace.test.unicus.one"
     : process.env.REACT_APP_ENV === "staging"

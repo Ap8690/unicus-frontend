@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Row, Col } from 'react-bootstrap';
-import { IAnalytics } from '../../../../Models/Analytics';
-import { BASE_URL } from '../../../../Utilities/Util';
+import { IAnalytics } from '../../../../../Models/Analytics';
+import { BASE_URL } from '../../../../../Utilities/Util';
 import AnalyticsTab from './AnalyticsTab';
 import Integration from './Integration';
 import Zapier from './Zapier';
