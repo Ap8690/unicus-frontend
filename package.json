@@ -74,7 +74,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "serve -s build",
+    "start": "node server/index.js",
     "dev": "set REACT_APP_ENV=local&& react-scripts start",
     "build": "CI=false && react-scripts build",
     "test": "react-scripts test",
