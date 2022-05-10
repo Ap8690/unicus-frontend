@@ -120,7 +120,7 @@ function App() {
 
     return (
       <div>
-        {false ? (
+        {window.location.host === UNICUS_STORE ? (
           <div className="app">
             <Router>
               <Header store={userStore} />
