@@ -31,7 +31,7 @@ app.listen(PORT, (error) => {
   console.log("listening on " + PORT + "...");
 });
 
-if (process.env.NODE_ENV === "prod") {
+if (process.env.NODE_ENV === "prod" || process.env.NODE_ENV === "staging") {
   app.use((req, res, next) => {
     if (req.header("x-forwarded-proto") !== "https")
       res.redirect(`https://${req.header("host")}${req.url}`);
