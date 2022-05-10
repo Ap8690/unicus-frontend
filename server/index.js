@@ -76,7 +76,7 @@ app.get("/*", (req, res, next) => {
       });
     } else res.sendFile(indexPath);
   } catch (err) {
-    console.log("err", err);
+    console.log("err", err.response);
   }
 });
 
@@ -120,6 +120,6 @@ const fetchItem = async (location, hostname) => {
       return res.data.nft;
     }
   } catch (err) {
-    console.log(err);
+    console.log(err.response);
   }
 };
