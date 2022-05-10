@@ -15,7 +15,7 @@ const BASE_URL =
     : process.env.REACT_APP_ENV === "development"
     ? "https://unicus-storefront-backend-test.herokuapp.com"
     : process.env.REACT_APP_ENV === "staging"
-    ? "https://backend.qa.unicu.one"
+    ? "https://backend.qa.unicus.one"
     : process.env.REACT_APP_ENV === "demo"
     ? "https://unicus-storefront-backend-demo.herokuapp.com"
     : "https://unicus-storefront-backend.herokuapp.com";
