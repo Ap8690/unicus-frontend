@@ -19,4 +19,6 @@ export interface IAdvance {
   siteUrls: string;
   privacyPolicy: string;
   terms: string;
+  aboutUs: string;
+  creators:string;
 }

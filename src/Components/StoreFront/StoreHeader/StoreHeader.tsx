@@ -1,0 +1,611 @@
+import { useEffect, useState } from "react";
+import {
+  Container,
+  Nav,
+  Image,
+  Navbar,
+  OverlayTrigger,
+  Popover,
+  Button,
+} from "react-bootstrap";
+import { Form } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { ReactComponent as BsWallet2 } from "../../Assets/react-icons/BsWallet2.svg";
+
+import { Avatar } from "@mui/material";
+
+// Svgs
+import eth from "../../Assets/ethereum.svg";
+import Bnb from "../../Assets/bnb.svg";
+import polygon from "../../Assets/polygon.svg";
+import { useLocation, withRouter } from "react-router-dom";
+import unicusLogo from "../../Assets/unicus-logo.png";
+
+// redux imports
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { ethChain, bscChain, polygonChain, backendUrl } from "../../../config";
+import { getMetamaskProvider } from "../../../Redux/Blockchain/contracts";
+import { AddNetworks, getNetwork, getUserInfo, getaccessToken, getuserAddress, getRegisterWallet } from "../../../Redux/Profile/actions";
+import { sslFix } from "../../../Utilities/Util";
+import RegisterWallet from "../../Modals/Auth/RegisterWallet";
+import DisConnect from "../../Modals/DisConnect/DisConnect";
+import ProfileDropDown from "../../ProfileDropDown/ProfileDropDown";
+import MaterialSwitch from "../../Toggle/MaterialSwitch";
+import CreateNFTModal from "../../Modals/CreateNFTModal/CreateNFTModal";
+import DefaultErrorModal from "../../Modals/DefaultErrorModal";
+import WalletsPopup from "../../Modals/WalletsPopup/WalletsPopup";
+import web3 from "../../../web3";
+
+
+const StoreHeader = (props: any) => {
+  // redux state
+  const dispatch = useDispatch();
+  const { networkID, provider, userInfo, registerWallet } = useSelector(
+    (state: any) => state.profile
+  );
+  const { pathname } = useLocation();
+
+  const [showScroll, setShowScroll] = useState(false);
+  const [registeredWallet, setregisteredWallet] = useState(false);
+  const [CreateNFTModalOpen, setCreateNFTModalOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [globalModalPopup, setglobalModalPopup] = useState(false);
+  const [globalModal, setglobalModal] = useState([]);
+  const [openDisconnectModal, setOpenDisconnectModal] = useState(false);
+  const [header, setHeader] = useState(true);
+  const [defaultErrorModal, setdefaultErrorModal] = useState<any>(false);
+  const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
+  const [globalSearch, setglobalSearch] = useState<any>("");
+  const [redirectUrl, setRedirectUrl] = useState("/");
+  const [storeRegistration, setStoreRegistration] = useState(false);
+
+  const handledefaultErrorModal = () => {
+    setdefaultErrorModal(false);
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", (event: any) => {
+      if (event.target.name !== "title") {
+        setglobalModalPopup(false);
+      }
+    });
+  }, []);
+
+  const handleGlobalSearch = (e: any) => {
+    e.preventDefault();
+    props.history.push(`/search/${globalSearch}`);
+    setglobalModalPopup(false);
+  };
+
+  const handleGlobalLink = (e: any, item: any) => {
+    e.preventDefault();
+    console.log(e.target.id);
+    setglobalModalPopup(false);
+    if (e.target.id == "globalNft") {
+      props.history.push(`/nft/${item.nftId}`);
+    } else {
+      // props.history.push(`/artist/${item.name.trim()}`);
+    }
+  };
+
+  const handleGlobalModal = async (e: any) => {
+    e.preventDefault();
+    setglobalSearch(e.target.value);
+    if (e.target.value.length > 2) {
+      await axios
+        .get(`${backendUrl}/users/globalSearch/${e.target.value}`)
+        .then((res: any) => {
+          setglobalModalPopup(true);
+          var metadata: any = [];
+          for (let i = 0; i < res.data.nfts.length; i++) {
+            metadata.push({
+              name: res.data.nfts[i].name,
+              nftId: res.data.nfts[i].nftId,
+              cloudinaryUrl: res.data.nfts[i].cloudinaryUrl,
+            });
+          }
+          for (let i = 0; i < res.data.users.length; i++) {
+            metadata.push({
+              name: res.data.users[i].username,
+              profileUrl: res.data.users[i].profileUrl,
+            });
+          }
+          console.log(metadata);
+          setglobalModal(metadata);
+        });
+    } else {
+      setglobalModalPopup(false);
+    }
+  };
+
+  // header color
+  const checkScrollTop = () => {
+    if (!showScroll && window.pageYOffset >= 10) {
+      setShowScroll(true);
+    } else if (showScroll && window.pageYOffset <= 10) {
+      setShowScroll(false);
+    }
+  };
+  window.addEventListener("scroll", checkScrollTop);
+
+  // wallet popup
+  useEffect(() => {
+    if (userInfo) {
+      setOpen(false);
+    }
+  }, [userInfo]);
+
+  const [netID, setNetID] = useState<any>(null);
+
+  const selectNetwork = (type: any, id: string) => {
+    dispatch(AddNetworks(type));
+    dispatch(getNetwork(id));
+  };
+
+  const popover = (
+    <Popover id="popover-basic" className="networks_modal">
+      <div className="popover-header">Networks</div>
+      <div className="popover-body gfg">
+        <div
+          className="net"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onClick={() => {
+            selectNetwork("ethereum", ethChain);
+          }}
+        >
+          <img style={{ width: "70%" }} src={eth} alt="" />
+        </div>
+        <div
+          className="net"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onClick={() => {
+            selectNetwork("bnb", bscChain);
+          }}
+        >
+          <img style={{ width: "70%" }} src={Bnb} alt="" />
+        </div>
+        <div
+          className="net"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onClick={() => {
+            selectNetwork("polygon", polygonChain);
+          }}
+        >
+          <img style={{ width: "70%" }} src={polygon} alt="" />
+        </div>
+      </div>
+    </Popover>
+  );
+
+  useEffect(() => {
+    setregisteredWallet(registerWallet);
+  }, [registerWallet]);
+
+  useEffect(() => {
+    dispatch(getMetamaskProvider());
+    const userInfo: any = localStorage.getItem("userInfo");
+    const accessToken = localStorage.getItem("accessToken");
+    if (userInfo) {
+      dispatch(getUserInfo(JSON.parse(userInfo)));
+    }
+    if (accessToken) {
+      dispatch(getaccessToken(accessToken));
+    }
+    web3.eth
+      .getAccounts()
+      .then((account) => {
+        if (account[0]) {
+          dispatch(getuserAddress(account[0]));
+        }
+      })
+      .catch(() => {
+        console.log("Web3 Not Found!");
+      });
+    const get = localStorage.getItem("networkID");
+    if (get == polygonChain) {
+      dispatch(AddNetworks("polygon"));
+    } else if (get == ethChain) {
+      dispatch(AddNetworks("ethereum"));
+    } else {
+      dispatch(AddNetworks("bnb"));
+    }
+  }, [provider]);
+
+  useEffect(() => {
+    setNetID(networkID);
+  }, [networkID]);
+
+  useEffect(() => {
+    if (
+      pathname === "/" ||
+      pathname === "/login" ||
+      pathname === "/about" ||
+      pathname === "/community" ||
+      pathname === "/token"
+    ) {
+      setHeader(true);
+    } else {
+      setHeader(false);
+    }
+  }, [pathname]);
+
+  return (
+    <>
+      <Navbar
+        collapseOnSelect
+        expand="lg"
+        variant="dark"
+        fixed="top"
+        className={
+          showScroll
+            ? "navbar navbar-expand-lg navbar-dark fixed-top navbar__bg"
+            : "navbar navbar-expand-lg navbar-dark fixed-top"
+        }
+      >
+        <Container fluid>
+          <div className="network_select mode">
+            <OverlayTrigger
+              trigger="click"
+              placement="bottom"
+              overlay={popover}
+              rootClose={true}
+            >
+              <div className="img_net">
+                <Image
+                  src={
+                    netID === polygonChain
+                      ? polygon
+                      : netID === bscChain
+                      ? Bnb
+                      : netID === ethChain
+                      ? eth
+                      : ""
+                  }
+                  alt=""
+                />
+              </div>
+            </OverlayTrigger>
+          </div>
+          <a href="/">
+            <div className="d-flex align-items-center mt-2">
+              <Avatar
+                sx={{
+                  width: 45,
+                  height: 45,
+                  color: "#fff",
+                  background: "#fff",
+                }}
+              >
+                <img
+                  src={
+                    props.general && props.general.logoUrl !== ""
+                      ? props.general.logoUrl
+                      : unicusLogo
+                  }
+                  alt={"Store Logo"}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              </Avatar>
+              <p className="fw-bold h5 ms-2 mt-2">
+                {props.general && props.general.storeName
+                  ? props.general.storeName
+                  : `Storename`}
+              </p>
+            </div>
+          </a>
+          <form
+            className="d-none d-md-block ms-3 mt-2"
+            style={{ position: "relative" }}
+            onSubmit={handleGlobalSearch}
+          >
+            <Form.Group style={{ paddingLeft: "15px" }}>
+              <Form.Control
+                style={{
+                  paddingLeft: "33px",
+                  backgroundColor: "inherit",
+                  borderColor: showScroll
+                    ? "#86b7fe"
+                    : "var(--searchInputBorder)",
+                  color: "var(--searchInputTextColor) !important",
+                }}
+                type="text"
+                placeholder="Search..."
+                className={
+                  showScroll
+                    ? "shadow-none form-control globalSearch form__scroll_down__white"
+                    : "shadow-none form-control globalSearch form__Search__all__header"
+                }
+                name="title"
+                value={globalSearch}
+                autoComplete="off"
+                onChange={handleGlobalModal}
+              />
+            </Form.Group>
+            {globalModalPopup && (
+              <div style={{ background: "#002885" }} className="globalModal">
+                <div>
+                  {globalModal
+                    .sort((a: any, b: any) => {
+                      return a.name
+                        .toLowerCase()
+                        .trim()
+                        .indexOf(globalSearch.toLowerCase()) -
+                        b.name
+                          .toLowerCase()
+                          .trim()
+                          .indexOf(globalSearch.toLowerCase()) ==
+                        0
+                        ? a.name.toLowerCase().trim() -
+                            b.name.toLowerCase().trim()
+                        : a.name
+                            .toLowerCase()
+                            .trim()
+                            .indexOf(globalSearch.toLowerCase()) -
+                            b.name
+                              .toLowerCase()
+                              .trim()
+                              .indexOf(globalSearch.toLowerCase());
+                    })
+                    .slice(0, 8)
+                    .map((item: any) => {
+                      return (
+                        <a
+                          id={item.cloudinaryUrl ? "globalNft" : "globalUser"}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            margin: "0.4rem 0.5rem",
+                            paddingLeft: "0",
+                          }}
+                          onClick={(e) => {
+                            handleGlobalLink(e, item);
+                          }}
+                          href={item.cloudinaryUrl ? `/nft/${item.nftId}` : ""}
+                        >
+                          {!item.cloudinaryUrl &&
+                            (item.profileUrl ? (
+                              <img
+                                id="globalUser"
+                                style={{
+                                  width: "30px",
+                                  height: "30px",
+                                  objectFit: "fill",
+                                  borderRadius: "100%",
+                                }}
+                                src={item.profileUrl}
+                              />
+                            ) : (
+                              <Avatar
+                                id="globalUser"
+                                sx={{
+                                  width: 30,
+                                  height: 30,
+                                  color: "#fff",
+                                  background: "#bebebe",
+                                }}
+                              ></Avatar>
+                            ))}
+                          {item.cloudinaryUrl && (
+                            <img
+                              id={
+                                item.cloudinaryUrl ? "globalNft" : "globalUser"
+                              }
+                              style={{
+                                width: "30px",
+                                height: "30px",
+                                objectFit: "fill",
+                                borderRadius: "100%",
+                              }}
+                              src={sslFix(item.cloudinaryUrl)}
+                            />
+                          )}
+                          <span
+                            id={item.cloudinaryUrl ? "globalNft" : "globalUser"}
+                          >
+                            {item.name}
+                          </span>
+                        </a>
+                      );
+                    })}
+                </div>
+                {globalModal.length === 0 && (
+                  <p
+                    className="no_result_found__p"
+                    style={{
+                      marginBottom: "0px",
+                    }}
+                  >
+                    No result found
+                  </p>
+                )}
+              </div>
+            )}
+          </form>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="m-auto nav__ mx-auto">
+              <div className="navbar__left">
+                <a href="/">
+                  <span
+                    style={{
+                      color: showScroll ? "#fff" : "",
+                    }}
+                  >
+                    Home
+                  </span>
+                </a>
+                <LinkContainer to="/explore">
+                  <Nav.Link>
+                    <span
+                      style={{
+                        color: showScroll ? "#fff" : "",
+                      }}
+                    >
+                      Explore
+                    </span>
+                  </Nav.Link>
+                </LinkContainer>
+                {/* <LinkContainer to="/collections">
+                    <Nav.Link>
+                      <span
+                        style={{
+                          color: showScroll ? "#fff" : "",
+                        }}
+                      >
+                        Collections
+                      </span>
+                    </Nav.Link>
+                  </LinkContainer> */}
+
+                {!userInfo ? (
+                  <Nav.Link
+                    onClick={() => {
+                      setOpen(true);
+                      setStoreRegistration(false);
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: showScroll ? "#fff" : "",
+                      }}
+                    >
+                      Create NFT
+                    </span>
+                  </Nav.Link>
+                ) : (
+                  <LinkContainer to="/create-nft">
+                    {/* <Nav.Link onClick={() => setCreateNFTModalOpen(true)}>Create NFT</Nav.Link> */}
+                    <Nav.Link>
+                      <span
+                        style={{
+                          color: showScroll ? "#fff" : "",
+                        }}
+                      >
+                        Create NFT
+                      </span>
+                    </Nav.Link>
+                  </LinkContainer>
+                )}
+                <LinkContainer to="/auctions">
+                  <Nav.Link>
+                    <span
+                      style={{
+                        color: showScroll ? "#fff" : "",
+                      }}
+                    >
+                      Auctions
+                    </span>
+                  </Nav.Link>
+                </LinkContainer>
+                {/* <LinkContainer to="/artists">
+                  <Nav.Link>
+                    <span
+                      style={{
+                        color: showScroll ? "#fff" : "",
+                      }}
+                    >
+                      Artists
+                    </span>
+                  </Nav.Link>
+                </LinkContainer> */}
+              </div>
+              <div className="navbar__right">
+                <MaterialSwitch />
+                {/* } */}
+                <div className="network_select desk">
+                  <OverlayTrigger
+                    trigger="click"
+                    placement="bottom"
+                    overlay={popover}
+                    rootClose={true}
+                  >
+                    <div className="img_net">
+                      <Image
+                        src={
+                          netID === polygonChain
+                            ? polygon
+                            : netID === bscChain
+                            ? Bnb
+                            : netID === ethChain
+                            ? eth
+                            : ""
+                        }
+                        alt=""
+                      />
+                    </div>
+                  </OverlayTrigger>
+                </div>
+                {!userInfo ? (
+                  <button
+                    className="btn_brand btn_outlined"
+                    onClick={() => {
+                      setOpen(true);
+                      setStoreRegistration(false);
+                    }}
+                  >
+                    <BsWallet2 />
+                    Connect
+                  </button>
+                ) : (
+                  <ProfileDropDown
+                    setOpenDisconnectModal={setOpenDisconnectModal}
+                    userName={
+                      userInfo.username && userInfo.username.substring(0, 1)
+                    }
+                    general={props.general}
+                  />
+                )}
+              </div>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <CreateNFTModal
+        CreateNFTModalShow={CreateNFTModalOpen}
+        CreateNFTModalHandleClose={() => setCreateNFTModalOpen(false)}
+      />
+      <WalletsPopup
+        show={open}
+        storeRegistration={storeRegistration}
+        handleClose={() => {
+          setOpen(false);
+          setStoreRegistration(false);
+        }}
+        redirectUrl={redirectUrl}
+      />
+      <DisConnect
+        show={openDisconnectModal}
+        handleClose={() => setOpenDisconnectModal(false)}
+      />
+      <RegisterWallet
+        RegisterWalletShow={registeredWallet}
+        RegisterWalletClose={() => dispatch(getRegisterWallet(false))}
+      />
+      <DefaultErrorModal
+        DefaultErrorModalShow={defaultErrorModal}
+        DefaultErrorModalClose={() => handledefaultErrorModal()}
+        DefaultErrorMessage={defaultErrorMessage}
+      />
+    </>
+  );
+};
+
+export default withRouter(StoreHeader);

@@ -26,6 +26,7 @@ import { bscChain, ethChain, polygonChain } from "../../../config";
 // utilities
 import {
   connectWallet,
+  getStoreName,
   getUserWallet,
   METAMASK,
   TRONLINK,
@@ -578,7 +579,7 @@ const AddForm = (props: any) => {
             fontSize: "20px",
           }}
         >
-          Create your own NFT and upload it at Unicus Marketplace
+          Create your own NFT and upload it at ${getStoreName} Marketplace
         </h1>
         <Container>
           <Row>

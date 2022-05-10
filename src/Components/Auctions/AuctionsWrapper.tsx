@@ -9,6 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { bscChain } from "../../config";
 import { backendUrl } from "../../config";
+import { getStoreName } from "../../Utilities/Util";
 
 const AuctionsWrapper = () => {
     // redux state
@@ -92,7 +93,7 @@ const AuctionsWrapper = () => {
                     className="section_heading"
                     style={{ color: "", fontSize: "20px" }}
                 >
-                    Unicus has exclusive assets and vast variety of NFT
+                    ${getStoreName} has exclusive assets and vast variety of NFT
                 </h1>
             </div>
             <Container>

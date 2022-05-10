@@ -14,6 +14,7 @@ import { bscChain } from '../../config'
 import { backendUrl } from '../../config'
 import ResetPasswordPopUp from '../Modals/Auth/ResetPassword'
 import CollectionCard from './CollectionCard'
+import { getStoreName } from '../../Utilities/Util'
 
 const CollectionsWrapper = (props: any) => {
     // redux state
@@ -102,7 +103,7 @@ const CollectionsWrapper = (props: any) => {
             <div className='section_info'>
                 <h1 className='section_heading'>Explore</h1>
                 <h1 className='section_heading' style={{ fontSize: '20px' }}>
-                    Unicus has exclusive assets and vast variety of NFT
+                    ${getStoreName} has exclusive assets and vast variety of NFT
                 </h1>
             </div>
             <Container>

@@ -12,7 +12,7 @@
   transition: all 0.15s ease-out;
 
   &.active {
-    color: white!important;
+    color: var(--text_default_pure) !important;
     background-image: none;
   }
 

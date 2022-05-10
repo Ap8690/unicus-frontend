@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { disConnectWallet } from '../../Redux/Profile/actions'
 
-const ProfileDropDown = ({ setOpenDisconnectModal, userName }) => {
+const ProfileDropDown = ({ setOpenDisconnectModal, userName, general }) => {
     const [darkChecked, setDarkChecked] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
@@ -174,162 +174,194 @@ const ProfileDropDown = ({ setOpenDisconnectModal, userName }) => {
 
     // console.log(darkChecked)
     return (
-        <React.Fragment>
-            <Box
+      <React.Fragment>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            textAlign: "center",
+            // background: '#0e2c59',
+            // height: '100vh',
+          }}
+        >
+          <Tooltip title="Account settings">
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              // sx={{ ml: 2 }}
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              <Avatar
                 sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    // background: '#0e2c59',
-                    // height: '100vh',
+                  width: 45,
+                  height: 45,
+                  color: "#fff",
+                  background: "#bebebe",
                 }}
-            >
-                <Tooltip title='Account settings'>
-                    <IconButton
-                        onClick={handleClick}
-                        size='small'
-                        // sx={{ ml: 2 }}
-                        aria-controls={open ? 'account-menu' : undefined}
-                        aria-haspopup='true'
-                        aria-expanded={open ? 'true' : undefined}
-                    >
-                        <Avatar
-                            sx={{
-                                width: 45,
-                                height: 45,
-                                color: '#fff',
-                                background: '#bebebe',
-                            }}
-                        >
-                            {userInfo && userInfo.profileUrl !== '' ? (
-                                <img
-                                    src={userInfo.profileUrl}
-                                    alt={userInfo.username}
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                    }}
-                                />
-                            ) : (
-                                <Avatar />
-                            )}
-                        </Avatar>
-                    </IconButton>
-                </Tooltip>
-            </Box>
-            <Menu
-                anchorEl={anchorEl}
-                id='account-menu'
-                open={open}
-                onClose={handleClose}
-                // onClick={handleClose}
-                PaperProps={{
-                    elevation: 0,
-                    sx: {
-                        overflow: 'visible',
-                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                        background: 'rgba(27, 44, 71, 0.5)',
-                        color: '#fff !important',
-                        mt: 1.5,
-                        boxShadow:
-                            '0 4px 6px -1px rgba(0, 0, 0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)',
-                        '& .MuiAvatar-root': {
-                            width: 32,
-                            height: 32,
-                            ml: -0.5,
-                            mr: 1,
-                        },
-                        '&:before': {
-                            content: '""',
-                            display: 'block',
-                            position: 'absolute',
-                            top: -2,
-                            bottom: -2,
-                            left: -2,
-                            right: -2,
-                            zIndex: -1,
-                            backdropFilter: 'blur(700px)',
-                            // border: '2px solid #fff',
-                            width: 210,
-                            height: 160,
-                            // bgcolor: "background.paper",
-                            // transform: "translateY(-50%) rotate(45deg)",
-                        },
-                        '&:after': {
-                            content: '""',
-                            display: 'block',
-                            position: 'absolute',
-                            // filter: 'blur(10px)',
-                            top: 0,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            bgcolor: 'background.paper',
-                            transform: 'translateY(-50%) rotate(45deg)',
-                            zIndex: 0,
-                        },
-                    },
-                }}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-            >
-                <Link
-                    to='/portfolio'
+              >
+                {userInfo && userInfo.profileUrl !== "" ? (
+                  <img
+                    src={userInfo.profileUrl}
+                    alt={userInfo.username}
                     style={{
-                        margin: 0,
-                        padding: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        color: '#fff !important',
-                        width: '100%',
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
                     }}
-                >
-                    <MenuItem
-                        sx={{
-                            width: '100%',
-                            '&:hover': {
-                                background: '#8f909324',
-                            },
-                        }}
-                        onClick={() => {
-                            handleClose()
-                        }}
-                        // component={<Navigate to='/portfolio' />}
-                    >
-                        <Avatar
-                            sx={{
-                                width: 45,
-                                height: 45,
-                                color: '#fff',
-                                background: '#bebebe',
-                            }}
-                        >
-                            {userInfo && userInfo.profileUrl !== '' ? (
-                                <img
-                                    src={userInfo.profileUrl}
-                                    alt={userInfo.username}
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                    }}
-                                />
-                            ) : (
-                                <Avatar
-                                style={{marginLeft: '0', marginRight: '0'}}
-                                sx={{
-                                    width: '100%',
-                                    height: '100%',
-                                    color: '#fff',
-                                    background: '#bebebe',
-                                }} />
-                            )}
-                        </Avatar>
-                        <span>My Profile</span>
-                    </MenuItem>
-                </Link>
-                {/* <MenuItem
+                  />
+                ) : (
+                  <Avatar />
+                )}
+              </Avatar>
+            </IconButton>
+          </Tooltip>
+        </Box>
+        <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={open}
+          onClose={handleClose}
+          // onClick={handleClose}
+          PaperProps={{
+            elevation: 0,
+            sx: {
+              overflow: "visible",
+              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+              background: "rgba(27, 44, 71, 0.5)",
+              color: "#fff !important",
+              mt: 1.5,
+              boxShadow:
+                "0 4px 6px -1px rgba(0, 0, 0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)",
+              "& .MuiAvatar-root": {
+                width: 32,
+                height: 32,
+                ml: -0.5,
+                mr: 1,
+              },
+              "&:before": {
+                content: '""',
+                display: "block",
+                position: "absolute",
+                top: -2,
+                bottom: -2,
+                left: -2,
+                right: -2,
+                zIndex: -1,
+                backdropFilter: "blur(700px)",
+                // border: '2px solid #fff',
+                width: 210,
+                height: 160,
+                // bgcolor: "background.paper",
+                // transform: "translateY(-50%) rotate(45deg)",
+              },
+              "&:after": {
+                content: '""',
+                display: "block",
+                position: "absolute",
+                // filter: 'blur(10px)',
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: "background.paper",
+                transform: "translateY(-50%) rotate(45deg)",
+                zIndex: 0,
+              },
+            },
+          }}
+          transformOrigin={{ horizontal: "right", vertical: "top" }}
+          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        >
+          <Link
+            to="/portfolio"
+            style={{
+              margin: 0,
+              padding: 0,
+              display: "flex",
+              alignItems: "center",
+              color: "#fff !important",
+              width: "100%",
+            }}
+          >
+            <MenuItem
+              sx={{
+                width: "100%",
+                "&:hover": {
+                  background: "#8f909324",
+                },
+              }}
+              onClick={() => {
+                handleClose();
+              }}
+              // component={<Navigate to='/portfolio' />}
+            >
+              <Avatar
+                sx={{
+                  width: 45,
+                  height: 45,
+                  color: "#fff",
+                  background: "#bebebe",
+                }}
+              >
+                {userInfo && userInfo.profileUrl !== "" ? (
+                  <img
+                    src={userInfo.profileUrl}
+                    alt={userInfo.username}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                ) : (
+                  <Avatar
+                    style={{ marginLeft: "0", marginRight: "0" }}
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      color: "#fff",
+                      background: "#bebebe",
+                    }}
+                  />
+                )}
+              </Avatar>
+              <span>My Profile</span>
+            </MenuItem>
+          </Link>
+
+          {general && userInfo._id === general.user ? (
+            <Link
+              to="/my-store"
+              style={{
+                margin: 0,
+                padding: 0,
+                display: "flex",
+                alignItems: "center",
+                color: "#fff !important",
+                width: "100%",
+              }}
+            >
+              <MenuItem
+                sx={{
+                  width: "100%",
+                  "&:hover": {
+                    background: "#8f909324",
+                  },
+                }}
+                onClick={() => {
+                  handleClose();
+                }}
+                // component={<Navigate to='/portfolio' />}
+              >
+                <span>My Store</span>
+              </MenuItem>
+            </Link>
+          ) : (
+            ""
+          )}
+          {/* <MenuItem
                     sx={{
                         // width: '100%',
                         '&:hover': {
@@ -367,27 +399,27 @@ const ProfileDropDown = ({ setOpenDisconnectModal, userName }) => {
                         />
                     </FormGroup>
                 </MenuItem> */}
-                <Divider sx={{ background: '#2d61db' }} />
-                <MenuItem
-                    style={{paddingTop: '7px', paddingBottom: '7px'}}
-                    sx={{
-                        '&:hover': {
-                            background: '#8f909324',
-                        },
-                    }}
-                    onClick={() => {
-                        handleClose()
-                        dispatch(disConnectWallet())
-                    }}
-                >
-                    <ListItemIcon>
-                        <Logout fontSize='small' sx={{ color: '#fff' }} />
-                    </ListItemIcon>
-                    Logout
-                </MenuItem>
-            </Menu>
-        </React.Fragment>
-    )
+          <Divider sx={{ background: "#2d61db" }} />
+          <MenuItem
+            style={{ paddingTop: "7px", paddingBottom: "7px" }}
+            sx={{
+              "&:hover": {
+                background: "#8f909324",
+              },
+            }}
+            onClick={() => {
+              handleClose();
+              dispatch(disConnectWallet());
+            }}
+          >
+            <ListItemIcon>
+              <Logout fontSize="small" sx={{ color: "#fff" }} />
+            </ListItemIcon>
+            Logout
+          </MenuItem>
+        </Menu>
+      </React.Fragment>
+    );
 }
 
 export default ProfileDropDown

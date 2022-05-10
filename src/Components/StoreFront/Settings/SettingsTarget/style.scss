@@ -1,0 +1,9 @@
+.settingsTarget {
+  border: 1px solid gray;
+  border-radius: 10px;
+  height: 100%;
+  cursor: pointer;
+  @media screen and (max-width: 890px) {
+    margin-top: 35px;
+  }
+}

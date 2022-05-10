@@ -15,6 +15,8 @@ import { backendUrl } from '../../config'
 import ResetPasswordPopUp from '../Modals/Auth/ResetPassword'
 import { getaccessToken, getUserInfo } from '../../Redux/Profile/actions'
 import Cookies from 'js-cookie'
+import { IStore } from '../../Models/Store'
+import { getStoreName } from '../../Utilities/Util'
 
 const ExploreWrapper = (props: any) => {
     // redux state
@@ -78,7 +80,7 @@ const ExploreWrapper = (props: any) => {
         ) {
             setResetPasswordPopUpShow(true)
         }
-    }, [])
+    }, [])   
 
     async function fetchItems() {
         if (skiploading) {
@@ -128,7 +130,7 @@ const ExploreWrapper = (props: any) => {
             <div className='section_info'>
                 <h1 className='section_heading'>Explore</h1>
                 <h1 className='section_heading' style={{ fontSize: '20px' }}>
-                    Unicus has exclusive assets and vast variety of NFT
+                    ${getStoreName} has exclusive assets and vast variety of NFT
                 </h1>
             </div>
             <Container>
