@@ -48,7 +48,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    if(window.location.host !== UNICUS_STORE){
+    if(window.location.host === UNICUS_STORE){
       getStore()
     }else{
     init();
