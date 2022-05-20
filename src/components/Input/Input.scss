@@ -1,0 +1,24 @@
+@use '/src/styles/colors';
+@use '/src/styles/mixins' as fn;
+@use '/src/styles/fonts';
+
+.input-box{
+    @include fn.flex-col(start, flex-start);
+    width: 100%;
+    .title{
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+    .required{
+        color: #dc4437 !important;
+    }
+    input{
+        width: 100%;
+        background-color: #00000000;
+        color: #fff;
+        border: 2px solid colors.$color-purple-1;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        font-family: fonts.$font-rubik;        
+    }
+}

@@ -1,0 +1,33 @@
+@use '/src/styles/mixins' as fn;
+@use '/src/styles/fonts';
+@use '/src/styles/global';
+
+.navbar{
+    height: 5rem;
+    width: 100%;
+    max-width: 1290px;
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    @include fn.flex(center, space-between);
+    padding: 0 2rem;
+    .brand-link{
+        padding: 0;
+        margin: 0;
+    }
+    .navbar-brand{
+        height: 3.5rem ;
+    }
+    .nav-links{
+        @include fn.flex(center, flex-end);
+        gap: 1.5rem;
+        .nav-link{
+            text-decoration: none;
+            color: #fff;
+            font-size: 1rem;
+            &:hover{
+                color: #999;
+            }
+        }
+    }
+}

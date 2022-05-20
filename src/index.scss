@@ -1,0 +1,56 @@
+@use 'src/styles/fonts';
+@use 'src/styles/helper';
+
+*{
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+body {
+  margin: 0;
+  font-family: fonts.$font-rubik;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: rgb(2, 0, 15);
+  min-height: 100vh;
+  position: relative;
+  color: #fff;
+}
+
+.App{
+  @include helper.flex-col(center, start)
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.btn{
+  border: none;
+  border-radius: 10px;
+  background: helper.$gradient-blue;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  &:hover{
+    filter: brightness(125%);
+    color: #fff !important;
+  }
+}
+
+p{
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  background-color: #202324;
+  color: #aba499;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #181a1b;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #454a4d;
+}

@@ -1,0 +1,307 @@
+@use "/src/styles/colors";
+@use "/src/styles/mixins" as fn;
+@use "/src/styles/fonts";
+
+.homepage {
+  max-width: 1290px;
+  padding: 4rem 2rem;
+}
+
+.topBanner {
+  @include fn.flex(center, space-between);
+  gap: 3rem;
+  p {
+    font-weight: 500;
+  }
+  .largeText {
+    padding: 1rem 0;
+    font-weight: bold;
+    font-size: 3rem;
+  }
+  img {
+    width: 450px;
+  }
+}
+
+.unicusEcosystem {
+  margin-top: 13rem;
+  > p {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  .ecosystemGrid {
+    margin-top: 8rem;
+    display: grid;
+    gap: 6rem;
+    grid-template-columns: repeat(3, 1fr);
+    .gridData {
+      @include fn.flex-col(start, flex-start);
+      gap: 1rem;
+      .itemMid {
+        font-weight: 500;
+      }
+      p:last-child {
+        font-size: 0.9rem;
+        max-width: 330px;
+      }
+    }
+  }
+}
+.blue-head {
+  font-size: 2rem;
+  font-weight: bold;
+  color: colors.$color-purple-2;
+  text-align: center;
+}
+.solutions {
+  margin-top: 10rem;
+}
+
+.soln-head{
+  font-size: 1.8rem;
+  margin: 5rem 0;
+  font-weight: 600;
+}
+.soln-1, .soln-3{
+  .soln-head{
+    text-align: right;
+  }
+}
+
+.soln-1, .soln-3, .soln-2{
+  margin-bottom: 6rem;
+  .title{
+    background: linear-gradient(colors.$color-purple-1, colors.$color-purple-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 500;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .soln-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4rem;
+    margin: 6rem 0;
+    .grid-data{
+      border-radius: 10px;
+      font-weight: 300;
+      padding: 2rem;
+      background-color: #060714;
+      position: relative;
+      overflow: hidden;
+      &::before{
+        content: '';
+        position: absolute;
+        top:0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(#8476F1, #FFFFFF );
+        opacity: 0.16;
+      }
+    }
+  }
+}
+
+.soln-info1, .soln-info3{
+  @include fn.flex(center, space-between);
+  gap: 4rem;
+}
+.soln-info2{
+  @include fn.flex(center, space-between);
+  flex-direction: row-reverse;
+  gap: 4rem;
+}
+
+.roadmap{
+  margin-top: 10rem;
+  >p{
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.4rem;
+    font-weight: 300;
+  }
+  .roadmap-img{
+    @include fn.flex-center();
+    flex-direction: column;
+    position: relative;
+    margin: 8rem 0;
+    .roadmap-info{
+      width: 100%;
+      margin-top: 4rem;
+      @include fn.flex(start, space-evenly);
+      text-align: center;
+      p{
+        font-weight: 300;
+        margin-top: 1rem;
+      }
+    }
+  }
+}
+.token{
+  margin-top: 10rem;
+  >p{
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.4rem;
+    font-weight: 300;
+  }
+  .token-info{
+    margin: 6rem 0 ;
+    @include fn.flex(start, space-between);
+    img{
+      width: 600px;
+    }
+    div{
+      @include fn.flex-col(start, flex-start);
+      gap: 2rem;
+    }
+    li{
+      margin-bottom: 1rem;
+    }
+  }
+}
+.blogs{
+  margin-top: 10rem;
+  >p{
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.4rem;
+    font-weight: 300;
+  }
+  .blog-img{
+    width: 380px;
+    height: 430px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+  }
+  .blog-grid{
+    margin: 4rem 0;
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.blog-card{
+  @include fn.flex-col(start, flex-start);
+  gap: 1rem;
+  .category{
+    font-weight: 500;
+    font-size: 0.7rem;
+    color: colors.$color-purple-1;
+  }
+  .title{
+    font-weight: 500;
+    font-size: 0.8rem;
+  }
+  .desc{
+    font-weight: 300;
+    font-size: 0.7rem;
+  }
+  .read-more{
+    overflow: hidden;
+    text-align: center;
+    color: colors.$color-purple-1;
+    text-decoration: none;
+    font-size: 0.7rem;
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  .read-more:before,
+  .read-more:after {
+    background-color: colors.$color-purple-1;
+    content: "";
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 50%;
+  }
+  
+  .read-more:before {
+    right: 0.5em;
+    margin-left: -50%;
+  }
+  
+  .read-more:after {
+    left: 0.5em;
+    margin-right: -50%;
+  }
+}
+.testimonials{
+  margin-top: 10rem;
+  >p{
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.4rem;
+    font-weight: 300;
+  }
+  .testimonial-grid{
+    margin: 4rem 0;
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.testimonial-card{
+  border-radius: 10px;
+  background: #121214;
+  padding: 4rem;
+  @include fn.flex-col(center, center);
+  gap: 1rem;
+  position: relative;
+  img{
+    border-radius: 50%;
+    object-fit: cover;
+    width: 200px;
+    height: 200px;
+  }
+  .name{
+    font-weight: 500;
+  }
+  .profession{
+    color: colors.$color-purple-1;
+    font-weight: 500;
+    font-size: 0.7rem;
+  }
+  .testimonial{
+    font-weight: 300;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  &::after{
+    content: "";
+    position: absolute;
+    border-radius: 20px;
+    height: 7px;
+    background-color: colors.$color-purple-1;
+    width: 95%;
+    top: 0;
+  }
+}
+
+.stay-in-loop{
+  @include fn.flex(center, space-between);
+  margin-top: 10rem;
+  h2{
+    font-size: 3rem;
+  }
+  span{
+    font-size: 0.8rem;
+    font-weight: 300;
+  }
+  .inputs{
+    @include fn.flex(center, flex-start);
+    gap: 2rem;
+    margin-top: 1rem;
+    button{
+      font-weight: 500;
+      font-family: fonts.$font-rubik;
+    }
+  }
+}

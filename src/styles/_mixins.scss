@@ -1,0 +1,30 @@
+@mixin flex($items, $justify) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $items;
+}
+
+@mixin flex-col($items, $justify) {
+    display: flex;
+    flex-direction: column;
+    justify-content: $justify;
+    align-items: $items;
+}
+
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin max-width($width) {
+    @media screen and (max-width: $width) {
+        @content;
+    }
+}
+
+@mixin min-width($width) {
+    @media screen and (min-width: $width) {
+        @content;
+    }
+}
