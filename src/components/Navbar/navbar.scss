@@ -3,7 +3,7 @@
 @use '/src/styles/global';
 
 .navbar{
-    height: 5rem;
+    height: 4rem;
     width: 100%;
     max-width: 1290px;
     position: sticky;
@@ -21,13 +21,35 @@
     .nav-links{
         @include fn.flex(center, flex-end);
         gap: 1.5rem;
+        min-width: fit-content;
         .nav-link{
             text-decoration: none;
             color: #fff;
-            font-size: 1rem;
+            font-size: fonts.$font-size-base;
             &:hover{
                 color: #999;
             }
         }
+    }
+    .nav-icons{
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+}
+
+.MuiMenu-paper{
+    .balance-box{
+        padding: 1rem 1rem 0.5rem;
+        border-top: 0.5px solid rgba($color: #E1E1E1, $alpha: 0.2);
+        font-size: fonts.$font-size-lg;
+        .balance{
+            font-weight: 500;
+            margin-bottom: .5rem;
+            font-size: fonts.$font-size-base;
+        }
+    }
+    .menu-link{
+        width: 100%;
+        height: 100%;
     }
 }

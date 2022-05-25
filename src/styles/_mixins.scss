@@ -1,3 +1,5 @@
+@use '/src/styles/colors';
+
 @mixin flex($items, $justify) {
     display: flex;
     justify-content: $justify;
@@ -27,4 +29,11 @@
     @media screen and (min-width: $width) {
         @content;
     }
+}
+
+@mixin text-gradient {
+    background: linear-gradient(colors.$color-purple-1, colors.$color-purple-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }

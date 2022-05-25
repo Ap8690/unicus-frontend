@@ -16,7 +16,7 @@ import blog2Img from "../../assets/images/Rectangle 8 (2).png"
 import blog3Img from "../../assets/images/Rectangle 8.png"
 import { Link } from "react-router-dom";
 import messageImg from "../../assets/svgs/message-sent.svg"
-import Input from "../../components/Input/Input";
+import Input from "../../components/InputBordered/InputBordered";
 
 const Homepage = ({}) => {
   return (

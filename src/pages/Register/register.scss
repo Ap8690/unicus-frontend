@@ -1,0 +1,41 @@
+@use '/src/styles/fonts';
+@use '/src/styles/colors';
+@use '/src/styles/mixins';
+
+.register-page{
+    @include mixins.flex-center();
+    padding: 3rem 2rem 4rem;
+    width: 100%;
+    .blue-head{
+        margin-bottom: 3rem;
+    }
+    .register-wrapper{
+        max-width: 400px;
+        width: 100%;
+    }
+    form{
+        button{
+            margin-top: 1rem;
+        }
+        .terms{
+            font-weight: 400;
+            font-size: fonts.$font-size-xs;
+            text-align: center;
+            margin-top: 1.4rem;
+        }
+        a{
+            @include mixins.text-gradient;
+            font-weight: inherit;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        .login-btn{
+            margin: 2rem 0  1rem;
+        }
+        .new-user{
+            font-weight: 400;
+            text-align: center;
+            margin-top: 1rem;
+        }
+    }
+}

@@ -1,24 +1,22 @@
-import "./input.scss";
+import "./inputbordered.scss";
 
-const Input = ({
+const InputBordered = ({
   title,
   placeholder,
   multi,
   date,
   time,
-  email,
   password,
   state,
   setState,
   required,
   disabled,
-  forgetPass
 }) => {
   const handleChange = (e) => {
     setState(e.target.value);
   };
   return (
-    <div className="input-box">
+    <div className="input-box-bordered">
       {title && (
         <span className="title">
           {title}
@@ -41,24 +39,9 @@ const Input = ({
           value={state}
           placeholder={placeholder}
         />
-      ) : password ? (
-        <div className="password-field">
-        <input
-          type={"password"}
-          onChange={handleChange}
-          value={state}
-          placeholder={placeholder}
-          disabled={disabled}
-        />
-        {forgetPass &&
-            <div className="forget-pass">
-                <button>Forgot Password?</button>
-            </div>
-        }
-        </div>
       ) : (
         <input
-          type={email ? "email" : "text"}
+          type={password ? "password" : "text"}
           onChange={handleChange}
           value={state}
           placeholder={placeholder}
@@ -68,4 +51,4 @@ const Input = ({
     </div>
   );
 };
-export default Input;
+export default InputBordered;

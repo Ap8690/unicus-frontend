@@ -8,7 +8,7 @@
 
 body {
   margin: 0;
-  font-family: fonts.$font-rubik;
+  font-family: helper.$font-rubik;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: rgb(2, 0, 15);
@@ -26,9 +26,18 @@ code {
     monospace;
 }
 
+button{
+  background: none;
+  border: none;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
 .btn{
   border: none;
   border-radius: 10px;
+  font-weight: 500;
   background: helper.$gradient-blue;
   padding: 0.75rem 1rem;
   color: #fff;
@@ -36,6 +45,50 @@ code {
     filter: brightness(125%);
     color: #fff !important;
   }
+}
+.large-btn{
+  font-weight: 500;
+  font-family: fonts.$font-rubik !important;
+  padding: 1rem;
+  width: 100%;
+  font-size: fonts.$font-size-xl;
+}
+.large-btn-outline{
+  font-weight: 500;
+  background: none;
+  border: 1px solid rgba($color: #fff, $alpha: 0.3);
+  font-family: fonts.$font-rubik !important;
+  padding: 1rem;
+  width: 100%;
+  font-size: fonts.$font-size-xl;
+  border-radius: 10px;
+}
+
+.blue-head {
+  font-size: helper.$font-size-4xl;
+  font-weight: bold;
+  // color: helper.$color-purple-2;
+  text-align: center;
+  @include helper.text-gradient;
+}
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
+.MuiMenu-paper{
+  background-color: rgba($color: #fff, $alpha: 0.125) !important;
+  backdrop-filter: blur(10px);
+  color: #fff !important;
+  z-index: 11000 !important;
+  margin-top: 1rem;
+  width: 200px;
+  border-radius: 10px !important;
+}
+
+.hidden{
+  display: none;
 }
 
 p{

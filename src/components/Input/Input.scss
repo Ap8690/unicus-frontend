@@ -5,20 +5,37 @@
 .input-box{
     @include fn.flex-col(start, flex-start);
     width: 100%;
+    margin-top: 1.5rem;
     .title{
         font-weight: 500;
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.5rem;
     }
     .required{
-        color: #dc4437 !important;
+        color: colors.$color-purple-2 !important;
+    }
+    .password-field{
+        width: 100%;
+        .forget-pass{
+            width: 100%;
+            @include fn.flex(center, end);
+            font-size: fonts.$font-size-xs;
+            button{
+                font-family: fonts.$font-rubik !important;
+                padding: 0.2rem 0;
+            }
+        }
     }
     input{
         width: 100%;
         background-color: #00000000;
         color: #fff;
-        border: 2px solid colors.$color-purple-1;
-        border-radius: 10px;
-        padding: 0.75rem 1rem;
+        border: none    ;
+        border-bottom: 1px solid rgba($color: #fff, $alpha: 0.3);
+        // border-radius: 10px;
+        padding: 0.75rem 0;
         font-family: fonts.$font-rubik;        
+        &:focus{
+            outline: rgba($color: #fff, $alpha: .3);
+        }
     }
 }

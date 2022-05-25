@@ -1,0 +1,51 @@
+@use '/src/styles/fonts';
+@use '/src/styles/colors';
+@use '/src/styles/mixins';
+
+.connect-wallet-page{
+    @include mixins.flex-center();
+    padding: 3rem 2rem 4rem;
+    width: 100%;
+    .connect-wrapper{
+        max-width: 400px;
+        width: 100%;
+    }
+    .blue-head{
+        margin-bottom: 1rem;
+    }
+    .using-email{
+        @include mixins.flex-col(center, flex-start);
+        gap: 1.5rem;
+    }
+    .using-wallets{
+        margin-top: 3rem;
+        @include mixins.flex-col(center, flex-start);
+        gap: 1.5rem;
+        .blue-head{
+            margin-bottom: 0;
+        }
+        .wallet-text{
+            font-size: fonts.$font-size-xs;
+        }
+        .wallets{
+            @include mixins.flex-col(center, flex-start);
+            border-radius: 10px;
+            margin-top: 1rem;
+            width: 100%;
+            border: 1px solid rgba($color: #fff, $alpha: 0.3);
+            button{
+                @include mixins.flex(center, space-between);
+                width: 100%;
+                padding: 1rem 1rem;
+                img{
+                    height: 2rem;
+                    width: 2rem;
+                }
+                border-bottom: 1px solid rgba($color: #fff, $alpha: 0.3);
+            }
+            button:last-child{
+                border: none;
+            }
+        }
+    }
+}
