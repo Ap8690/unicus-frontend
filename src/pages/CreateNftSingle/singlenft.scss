@@ -1,0 +1,153 @@
+@use '/src/styles/colors';
+@use '/src/styles/fonts';
+@use '/src/styles/mixins';
+
+.create-nft-single-page {
+    max-width: 1290px;
+    width: 100%;
+    padding: 6rem 2rem;
+    .field-title{
+        font-size: fonts.$font-size-lg;
+        font-weight: 500;
+    }
+    .head{
+        width: 50%;
+        >div{
+            text-align: left !important;
+        }
+        .head-text{
+            margin-top: 1.5rem;
+            font-size: fonts.$font-size-sm;
+            // max-width: 400px;
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
+    }
+    .body{
+        @include mixins.flex(start, space-between);
+        gap: 6rem;
+        margin-top: 4rem;
+        .preview-field{
+            @include mixins.flex-col(start, flex-start);
+            gap: 1rem;
+        }
+        .preview-card{
+            @include mixins.flex-col(start, flex-start);
+            gap: 1rem;
+            border-radius: 18px;
+            overflow: hidden;
+            width: 300px;
+            border: 1px solid rgba($color: #666, $alpha: 0.8);
+            padding: 1rem;
+            .img-box{
+                width: 100%;
+                height: calc(300px - 2rem);
+                overflow: hidden;
+                border-radius: 18px;
+                img{
+                    width: 100%;
+                    height: 100 ;
+                }
+            }
+            .nft-info{
+                width: 100%;
+                @include mixins.flex-col(start, flex-start);
+                gap: 0.5rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid rgba($color: #666, $alpha: 0.4);
+                .titles{
+                    @include mixins.flex(center, space-between);
+                    width: 100%;
+                    font-weight: 500;
+                    font-size: fonts.$font-size-sm;
+                }
+                .info{
+                    @include mixins.flex(center, space-between);
+                    width: 100%;
+                    font-size: fonts.$font-size-sm;
+                }
+            }
+            .btn-box{
+                @include mixins.flex(center, space-between);
+                width: 100%;
+                .texture-btn{
+                    @include mixins.text-gradient;
+                    font-weight: 500;
+                }
+                >div{
+                    @include mixins.flex(center, flex-end);
+                    gap: 0.5rem;
+                }
+            }
+        }
+        .input-fields{
+            width: 100%;
+            @include mixins.flex-col(start, flex-start);
+            gap: 2rem;
+            .create-btn{
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+            .upload-file{
+                @include mixins.flex-col(start, flex-start);
+                gap: 1rem;
+                .field{
+                    width: 300px;
+                    height: 300px;
+                    border-radius: 18px;
+                    border: 2px dashed rgba($color: #666, $alpha: 0.8);
+                    
+                }
+            }
+            .basic-info{
+                width: 100%;
+            }
+        }
+    }
+    .blockchain{
+        width: 100%;
+        @include mixins.flex-col(start, flex-start);
+        gap: 2rem;
+        .select-chain{
+            width: 100%;
+        }
+        .set-price{
+            width: 100%;
+            padding: 1.5rem;
+            border: 1px solid rgba($color: #666, $alpha: 0.8);
+            .btn-box{
+                @include mixins.flex(center, space-between);
+                padding-bottom: 1.5rem;
+                gap: 1.5rem;
+                border-bottom: 1px solid rgba($color: #666, $alpha: 0.4);
+                button{
+                    @include mixins.flex(center, flex-start);
+                    gap: 1rem;
+                }
+            }
+
+        }
+        .select-collection{
+            width: 100%;
+        }
+        .set-attributes{
+            width: 100%;
+            padding: 1.5rem;
+            border: 1px solid rgba($color: #666, $alpha: 0.8);
+            @include mixins.flex-col(start, center);
+            gap: 1.5rem;
+            .btn-outline{
+                width: 100%;
+                @include mixins.flex(center, space-between);
+                gap: 1rem;
+                .btn-text{
+                    @include mixins.flex(center, flex-start);
+                    gap: 1rem;
+                }
+            }
+
+        }
+    }
+}

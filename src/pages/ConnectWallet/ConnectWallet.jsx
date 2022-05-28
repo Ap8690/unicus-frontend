@@ -7,19 +7,21 @@ import metamaskLogo from '../../assets/svgs/metamask.svg'
 import coinbaseLogo from '../../assets/svgs/coinbase.svg'
 import mewLogo from '../../assets/svgs/myetherwallet.svg'
 import walletconnectLogo from '../../assets/svgs/walletconnect.svg'
+import { useNavigate } from 'react-router-dom'
 
 const ConnectWallet = () => {
   const { connectMetamask } = useContext(Web3Context)
+  const navigate = useNavigate()
 
   return (
       <div className='connect-wallet-page'>
           <div className="connect-wrapper">
             <div className="using-email">
                 <div className="blue-head">Connect using Email</div>
-                <button className="large-btn-outline">
+                <button className="large-btn-outline" onClick={() => navigate('/login')}>
                     Login
                 </button>
-                <button className="large-btn-outline">
+                <button className="large-btn-outline" onClick={() => navigate('/register')}>
                     Register
                 </button>
             </div>

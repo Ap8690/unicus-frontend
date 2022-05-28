@@ -1,17 +1,19 @@
 import './navbar.scss'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import unicusLogo from '../../assets/images/Unicus-logo.png'
 import profileLogo from '../../assets/svgs/profileIcon.svg'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import SearchBar from '../../components/SearchBar/SearchBar'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import sunIcon from '../../assets/svgs/sunIcon.svg'
 import walletIcon from '../../assets/svgs/walletIcon.svg'
+import { UserContext } from '../../context/UserContext'
 
 const Navbar = () => {
   const [search, setSearch] = useState('')
   const location = useLocation()
+  const navigate = useNavigate()
   
   const [anchorStats, setAnchorStats] = useState(null);
   const [anchorChains, setAnchorChains] = useState(null);
@@ -20,6 +22,8 @@ const Navbar = () => {
   const openStats = Boolean(anchorStats);
   const openChains = Boolean(anchorChains);
   const openProfile = Boolean(anchorProfile);
+
+  const { isLogin } = useContext(UserContext)
 
   const handleClickStats = (event) => {
     setAnchorStats(event.currentTarget);
@@ -34,7 +38,9 @@ const Navbar = () => {
     setAnchorChains(null);
   };
   const handleClickProfile= (event) => {
-    setAnchorProfile(event.currentTarget);
+    isLogin 
+      ? setAnchorProfile(event.currentTarget)
+      : navigate('/connect-wallet')
   };
   const handleCloseProfile = () => {
     setAnchorProfile(null);

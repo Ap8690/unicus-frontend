@@ -4,7 +4,7 @@
 
 .connect-wallet-page{
     @include mixins.flex-center();
-    padding: 3rem 2rem 4rem;
+    padding: 6rem 2rem;
     width: 100%;
     .connect-wrapper{
         max-width: 400px;

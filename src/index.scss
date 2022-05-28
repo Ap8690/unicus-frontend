@@ -12,9 +12,34 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: rgb(2, 0, 15);
+  background-image: url(./assets/svgs/backgroundImg1.svg), url(./assets/svgs/backgroundImg.svg);
+  // background-position: center;  
   min-height: 100vh;
   position: relative;
   color: #fff;
+}
+
+button{
+  font-family: helper.$font-rubik !important;
+}
+
+#chain-select-label, #demo-simple-select-standard-label{
+  color: #fff !important;
+}
+#chain-select{
+  color: #fff !important;
+}
+.css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon{
+  fill: white !important;
+}
+.css-1mf6u8l-MuiSvgIcon-root-MuiSelect-icon{
+  fill: white !important;
+}
+.css-a3l6o-MuiInputBase-root-MuiInput-root-MuiSelect-root:before{
+  border-bottom: 1px solid rgba($color: #666, $alpha: 0.8) !important;
+}
+.css-a3l6o-MuiInputBase-root-MuiInput-root-MuiSelect-root:after{
+  border-bottom: 1px solid rgba($color: #fff, $alpha: 1) !important;
 }
 
 .App{
@@ -46,6 +71,18 @@ button{
     color: #fff !important;
   }
 }
+.btn-grey{
+  border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  background: rgba($color: #666, $alpha: 0.2);
+  padding: 0.75rem 1rem;
+  color: #fff;
+  &:hover{
+    filter: brightness(125%);
+    color: #fff !important;
+  }
+}
 .large-btn{
   font-weight: 500;
   font-family: fonts.$font-rubik !important;
@@ -61,6 +98,16 @@ button{
   padding: 1rem;
   width: 100%;
   font-size: fonts.$font-size-xl;
+  border-radius: 10px;
+}
+.btn-outline{
+  font-weight: 500;
+  background: none;
+  border: 1px solid rgba($color: #fff, $alpha: 0.3);
+  font-family: fonts.$font-rubik !important;
+  padding: 1rem;
+  width: 100%;
+  // font-size: fonts.$font-size-xl;
   border-radius: 10px;
 }
 

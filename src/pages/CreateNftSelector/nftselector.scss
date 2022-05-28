@@ -1,0 +1,50 @@
+@use '/src/styles/colors';
+@use '/src/styles/fonts';
+@use '/src/styles/mixins';
+
+.create-nft-selector{
+    @include mixins.flex-col(center, center);
+    padding: 6rem 2rem;
+    gap: 1.5rem;
+    width: 100%;
+    .blue-head{
+        text-align: center;
+    }
+    .selector-text{
+        font-size: fonts.$font-size-sm;
+        max-width: 400px;
+        text-align: center;
+        font-weight: 300;
+        letter-spacing: 1px;
+    }
+    .selectors{
+        @include mixins.flex(center, center);
+        margin: 4rem 0;
+        gap: 2rem;
+        .selector{
+            @include mixins.flex-col(center, center);
+            gap: 3rem;
+            .img-box{
+                border-radius: 9%;
+                cursor: pointer;
+                padding: 1.5rem;
+                height: 380px;
+                width: 350px;
+                border: 2px dashed colors.$color-purple-1;
+                overflow: hidden;
+                position: relative;
+                img{
+                    border-radius: 30px;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+            button{
+                border-radius: 99999px;
+                font-weight: 500;
+                padding: 0.75rem 1.5rem;
+            }
+        }
+    }
+}

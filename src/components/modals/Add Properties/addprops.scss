@@ -1,0 +1,51 @@
+@use '/src/styles/colors';
+@use '/src/styles/fonts';
+@use '/src/styles/mixins';
+
+.dialog{
+    padding: 1.5rem;
+    color: #fff !important;
+    .dialog-title{
+        @include mixins.flex-center;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba($color: #666, $alpha: 0.4);
+        text-align: center;
+        position: relative;
+        button{
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    }
+    .info{
+        font-weight: 400;
+        font-size: fonts.$font-size-sm;
+        padding: 1rem 0;
+    }
+    .values{
+        padding: 1rem 0;
+        @include mixins.flex(center, space-between);
+        gap: 1.5rem;
+        >div{
+            width: 50%;
+        }
+
+    }
+    .btn-outline{
+        width: fit-content;
+        font-size: fonts.$font-size-sm;
+    }
+    .props{
+        border-bottom: 1px solid rgba($color: #666, $alpha: 0.4);
+        padding-bottom: 1.5rem;
+    }
+    
+    .save-btn{
+        padding-top: 1.5rem;
+        @include mixins.flex-center();
+        .btn{
+            border-radius: 9999px !important;
+            width: 8rem;
+        }
+    }
+}

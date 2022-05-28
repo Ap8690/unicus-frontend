@@ -32,8 +32,8 @@
 }
 
 @mixin text-gradient {
-    background: linear-gradient(colors.$color-purple-1, colors.$color-purple-2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    background: linear-gradient(colors.$color-purple-1, colors.$color-purple-2) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
 }

@@ -9,6 +9,7 @@ const Input = ({
   email,
   password,
   state,
+  number,
   setState,
   required,
   disabled,
@@ -56,6 +57,14 @@ const Input = ({
             </div>
         }
         </div>
+      ) : number ? (
+        <input
+          type={"number"}
+          onChange={handleChange}
+          value={state}
+          placeholder={placeholder}
+          disabled={disabled}
+        />
       ) : (
         <input
           type={email ? "email" : "text"}
