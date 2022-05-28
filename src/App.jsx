@@ -8,6 +8,7 @@ import CreateNftSingle from './pages/CreateNftSingle/CreateNftSingle';
 import Homepage from './pages/Homepage/Homepage';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
+import Blog from './pages/Blog/Blog';
 
 const App = () => {
   const { isLogin } = useContext(UserContext)
@@ -20,6 +21,7 @@ const App = () => {
           <Route path='/' element={<Homepage />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/blog' element={<Blog />} />
           <Route path='/connect-wallet' element={<ConnectWallet />} />
           <Route path='/create-nft' element={<CreateNftSelector />} />
           <Route path='/create-nft/single-item' element={<CreateNftSingle />} />
