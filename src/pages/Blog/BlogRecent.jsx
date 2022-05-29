@@ -1,6 +1,3 @@
-// Sass File
-import "./Blog.scss";
-
 // Images
 import chevronDown from "../../assets/svgs/chevronDown.svg";
 import chevronLeft from "../../assets/svgs/chevronLeft.svg";
@@ -9,52 +6,7 @@ import blogImg from "../../assets/images/Rectangle 8.png";
 
 // Library
 import { useEffect, useState } from "react";
-
-const BlogRecommendedMain = ({ text, image, time, date, title }) => {
-  return (
-    <div className="blog-recommended-main">
-      <div className="blog-recommended-image">
-        <img src={image} alt="Blog Image" />
-      </div>
-      <div className="blog-info">
-        <div className="blog-info-element left">{time} mins read</div>
-        <div className="blog-info-element right">{date}</div>
-      </div>
-
-      <h3 className="blog-recommended-main-heading">{title}</h3>
-      <p className="blog-description">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum sed saepe
-        odio deserunt. Quasi consectetur deleniti culpa asperiores omnis at
-        expedita explicabo. Temporibus, eos commodi! Veniam fugiat aut aliquid
-        neque! Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea,
-        aliquid consectetur quidem eaque distinctio odio delectus architecto
-        enim necessitatibus! Rerum impedit tenetur necessitatibus nulla quos
-        iusto illo iure sequi tempora?
-      </p>
-    </div>
-  );
-};
-
-const BlogRecommendedSide = ({ text, title, image, time, date }) => {
-  return (
-    <div className="blog-recommended-side">
-      <div className="blog-recommended-image">
-        <img src={image} alt="Blog Image" />
-      </div>
-      <div className="blog-info">
-        <div className="blog-info-element left">{time} mins read</div>
-        <div className="blog-info-element right">{date}</div>
-      </div>
-      <h3 className="blog-recommended-side-heading">{title}</h3>
-      <p className="blog-description">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum
-        perspiciatis consequatur itaque velit hic omnis quia at debitis
-        temporibus accusamus, recusandae neque totam officiis, a nostrum officia
-        veniam, optio quos? Lore
-      </p>
-    </div>
-  );
-};
+import { Link } from "react-router-dom";
 
 // Filter for Recent Blogs
 const BlogRecentFilter = ({ setBlogFilter }) => {
@@ -144,37 +96,14 @@ const BlogRecentElement = ({ blog }) => {
       </div>
       <div className="blog-recent-element-info">
         <div className="blog-info-element left">{blog.time} mins read</div>
-        <h3 className="blog-recent-element-heading">{blog.title}</h3>
+        <Link
+          to={`/readblog/${blog.id}`}
+          className="blog-recent-element-heading"
+        >
+          {blog.title}
+        </Link>
         <p className="blog-description">{blog.text}</p>
         <div className="blog-info-element left">{blog.date}</div>
-      </div>
-    </div>
-  );
-};
-// Recommended Blogs
-const BlogRecommended = () => {
-  return (
-    <div className="blog-recommended">
-      <h2 className="blog-heading">Recommended</h2>
-      <div className="blog-recommended-holder">
-        <BlogRecommendedMain
-          image={blogImg}
-          time={3}
-          date="25th April, 2021"
-          title={"How to become rich"}
-        />
-        <BlogRecommendedSide
-          image={blogImg}
-          time={3}
-          date="25th April, 2021"
-          title={"How to become rich"}
-        />
-        <BlogRecommendedSide
-          image={blogImg}
-          time={3}
-          date="25th April, 2021"
-          title={"How to become rich"}
-        />
       </div>
     </div>
   );
@@ -184,6 +113,7 @@ const BlogRecommended = () => {
 const BlogRecent = () => {
   const [blogList, setBlogList] = useState([
     {
+      id: 1,
       title: "Lorem ipsum dolor sit amet, conse  adipiscing elit. se venena",
       text: "This is just a placeholder, will be replaced soon enough",
       image: blogImg,
@@ -191,6 +121,7 @@ const BlogRecent = () => {
       date: "25th April, 2022",
     },
     {
+      id: 2,
       title: "Lorem ipsum dolor sit amet, conse  adipiscing elit. se venena",
       text: "This is just a placeholder, will be replaced soon enough",
       image: blogImg,
@@ -198,6 +129,7 @@ const BlogRecent = () => {
       date: "25th April, 2022",
     },
     {
+      id: 3,
       title: "Lorem ipsum dolor sit amet, conse  adipiscing elit. se venena",
       text: "This is just a placeholder, will be replaced soon enough",
       image: blogImg,
@@ -205,6 +137,7 @@ const BlogRecent = () => {
       date: "25th April, 2022",
     },
     {
+      id: 4,
       title: "Lorem ipsum dolor sit amet, conse  adipiscing elit. se venena",
       text: "This is just a placeholder, will be replaced soon enough",
       image: blogImg,
@@ -212,6 +145,7 @@ const BlogRecent = () => {
       date: "25th April, 2022",
     },
     {
+      id: 5,
       title: "Lorem ipsum dolor sit amet, conse  adipiscing elit. se venena",
       text: "This is just a placeholder, will be replaced soon enough",
       image: blogImg,
@@ -219,6 +153,7 @@ const BlogRecent = () => {
       date: "25th April, 2022",
     },
     {
+      id: 6,
       title: "Lorem ipsum dolor sit amet, conse  adipiscing elit. se venena",
       text: "This is just a placeholder, will be replaced soon enough",
       image: blogImg,
@@ -226,6 +161,7 @@ const BlogRecent = () => {
       date: "25th April, 2022",
     },
     {
+      id: 7,
       title: "Lorem ipsum dolor sit amet, conse  adipiscing elit. se venena",
       text: "This is just a placeholder, will be replaced soon enough",
       image: blogImg,
@@ -233,6 +169,7 @@ const BlogRecent = () => {
       date: "25th April, 2022",
     },
     {
+      id: 8,
       title: "Lorem ipsum dolor sit amet, conse  adipiscing elit. se venena",
       text: "This is just a placeholder, will be replaced soon enough",
       image: blogImg,
@@ -240,6 +177,7 @@ const BlogRecent = () => {
       date: "25th April, 2022",
     },
     {
+      id: 9,
       title: "Lorem ipsum dolor sit amet, conse  adipiscing elit. se venena",
       text: "This is just a placeholder, will be replaced soon enough",
       image: blogImg,
@@ -247,6 +185,7 @@ const BlogRecent = () => {
       date: "25th April, 2022",
     },
     {
+      id: 10,
       title: "Lorem ipsum dolor sit amet, conse  adipiscing elit. se venena",
       text: "This is just a placeholder, will be replaced soon enough",
       image: blogImg,
@@ -275,10 +214,7 @@ const BlogRecent = () => {
       </div>
       <div className="blog-recent-element-holder">
         {blogDisplayList.map((blog, i) => (
-          <BlogRecentElement
-            blog={blog}
-            key={`${i}${new Date().getTime()}${blog.title}`}
-          />
+          <BlogRecentElement blog={blog} key={blog.id} />
         ))}
       </div>
       <BlogRecentSwitcher
@@ -290,13 +226,4 @@ const BlogRecent = () => {
   );
 };
 
-const Blog = ({}) => {
-  return (
-    <div className="blog">
-      <BlogRecommended />
-      <BlogRecent />
-    </div>
-  );
-};
-
-export default Blog;
+export default BlogRecent;

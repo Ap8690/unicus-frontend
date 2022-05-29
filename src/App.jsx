@@ -14,7 +14,7 @@ import CreateNftSingle from "./pages/CreateNftSingle/CreateNftSingle";
 import Homepage from "./pages/Homepage/Homepage";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import Blog from "./pages/Blog/Blog";
+import Blog from "./pages/Blog/BlogMain";
 
 const App = () => {
   const { isLogin } = useContext(UserContext);

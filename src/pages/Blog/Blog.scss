@@ -15,6 +15,7 @@
   .blog-recommended {
     .blog-recommended-holder {
       padding: 2rem 0;
+      height: 57rem;
       display: grid;
       grid-template-columns: 2fr 1fr;
       grid-template-rows: repeat(minmax(0, 1fr));
@@ -79,6 +80,12 @@
         .blog-info {
           font-size: fonts.$font-size-xs;
         }
+      }
+      .blog-recommended-side:nth-of-type(2) {
+        align-self: flex-start;
+      }
+      .blog-recommended-side:nth-of-type(3) {
+        align-self: flex-end;
       }
     }
   }
