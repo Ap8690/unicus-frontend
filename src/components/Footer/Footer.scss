@@ -27,15 +27,15 @@ footer {
     font-weight: 400;
   }
   .footer-nav-bar {
-    width: 100%;
+    width: 70%;
     .footer-nav-links {
-      @include fn.flex(center, center);
+      @include fn.flex(center, space-evenly);
       width: 100%;
       text-align: center;
-      gap: 4.4rem;
-
+      flex-wrap: wrap;
+      gap: 4rem;
       .footer-nav-link {
-        max-width: fit-content;
+        width: fit-content;
         font-size: fonts.$font-size-xl;
         font-weight: 400;
         &:hover {
@@ -45,7 +45,7 @@ footer {
     }
   }
   .footer-social-links {
-    @include fn.flex(center, center);
+    @include fn.flex(center, space-between);
     flex-wrap: wrap;
     gap: 5.2rem;
     .footer-social-link {
