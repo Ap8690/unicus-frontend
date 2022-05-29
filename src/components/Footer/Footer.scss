@@ -32,6 +32,10 @@ footer {
         min-width: fit-content;
         font-size: fonts.$font-size-xl;
         font-weight: 400;
+
+        &:hover {
+          color: #999;
+        }
       }
     }
   }
@@ -41,6 +45,9 @@ footer {
     .footer-social-link {
       height: 4rem;
       width: 4rem;
+      &:hover {
+        opacity: 0.5;
+      }
     }
   }
   .footer-copyright {

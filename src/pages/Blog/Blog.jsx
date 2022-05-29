@@ -58,7 +58,14 @@ const BlogRecommendedSide = ({ text, title, image, time, date }) => {
 
 // Filter for Recent Blogs
 const BlogRecentFilter = ({ setBlogFilter }) => {
-  return <div className="blog-recent-filter">Categories</div>;
+  return (
+    <div className="blog-recent-filter">
+      <p>Categories</p>
+      <button>
+        <img src={chevronDown} alt="Expand Categories" />
+      </button>
+    </div>
+  );
 };
 
 const BlogRecentSwitcherElement = ({ currentPage, page, updatePage }) => {

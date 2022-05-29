@@ -7,7 +7,7 @@
   max-width: 1290px;
   width: 100%;
   max-width: 1290px;
-  padding: 12rem 2rem;
+  padding: 10rem 2rem;
   padding-bottom: 0;
   font-weight: 300;
 
@@ -89,6 +89,26 @@
     .blog-recent-header {
       @include fn.flex(center, space-between);
       width: 100%;
+      .blog-recent-filter {
+        @include fn.flex(center, space-between);
+        background-color: #252330;
+        font-weight: 400;
+        font-size: fonts.$font-size-lg;
+        padding: 1rem;
+        width: 10%;
+        min-width: 14rem;
+        border-radius: 1rem;
+
+        button {
+          @include fn.flex(center, center);
+          height: 100%;
+          img {
+            display: block;
+            height: 100%;
+            width: auto;
+          }
+        }
+      }
     }
 
     .blog-recent-element-holder {
