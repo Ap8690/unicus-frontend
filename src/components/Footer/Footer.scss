@@ -1,0 +1,50 @@
+@use "/src/styles/mixins" as fn;
+@use "/src/styles/fonts";
+@use "/src/styles/colors";
+
+footer {
+  padding: 2.8rem 0;
+  @include fn.flex-col(center, flex-start);
+  gap: 4.2rem;
+  width: 100%;
+  background-color: #00040e;
+  a {
+    display: block;
+    width: 30%;
+    max-width: 12rem;
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+  .footer-intro {
+    font-size: fonts.$font-size-2xl;
+    margin: 0;
+    font-weight: 400;
+  }
+  .footer-nav-bar {
+    .footer-nav-links {
+      @include fn.flex(center, center);
+      gap: 4.4rem;
+
+      .footer-nav-link {
+        min-width: fit-content;
+        font-size: fonts.$font-size-xl;
+        font-weight: 400;
+      }
+    }
+  }
+  .footer-social-links {
+    @include fn.flex(center, center);
+    gap: 5.2rem;
+    .footer-social-link {
+      height: 4rem;
+      width: 4rem;
+    }
+  }
+  .footer-copyright {
+    font-size: fonts.$font-size-2xl;
+    font-weight: 400;
+  }
+}

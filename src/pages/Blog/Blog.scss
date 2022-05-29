@@ -146,6 +146,10 @@
           max-height: 2em;
         }
       }
+      .blog-recent-switcher-button:disabled {
+        cursor: initial;
+        opacity: 0.5;
+      }
       .blog-recent-switcher-element {
         border-radius: 1rem;
         cursor: pointer;
