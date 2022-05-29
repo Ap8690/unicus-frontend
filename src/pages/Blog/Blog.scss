@@ -4,7 +4,6 @@
 
 .blog {
   @include fn.flex-col(center, center);
-  max-width: 1290px;
   width: 100%;
   max-width: 1290px;
   padding: 10rem 2rem;

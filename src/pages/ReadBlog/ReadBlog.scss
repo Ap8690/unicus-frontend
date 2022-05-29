@@ -1,0 +1,93 @@
+@use "/src/styles/colors";
+@use "/src/styles/mixins" as fn;
+@use "/src/styles/fonts";
+
+.read-blog {
+  @include fn.flex-col(center, flex-start);
+  gap: 5.375rem;
+  width: 100%;
+  max-width: 1290px;
+  padding: 6rem 2rem;
+  padding-bottom: 0;
+
+  .read-blog-main {
+    .read-blog-image {
+      position: relative;
+      border-radius: 2rem;
+      width: 100%;
+      overflow: hidden;
+      max-height: 38rem;
+
+      img {
+        min-width: 100%;
+        min-height: 100%;
+
+        position: relative;
+        border-radius: 2rem;
+        top: 50%;
+        transform: translateY(-25%);
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    // Lower Part of Read Blog
+    .read-blog-lower {
+      @include fn.flex(flex-start, space-between);
+      padding-top: 5.375rem;
+
+      .read-blog-text {
+        @include fn.flex-col(flex-start, flex-start);
+        width: 80%;
+        gap: 2rem;
+        padding-right: 3rem;
+        border-right: solid #333333 1px;
+        .read-blog-heading {
+          font-size: fonts.$font-size-4xl;
+          font-weight: 700;
+          margin: 0;
+        }
+        .read-blog-para {
+          font-size: fonts.$font-size-lg;
+          font-weight: 400;
+        }
+      }
+
+      .read-blog-author {
+        .read-blog-author-info {
+          @include fn.flex(center, center);
+          gap: 1rem;
+          .read-blog-author-image {
+            border-radius: 50%;
+            width: 30%;
+            overflow: hidden;
+            img {
+              display: block;
+              width: 100%;
+              height: auto;
+              border-radius: 50%;
+            }
+          }
+
+          .read-blog-author-info-text {
+            @include fn.flex-col(center, center);
+            .read-blog-author-name {
+              text-align: center;
+              font-size: fonts.$font-size-xl;
+              font-weight: 500;
+            }
+            .read-blog-author-profile-link {
+              text-align: center;
+              font-size: fonts.$font-size-lg;
+              font-weight: 600;
+              background: colors.$gradient-blue;
+              background-clip: text;
+              color: rgba(0, 0, 0, 0);
+            }
+          }
+        }
+      }
+    }
+  }
+}
