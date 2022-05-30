@@ -4,6 +4,9 @@ import { useLocation } from "react-router-dom";
 // Images
 import blogImg from "../../assets/images/Rectangle 695.png";
 import authorImg from "../../assets/images/createselector1.png";
+import twitterLogo from "../../assets/svgs/shareBlogTwitter.svg";
+import instagramLogo from "../../assets/svgs/shareBlogInstagram.svg";
+import facebookLogo from "../../assets/svgs/shareBlogFacebook.svg";
 
 // Sass
 import "./ReadBlog.scss";
@@ -68,6 +71,20 @@ const ReadBlog = () => {
                   className="read-blog-author-profile-link"
                 >
                   View Profile
+                </a>
+              </div>
+            </div>
+            <div className="share-blog-holder">
+              <h3 className="share-blog-heading">Share this Blog</h3>
+              <div className="share-blog-links">
+                <a href="#" className="share-blog-link">
+                  <img src={twitterLogo} alt="Twitter" />
+                </a>
+                <a href="#" className="share-blog-link">
+                  <img src={instagramLogo} alt="Instagram" />
+                </a>
+                <a href="#" className="share-blog-link">
+                  <img src={facebookLogo} alt="facebook" />
                 </a>
               </div>
             </div>
