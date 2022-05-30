@@ -199,7 +199,7 @@ const BlogRecent = () => {
 
   // For handling when page no is changed
   useEffect(() => {
-    setBlogDisplayList(blogList.slice(currentPage * 5, currentPage * 5 + 5));
+    setBlogDisplayList(blogList.slice(currentPage * 6, currentPage * 6 + 6));
   }, [currentPage]);
 
   // When Blog List Changes
@@ -219,7 +219,7 @@ const BlogRecent = () => {
       </div>
       <BlogRecentSwitcher
         currentPage={currentPage}
-        length={Math.ceil(blogList.length / 5)}
+        length={Math.ceil(blogList.length / 6)}
         setCurrentPage={setCurrentPage}
       />
     </div>
