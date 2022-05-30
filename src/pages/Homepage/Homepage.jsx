@@ -1,4 +1,6 @@
 import "./Homepage.scss";
+
+// Images
 import bannerImg from "../../assets/images/Group 1.png";
 import starImg from "../../assets/svgs/star.svg";
 import dollarImg from "../../assets/svgs/dollar.svg";
@@ -11,16 +13,33 @@ import soln2Img from "../../assets/images/Rectangle 691.png";
 import soln3Img from "../../assets/images/Rectangle 695.png";
 import tokenImg from "../../assets/images/token.png";
 import roadmapImg from "../../assets/svgs/roadmap.svg";
-import blog1Img from "../../assets/images/Rectangle 8 (1).png"
-import blog2Img from "../../assets/images/Rectangle 8 (2).png"
-import blog3Img from "../../assets/images/Rectangle 8.png"
+import blog1Img from "../../assets/images/Rectangle 8 (1).png";
+import blog2Img from "../../assets/images/Rectangle 8 (2).png";
+import blog3Img from "../../assets/images/Rectangle 8.png";
+
+// Background Images
+import circlesImg from "../../assets/svgs/circles.svg";
+import looper from "../../assets/svgs/looper.svg";
+import looperRoadMap from "../../assets/svgs/looperRoadMap.svg";
+import looperRoadMap2 from "../../assets/svgs/looperRoadMap2.svg";
+import bg1 from "../../assets/svgs/bg1Home.svg";
+import one from "../../assets/svgs/01.svg";
+import bg2 from "../../assets/svgs/bg2Home.svg";
+import two from "../../assets/svgs/02.svg";
+import bg3 from "../../assets/svgs/bg3Home.svg";
+import three from "../../assets/svgs/03.svg";
+import bg4 from "../../assets/svgs/bg4Home.svg";
+import bg5 from "../../assets/svgs/bg5Home.svg";
+import bg6 from "../../assets/svgs/bg6Home.svg";
+
 import { Link } from "react-router-dom";
-import messageImg from "../../assets/svgs/message-sent.svg"
+import messageImg from "../../assets/svgs/message-sent.svg";
 import Input from "../../components/InputBordered/InputBordered";
 
 const Homepage = ({}) => {
   return (
     <div className="homepage">
+      <Circles />
       <TopBanner />
       <UnicusEcosystem />
       <Solutions />
@@ -30,6 +49,16 @@ const Homepage = ({}) => {
       <Testimonials />
       <StayInLoop />
     </div>
+  );
+};
+
+const Circles = () => {
+  return (
+    <img
+      className="top-banner-circles"
+      src={circlesImg}
+      alt="circles background"
+    />
   );
 };
 
@@ -110,6 +139,11 @@ const Solutions = () => {
   return (
     <section className="solutions">
       <div className="blue-head">Solutions Provided By UnicusOne</div>
+      <img
+        src={looper}
+        alt="Background Looper"
+        className="background-particle-looper"
+      />
       <Solution1 />
       <Solution2 />
       <Solution3 />
@@ -117,10 +151,16 @@ const Solutions = () => {
   );
 };
 
-const Solution1 = ({}) => {
+const Solution1 = () => {
   return (
     <div className="soln-1">
+      <img
+        src={bg1}
+        alt="background particle"
+        className="background-particle"
+      />
       <div className="soln-head">
+        <img src={one} alt="One" className="background-particle-number" />
         Partner with us to unlock the true potential of Web 3.0 Economy
       </div>
       <div className="soln-info1">
@@ -178,10 +218,16 @@ const Solution1 = ({}) => {
     </div>
   );
 };
-const Solution2 = ({}) => {
+const Solution2 = () => {
   return (
     <div className="soln-2">
+      <img
+        src={bg2}
+        alt="background particle"
+        className="background-particle"
+      />
       <div className="soln-head">
+        <img src={two} alt="two" className="background-particle-number" />
         Mint, auction and trade your valuable creations
       </div>
       <div className="soln-info2">
@@ -237,7 +283,13 @@ const Solution2 = ({}) => {
 const Solution3 = ({}) => {
   return (
     <div className="soln-3">
+      <img
+        src={bg3}
+        alt="background particle"
+        className="background-particle"
+      />
       <div className="soln-head">
+        <img src={three} alt="three" className="background-particle-number" />
         360° Web 3.0 Solutions for Metaverse & Gaming Projects
       </div>
       <div className="soln-info3">
@@ -293,6 +345,16 @@ const Solution3 = ({}) => {
 const Roadmap = () => {
   return (
     <section className="roadmap">
+      <img
+        src={looperRoadMap}
+        alt="background looper"
+        className="background-particle-looper"
+      />
+      <img
+        src={looperRoadMap2}
+        alt="background looper"
+        className="background-particle-looper"
+      />
       <div className="blue-head">Roadmap</div>
       <p>
         Planning to develop a NFT marketplace? You have landed at the right
@@ -336,6 +398,11 @@ const Roadmap = () => {
 const Token = () => {
   return (
     <div className="token">
+      <img
+        src={bg4}
+        alt="background particle"
+        className="background-particle"
+      />
       <div className="blue-head">UnicusOne Token</div>
       <p>
         UnicusOne tokens have multiple use cases, these can be used as security,
@@ -373,9 +440,24 @@ const Blogs = () => {
         obcaecati laboriosam suscipit.
       </p>
       <div className="blog-grid">
-        <BlogCard img={blog1Img} title={'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'} description='Lorem ipsum dolor, sit amet consectetur adipisicing elit.' category="Category" />
-        <BlogCard img={blog2Img} title={'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'} description='Lorem ipsum dolor, sit amet consectetur adipisicing elit.' category="Category" />
-        <BlogCard img={blog3Img} title={'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'} description='Lorem ipsum dolor, sit amet consectetur adipisicing elit.' category="Category" />
+        <BlogCard
+          img={blog1Img}
+          title={"Lorem ipsum dolor, sit amet consectetur adipisicing elit."}
+          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit."
+          category="Category"
+        />
+        <BlogCard
+          img={blog2Img}
+          title={"Lorem ipsum dolor, sit amet consectetur adipisicing elit."}
+          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit."
+          category="Category"
+        />
+        <BlogCard
+          img={blog3Img}
+          title={"Lorem ipsum dolor, sit amet consectetur adipisicing elit."}
+          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit."
+          category="Category"
+        />
       </div>
     </div>
   );
@@ -388,7 +470,9 @@ const BlogCard = ({ img, category = "Category", title, description, id }) => {
       <span className="category">{category}</span>
       <span className="title">{title}</span>
       <span className="desc">{description}</span>
-      <Link to={'/'} className="read-more">READ MORE</Link>
+      <Link to={"/"} className="read-more">
+        READ MORE
+      </Link>
     </div>
   );
 };
@@ -396,40 +480,78 @@ const BlogCard = ({ img, category = "Category", title, description, id }) => {
 const Testimonials = () => {
   return (
     <div className="testimonials">
+      <img
+        src={bg5}
+        alt="background particle"
+        className="background-particle"
+      />
       <div className="blue-head">Testimonials</div>
       <p>
         We leave no stone unturned to to make our partners and users satisfied
       </p>
       <div className="testimonial-grid">
-        <TestimonialCard img={blog1Img} testimonial={'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Lorem ipsum dolor, sit amet consectetur adipisicing elit.'} name='Name' profession='Profession' />
-        <TestimonialCard img={blog2Img} testimonial={'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Lorem ipsum dolor, sit amet consectetur adipisicing elit.'} name='Name' profession='Profession' />
-        <TestimonialCard img={blog3Img} testimonial={'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Lorem ipsum dolor, sit amet consectetur adipisicing elit.'} name='Name' profession='Profession' />
+        <TestimonialCard
+          img={blog1Img}
+          testimonial={
+            "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Lorem ipsum dolor, sit amet consectetur adipisicing elit."
+          }
+          name="Name"
+          profession="Profession"
+        />
+        <TestimonialCard
+          img={blog2Img}
+          testimonial={
+            "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Lorem ipsum dolor, sit amet consectetur adipisicing elit."
+          }
+          name="Name"
+          profession="Profession"
+        />
+        <TestimonialCard
+          img={blog3Img}
+          testimonial={
+            "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Lorem ipsum dolor, sit amet consectetur adipisicing elit."
+          }
+          name="Name"
+          profession="Profession"
+        />
       </div>
     </div>
   );
 };
 
-const TestimonialCard = ({img, testimonial, name, profession}) => {
-  return <div className="testimonial-card">
-    <img src={img} alt={name} />
-    <div className="name">{name}</div>
-    <div className="profession">{profession}</div>
-    <div className="testimonial">{testimonial}</div>
-  </div>
-}
+const TestimonialCard = ({ img, testimonial, name, profession }) => {
+  return (
+    <div className="testimonial-card">
+      <img src={img} alt={name} />
+      <div className="name">{name}</div>
+      <div className="profession">{profession}</div>
+      <div className="testimonial">{testimonial}</div>
+    </div>
+  );
+};
 
 const StayInLoop = () => {
-  return <div className="stay-in-loop">
-    <div>
+  return (
+    <div className="stay-in-loop">
+      <img
+        src={bg6}
+        alt="background particle"
+        className="background-particle"
+      />
+      <div>
         <h2>Stay in Loop</h2>
-        <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor ornare ut lobortis sit erat morbi.</span>
+        <span>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor ornare
+          ut lobortis sit erat morbi.
+        </span>
         <form className="inputs">
-          <Input placeholder={'Email'}  />
+          <Input placeholder={"Email"} />
           <button className="btn">Subscribe</button>
         </form>
+      </div>
+      <img src={messageImg} alt="stay in touch" />
     </div>
-    <img src={messageImg} alt="stay in touch" />
-  </div>
-}
+  );
+};
 
 export default Homepage;

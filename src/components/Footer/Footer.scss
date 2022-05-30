@@ -20,7 +20,7 @@ footer {
   }
   .footer-intro {
     width: 100%;
-    font-size: fonts.$font-size-2xl;
+    font-size: fonts.$font-size-xl;
     text-align: center;
     padding: 0 2rem;
     margin: 0;
@@ -36,7 +36,7 @@ footer {
       gap: 4rem;
       .footer-nav-link {
         width: fit-content;
-        font-size: fonts.$font-size-xl;
+        font-size: fonts.$font-size-base;
         font-weight: 400;
         &:hover {
           color: #999;

@@ -1,57 +1,57 @@
-@use 'src/styles/fonts';
-@use 'src/styles/helper';
+@use "src/styles/fonts";
+@use "src/styles/helper";
 
-*{
+* {
   box-sizing: border-box;
   transition: all 0.3s ease;
 }
 
 body {
+  overflow-x: hidden;
   margin: 0;
   font-family: helper.$font-rubik;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: rgb(2, 0, 15);
-  background-image: url(./assets/svgs/backgroundImg1.svg), url(./assets/svgs/backgroundImg.svg);
-  // background-position: center;  
+  background: #000002;
   min-height: 100vh;
   position: relative;
   color: #fff;
 }
 
-button{
+button {
   font-family: helper.$font-rubik !important;
 }
 
-#chain-select-label, #demo-simple-select-standard-label{
+#chain-select-label,
+#demo-simple-select-standard-label {
   color: #fff !important;
 }
-#chain-select{
+#chain-select {
   color: #fff !important;
 }
-.css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon{
+.css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon {
   fill: white !important;
 }
-.css-1mf6u8l-MuiSvgIcon-root-MuiSelect-icon{
+.css-1mf6u8l-MuiSvgIcon-root-MuiSelect-icon {
   fill: white !important;
 }
-.css-a3l6o-MuiInputBase-root-MuiInput-root-MuiSelect-root:before{
+.css-a3l6o-MuiInputBase-root-MuiInput-root-MuiSelect-root:before {
   border-bottom: 1px solid rgba($color: #666, $alpha: 0.8) !important;
 }
-.css-a3l6o-MuiInputBase-root-MuiInput-root-MuiSelect-root:after{
+.css-a3l6o-MuiInputBase-root-MuiInput-root-MuiSelect-root:after {
   border-bottom: 1px solid rgba($color: #fff, $alpha: 1) !important;
 }
 
-.App{
-  @include helper.flex-col(center, start)
+.App {
+  @include helper.flex-col(center, start);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-button{
+button {
   background: none;
   border: none;
   font-size: inherit;
@@ -59,38 +59,38 @@ button{
   cursor: pointer;
 }
 
-.btn{
+.btn {
   border: none;
   border-radius: 10px;
   font-weight: 500;
   background: helper.$gradient-blue;
   padding: 0.75rem 1rem;
   color: #fff;
-  &:hover{
+  &:hover {
     filter: brightness(125%);
     color: #fff !important;
   }
 }
-.btn-grey{
+.btn-grey {
   border: none;
   border-radius: 10px;
   font-weight: 500;
   background: rgba($color: #666, $alpha: 0.2);
   padding: 0.75rem 1rem;
   color: #fff;
-  &:hover{
+  &:hover {
     filter: brightness(125%);
     color: #fff !important;
   }
 }
-.large-btn{
+.large-btn {
   font-weight: 500;
   font-family: fonts.$font-rubik !important;
   padding: 1rem;
   width: 100%;
   font-size: fonts.$font-size-xl;
 }
-.large-btn-outline{
+.large-btn-outline {
   font-weight: 500;
   background: none;
   border: 1px solid rgba($color: #fff, $alpha: 0.3);
@@ -100,7 +100,7 @@ button{
   font-size: fonts.$font-size-xl;
   border-radius: 10px;
 }
-.btn-outline{
+.btn-outline {
   font-weight: 500;
   background: none;
   border: 1px solid rgba($color: #fff, $alpha: 0.3);
@@ -119,12 +119,12 @@ button{
   @include helper.text-gradient;
 }
 
-a{
+a {
   text-decoration: none;
   color: inherit;
 }
 
-.MuiMenu-paper{
+.MuiMenu-paper {
   background-color: rgba($color: #fff, $alpha: 0.125) !important;
   backdrop-filter: blur(10px);
   color: #fff !important;
@@ -134,11 +134,11 @@ a{
   border-radius: 10px !important;
 }
 
-.hidden{
+.hidden {
   display: none;
 }
 
-p{
+p {
   margin: 0;
 }
 
