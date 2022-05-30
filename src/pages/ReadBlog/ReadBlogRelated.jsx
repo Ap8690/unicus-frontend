@@ -1,9 +1,28 @@
 // Images
+import { Link } from "react-router-dom";
 import blogImg from "../../assets/images/Rectangle 8.png";
 
 const RelatedBlog = ({ blog }) => {
-  return <div className="read-blog-related-blog">
-  </div>;
+  return (
+    <div className="related-blog">
+      <div className="related-blog-image">
+        <img src={blog.image} alt={blog.title} />
+      </div>
+      <div className="related-blog-category">{blog.category}</div>
+      <h3 className="related-blog-heading">{blog.title}</h3>
+      <div className="related-blog-text">{blog.text}</div>
+      <div className="related-blog-read-more">
+        <div className="related-blog-read-more-line"></div>
+        <Link
+          className="related-blog-read-more-text"
+          to={`/readblog/${blog.id}`}
+        >
+          Read More
+        </Link>
+        <div className="related-blog-read-more-line"></div>
+      </div>
+    </div>
+  );
 };
 
 const ReadBlogRelated = ({ category }) => {
@@ -40,7 +59,11 @@ const ReadBlogRelated = ({ category }) => {
   return (
     <div className="read-blog-related">
       <h3 className="read-blog-related-heading">Related Blogs</h3>
-      <div className="read-blog-related-blogs"></div>
+      <div className="read-blog-related-blogs">
+        {blogs.map((blog) => (
+          <RelatedBlog blog={blog} key={blog.id} />
+        ))}
+      </div>
     </div>
   );
 };

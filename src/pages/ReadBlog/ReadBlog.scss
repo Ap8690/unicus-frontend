@@ -9,7 +9,29 @@
   max-width: 1290px;
   padding: 6rem 2rem;
   padding-bottom: 0;
+  position: relative;
 
+  // Background Particles
+  .background-particle {
+    position: absolute;
+    z-index: -1;
+  }
+
+  .background-particle:nth-of-type(1) {
+    top: 25%;
+    left: -30%;
+  }
+
+  .background-particle:nth-of-type(2) {
+    top: 50%;
+    left: 90%;
+  }
+
+  .background-particle:nth-of-type(3) {
+    top: 68%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
   .read-blog-main {
     border-bottom: solid #333333 1px;
     padding-bottom: 5rem;
@@ -122,6 +144,7 @@
 
   .read-blog-related {
     @include fn.flex-col(flex-start, center);
+    padding-bottom: 18rem;
     width: 100%;
     .read-blog-related-heading {
       font-weight: 600;
@@ -129,6 +152,54 @@
       background: colors.$gradient-blue;
       background-clip: text;
       color: rgba(0, 0, 0, 0);
+    }
+    .read-blog-related-blogs {
+      @include fn.flex(center, center);
+      gap: 3.5rem;
+      width: 100%;
+      height: 37rem;
+      .related-blog {
+        @include fn.flex-col(flex-start, flex-start);
+        gap: 0.6rem;
+        height: 100%;
+        .related-blog-image {
+          overflow: hidden;
+          img {
+            display: block;
+            height: 100%;
+            width: auto;
+          }
+        }
+        .related-blog-category {
+          margin-top: 1.4rem;
+          background: colors.$gradient-blue;
+          background-clip: text;
+          color: rgba(0, 0, 0, 0);
+          font-weight: 600;
+          font-size: fonts.$font-size-sm;
+        }
+        .related-blog-heading {
+          margin: 0;
+          font-size: fonts.$font-size-base;
+          font-weight: 600;
+        }
+        .related-blog-read-more {
+          width: 100%;
+          @include fn.flex(center, space-between);
+          .related-blog-read-more-line {
+            height: 0.3rem;
+            width: 35%;
+            background: colors.$gradient-blue;
+          }
+          .related-blog-read-more-text {
+            font-weight: 500;
+            font-size: fonts.$font-size-base;
+            background: colors.$gradient-blue;
+            background-clip: text;
+            color: rgba(0, 0, 0, 0);
+          }
+        }
+      }
     }
   }
 }

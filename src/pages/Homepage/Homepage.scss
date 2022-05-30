@@ -67,6 +67,7 @@
 .background-particle-number,
 .background-particle-looper {
   position: absolute;
+  z-index: -1;
 }
 
 .background-particle:nth-of-type(2n + 1) {

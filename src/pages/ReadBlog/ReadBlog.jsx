@@ -11,6 +11,7 @@ import "./ReadBlog.scss";
 // Components
 import ReadBlogMain from "./ReadBlogMain";
 import ReadBlogRelated from "./ReadBlogRelated";
+import ReadBlogBackground from "./ReadBlogBackground";
 
 // Return Id from the given location
 const getId = (location) =>
@@ -32,6 +33,7 @@ const ReadBlog = () => {
       `Nec aliquam risus. . Facilisis iaculis pellentesque arcu quisque non ac. Laoreet ornare volutpat adipiscing consectetur sollicitudin sed. Et diam quis vulputate tellus facilisis pharetra. Massa, eget odio orci felis viverra ac gravida vel. Auctor volutpat varius est egestas est massa in vitae, molestie.Est euismod potenti vel viverra id phasellus turpis. Maecenas volutpat aenean. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scelerisque cras feugiat in augue suspendisse sed egestas. Cursus quis et, orci ac porttitor blandit etiam mattis. Gravida cursus volutpat fermentum fermentum, erat sem. Quam sed dignissim ullamcorper nibh sit. Amet velit, dignissim commodo, hendrerit fringilla lacus. Maecenas et massa, aliquet scelerisque.Ac ornare facilisi integer egestas mauris, odio interdum feugiat pharetra. Senectus in consectetur et vulputate. Facilisis iaculis pellentesque arcu quisque non ac. Laoreet ornare volutpat adipiscing consectetur sollicitudin sed. Et diam quis vulputate tellus facilisis pharetra. Massa, eget odio orci felis viverra ac gravida vel. Auctor volutpat varius est egestas est massa in vitae, molestie.Est euismod potenti vel viverra id phasellus turpis. Maecenas volutpat aenean sed fames commodo. Id donec sodales etiam lectus risus aenean egestas rhoncus gravida. Nec phasellus egestas praesent nullam. Neque amet orci nunc, pulvinar ante pretium sed. Nisi, accumsan amet, magna eu sapien. Nullam fusce commodo, nec aliquam risus. . Facilisis iaculis pellentesque arcu quisque non ac. Laoreet ornare volutpat adipiscing consectetur sollicitudin sed. Et diam quis vulputate tellus facilisis pharetra. Massa, eget odio orci felis viverra ac gravida vel. Auctor volutpat varius est egestas est massa in vitae, molestie.Est euismod potenti vel viverra id phasellus turpis. Maecenas volutpat aenean. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scelerisque cras feugiat in augue suspendisse sed egestas. Cursus quis et, orci ac porttitor blandit etiam mattis. Gravida cursus volutpat fermentum fermentum, erat sem. Quam sed dignissim ullamcorper nibh sit. Amet velit, dignissim commodo, hendrerit fringilla lacus. Maecenas et massa, aliquet scelerisque.Ac ornare facilisi integer egestas mauris, odio interdum feugiat pharetra. Senectus in consectetur et vulputate.`,
     ],
     image: blogImg,
+    category: "Cryptocurrency",
     time: 1,
     date: "25th April, 2022",
   };
@@ -44,6 +46,7 @@ const ReadBlog = () => {
   };
   return (
     <div className="read-blog">
+      <ReadBlogBackground />
       <ReadBlogMain blog={blog} author={author} />
       <ReadBlogRelated category={blog.category} />
     </div>
