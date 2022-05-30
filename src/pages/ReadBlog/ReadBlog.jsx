@@ -4,21 +4,18 @@ import { useLocation } from "react-router-dom";
 // Images
 import blogImg from "../../assets/images/Rectangle 695.png";
 import authorImg from "../../assets/images/createselector1.png";
-import twitterLogo from "../../assets/svgs/shareBlogTwitter.svg";
-import instagramLogo from "../../assets/svgs/shareBlogInstagram.svg";
-import facebookLogo from "../../assets/svgs/shareBlogFacebook.svg";
 
 // Sass
 import "./ReadBlog.scss";
+
+// Components
+import ReadBlogMain from "./ReadBlogMain";
+import ReadBlogRelated from "./ReadBlogRelated";
 
 // Return Id from the given location
 const getId = (location) =>
   parseInt(location.pathname.substring(location.pathname.lastIndexOf("/") + 1));
 
-// Paragraph for Read Blog
-const ReadBlogPara = ({ para }) => {
-  return <p className="read-blog-para">{para}</p>;
-};
 // Component for opening a blog
 const ReadBlog = () => {
   const location = useLocation();
@@ -47,51 +44,8 @@ const ReadBlog = () => {
   };
   return (
     <div className="read-blog">
-      <div className="read-blog-main">
-        <div className="read-blog-image">
-          <img src={blogImg} alt={blog.title} />
-        </div>
-
-        <div className="read-blog-lower">
-          <div className="read-blog-text">
-            <h3 className="read-blog-heading">{blog.title}</h3>
-            {blog.text.map((para, i) => (
-              <ReadBlogPara para={para} key={`${i}${para}`} />
-            ))}
-          </div>
-          <div className="read-blog-author">
-            <div className="read-blog-author-info">
-              <div className="read-blog-author-image">
-                <img src={author.image} alt={author.name} />
-              </div>
-              <div className="read-blog-author-info-text">
-                <div className="read-blog-author-name">{author.name}</div>
-                <a
-                  href={author.profile}
-                  className="read-blog-author-profile-link"
-                >
-                  View Profile
-                </a>
-              </div>
-            </div>
-            <div className="share-blog-holder">
-              <h3 className="share-blog-heading">Share this Blog</h3>
-              <div className="share-blog-links">
-                <a href="#" className="share-blog-link">
-                  <img src={twitterLogo} alt="Twitter" />
-                </a>
-                <a href="#" className="share-blog-link">
-                  <img src={instagramLogo} alt="Instagram" />
-                </a>
-                <a href="#" className="share-blog-link">
-                  <img src={facebookLogo} alt="facebook" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="read-blog-related"></div>
+      <ReadBlogMain blog={blog} author={author} />
+      <ReadBlogRelated category={blog.category} />
     </div>
   );
 };
