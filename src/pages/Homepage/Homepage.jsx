@@ -1,3 +1,9 @@
+// Libraries
+import { Link } from "react-router-dom";
+import messageImg from "../../assets/svgs/message-sent.svg";
+import Input from "../../components/InputBordered/InputBordered";
+
+// Sass
 import "./Homepage.scss";
 
 // Images
@@ -18,27 +24,18 @@ import blog2Img from "../../assets/images/Rectangle 8 (2).png";
 import blog3Img from "../../assets/images/Rectangle 8.png";
 
 // Background Images
-import circlesImg from "../../assets/svgs/circles.svg";
-import looper from "../../assets/svgs/looper.svg";
-import looperRoadMap from "../../assets/svgs/looperRoadMap.svg";
-import looperRoadMap2 from "../../assets/svgs/looperRoadMap2.svg";
-import bg1 from "../../assets/svgs/bg1.svg";
 import one from "../../assets/svgs/01.svg";
-import bg2 from "../../assets/svgs/bg2.svg";
 import two from "../../assets/svgs/02.svg";
-import bg3 from "../../assets/svgs/bg3.svg";
 import three from "../../assets/svgs/03.svg";
-import bg4 from "../../assets/svgs/bg4.svg";
-import bg5 from "../../assets/svgs/bg5.svg";
-import bg6 from "../../assets/svgs/bg6.svg";
+import circlesImg from "../../assets/svgs/circles.svg";
 
-import { Link } from "react-router-dom";
-import messageImg from "../../assets/svgs/message-sent.svg";
-import Input from "../../components/InputBordered/InputBordered";
+// Components
+import HomepageBackground from "./HomepageBackground";
 
-const Homepage = ({}) => {
+const Homepage = () => {
   return (
     <div className="homepage">
+      <HomepageBackground />
       <Circles />
       <TopBanner />
       <UnicusEcosystem />
@@ -139,11 +136,6 @@ const Solutions = () => {
   return (
     <section className="solutions">
       <div className="blue-head">Solutions Provided By UnicusOne</div>
-      <img
-        src={looper}
-        alt="Background Looper"
-        className="background-particle-looper"
-      />
       <Solution1 />
       <Solution2 />
       <Solution3 />
@@ -154,11 +146,6 @@ const Solutions = () => {
 const Solution1 = () => {
   return (
     <div className="soln-1">
-      <img
-        src={bg1}
-        alt="background particle"
-        className="background-particle"
-      />
       <div className="soln-head">
         <img src={one} alt="One" className="background-particle-number" />
         Partner with us to unlock the true potential of Web 3.0 Economy
@@ -221,11 +208,6 @@ const Solution1 = () => {
 const Solution2 = () => {
   return (
     <div className="soln-2">
-      <img
-        src={bg2}
-        alt="background particle"
-        className="background-particle"
-      />
       <div className="soln-head">
         <img src={two} alt="two" className="background-particle-number" />
         Mint, auction and trade your valuable creations
@@ -283,11 +265,6 @@ const Solution2 = () => {
 const Solution3 = ({}) => {
   return (
     <div className="soln-3">
-      <img
-        src={bg3}
-        alt="background particle"
-        className="background-particle"
-      />
       <div className="soln-head">
         <img src={three} alt="three" className="background-particle-number" />
         360° Web 3.0 Solutions for Metaverse & Gaming Projects
@@ -345,16 +322,6 @@ const Solution3 = ({}) => {
 const Roadmap = () => {
   return (
     <section className="roadmap">
-      <img
-        src={looperRoadMap}
-        alt="background looper"
-        className="background-particle-looper"
-      />
-      <img
-        src={looperRoadMap2}
-        alt="background looper"
-        className="background-particle-looper"
-      />
       <div className="blue-head">Roadmap</div>
       <p>
         Planning to develop a NFT marketplace? You have landed at the right
@@ -398,11 +365,6 @@ const Roadmap = () => {
 const Token = () => {
   return (
     <div className="token">
-      <img
-        src={bg4}
-        alt="background particle"
-        className="background-particle"
-      />
       <div className="blue-head">UnicusOne Token</div>
       <p>
         UnicusOne tokens have multiple use cases, these can be used as security,
@@ -480,11 +442,6 @@ const BlogCard = ({ img, category = "Category", title, description, id }) => {
 const Testimonials = () => {
   return (
     <div className="testimonials">
-      <img
-        src={bg5}
-        alt="background particle"
-        className="background-particle"
-      />
       <div className="blue-head">Testimonials</div>
       <p>
         We leave no stone unturned to to make our partners and users satisfied
@@ -533,11 +490,6 @@ const TestimonialCard = ({ img, testimonial, name, profession }) => {
 const StayInLoop = () => {
   return (
     <div className="stay-in-loop">
-      <img
-        src={bg6}
-        alt="background particle"
-        className="background-particle"
-      />
       <div>
         <h2>Stay in Loop</h2>
         <span>

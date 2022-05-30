@@ -6,7 +6,7 @@ import BlogRecommended from "./BlogRecommended";
 import BlogRecent from "./BlogRecent";
 import BlogBackground from "./BlogBackground";
 
-const Blog = ({}) => {
+const Blog = () => {
   return (
     <div className="blog">
       <BlogBackground />

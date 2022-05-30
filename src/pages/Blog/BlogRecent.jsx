@@ -204,7 +204,7 @@ const BlogRecent = () => {
 
   // When Blog List Changes
   useEffect(() => {
-    setBlogDisplayList(blogList.slice(0, 5));
+    setBlogDisplayList(blogList.slice(0, 6));
   }, [blogList]);
   return (
     <div className="blog-recent">

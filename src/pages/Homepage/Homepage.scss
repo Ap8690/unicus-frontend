@@ -3,6 +3,7 @@
 @use "/src/styles/fonts";
 
 .homepage {
+  position: relative;
   max-width: 1290px;
   padding: 6rem 2rem;
   padding-bottom: 25rem;
@@ -61,21 +62,62 @@
   }
 }
 
-// Solutions
+// Background
 .background-particle,
 .background-particle-number,
 .background-particle-looper {
   position: absolute;
 }
 
+.background-particle:nth-of-type(2n + 1) {
+  right: -30%;
+}
+
+.background-particle:nth-of-type(2n) {
+  left: -30%;
+}
+
+.background-particle:nth-of-type(1) {
+  top: 14%;
+}
+
+.background-particle:nth-of-type(2) {
+  top: 30%;
+}
+
+.background-particle:nth-of-type(3) {
+  top: 42%;
+}
+
+.background-particle:nth-of-type(4) {
+  top: 67%;
+}
+
+.background-particle:nth-of-type(5) {
+  top: 80%;
+}
+
+.background-particle:nth-of-type(6) {
+  top: 91%;
+}
+
+.background-particle-looper {
+  top: 19%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#root > div > div > img:nth-child(8) {
+  top: 47%;
+}
+#root > div > div > img:nth-child(9) {
+  top: 53%;
+}
+
 .solutions {
   @include fn.flex-col(center, flex-start);
-  position: relative;
   gap: 2rem;
   margin-top: 10rem;
-  .background-particle-looper {
-    top: 5%;
-  }
 }
 
 .soln-head {
@@ -176,16 +218,7 @@
 }
 
 .roadmap {
-  position: relative;
   margin-top: 10rem;
-  .background-particle-looper {
-    top: -195%;
-    right: -10%;
-  }
-  .background-particle-looper:nth-of-type(2) {
-    top: -100%;
-    right: -5%;
-  }
   > p {
     text-align: center;
     margin-top: 1rem;
@@ -211,7 +244,6 @@
 }
 .token {
   margin-top: 10rem;
-  position: relative;
   .background-particle {
     left: -20%;
   }
@@ -305,7 +337,6 @@
   }
 }
 .testimonials {
-  position: relative;
   margin-top: 10rem;
   .background-particle {
     top: -100%;
@@ -363,7 +394,6 @@
 
 .stay-in-loop {
   @include fn.flex(center, space-between);
-  position: relative;
   margin-top: 10rem;
   .background-particle {
     left: -20%;
