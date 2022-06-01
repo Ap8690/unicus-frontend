@@ -1,0 +1,30 @@
+@use "/src/styles/colors";
+@use "/src/styles/mixins" as fn;
+@use "/src/styles/fonts";
+
+.blue-background-holder {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  min-height: 100%;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+}
+.background-particle-blue-ellipse {
+  position: absolute;
+  z-index: -1;
+  background: #09183d;
+  filter: blur(500px);
+  width: 930px;
+  height: 959px;
+}
+
+.background-particle-blue-ellipse:nth-of-type(2n + 1) {
+  left: -40%;
+}
+
+.background-particle-blue-ellipse:nth-of-type(2n) {
+  right: -40%;
+}

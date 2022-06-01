@@ -1,0 +1,145 @@
+@use "/src/styles/colors";
+@use "/src/styles/mixins" as fn;
+@use "/src/styles/fonts";
+
+.ranking {
+  width: 100%;
+  max-width: 1290px;
+  padding: 6rem 2rem;
+  position: relative;
+  
+  .ranking-header {
+    .ranking-heading {
+      font-size: fonts.$font-size-6xl;
+      background: colors.$gradient-blue;
+      color: transparent;
+      background-clip: text;
+    }
+    .ranking-filter-etc {
+      @include fn.flex(center, space-between);
+      .ranking-intro {
+        width: 40%;
+        font-size: fonts.$font-size-xl;
+        font-weight: 500;
+      }
+      .ranking-filters {
+        @include fn.flex(center, space-evenly);
+        width: 55%;
+        gap: 1.375rem;
+        .ranking-filter {
+          @include fn.flex(center, space-between);
+          border-radius: 0.5rem;
+          width: 33%;
+          max-width: 14rem;
+          background-color: rgba(255, 255, 255, 0.1);
+          padding: 1rem 1.5rem;
+          padding-right: 0.5rem;
+
+          .ranking-filter-expand {
+            img {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+  // Ranking Table
+  .ranking-table {
+    margin-top: 8rem;
+    width: 100%;
+    table {
+      table-layout: fixed;
+      border: none;
+      width: 100%;
+      border-collapse: collapse;
+      thead {
+        width: 100%;
+        tr {
+          th:nth-child(1) {
+            width: 30%;
+            text-align: left;
+            padding-left: 4rem;
+          }
+          th {
+            text-align: center;
+            font-size: fonts.$font-size-xl;
+            width: auto;
+            font-weight: 600;
+          }
+        }
+      }
+      tbody:before {
+        content: "-";
+        display: block;
+        line-height: 3rem;
+        color: transparent;
+      }
+      tbody {
+        width: 100%;
+        tr {
+          td:nth-child(1) {
+            padding-left: 2rem;
+            width: 30%;
+            text-align: left;
+          }
+          td {
+            border: none !important;
+            padding: 2rem 0;
+            text-align: center;
+            font-size: fonts.$font-size-xl;
+            width: auto;
+            font-weight: 600;
+
+            .collection-image {
+              display: inline-block;
+              height: 3rem;
+              border-radius: 50%;
+              vertical-align: middle;
+              margin: 0 1rem;
+            }
+          }
+          td.green {
+            color: #22c16c;
+          }
+          td.red {
+            color: #f94025;
+          }
+        }
+        tr:nth-child(2n) {
+          background-color: rgba(255, 255, 255, 0.05);
+        }
+        tr:nth-child(2n + 1) {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+  }
+
+  // Switcher
+  .ranking-switcher {
+    @include fn.flex(center, center);
+    gap: 2rem;
+    margin-top: 4rem;
+
+    .ranking-switcher-button {
+      height: 1.5rem;
+      display: block;
+      img {
+        display: block;
+        height: 100%;
+      }
+    }
+    .ranking-switcher-button:disabled {
+      opacity: 0.4;
+    }
+    .ranking-switcher-element {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: fonts.$font-size-xl;
+    }
+    .ranking-switcher-element.current {
+      opacity: 0.4;
+    }
+  }
+}

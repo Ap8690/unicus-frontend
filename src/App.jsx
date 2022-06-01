@@ -16,6 +16,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Blog from "./pages/Blog/BlogMain";
 import ReadBlog from "./pages/ReadBlog/ReadBlog";
+import Ranking from "./pages/Ranking/Ranking";
 
 const App = () => {
   const { isLogin } = useContext(UserContext);
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/connect-wallet" element={<ConnectWallet />} />
           <Route path="/create-nft" element={<CreateNftSelector />} />
           <Route path="/create-nft/single-item" element={<CreateNftSingle />} />
+          <Route path="/stats/ranking" element={<Ranking />} />
         </Routes>
         <Footer />
       </BrowserRouter>
