@@ -17,6 +17,7 @@ import Register from "./pages/Register/Register";
 import Blog from "./pages/Blog/BlogMain";
 import ReadBlog from "./pages/ReadBlog/ReadBlog";
 import Ranking from "./pages/Ranking/Ranking";
+import Activity from "./pages/Activity/Activity";
 
 const App = () => {
   const { isLogin } = useContext(UserContext);
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/create-nft" element={<CreateNftSelector />} />
           <Route path="/create-nft/single-item" element={<CreateNftSingle />} />
           <Route path="/stats/ranking" element={<Ranking />} />
+          <Route path="/stats/activity" element={<Activity />} />
         </Routes>
         <Footer />
       </BrowserRouter>
