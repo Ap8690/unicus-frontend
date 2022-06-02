@@ -1,11 +1,13 @@
 const ExploreElement = ({ element }) => {
   return (
     <div className="explore-element">
-      <img
-        src={element.image}
-        alt={element.name}
-        className="explore-element-item-image"
-      />
+      <div className="explore-element-item-image">
+        <img
+          src={element.image}
+          alt={element.name}
+        />
+      </div>
+
       <div className="explore-element-name">{element.name}</div>
       <div className="explore-element-price">{element.price} ETH</div>
       <div className="explore-element-creators">
