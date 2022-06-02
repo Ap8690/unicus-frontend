@@ -3,6 +3,7 @@ import shoppingCart from "../../../assets/svgs/shoppingCart.svg";
 import transfer from "../../../assets/svgs/transfer.svg";
 import list from "../../../assets/svgs/list.svg";
 import ethereum from "../../../assets/svgs/ethereum.svg";
+import { useEffect, useState } from "react";
 
 // Util Function
 const getImage = (type) => {
@@ -44,7 +45,7 @@ const ActivityTableData = ({ activity }) => {
     </tr>
   );
 };
-const ActivityTable = ({ activities }) => {
+const ActivityTable = ({ activities, search }) => {
   return (
     <div className="activity-table">
       <table>

@@ -60,10 +60,34 @@ const Activity = () => {
     },
   ];
 
+  // Filter for event types
   const eventTypes = ["Listings", "Sales", "Bids", "Transfers"];
+
+  // To be used in collection filter
+  const collections = [
+    {
+      name: "Leslie Alexander",
+      image: itemPic,
+    },
+    {
+      name: "Untitled Collection",
+      image: itemPic,
+    },
+    {
+      name: "Guy Hawkins",
+      image: itemPic,
+    },
+    {
+      name: "Webbed",
+      image: itemPic,
+    },
+  ];
+
   const [activeFilters, setActiveFilters] = useState(["Listings"]);
   const [displayActivities, setDisplayActivities] = useState(activities);
+  const [search, setSearch] = useState("");
 
+  // Search via filter
   useEffect(() => {
     if (activeFilters.length === 0) {
       // If No filters active
@@ -78,6 +102,18 @@ const Activity = () => {
     );
     setDisplayActivities(temp);
   }, [activeFilters]);
+
+  // Search Via Name
+  useEffect(() => {
+    if (search === "") {
+      setDisplayActivities(activities);
+      return;
+    }
+    const temp = activities.filter(
+      (activity) => activity.item.toLowerCase() === search.toLowerCase()
+    );
+    setDisplayActivities(temp);
+  }, [search]);
   return (
     <section className="activity">
       <BlueBackground />
@@ -90,6 +126,9 @@ const Activity = () => {
         eventTypes={eventTypes}
         activeFilters={activeFilters}
         setActiveFilters={setActiveFilters}
+        collections={collections}
+        search={search}
+        setSearch={setSearch}
       />
     </section>
   );

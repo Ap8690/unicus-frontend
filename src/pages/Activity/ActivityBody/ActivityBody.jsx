@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // Components
-import EventTypes from "./EventTypes";
+import ActivityBodyFilters from "./ActivityBodyFilters";
 import ActivityTable from "./ActivityTable";
 
 const ActivityBody = ({
@@ -10,18 +10,24 @@ const ActivityBody = ({
   eventTypes,
   activeFilters,
   setActiveFilters,
+  collections,
+  search,
+  setSearch,
 }) => {
   const [ifOpen, setIfOpen] = useState(true);
   return (
     <div className="activity-body">
-      <EventTypes
+      <ActivityBodyFilters
         ifOpen={ifOpen}
         setIfOpen={setIfOpen}
+        collections={collections}
         activeFilters={activeFilters}
         setActiveFilters={setActiveFilters}
         eventTypes={eventTypes}
+        search={search}
+        setSearch={setSearch}
       />
-      <ActivityTable activities={activities} />
+      <ActivityTable activities={activities} search={search} />
     </div>
   );
 };

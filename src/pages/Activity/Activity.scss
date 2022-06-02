@@ -47,64 +47,10 @@
   .activity-body {
     display: grid;
     grid-template-columns: 30% 70%;
+    grid-template-rows: repeat(2, 1fr);
     margin-top: 2.3rem;
     grid-column-gap: 22px;
-
-    .event-types {
-      @include fn.flex-col(center, center);
-      align-self: flex-start;
-      position: relative;
-      gap: 25px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 3rem 0;
-      padding-bottom: 2rem;
-      max-width: 356px;
-
-      .event-types-heading {
-        @include fn.flex(center, space-between);
-        width: 80%;
-        margin: 0;
-        text-align: left;
-        font-size: fonts.$font-size-3xl;
-        font-weight: 300;
-        padding-bottom: 20px;
-        border-bottom: solid 1px rgba(255, 255, 255, 0.12);
-
-        img {
-          display: block;
-          margin-left: auto;
-          height: 2rem;
-          width: auto;
-        }
-      }
-
-      .event-types-holder {
-        height: 143px;
-        overflow: hidden;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(auto, 1fr));
-        grid-row-gap: 32px;
-        grid-column-gap: 40px;
-        max-width: 356px;
-        min-height: 0;
-
-        transition: height 0.3s ease-in-out;
-
-        .event-type {
-          font-size: fonts.$font-size-xl;
-          font-weight: 300;
-          padding: 15px;
-
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          border-radius: 10px;
-        }
-        .event-type.active {
-          background: colors.$gradient-blue;
-        }
-      }
-    }
-
+    
     .activity-table {
       width: 100%;
       width: 100%;

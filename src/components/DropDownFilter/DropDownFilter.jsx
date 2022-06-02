@@ -1,32 +1,28 @@
 // Images
-import chevronDown from "../../../assets/svgs/chevronDown.svg";
+import chevronDown from "../../assets/svgs/chevronDown.svg";
 
-const EventTypeButton = ({
-  eventType,
-  activeFilters,
-  onClickAdd,
-  onClickRemove,
-}) => {
-  const className = activeFilters.find((filter) => filter === eventType)
+// SASS
+import "./DropDownFilter.scss";
+
+const TypeButton = ({ type, activeFilters, onClickAdd, onClickRemove }) => {
+  const className = activeFilters.find((filter) => filter === type)
     ? " active"
     : "";
   const onClick = className === " active" ? onClickRemove : onClickAdd;
   return (
-    <button
-      className={"event-type" + className}
-      onClick={() => onClick(eventType)}
-    >
-      {eventType}
+    <button className={"drop-down-type" + className} onClick={() => onClick(type)}>
+      {type}
     </button>
   );
 };
 
-const EventTypes = ({
+const DropDownFilter = ({
   ifOpen,
   setIfOpen,
+  types,
   activeFilters,
   setActiveFilters,
-  eventTypes,
+  heading,
 }) => {
   const onClickAdd = (rmFilter) => {
     const temp = activeFilters.concat(rmFilter);
@@ -38,15 +34,15 @@ const EventTypes = ({
   };
 
   return (
-    <div className="event-types">
-      <h2 className="event-types-heading">
-        <div className="text">Event Types</div>
+    <div className="drop-down-filter">
+      <h2 className="drop-down-filter-heading">
+        <div className="text">{heading}</div>
         <button onClick={() => setIfOpen(!ifOpen)}>
           <img src={chevronDown} alt="Expand List" />
         </button>
       </h2>
       <div
-        className="event-types-holder"
+        className="drop-down-types-holder"
         style={
           !ifOpen
             ? {
@@ -55,10 +51,10 @@ const EventTypes = ({
             : null
         }
       >
-        {eventTypes.map((eventType, i) => (
-          <EventTypeButton
+        {types.map((type, i) => (
+          <TypeButton
             key={`evt${i}`}
-            eventType={eventType}
+            type={type}
             activeFilters={activeFilters}
             onClickAdd={onClickAdd}
             onClickRemove={onClickRemove}
@@ -69,4 +65,4 @@ const EventTypes = ({
   );
 };
 
-export default EventTypes;
+export default DropDownFilter;
