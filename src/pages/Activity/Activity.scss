@@ -9,7 +9,7 @@
   position: relative;
   .activity-header {
     display: grid;
-    grid-template-columns: 40% 60%;
+    grid-template-columns: 32% 68%;
     .filter-icon {
       @include fn.flex(center, flex-start);
       font-weight: 500;
@@ -46,11 +46,13 @@
   }
   .activity-body {
     display: grid;
-    grid-template-columns: 40% 60%;
+    grid-template-columns: 30% 70%;
     margin-top: 2.3rem;
+    grid-column-gap: 22px;
 
     .event-types {
       @include fn.flex-col(center, center);
+      align-self: flex-start;
       position: relative;
       gap: 25px;
       background: rgba(255, 255, 255, 0.05);
@@ -80,7 +82,6 @@
       .event-types-holder {
         height: 143px;
         overflow: hidden;
-        width: 80%;
         display: grid;
         grid-template-columns: repeat(2, minmax(auto, 1fr));
         grid-row-gap: 32px;
@@ -100,6 +101,84 @@
         }
         .event-type.active {
           background: colors.$gradient-blue;
+        }
+      }
+    }
+
+    .activity-table {
+      width: 100%;
+      width: 100%;
+      table {
+        table-layout: fixed;
+        border: none;
+        width: 100%;
+        border-collapse: collapse;
+        tbody::before {
+          content: "-";
+          height: 42px;
+          display: block;
+          color: transparent;
+        }
+        tr {
+          display: grid;
+          grid-template-columns: 3fr 1fr 1fr 2fr 1fr 1fr;
+          th:nth-child(1) {
+            text-align: center;
+          }
+          th {
+            font-weight: 600;
+            font-size: fonts.$font-size-lg;
+            padding: 13px 0;
+          }
+        }
+        tr:nth-child(1) {
+          border: 1px dashed rgba(255, 255, 255, 0.2);
+          border-left: none;
+          border-right: none;
+        }
+        .activity-table-data {
+          margin-bottom: 62px;
+          border: none !important;
+          grid-template-columns: 1.5fr 1.5fr 1fr 1fr 2fr 1fr 1fr;
+          align-items: flex-start;
+          td {
+            text-align: center;
+            font-size: fonts.$font-size-base;
+          }
+          .activity-table-data-icon {
+            @include fn.flex(center, flex-start);
+            gap: 10px;
+            font-weight: 600;
+            img {
+              display: block;
+            }
+          }
+          .activity-table-data-item-name {
+            @include fn.flex(center, space-between);
+            text-align: left;
+            gap: 6px;
+            img {
+              display: block;
+            }
+          }
+          .activity-table-data-price {
+            text-align: right;
+            .eth-price {
+              display: block;
+              font-weight: 600;
+              img {
+                vertical-align: middle;
+              }
+            }
+          }
+          .activity-table-data-to,
+          .activity-table-data-from,
+          .activity-table-data-time {
+            font-weight: 600;
+            background: colors.$gradient-blue;
+            background-clip: text;
+            color: transparent;
+          }
         }
       }
     }
