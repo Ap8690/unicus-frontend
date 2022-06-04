@@ -1,0 +1,70 @@
+@use "/src/styles/colors";
+@use "/src/styles/mixins" as fn;
+@use "/src/styles/fonts";
+
+.market-place {
+  position: relative;
+  max-width: 1290px;
+  padding: 6rem 2rem;
+  padding-bottom: 25rem;
+  .market-place-main {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 175px;
+    align-items: center;
+    .market-place-main-text {
+      .market-place-main-heading {
+        font-size: fonts.$font-size-5xl;
+        font-weight: 700;
+        margin: 0;
+      }
+      .market-place-main-intro {
+        margin-top: 10px;
+        font-size: fonts.$font-size-xl;
+        font-weight: 300;
+      }
+      .market-place-main-button-holder {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-column-gap: 25px;
+        width: 80%;
+        margin-top: 42px;
+        button {
+          font-size: fonts.$font-size-xl;
+          font-weight: 700;
+          padding: 10px 20px;
+          border-radius: 10px;
+        }
+        .explore-now {
+          background: colors.$gradient-blue;
+        }
+        .create {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+      .market-place-main-stats {
+        @include fn.flex(center, space-between);
+        margin-top: 46px;
+        .market-place-main-stat {
+          text-align: center;
+          color: rgba(255, 255, 255, 0.5);
+          font-size: fonts.$font-size-xl;
+          .stat-number {
+            font-size: fonts.$font-size-3xl;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 1);
+          }
+        }
+      }
+    }
+    .market-place-banner {
+      width: 100%;
+      grid-column: 1/3;
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+}
