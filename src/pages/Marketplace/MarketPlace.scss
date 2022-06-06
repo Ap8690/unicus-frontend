@@ -109,11 +109,16 @@
       }
     }
     .market-place-featured-elements {
+      @include fn.flex(center, flex-start);
+      scroll-behavior: smooth;
+      overflow: hidden;
+      flex-wrap: nowrap;
+      gap: 5%;
       margin-top: 58px;
-      @include fn.flex(center, space-between);
       .market-place-featured-element {
         @include fn.flex-col(center, flex-start);
-        width: 30%;
+        min-width: 30%;
+        font-weight: 300;
         img {
           display: block;
           width: 100%;

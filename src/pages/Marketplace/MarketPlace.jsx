@@ -36,6 +36,26 @@ const MarketPlace = () => {
       heading: "Lorem Heading",
       text: "Lorem Text",
     },
+    {
+      image: featuredImg,
+      heading: "Lorem Heading",
+      text: "Lorem Text",
+    },
+    {
+      image: featuredImg,
+      heading: "Lorem Heading",
+      text: "Lorem Text",
+    },
+    {
+      image: featuredImg,
+      heading: "Lorem Heading",
+      text: "Lorem Text",
+    },
+    {
+      image: featuredImg,
+      heading: "Lorem Heading",
+      text: "Lorem Text",
+    },
   ];
   return (
     <section className="market-place">

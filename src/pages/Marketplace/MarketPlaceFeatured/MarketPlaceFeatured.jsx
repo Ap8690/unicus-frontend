@@ -6,17 +6,17 @@ import MarketPlaceNavigator from "./MarketPlaceNavigatorFeatured";
 import MarketPlaceNavigatorPanFeatured from "./MarketPlaceNavigatorPanFeatured";
 
 const MarketPlaceFeatured = ({ list }) => {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentScroll, setCurrentScroll] = useState(0);
   const length = Math.ceil(list.length / 3);
   return (
     <div className="market-place-featured">
       <MarketPlaceNavigator
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        currentScroll={currentScroll}
+        setCurrentScroll={setCurrentScroll}
         length={length}
         heading={"Featured Artworks"}
       />
-      <MarketPlaceNavigatorPanFeatured list={list} currentPage={currentPage} />
+      <MarketPlaceNavigatorPanFeatured list={list} currentScroll={currentScroll} />
     </div>
   );
 };

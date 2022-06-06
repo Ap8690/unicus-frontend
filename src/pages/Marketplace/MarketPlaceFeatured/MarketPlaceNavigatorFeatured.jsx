@@ -4,24 +4,24 @@ import arrowRight from "../../../assets/svgs/arrowRight.svg";
 
 // Exportable Navigator Component
 const MarketPlaceNavigator = ({
-  currentPage,
-  setCurrentPage,
+  currentScroll,
+  setCurrentScroll,
   heading,
   length,
 }) => {
   const goLeft = () => {
-    if (currentPage == 0) {
+    if (currentScroll == 0) {
       return;
       // do nothing
     }
-    setCurrentPage(currentPage - 1);
+    setCurrentScroll(currentScroll - 1);
   };
 
   const goRight = () => {
-    if (currentPage >= length - 1) {
+    if (currentScroll >= length - 1) {
       return;
     }
-    setCurrentPage(currentPage + 1);
+    setCurrentScroll(currentScroll + 1);
   };
 
   return (
