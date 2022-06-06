@@ -67,4 +67,64 @@
       }
     }
   }
+  .market-place-featured {
+    margin-top: 170px;
+    .market-place-featured-navigator {
+      .header {
+        @include fn.flex(center, space-between);
+        .heading {
+          font-size: fonts.$font-size-4xl;
+          font-weight: 700;
+        }
+        .btn-holder {
+          @include fn.flex(center, center);
+          gap: 22px;
+          .left-btn,
+          .right-btn {
+            position: relative;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            img {
+              vertical-align: middle;
+            }
+            &::after {
+              position: absolute;
+              content: "";
+              left: 0;
+              bottom: 0;
+              height: 100%;
+              width: 100%;
+              opacity: 0;
+              background: colors.$gradient-blue;
+              transition: 0.32s ease-in-out;
+              border-radius: 50%;
+              z-index: -1;
+            }
+            &:hover::after {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+    .market-place-featured-elements {
+      margin-top: 58px;
+      @include fn.flex(center, space-between);
+      .market-place-featured-element {
+        @include fn.flex-col(center, flex-start);
+        width: 30%;
+        img {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+        .heading {
+          font-size: fonts.$font-size-3xl;
+          font-weight: 700;
+          margin-bottom: 9px;
+        }
+      }
+    }
+  }
 }

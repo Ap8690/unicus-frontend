@@ -14,7 +14,7 @@ const MarketPlaceMain = ({ saleStats }) => {
           autem ad quia sint provident ut voluptas ea, facere molestiae vitae
         </p>
         <div className="market-place-main-button-holder">
-          <button className="explore-now">Explore Now</button>
+          <button className="btn nav-link">Explore Now</button>
           <button className="create">Create</button>
         </div>
         <div className="market-place-main-stats">
