@@ -8,6 +8,7 @@ import featuredImg from "../../assets/images/Rectangle 8 (2).png";
 import BlueBackground from "../../components/BlueBackground/BlueBackground";
 import MarketPlaceMain from "./MarketPlaceMain";
 import MarketPlaceFeatured from "./MarketPlaceFeatured/MarketPlaceFeatured";
+import MarketPlaceTrending from "./MarketPlaceTrending/MarketPlaceTrending";
 
 const MarketPlace = () => {
   const saleStats = {
@@ -20,41 +21,25 @@ const MarketPlace = () => {
       image: featuredImg,
       heading: "Lorem Heading",
       text: "Lorem Text",
+      category: "Art"
     },
     {
       image: featuredImg,
       heading: "Lorem Heading",
       text: "Lorem Text",
+      category: "Coins"
     },
     {
       image: featuredImg,
       heading: "Lorem Heading",
       text: "Lorem Text",
+      category: "Game"
     },
     {
       image: featuredImg,
       heading: "Lorem Heading",
       text: "Lorem Text",
-    },
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem Text",
-    },
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem Text",
-    },
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem Text",
-    },
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem Text",
+      category: "Art"
     },
   ];
   return (
@@ -62,6 +47,7 @@ const MarketPlace = () => {
       <BlueBackground />
       <MarketPlaceMain saleStats={saleStats} />
       <MarketPlaceFeatured list={featuredList} />
+      <MarketPlaceTrending list={featuredList} />
     </section>
   );
 };

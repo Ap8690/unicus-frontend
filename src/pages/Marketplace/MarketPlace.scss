@@ -7,6 +7,8 @@
   max-width: 1290px;
   padding: 6rem 2rem;
   padding-bottom: 25rem;
+
+  // Main
   .market-place-main {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -67,6 +69,8 @@
       }
     }
   }
+
+  // Featured
   .market-place-featured {
     margin-top: 170px;
     .market-place-featured-navigator {
@@ -128,6 +132,68 @@
           font-size: fonts.$font-size-3xl;
           font-weight: 700;
           margin-bottom: 9px;
+        }
+      }
+    }
+  }
+  // Trending
+  .market-place-trending {
+    margin-top: 171px;
+    .market-place-trending-navigator {
+      .header {
+        @include fn.flex(center, space-between);
+        .heading {
+          font-size: fonts.$font-size-4xl;
+          font-weight: 700;
+          .category-selector {
+            color: #5d5fef;
+            display: inline;
+            position: relative;
+            .category-list {
+              @include fn.flex-col(flex-start, flex-start);
+              white-space: nowrap;
+              position: absolute;
+              left: 0;
+              top: 100%;
+              .category-list-option {
+                color: #5d5fef;
+                font-weight: 700;
+                width: 100%;
+                text-align: left;
+                padding: 0;
+              }
+            }
+          }
+        }
+        .btn-holder {
+          @include fn.flex(center, center);
+          gap: 22px;
+          .left-btn,
+          .right-btn {
+            position: relative;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            img {
+              vertical-align: middle;
+            }
+            &::after {
+              position: absolute;
+              content: "";
+              left: 0;
+              bottom: 0;
+              height: 100%;
+              width: 100%;
+              opacity: 0;
+              background: colors.$gradient-blue;
+              transition: 0.32s ease-in-out;
+              border-radius: 50%;
+              z-index: -1;
+            }
+            &:hover::after {
+              opacity: 1;
+            }
+          }
         }
       }
     }
