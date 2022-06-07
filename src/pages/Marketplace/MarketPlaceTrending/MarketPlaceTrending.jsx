@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
+
+// Components
 import MarketPlaceTrendingNavigator from "./MarketPlaceTrendingNavigator";
+import MarketPlaceTrendingElements from "./MarketPlaceTrendingElements";
+import BottomNavigationMarker from "../BottomNavigationMarker";
 
 const MarketPlaceTrending = ({ list }) => {
   // We can filter this list as per requirement
@@ -33,6 +37,11 @@ const MarketPlaceTrending = ({ list }) => {
         setCurrentScroll={setCurrentScroll}
         length={length}
       />
+      <MarketPlaceTrendingElements
+        list={displayList}
+        currentScroll={currentScroll}
+      />
+      <BottomNavigationMarker currentPage={currentScroll} length={length} />
     </div>
   );
 };

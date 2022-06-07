@@ -54,6 +54,7 @@ const MarketPlaceTrendingNavigator = ({
   const updateCategory = (ct) => {
     setCategory(ct);
     setIfOpen(false);
+    setCurrentScroll(0);
   };
   return (
     <div className="market-place-trending-navigator">
@@ -61,7 +62,6 @@ const MarketPlaceTrendingNavigator = ({
         <h2 className="heading">
           Trending in{" "}
           <div className="category-selector">
-            {getNameForHeading(category)}
             <div
               className="category-list"
               style={
@@ -89,6 +89,7 @@ const MarketPlaceTrendingNavigator = ({
             </div>
           </div>
           <button onClick={() => setIfOpen(!ifOpen)}>
+            {getNameForHeading(category)}
             <img
               src={chevronDownBlue}
               alt="Open Menu"
