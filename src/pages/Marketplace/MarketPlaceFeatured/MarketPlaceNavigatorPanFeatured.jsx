@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+// Custom Hook
+import useExplorer from "../useExplorer";
 
 const Element = ({ element }) => (
   <div className="market-place-featured-element">
@@ -8,13 +9,7 @@ const Element = ({ element }) => (
   </div>
 );
 const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll }) => {
-  const holderRef = useRef(null);
-  useEffect(() => {
-    if (holderRef.current) {
-      holderRef.current.scrollLeft =
-        currentScroll * (holderRef.current.offsetWidth * 1.05);
-    }
-  }, [holderRef, currentScroll]);
+  const holderRef = useExplorer(currentScroll);
   return (
     <div className="market-place-featured-elements" ref={holderRef}>
       {list.map((element, i) => (

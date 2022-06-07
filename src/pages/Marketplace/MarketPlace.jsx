@@ -10,6 +10,7 @@ import BlueBackground from "../../components/BlueBackground/BlueBackground";
 import MarketPlaceMain from "./MarketPlaceMain";
 import MarketPlaceFeatured from "./MarketPlaceFeatured/MarketPlaceFeatured";
 import MarketPlaceTrending from "./MarketPlaceTrending/MarketPlaceTrending";
+import MarketPlaceAuctions from "./MarketPlaceAuctions/MarketPlaceAuctions";
 
 const MarketPlace = () => {
   const saleStats = {
@@ -51,7 +52,7 @@ const MarketPlace = () => {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. A, quis mi elit magna blandit ac.",
       category: "Art",
       creatorImage: userImg,
-      creatorName: "Pablo"
+      creatorName: "Pablo",
     },
     {
       image: featuredImg,
@@ -59,7 +60,7 @@ const MarketPlace = () => {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. A, quis mi elit magna blandit ac.",
       category: "Coins",
       creatorImage: userImg,
-      creatorName: "Monty"
+      creatorName: "Monty",
     },
     {
       image: featuredImg,
@@ -67,7 +68,7 @@ const MarketPlace = () => {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. A, quis mi elit magna blandit ac.",
       category: "Game",
       creatorImage: userImg,
-      creatorName: "Python"
+      creatorName: "Python",
     },
     {
       image: featuredImg,
@@ -75,7 +76,36 @@ const MarketPlace = () => {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. A, quis mi elit magna blandit ac.",
       category: "Art",
       creatorImage: userImg,
-      creatorName: "Sorachi"
+      creatorName: "Sorachi",
+    },
+  ];
+
+  const auctionsList = [
+    {
+      image: featuredImg,
+      name: "Lorem ipsum dolor sit",
+      sellerName: "Crybaby",
+      ifVerified: true,
+      type: "Live",
+      date: new Date(2022, 6, 6).getTime(),
+    },
+    {
+      image: featuredImg,
+      name: "Lorem ipsum dolor sit",
+      sellerName: "Crybaby",
+      ifVerified: false,
+      type: "Upcoming",
+      days: 1,
+      hours: 14,
+      date: new Date(2022, 6, 10).getTime(),
+    },
+    {
+      image: featuredImg,
+      name: "Lorem ipsum dolor sit",
+      sellerName: "Crybaby",
+      ifVerified: true,
+      type: "Ended",
+      date: new Date(2022, 5, 27).getTime(),
     },
   ];
   return (
@@ -84,6 +114,7 @@ const MarketPlace = () => {
       <MarketPlaceMain saleStats={saleStats} />
       <MarketPlaceFeatured list={featuredList} />
       <MarketPlaceTrending list={trendingList} />
+      <MarketPlaceAuctions list={auctionsList} />
     </section>
   );
 };

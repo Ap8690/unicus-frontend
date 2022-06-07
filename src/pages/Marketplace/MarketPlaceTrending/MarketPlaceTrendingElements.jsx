@@ -1,7 +1,7 @@
-// Lib
-import { useRef, useEffect } from "react";
+// Custom Hook
+import useExplorer from "../useExplorer";
 
-const MarketPlaceTrendingElement = ({ element }) => {
+const Element = ({ element }) => {
   return (
     <div className="market-place-trending-element">
       <img src={element.image} alt={element.heading} />
@@ -21,19 +21,12 @@ const MarketPlaceTrendingElement = ({ element }) => {
   );
 };
 const MarketPlaceTrendingElements = ({ list, currentScroll }) => {
-  const holderRef = useRef(null);
-  useEffect(() => {
-    if (holderRef.current) {
-      holderRef.current.scrollLeft =
-        currentScroll * (holderRef.current.offsetWidth * 1.05);
-    }
-  }, [holderRef, currentScroll]);
+  const holderRef = useExplorer(currentScroll);
   return (
     <div className="market-place-trending-elements" ref={holderRef}>
       {list.map((element, i) => (
-        <MarketPlaceTrendingElement element={element} key={`mpte${i}`} />
+        <Element element={element} key={`mpte${i}`} />
       ))}
-      
     </div>
   );
 };

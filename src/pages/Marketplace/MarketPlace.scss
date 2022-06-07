@@ -19,9 +19,39 @@
       background-color: rgba(255, 255, 255, 0.2);
       border-radius: 30px;
     }
-    .navigation-tab.current{
+    .navigation-tab.current {
       background-color: #5d5fef;
       width: 60px;
+    }
+  }
+  .btn-holder {
+    @include fn.flex(center, center);
+    gap: 22px;
+    .left-btn,
+    .right-btn {
+      position: relative;
+      padding: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      img {
+        vertical-align: middle;
+      }
+      &::after {
+        position: absolute;
+        content: "";
+        left: 0;
+        bottom: 0;
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+        background: colors.$gradient-blue;
+        transition: 0.32s ease-in-out;
+        border-radius: 50%;
+        z-index: -1;
+      }
+      &:hover::after {
+        opacity: 1;
+      }
     }
   }
   // Main
@@ -96,36 +126,6 @@
           font-size: fonts.$font-size-4xl;
           font-weight: 700;
         }
-        .btn-holder {
-          @include fn.flex(center, center);
-          gap: 22px;
-          .left-btn,
-          .right-btn {
-            position: relative;
-            padding: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            img {
-              vertical-align: middle;
-            }
-            &::after {
-              position: absolute;
-              content: "";
-              left: 0;
-              bottom: 0;
-              height: 100%;
-              width: 100%;
-              opacity: 0;
-              background: colors.$gradient-blue;
-              transition: 0.32s ease-in-out;
-              border-radius: 50%;
-              z-index: -1;
-            }
-            &:hover::after {
-              opacity: 1;
-            }
-          }
-        }
       }
     }
     .market-place-featured-elements {
@@ -192,36 +192,6 @@
             }
           }
         }
-        .btn-holder {
-          @include fn.flex(center, center);
-          gap: 22px;
-          .left-btn,
-          .right-btn {
-            position: relative;
-            padding: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            img {
-              vertical-align: middle;
-            }
-            &::after {
-              position: absolute;
-              content: "";
-              left: 0;
-              bottom: 0;
-              height: 100%;
-              width: 100%;
-              opacity: 0;
-              background: colors.$gradient-blue;
-              transition: 0.32s ease-in-out;
-              border-radius: 50%;
-              z-index: -1;
-            }
-            &:hover::after {
-              opacity: 1;
-            }
-          }
-        }
       }
     }
     .market-place-trending-elements {
@@ -266,6 +236,86 @@
         .text {
           margin-top: 20px;
           padding-left: 50px;
+        }
+      }
+    }
+  }
+
+  // Auctions
+  .market-place-auctions {
+    margin-top: 171px;
+    .market-place-auctions-navigator {
+      .header {
+        @include fn.flex(center, flex-start);
+        gap: 60px;
+        .heading {
+          font-size: fonts.$font-size-4xl;
+          font-weight: 700;
+        }
+        .types {
+          .type-button {
+            position: relative;
+            font-size: fonts.$font-size-2xl;
+            font-weight: 500;
+            color: #5d5fef;
+          }
+          .type-button::after {
+            position: absolute;
+            content: "";
+            width: 80%;
+            height: 5px;
+            border-radius: 100px;
+            background-color: rgba(255, 255, 255, 0.2);
+            left: 50%;
+            transform: translateX(-50%);
+            top: 110%;
+            transition: 0.3s ease-in-out;
+          }
+          .type-button.current::after {
+            background-color: #5d5fef;
+          }
+        }
+        .btn-holder {
+          margin-left: auto;
+        }
+      }
+    }
+    .market-place-auctions-elements {
+      @include fn.flex(flex-start, flex-start);
+      margin-top: 58px;
+      scroll-behavior: smooth;
+      overflow: hidden;
+      flex-wrap: nowrap;
+      gap: 5%;
+      .market-place-auction-element {
+        @include fn.flex-col(center, center);
+        gap: 10px;
+        width: 30%;
+        img {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+        .name {
+          font-size: fonts.$font-size-2xl;
+          font-weight: 500;
+          margin-bottom: 0;
+        }
+        .seller-name {
+          color: #5d5fef;
+          img {
+            display: inline;
+            vertical-align: middle;
+            height: 100%;
+            width: auto;
+          }
+        }
+        .info {
+          @include fn.flex(center, flex-start);
+          gap: 10px;
+          .type {
+            color: #5d5fef;
+          }
         }
       }
     }
