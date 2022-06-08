@@ -399,4 +399,53 @@
       }
     }
   }
+
+  // Create and Sell
+  .market-place-create-and-sell {
+    @include fn.flex(center, center);
+    gap: 70px;
+    margin-top: 171px;
+    .left {
+      .heading {
+        font-weight: 700;
+        font-size: fonts.$font-size-5xl;
+        margin: 0;
+        margin-bottom: 40px;
+      }
+      .btn {
+        font-size: fonts.$font-size-xl;
+        padding: 10px 50px;
+      }
+    }
+    .right {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      grid-row-gap: 50px;
+      grid-column-gap: 30px;
+      .info-div {
+        .img-holder {
+          position: relative;
+          border: 1px dashed #5d5fef;
+          height: 95px;
+          width: 95px;
+          img {
+            position: absolute;
+            display: block;
+            height: 100px;
+            width: 100px;
+            left: 25%;
+            top: -25%;
+          }
+        }
+        .info-heading {
+          font-size: fonts.$font-size-3xl;
+          font-weight: 700;
+          margin: 10px 0;
+        }
+        .info-text {
+          font-weight: 300;
+        }
+      }
+    }
+  }
 }

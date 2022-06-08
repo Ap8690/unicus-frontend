@@ -12,7 +12,7 @@ const Element = ({ element }) => {
         {element.price}
       </div>
       <div className="change">
-        {sign} {element.change}
+        {sign} {element.change}%
       </div>
     </div>
   );

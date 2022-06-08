@@ -12,6 +12,7 @@ import MarketPlaceFeatured from "./MarketPlaceFeatured/MarketPlaceFeatured";
 import MarketPlaceTrending from "./MarketPlaceTrending/MarketPlaceTrending";
 import MarketPlaceAuctions from "./MarketPlaceAuctions/MarketPlaceAuctions";
 import MarketPlaceTopCollections from "./MarketPlaceTopCollections/MarketPlaceTopCollections";
+import MarketPlaceCreateAndSell from "./MarketPlaceCreateAndSell/MarketPlaceCreateAndSell";
 
 const MarketPlace = () => {
   const saleStats = {
@@ -174,6 +175,7 @@ const MarketPlace = () => {
       <MarketPlaceTrending list={trendingList} />
       <MarketPlaceAuctions list={auctionsList} />
       <MarketPlaceTopCollections list={topCollectionsList} />
+      <MarketPlaceCreateAndSell />
     </section>
   );
 };
