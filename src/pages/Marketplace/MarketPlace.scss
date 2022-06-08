@@ -6,7 +6,6 @@
   position: relative;
   max-width: 1290px;
   padding: 6rem 2rem;
-  padding-bottom: 25rem;
 
   // Some Common Elements
   .navigation-marker {
@@ -253,6 +252,8 @@
           font-weight: 700;
         }
         .types {
+          @include fn.flex(center, flex-start);
+          gap: 20px;
           .type-button {
             position: relative;
             font-size: fonts.$font-size-2xl;
@@ -420,8 +421,8 @@
     .right {
       display: grid;
       grid-template-columns: 50% 50%;
-      grid-row-gap: 50px;
-      grid-column-gap: 30px;
+      grid-row-gap: 100px;
+      grid-column-gap: 80px;
       .info-div {
         .img-holder {
           position: relative;
