@@ -11,6 +11,7 @@ import MarketPlaceMain from "./MarketPlaceMain";
 import MarketPlaceFeatured from "./MarketPlaceFeatured/MarketPlaceFeatured";
 import MarketPlaceTrending from "./MarketPlaceTrending/MarketPlaceTrending";
 import MarketPlaceAuctions from "./MarketPlaceAuctions/MarketPlaceAuctions";
+import MarketPlaceTopCollections from "./MarketPlaceTopCollections/MarketPlaceTopCollections";
 
 const MarketPlace = () => {
   const saleStats = {
@@ -108,6 +109,63 @@ const MarketPlace = () => {
       date: new Date(2022, 5, 27).getTime(),
     },
   ];
+
+  const topCollectionsList = [
+    {
+      image: featuredImg,
+      name: "Lorem Dollar",
+      price: "14777,24",
+      change: 321.62,
+    },
+    {
+      image: featuredImg,
+      name: "Lorem Dollar",
+      price: "14777,24",
+      change: 321.62,
+    },
+    {
+      image: featuredImg,
+      name: "Lorem Dollar",
+      price: "14777,24",
+      change: 321.62,
+    },
+    {
+      image: featuredImg,
+      name: "Lorem Dollar",
+      price: "14777,24",
+      change: 321.62,
+    },
+    {
+      image: featuredImg,
+      name: "Lorem Dollar",
+      price: "14777,24",
+      change: 321.62,
+    },
+    {
+      image: featuredImg,
+      name: "Lorem Dollar",
+      price: "14777,24",
+      change: 321.62,
+    },
+    {
+      image: featuredImg,
+      name: "Lorem Dollar",
+      price: "14777,24",
+      change: 321.62,
+    },
+    {
+      image: featuredImg,
+      name: "Lorem Dollar",
+      price: "14777,24",
+      change: 321.62,
+    },
+    {
+      image: featuredImg,
+      name: "Lorem Dollar",
+      price: "14777,24",
+      change: 321.62,
+    },
+  ];
   return (
     <section className="market-place">
       <BlueBackground />
@@ -115,6 +173,7 @@ const MarketPlace = () => {
       <MarketPlaceFeatured list={featuredList} />
       <MarketPlaceTrending list={trendingList} />
       <MarketPlaceAuctions list={auctionsList} />
+      <MarketPlaceTopCollections list={topCollectionsList} />
     </section>
   );
 };

@@ -59,7 +59,7 @@ const MarketPlaceTrendingNavigator = ({
   return (
     <div className="market-place-trending-navigator">
       <div className="header">
-        <h2 className="heading">
+        <div className="heading">
           Trending in{" "}
           <div className="category-selector">
             <div
@@ -102,7 +102,7 @@ const MarketPlaceTrendingNavigator = ({
               }
             />
           </button>
-        </h2>
+        </div>
         <div className="btn-holder">
           <button className="left-btn" onClick={goLeft}>
             <img src={arrowLeft} alt="Left Arrow" />

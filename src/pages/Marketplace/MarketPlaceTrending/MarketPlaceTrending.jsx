@@ -12,7 +12,7 @@ const MarketPlaceTrending = ({ list }) => {
   const [currentScroll, setCurrentScroll] = useState(0);
 
   // Hardcoded
-  const length = Math.ceil(list.length / 3);
+  const length = Math.ceil(displayList.length / 3);
   const categories = ["all", "art", "coins", "game"];
 
   useEffect(() => {

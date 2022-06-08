@@ -65,7 +65,7 @@ const RankingTable = ({ items, currRangeStart }) => {
           {items.map((item, i) => (
             <RankingTableData
               item={item}
-              key={item.id}
+              key={`rtd${i}`}
               i={currRangeStart + i}
             />
           ))}
