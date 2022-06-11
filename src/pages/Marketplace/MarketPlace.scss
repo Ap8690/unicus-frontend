@@ -449,4 +449,41 @@
       }
     }
   }
+  // Discover
+  .market-place-discover {
+    @include fn.flex-col(center, flex-start);
+    margin-top: 171px;
+    gap: 104px;
+    .heading {
+      font-size: fonts.$font-size-4xl;
+      margin: 0;  
+    }
+    .holder {
+      @include fn.flex(center, center);
+      gap: 62px;
+      .left-list,
+      .right-list {
+        @include fn.flex-col(center, space-between);
+        gap: 90px;
+        height: 100%;
+        a {
+          font-size: fonts.$font-size-3xl;
+          font-weight: 500;
+        }
+        a:hover {
+          @include fn.text-gradient();
+        }
+      }
+      .left-list {
+        align-items: flex-start;
+      }
+      .right-list {
+        align-items: flex-end;
+      }
+      .discover-image {
+        display: block;
+        height: 100%;
+      }
+    }
+  }
 }

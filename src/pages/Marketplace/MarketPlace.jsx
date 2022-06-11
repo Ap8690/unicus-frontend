@@ -13,6 +13,7 @@ import MarketPlaceTrending from "./MarketPlaceTrending/MarketPlaceTrending";
 import MarketPlaceAuctions from "./MarketPlaceAuctions/MarketPlaceAuctions";
 import MarketPlaceTopCollections from "./MarketPlaceTopCollections/MarketPlaceTopCollections";
 import MarketPlaceCreateAndSell from "./MarketPlaceCreateAndSell/MarketPlaceCreateAndSell";
+import MarketPlaceDiscover from "./MarketPlaceDiscover/MarketPlaceDiscover";
 import StayInLoop from "../../components/StayInLoop/StayInLoop";
 
 const MarketPlace = () => {
@@ -168,6 +169,18 @@ const MarketPlace = () => {
       change: 321.62,
     },
   ];
+
+  // Categories
+  const categories = [
+    "Art",
+    "Music",
+    "Sport",
+    "Virtual Worlds",
+    "Utility",
+    "Trading Cards",
+    "Domain Names",
+    "Collectibles",
+  ];
   return (
     <section className="market-place">
       <BlueBackground />
@@ -177,6 +190,7 @@ const MarketPlace = () => {
       <MarketPlaceAuctions list={auctionsList} />
       <MarketPlaceTopCollections list={topCollectionsList} />
       <MarketPlaceCreateAndSell />
+      <MarketPlaceDiscover categories={categories} />
       <StayInLoop />
     </section>
   );
