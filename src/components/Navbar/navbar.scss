@@ -2,13 +2,22 @@
 @use '/src/styles/fonts';
 @use '/src/styles/global';
 
+.solid-nav{
+  background: rgb(2, 0, 15);
+}
+
+nav{
+    position: sticky;
+    top: 0;
+    z-index: 10000; 
+    width: 100%;
+    @include fn.flex-center;
+}
 .navbar{
     height: 4rem;
     width: 100%;
     max-width: 1290px;
-    position: sticky;
-    top: 0;
-    z-index: 10000;
+
     @include fn.flex(center, space-between);
     padding: 0 2rem;
     .brand-link{

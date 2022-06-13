@@ -1,0 +1,12 @@
+@use '/src/styles/colors';
+@use '/src/styles/fonts';
+@use '/src/styles/mixins';
+
+.center-of{
+    height: 2.5rem;
+    min-width: 2.5rem;
+    @include mixins.flex-center();
+    border-left: 1px solid rgba($color: #fff, $alpha: 0.3);
+    border-right: 1px solid rgba($color: #fff, $alpha: 0.3);
+
+}

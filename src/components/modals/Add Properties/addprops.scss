@@ -22,15 +22,6 @@
         font-size: fonts.$font-size-sm;
         padding: 1rem 0;
     }
-    .values{
-        padding: 1rem 0;
-        @include mixins.flex(center, space-between);
-        gap: 1.5rem;
-        >div{
-            width: 50%;
-        }
-
-    }
     .btn-outline{
         width: fit-content;
         font-size: fonts.$font-size-sm;

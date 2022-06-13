@@ -1,4 +1,4 @@
-import "./Input.scss";
+import "./input.scss";
 
 const Input = ({
   title,

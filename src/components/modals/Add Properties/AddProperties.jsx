@@ -3,13 +3,15 @@ import "./addprops.scss";
 import PropTypes from "prop-types";
 import Dialog from "@mui/material/Dialog";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import Properties from "../../Properties/Properties";
+import Stats from "../../Stats/Stats";
 
-const AddProperties = ({ onClose, selectedValue, open }) => {
+const AddProperties = ({ onClose, open, type, inputs, setInputs, description }) => {
   const handleClose = () => {
-    onClose(selectedValue);
+    onClose();
   };
   const handleSave = () => {
-    onClose(selectedValue);
+    onClose();
   }
 
   return (
@@ -35,18 +37,15 @@ const AddProperties = ({ onClose, selectedValue, open }) => {
         </div>
         <div className="props">
           <div className="info">
-            Properties show up underneath your item, are clickable, and can be
-            filtered in your collection's sidebar.
+            {description}
           </div>
-          <div className="values">
-            <div>Type</div>
-            <div>Name</div>
-          </div>
-          <button className="btn-outline">Add More</button>
+          {type && type === 'properties' && <Properties state={inputs} setState={setInputs} />}
+          {type && type === 'stats' && <Stats state={inputs} setState={setInputs} />}
+          {type && type === 'levels' && <Stats state={inputs} setState={setInputs} />}
         </div>
-      <div className="save-btn">
+        <div className="save-btn">
           <button onClick={handleSave} className="btn">Save</button>
-      </div>
+        </div>
       </div>
     </Dialog>
   );

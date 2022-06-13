@@ -7,6 +7,9 @@ import { UserContext, UserProvider } from "./context/UserContext";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 
+//utils
+import ScrollToTop from "./utils/ScrollToTop";
+
 // Pages
 import ConnectWallet from "./pages/ConnectWallet/ConnectWallet";
 import CreateNftSelector from "./pages/CreateNftSelector/CreateNftSelectior";
@@ -21,6 +24,7 @@ import Activity from "./pages/Activity/Activity";
 import Explore from "./pages/Explore/Explore";
 import MarketPlace from "./pages/Marketplace/MarketPlace";
 
+
 const App = () => {
   const { isLogin } = useContext(UserContext);
 
@@ -28,6 +32,7 @@ const App = () => {
     <div className="App">
       <BrowserRouter>
         <Navbar />
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<Login />} />

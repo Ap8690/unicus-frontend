@@ -1,5 +1,5 @@
 import './navbar.scss'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import unicusLogo from '../../assets/images/Unicus-logo.png'
 import profileLogo from '../../assets/svgs/profileIcon.svg'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -14,6 +14,7 @@ const Navbar = () => {
   const [search, setSearch] = useState('')
   const location = useLocation()
   const navigate = useNavigate()
+  const [solidNav, setSolidNav] = useState(false)
   
   const [anchorStats, setAnchorStats] = useState(null);
   const [anchorChains, setAnchorChains] = useState(null);
@@ -46,8 +47,14 @@ const Navbar = () => {
     setAnchorProfile(null);
   };
 
+  window.addEventListener('scroll', function () {
+    if(window.scrollY === 0) return setSolidNav(false)
+    if(window.scrollY > 0) return setSolidNav(true)
+    setSolidNav(false)
+  })
 
-  return <nav className='navbar'>
+  return <nav className={solidNav && 'solid-nav'}>
+  <div className={`navbar`}>
       <Link to={'/'} className='brand-link' >
           <img src={unicusLogo} className='navbar-brand' alt="unicus" />
       </Link>
@@ -155,15 +162,16 @@ const Navbar = () => {
               </div>
 
             </Menu>
-            <Link to={'/create-store'} className='btn nav-link'>Create Store</Link>
-            <Link to={'/'} className='nav-link'>
+            <button onClick={()=>navigate('/create-store')} className='btn nav-link'>Create Store</button>
+            {/* <Link to={'/'} className='nav-link'>
               <img src={sunIcon} alt="profile" className='nav-icons' />
-            </Link>
+            </Link> */}
             <Link to={'/wallet'} className='nav-link'>
               <img src={walletIcon} alt="profile" className='nav-icons' />
             </Link>
           </div>
       }
+  </div>
   </nav>
 }
 
