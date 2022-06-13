@@ -1,0 +1,75 @@
+@use "/src/styles/colors";
+@use "/src/styles/mixins" as fn;
+@use "/src/styles/fonts";
+
+.create-store {
+  margin: 131px 0;
+  max-width: 1290px;
+  .heading {
+    @include fn.text-gradient;
+    font-size: fonts.$font-size-5xl;
+    font-weight: 600;
+  }
+  .intro {
+    font-weight: 600;
+    font-size: fonts.$font-size-2xl;
+  }
+  .create-store-form-holder {
+    margin-top: 100px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    .form-heading {
+      grid-column: 1/3;
+    }
+    .create-store-form {
+      grid-column: 2/3;
+      @include fn.flex-col(flex-start, flex-start);
+      label {
+        font-size: fonts.$font-size-xl;
+        font-weight: 600;
+        font-family: fonts.$font-rubik;
+      }
+      .form-input:nth-child(2),
+      .form-input:nth-child(3) {
+        margin-bottom: 54px;
+      }
+      .form-input {
+        width: 100%;
+        @include fn.flex-col(flex-start, flex-start);
+        gap: 30px;
+
+        .store-name-length {
+          align-self: flex-end;
+          font-weight: 600;
+          height: 30px;
+        }
+        input {
+          font-family: fonts.$font-rubik;
+          width: 100%;
+          background-color: transparent;
+          border: none;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+          color: rgba(255, 255, 255, 0.5);
+          font-weight: 400;
+          padding-bottom: 20px;
+          font-size: fonts.$font-size-lg;
+        }
+        input:placeholder {
+          font-family: fonts.$font-rubik;
+          color: rgba(255, 255, 255, 0.5);
+          font-weight: 400;
+          font-size: fonts.$font-size-lg;
+        }
+        input:focus {
+          outline: none;
+        }
+      }
+
+      .btn {
+        font-size: fonts.$font-size-2xl;
+        padding: 16px 44px;
+        font-weight: 600;
+      }
+    }
+  }
+}
