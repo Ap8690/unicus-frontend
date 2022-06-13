@@ -13,13 +13,13 @@ const Stats = ({ state, setState }) => {
             },
         ])
     }
-    const handleChange = (e, index) => {
+    const handleChange = (e:any, index:any) => {
         const { name, value } = e.target
         const list = [...state]
         list[index][name] = value
         setState(list)
     }
-    const handleRemove = (index) => {
+    const handleRemove = (index:any) => {
         if (state.length === 1) {
             return setState([
                 {
@@ -50,7 +50,7 @@ const Stats = ({ state, setState }) => {
             </div>
             <div className="values">
                 <span className="head">Value</span>
-                {state.map((singleProperty, index) => (
+                {state.map((singleProperty:any, index:any) => (
                     <StatsInput
                         key={index}
                         state={singleProperty.value}
@@ -66,32 +66,32 @@ const Stats = ({ state, setState }) => {
     </>)
 }
 
-const PropertyInput = ({ state, handleChange, handleRemove, index, name }) => {
+const PropertyInput = (props:any) => {
     return (
         <div className="property-input">
             <CloseIcon
-                onClick={() => handleRemove(index)}
+                onClick={() => props.handleRemove(props.index)}
                 fontSize="small"
                 className="close"
             />
             <input
                 type="text"
-                name={name}
-                value={state}
-                onChange={(e) => handleChange(e, index)}
+                name={props.name}
+                value={props.state}
+                onChange={(e) => props.handleChange(e, props.index)}
                 placeholder={'Speed'}
             />
         </div>
     )
 }
-const StatsInput = ({ value, totalValue, handleChange, index }) => {
+const StatsInput = (props:any) => {
     return (
         <div className="property-input">
             <input
                 type="number"
                 name='value'
-                value={value}
-                onChange={(e) => handleChange(e, index)}
+                value={props.value}
+                onChange={(e) => props.handleChange(e, props.index)}
                 placeholder={'3'}
                 min={0}
             />
@@ -101,8 +101,8 @@ const StatsInput = ({ value, totalValue, handleChange, index }) => {
             <input
                 type="number"
                 name='total'
-                value={totalValue}
-                onChange={(e) => handleChange(e, index)}
+                value={props.totalValue}
+                onChange={(e) => props.handleChange(e, props.index)}
                 placeholder={'5'}
                 min={0}
             />

@@ -2,7 +2,7 @@
 import messageImg from "../../assets/svgs/message-sent.svg";
 
 // Components
-import Input from "../InputBordered/InputBordered";
+import InputBordered from "../InputBordered/InputBordered";
 
 const StayInLoop = () => {
   return (
@@ -14,7 +14,7 @@ const StayInLoop = () => {
           ut lobortis sit erat morbi.
         </span>
         <form className="inputs">
-          <Input placeholder={"Email"} />
+          <InputBordered placeholder={"Email"} />
           <button className="btn">Subscribe</button>
         </form>
       </div>

@@ -2,7 +2,7 @@ import './searchbar.scss'
 import searchIcon from '../../assets/svgs/searchIcon.svg'
 
 const SearchBar = ({search, setSearch}) => {
-  const handleChange = (e) => {
+  const handleChange = (e:any) => {
     setSearch(e.target.value)
   }
   return <div className="search-bar">

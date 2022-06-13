@@ -12,13 +12,13 @@ const Properties = ({ state, setState }) => {
       },
     ])
   }
-  const handleChange = (e, index) => {
+  const handleChange = (e:any, index:any) => {
     const { name, value } = e.target
     const list = [...state]
     list[index][name] = value
     setState(list)
   }
-  const handleRemove = (index) => {
+  const handleRemove = (index:any) => {
     if (state.length === 1) {
       return setState([
         {
@@ -36,7 +36,7 @@ const Properties = ({ state, setState }) => {
       <div className="adding-values">
         <div className="values">
           <span className="head">Type</span>
-          {state.map((singleProperty, index) => (
+          {state.map((singleProperty:any, index:any) => (
             <PropertyInput
               key={index}
               name={"property"}
@@ -49,7 +49,8 @@ const Properties = ({ state, setState }) => {
         </div>
         <div className="values">
           <span className="head">Name</span>
-          {state.map((singleProperty, index) => (
+          {state.map((singleProperty:any, index:any) => (
+            // @ts-ignore
             <PropertyInput
               key={index}
               name={"value"}
@@ -81,7 +82,7 @@ const PropertyInput = ({ state, handleChange, handleRemove, index, name }) => {
         type="text"
         name={name}
         value={state}
-        onChange={(e) => handleChange(e, index)}
+        onChange={(e:any) => handleChange(e, index)}
         placeholder={name}
       />
     </div>

@@ -29,7 +29,7 @@ const CreateNftSingle = () => {
   const [chain, setChain] = useState('ethereum');
   const [unlockContent, setUnlockContent] = useState('')
   const [unlockable, setUnlockable] = useState(false)
-  const [collection, setCollection] = useState('')
+  const [collection, setCollection] = useState<any>('')
   const [explicit, setExplicit] = useState(false)
   const [openProp, setOpenProp] = useState(false)
   const [openStats, setOpenStats] = useState(false)
@@ -61,10 +61,10 @@ const CreateNftSingle = () => {
     stats: "Stats show up underneath your item, are clickable, and can be filtered in your collection's sidebar."
   }
 
-  const handleChange = (event) => {
+  const handleChange = (event:any) => {
     setChain(event.target.value);
   };
-  const handleChangeColllection = (event) => {
+  const handleChangeColllection = (event:any) => {
     setCollection(event.target.value);
   };
   const handleClickOpen = () => {
@@ -77,7 +77,7 @@ const CreateNftSingle = () => {
     setOpenLevels(true);
   };
 
-  const handleClose = (value) => {
+  const handleClose = (value:any) => {
     setOpenProp(false);
     setOpenStats(false);
     setOpenLevels(false);
@@ -214,7 +214,7 @@ const CreateNftSingle = () => {
                     <img src={unlockImg} alt="dollar" />
                     <span>Unlockable Content</span>
                   </div>
-                  <IOSSwitch defaultChecked checked={unlockable} onChange={(e) => setUnlockable(e.target.checked)} />
+                  <IOSSwitch defaultChecked checked={unlockable} onChange={(e:any) => setUnlockable(e.target.checked)} />
                 </div>
                 <Input multi placeholder={'Unlock content (access key, link to a file etc)'} state={unlockContent} useState={setUnlockContent} />
                 <div className='btn-outline'>
@@ -222,7 +222,7 @@ const CreateNftSingle = () => {
                     <img src={questionImg} alt="dollar" />
                     <span>Explicit & Sensitive Content</span>
                   </div>
-                  <IOSSwitch defaultChecked checked={explicit} onChange={(e) => setExplicit(e.target.checked)} />
+                  <IOSSwitch defaultChecked checked={explicit} onChange={(e:any) => setExplicit(e.target.checked)} />
                 </div>
 
               </div>
@@ -263,7 +263,7 @@ const CreateNftSingle = () => {
 }
 
 
-const IOSSwitch = styled((props) => (
+const IOSSwitch = styled((props:any) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
   width: 42,

@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import unicusLogo from '../../assets/images/Unicus-logo.png'
 import profileLogo from '../../assets/svgs/profileIcon.svg'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import SearchBar from '../../components/SearchBar/SearchBar'
+import SearchBar from '../SearchBar/SearchBar'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import sunIcon from '../../assets/svgs/sunIcon.svg'
@@ -26,19 +26,19 @@ const Navbar = () => {
 
   const { isLogin } = useContext(UserContext)
 
-  const handleClickStats = (event) => {
+  const handleClickStats = (event: any) => {
     setAnchorStats(event.currentTarget);
   };
   const handleCloseStats = () => {
     setAnchorStats(null);
   };
-  const handleClickChains= (event) => {
+  const handleClickChains= (event: any) => {
     setAnchorChains(event.currentTarget);
   };
   const handleCloseChains = () => {
     setAnchorChains(null);
   };
-  const handleClickProfile= (event) => {
+  const handleClickProfile= (event: any) => {
     isLogin 
       ? setAnchorProfile(event.currentTarget)
       : navigate('/connect-wallet')
