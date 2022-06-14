@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 
+//@ts-ignore
 export const Web3Context = createContext()
 
 export const TransactionProvider = ({children}) => {
@@ -9,7 +10,9 @@ export const TransactionProvider = ({children}) => {
   const connectMetamask = async () => {
     setLoading(true)
     try{
+        //@ts-ignore
         if(!window.ethereum) return alert("Please install Metamask")
+        //@ts-ignore
         const accounts = await window.ethereum.request({
             method: "eth_requestAccounts",
         });

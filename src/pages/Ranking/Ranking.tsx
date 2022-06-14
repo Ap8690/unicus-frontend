@@ -822,7 +822,7 @@ const Ranking = () => {
   const [currRangeStart, setCurrRangeStart] = useState(0);
   const [currRangeEnd, setCurrRangeEnd] = useState(Math.min(30, items.length));
 
-  const updateRankingList = (start, end) => {
+  const updateRankingList = (start:number, end:number) => {
     setCurrRangeStart(start);
     setCurrRangeEnd(end);
   };

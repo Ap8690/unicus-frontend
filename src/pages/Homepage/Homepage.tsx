@@ -425,13 +425,13 @@ const Blogs = () => {
   );
 };
 
-const BlogCard = ({ img, category = "Category", title, description, id }) => {
+const BlogCard = (props) => {
   return (
     <div className="blog-card">
-      <img src={img} alt="blog" className="blog-img" />
-      <span className="category">{category}</span>
-      <span className="title">{title}</span>
-      <span className="desc">{description}</span>
+      <img src={props.img} alt="blog" className="blog-img" />
+      <span className="category">{props?.category || "Category"}</span>
+      <span className="title">{props.title}</span>
+      <span className="desc">{props.description}</span>
       <Link to={"/"} className="read-more">
         READ MORE
       </Link>

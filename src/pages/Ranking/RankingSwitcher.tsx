@@ -6,14 +6,13 @@ import chevronLeft from "../../assets/svgs/chevronLeft.svg";
 import chevronRight from "../../assets/svgs/chevronRight.svg";
 
 const RankingSwitcherElement = ({ currentRange, range, updateRankingList }) => {
-  const onClick = () => updateRankingList(range[0] - 1, range[1]);
-  const ifCurrent =
+  const ifCurrent = 
     currentRange[0] + 1 === range[0] && currentRange[1] === range[1];
 
   return (
     <div
       className={"ranking-switcher-element" + (ifCurrent ? " current" : "")}
-      onClick={() => onClick(range[0], range[1])}
+      onClick={() => updateRankingList(range[0], range[1])}
     >
       {range[0]}-{range[1]}
     </div>

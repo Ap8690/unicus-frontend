@@ -10,6 +10,7 @@ import walletconnectLogo from '../../assets/svgs/walletconnect.svg'
 import { useNavigate } from 'react-router-dom'
 
 const ConnectWallet = () => {
+    //@ts-ignore
   const { connectMetamask } = useContext(Web3Context)
   const navigate = useNavigate()
 
