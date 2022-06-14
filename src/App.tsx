@@ -23,7 +23,7 @@ import Ranking from "./pages/Ranking/Ranking";
 import Activity from "./pages/Activity/Activity";
 import Explore from "./pages/Explore/Explore";
 import MarketPlace from "./pages/Marketplace/MarketPlace";
-
+import CreateStore from "./pages/CreateStore/CreateStore";
 
 const App = () => {
   const { isLogin } = useContext(UserContext);
@@ -46,6 +46,7 @@ const App = () => {
           <Route path="/stats/activity" element={<Activity />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/marketplace" element={<MarketPlace />} />
+          <Route path="/create-store" element={<CreateStore />} />
         </Routes>
         <Footer />
       </BrowserRouter>
