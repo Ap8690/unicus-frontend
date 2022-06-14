@@ -5,6 +5,13 @@ import React, { FormEvent, useState } from "react";
 // Styles
 import "./CreateStore.scss";
 
+// Components
+import BlueBackground from "../../components/BlueBackground/BlueBackground";
+
+// Images
+//@ts-ignore
+import uploadImage from "../../assets/svgs/uploadImage.svg";
+
 const CreateStoreForm = (): ReactJSXElement => {
   const onSubmit = (e: FormEvent) => {
     // the logic for submission here
@@ -27,7 +34,11 @@ const CreateStoreForm = (): ReactJSXElement => {
   return (
     <div className="create-store-form-holder">
       <h3 className="form-heading">Upload File</h3>
-      <div className="create-store-image-holder"></div>
+      <div className="create-store-image-holder">
+        <button className="upload-image-button">
+          <img src={uploadImage} alt="Upload Image" />
+        </button>
+      </div>
       <form action="" className="create-store-form" onSubmit={onSubmit}>
         <div className="form-input">
           <label htmlFor="store-name">Store Name</label>
@@ -67,17 +78,21 @@ const CreateStoreForm = (): ReactJSXElement => {
             placeholder="Enter Country"
           />
         </div>
-
         <button className="btn nav-link" type="submit">
           Create Store
         </button>
       </form>
+      <p className="upload-instructions">
+        Please upload a jpeg, png or svg file for your logo in 400x300 pixel
+        size or similar ratio{" "}
+      </p>
     </div>
   );
 };
 const CreateStore = (): ReactJSXElement => {
   return (
     <div className="create-store">
+      <BlueBackground />
       <h2 className="heading">Create Store</h2>
       <p className="intro">
         Launch your own white-label NFT store or NFT Marketplace without any
