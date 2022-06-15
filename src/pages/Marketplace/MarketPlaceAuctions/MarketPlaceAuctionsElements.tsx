@@ -13,42 +13,44 @@ const getTimeString = (days, hours, minutes) => {
 };
 
 // Element for the list
-const Element = ({ element }) => {
+const Element = ({ element, currentType }) => {
   // Need to keep updating time string as per clock
   // so need to use setInterval
-  const { days, hours, minutes } = getTime(new Date().getTime(), element.date);
-  const [timeString, setTimeString] = useState(
-    getTimeString(days, hours, minutes)
-  );
-  useEffect(() => {
-    // Check every second
-    setInterval(() => {
-      const { days, hours, minutes } = getTime(new Date(), element.date);
-      setTimeString(getTimeString(days, hours, minutes));
-    }, 1000);
-  }, []);
+  // const { days, hours, minutes } = getTime(new Date().getTime(), element.date);
+  // const [timeString, setTimeString] = useState(
+  //   getTimeString(days, hours, minutes)
+  // );
+  // useEffect(() => {
+  //   // Check every second
+  //   setInterval(() => {
+  //     const { days, hours, minutes } = element.auctionTimer.getTime();
+  //     setTimeString(getTimeString(days, hours, minutes));
+  //   }, 1000);
+  // }, []);
   return (
     <div className="market-place-auction-element">
-      <img src={element.image} alt={element.name} />
+      <div className="nft-image-size">
+        <img src={element.cloudinaryUrl} alt={element.name} /></div>
       <h2 className="name">{element.name}</h2>
       <p className="seller-name">
-        {element.sellerName}{" "}
+        {element.sellerInfo}{" "}
         {element.ifVerified ? <img src={verified} alt="Verified" /> : null}
       </p>
       <div className="info">
-        <span className="type">{element.type}</span>
-        <span className="time">{timeString}</span>
+        <span className="type">{currentType}</span>
+        {/* {currentType == "live" && <span className="time">Ends in {element.auctionStartOn}</span>}
+        {currentType == "upcoming" && <span className="time">Starts in {element.auctionStartOn}</span>} */}
       </div>
     </div>
   );
 };
 
-const MarketPlaceAuctionsElements = ({ list, currentScroll }) => {
+const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType }) => {
   const holderRef = useExplorer(currentScroll);
   return (
     <div className="market-place-auctions-elements" ref={holderRef}>
-      {list.map((element, i) => (
-        <Element element={element} key={`mpae${i}${element.date}`} />
+      {list.map((element:any, i:number) => (
+        <Element element={element} key={`mpae${i}${element.tokenId}`} currentType={currentType} />
       ))}
     </div>
   );

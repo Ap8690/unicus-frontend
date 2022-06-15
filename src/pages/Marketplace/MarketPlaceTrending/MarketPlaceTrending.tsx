@@ -4,28 +4,40 @@ import { useEffect, useState } from "react";
 import MarketPlaceTrendingNavigator from "./MarketPlaceTrendingNavigator";
 import MarketPlaceTrendingElements from "./MarketPlaceTrendingElements";
 import BottomNavigationMarker from "../BottomNavigationMarker";
+import {getTrendingNft} from "../../../services/api/supplier"
 
 const MarketPlaceTrending = ({ list }) => {
   // We can filter this list as per requirement
   const [category, setCategory] = useState("all");
-  const [displayList, setDisplayList] = useState(list);
   const [currentScroll, setCurrentScroll] = useState(0);
+  const [trendingNfts, setTrendingNfts]  = useState([]);
 
   // Hardcoded
-  const length = Math.ceil(displayList.length / 3);
-  const categories = ["all", "art", "coins", "game"];
+  const length = trendingNfts?.length > 0 ? Math.ceil(trendingNfts?.length / 3) : 0;
+  const categories = ["all", "art", "funny", "nature", "animal", "sports", "photography", "music","metaverse"];
 
   useEffect(() => {
-    if (category === "all") {
-      setDisplayList(list);
-      return;
-      // IN this case, entire list
-    }
-    const temp = list.filter(
-      (element) => element.category.toLowerCase() === category
-    );
-    setDisplayList(temp);
+    getTrendingNft(10,category)
+    .then((res) => {
+      console.log(res)
+      setTrendingNfts(res?.data.nfts);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+    console.log(category);
   }, [category]);
+
+  useEffect(() => {
+    getTrendingNft(10,category)
+    .then((res) => {
+      console.log(res)
+      setTrendingNfts(res?.data.nfts);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  },[])
 
   return (
     <div className="market-place-trending">
@@ -38,7 +50,7 @@ const MarketPlaceTrending = ({ list }) => {
         length={length}
       />
       <MarketPlaceTrendingElements
-        list={displayList}
+        list={trendingNfts}
         currentScroll={currentScroll}
       />
       <BottomNavigationMarker currentPage={currentScroll} length={length} />

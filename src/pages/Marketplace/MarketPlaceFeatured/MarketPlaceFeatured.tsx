@@ -1,13 +1,26 @@
 // Libs
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Components
 import MarketPlaceNavigator from "./MarketPlaceNavigatorFeatured";
-import MarketPlaceNavigatorPanFeatured from "./MarketPlaceNavigatorPanFeatured";
+import MarketPlaceNavigatorPanFeatured from "./MarketPlaceNavigatorPanFeatured"
+import {getFeaturedNft} from "../../../services/api/supplier"
 
 const MarketPlaceFeatured = ({ list }) => {
   const [currentScroll, setCurrentScroll] = useState(0);
-  const length = Math.ceil(list.length / 3);
+  const [featuredNft,setFeturedNft] = useState([]);
+  const length = featuredNft?.length > 0 ? Math.ceil(featuredNft?.length / 3) : 0;
+
+  useEffect(() => {
+    getFeaturedNft(10)
+    .then((res) => {
+      console.log(res)
+      setFeturedNft(res?.data.nfts);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  },[])
   return (
     <div className="market-place-featured">
       <MarketPlaceNavigator
@@ -16,7 +29,7 @@ const MarketPlaceFeatured = ({ list }) => {
         length={length}
         heading={"Featured Artworks"}
       />
-      <MarketPlaceNavigatorPanFeatured list={list} currentScroll={currentScroll} />
+      <MarketPlaceNavigatorPanFeatured list={featuredNft} currentScroll={currentScroll} />
     </div>
   );
 };

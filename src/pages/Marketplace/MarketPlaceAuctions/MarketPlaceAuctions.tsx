@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 
 // Components
-import MarketPlaceAuctionsElements from "./MarketPlaceAuctionsElements";
-import MarketPlaceAuctionsNavigator from "./MarketPlaceAuctionsNavigator";
-import BottomNavigationMarker from "../BottomNavigationMarker";
+import MarketPlaceAuctionsElements from "./MarketPlaceAuctionsElements"
+import MarketPlaceAuctionsNavigator from "./MarketPlaceAuctionsNavigator"
+import BottomNavigationMarker from "../BottomNavigationMarker"
+import {getAuctions} from "../../../services/api/supplier"
 
 const MarketPlaceAuctions = ({ list }) => {
   // Take list and filter as per the requirement
@@ -14,16 +15,21 @@ const MarketPlaceAuctions = ({ list }) => {
   const [displayList, setDisplayList] = useState(list);
 
   // Some hardcoded data
-  const types = ["Live", "Upcoming", "Ended"];
+  const types = ["Live", "Upcoming", "Ended"]; //"Live", "Upcoming", "Ended"
   const length = width > 768 ? Math.ceil(displayList.length / 3) : displayList.length;
 
   // Filter out list on the basis of elements
   useEffect(() => {
-    const temp = list.filter(
-      (element) => element.type.toLowerCase() === currentType
-    );
-    setDisplayList(temp);
+    getAuctions(10,currentType)
+    .then(res => {
+      console.log(res);
+      setDisplayList(res?.data.nfts)
+    })
   }, [currentType]);
+
+  useEffect(() => {
+    getAuctions(10,currentType)
+  },[])
   return (
     <div className="market-place-auctions">
       <MarketPlaceAuctionsNavigator
@@ -34,7 +40,7 @@ const MarketPlaceAuctions = ({ list }) => {
         currentType={currentType}
         setCurrentType={setCurrentType}
       />
-      <MarketPlaceAuctionsElements list={displayList} currentScroll={currentScroll} />
+      <MarketPlaceAuctionsElements list={displayList} currentScroll={currentScroll} currentType={currentType} />
       <BottomNavigationMarker currentPage={currentScroll} length={length} />
     </div>
   );

@@ -1,8 +1,10 @@
 // Images
 import marketPlaceImage from "../../assets/images/marketPlaceMain.png";
 import banner from "../../assets/images/marketPlaceMainBanner.png";
+import {useNavigate} from "react-router-dom";
 
 const MarketPlaceMain = ({ saleStats }) => {
+  let navigate = useNavigate();
   return (
     <div className="market-place-main">
       <div className="market-place-main-text">
@@ -14,8 +16,8 @@ const MarketPlaceMain = ({ saleStats }) => {
           autem ad quia sint provident ut voluptas ea, facere molestiae vitae
         </p>
         <div className="market-place-main-button-holder">
-          <button className="btn nav-link">Explore Now</button>
-          <button className="create">Create</button>
+          <button onClick={() => navigate("/explore")} className="btn nav-link">Explore Now</button>
+          <button onClick={() => navigate("/create-nft")} className="create">Create</button>
         </div>
         <div className="market-place-main-stats">
           <div className="market-place-main-stat">

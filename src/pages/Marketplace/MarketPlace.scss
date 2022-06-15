@@ -137,11 +137,21 @@
       .market-place-featured-element {
         @include fn.flex-col(center, flex-start);
         min-width: 30%;
+        width: auto;
         font-weight: 300;
-        img {
-          display: block;
+        .nft-image-size {
           width: 100%;
+          min-height: 414px;
+          max-height: 414px;
           height: auto;
+          overflow: hidden;
+          position: relative;
+          border-radius: 20px;
+          img {
+            display: block;
+            width: 100%;
+            height: 414px;
+          }
         }
         .heading {
           font-size: fonts.$font-size-3xl;
@@ -173,6 +183,7 @@
               position: absolute;
               left: 0;
               top: 100%;
+              z-index:100;
               .category-list-option {
                 color: #5d5fef;
                 font-weight: 700;
@@ -205,20 +216,30 @@
         min-width: 30%;
         max-width: 30%;
         font-weight: 300;
-        img {
-          display: block;
+        position: relative;
+        .nft-image-size {
           width: 100%;
+          min-height: 414px;
+          max-height: 414px;
           height: auto;
+          overflow: hidden;
+          position: relative;
+          border-radius: 20px;
+          img {
+            display: block;
+            width: 100%;
+            height: 414px;
+          }
         }
         .info {
-          align-self: center;
+          display:flex;
+          justify-content: center;
+          align-items: center;
           position: relative;
-          .heading {
-            font-weight: 500;
-            margin-bottom: 0;
-          }
+          width:100%;
+          transform: translateY(-18px);
           .creator-image {
-            position: absolute;
+            // position: absolute;
             display: block;
             height: 75px;
             width: 75px;
@@ -226,15 +247,25 @@
             top: -50%;
             border-radius: 50%;
           }
-          .credit {
-            .creator-name {
-              color: #5d5fef;
+          .info-text {
+            margin-left:10px;
+            .heading {
+              font-weight: 500;
+              margin-bottom: 0;
+              
+            }
+            
+            .credit {
+              .creator-name {
+                color: #5d5fef;
+              }
             }
           }
+          
         }
         .text {
-          margin-top: 20px;
-          padding-left: 50px;
+          text-align: center !important;
+          width: 100%;
         }
       }
     }
@@ -291,11 +322,20 @@
       .market-place-auction-element {
         @include fn.flex-col(center, center);
         gap: 10px;
-        width: 30%;
-        img {
-          display: block;
+        min-width: 30%;
+        .nft-image-size {
           width: 100%;
+          min-height: 414px;
+          max-height: 414px;
           height: auto;
+          overflow: hidden;
+          position: relative;
+          border-radius: 20px;
+          img {
+            display: block;
+            width: 100%;
+            height: 414px;
+          }
         }
         .name {
           font-size: fonts.$font-size-2xl;
@@ -486,4 +526,7 @@
       }
     }
   }
+}
+.type {
+  text-transform: capitalize;
 }
