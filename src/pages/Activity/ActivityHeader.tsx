@@ -14,8 +14,8 @@ const ActiveFilterComponent = ({ acFilter, removeFilter }) => {
 };
 
 const ActivityHeader = ({ activeFilters, setActiveFilters }) => {
-  const removeFilter = (rmFilter) => {
-    const temp = activeFilters.filter((filter) => filter != rmFilter);
+  const removeFilter = (rmFilter: string) => {
+    const temp = activeFilters.filter((filter: string) => filter != rmFilter);
     setActiveFilters(temp);
   };
   const clearAllFilter = () => {
@@ -28,7 +28,7 @@ const ActivityHeader = ({ activeFilters, setActiveFilters }) => {
         Filter
       </div>
       <div className="active-filters">
-        {activeFilters.map((acFilter, i) => (
+        {activeFilters.map((acFilter:string, i: number) => (
           <ActiveFilterComponent
             acFilter={acFilter}
             key={`${i}ac`}

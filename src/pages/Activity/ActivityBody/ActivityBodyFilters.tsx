@@ -2,22 +2,20 @@
 import DropDownFilter from "../../../components/DropDownFilter/DropDownFilter";
 import DropDownSearch from "../../../components/DropDownSearch/DropDownSearch";
 
+// Lib
+import { useState } from "react";
 const ActivityBodyFilters = ({
   eventTypes,
   activeFilters,
   setActiveFilters,
   collections,
-  setIfOpen,
-  ifOpen,
   search,
   setSearch,
 }) => {
   return (
     <div className="activity-body-filters">
       <DropDownFilter
-        ifOpen={ifOpen}
-        setIfOpen={setIfOpen}
-        types={eventTypes}
+        filters={eventTypes}
         activeFilters={activeFilters}
         setActiveFilters={setActiveFilters}
         heading="Event Types"

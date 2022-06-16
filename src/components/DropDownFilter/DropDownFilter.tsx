@@ -1,3 +1,6 @@
+// Lib
+import { useState } from "react";
+
 // Images
 import chevronDown from "../../assets/svgs/chevronDown.svg";
 
@@ -5,31 +8,33 @@ import chevronDown from "../../assets/svgs/chevronDown.svg";
 import "./DropDownFilter.scss";
 
 const TypeButton = ({ type, activeFilters, onClickAdd, onClickRemove }) => {
-  const className = activeFilters.find((filter) => filter === type)
+  const className = activeFilters.find((filter: string) => filter === type)
     ? " active"
     : "";
   const onClick = className === " active" ? onClickRemove : onClickAdd;
   return (
-    <button className={"drop-down-type" + className} onClick={() => onClick(type)}>
+    <button
+      className={"drop-down-type" + className}
+      onClick={() => onClick(type)}
+    >
       {type}
     </button>
   );
 };
 
 const DropDownFilter = ({
-  ifOpen,
-  setIfOpen,
-  types,
+  filters,
   activeFilters,
   setActiveFilters,
   heading,
 }) => {
-  const onClickAdd = (rmFilter) => {
+  const [ifOpen, setIfOpen] = useState(true);
+  const onClickAdd = (rmFilter: string) => {
     const temp = activeFilters.concat(rmFilter);
     setActiveFilters(temp);
   };
-  const onClickRemove = (rmFilter) => {
-    const temp = activeFilters.filter((filter) => filter != rmFilter);
+  const onClickRemove = (rmFilter: string) => {
+    const temp = activeFilters.filter((filter: string) => filter != rmFilter);
     setActiveFilters(temp);
   };
 
@@ -51,7 +56,7 @@ const DropDownFilter = ({
             : null
         }
       >
-        {types.map((type, i) => (
+        {filters.map((type: string, i: Number) => (
           <TypeButton
             key={`evt${i}`}
             type={type}

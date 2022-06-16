@@ -14,12 +14,9 @@ const ActivityBody = ({
   search,
   setSearch,
 }) => {
-  const [ifOpen, setIfOpen] = useState(true);
   return (
     <div className="activity-body">
       <ActivityBodyFilters
-        ifOpen={ifOpen}
-        setIfOpen={setIfOpen}
         collections={collections}
         activeFilters={activeFilters}
         setActiveFilters={setActiveFilters}
