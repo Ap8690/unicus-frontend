@@ -102,4 +102,55 @@
       }
     }
   }
+  .all-nfts-body {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: repeat(2, 1fr);
+    margin-top: 2.3rem;
+    grid-column-gap: 70px;
+
+    .all-nfts-elements {
+      .all-nfts-element {
+        @include fn.flex-col(center, flex-start);
+        gap: 20px;
+        .element-image {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+        .info {
+          display: grid;
+          grid-template-columns: repeat(2, 50%);
+          grid-row-gap: 5px;
+          width: 100%;
+          font-weight: 400;
+          div:nth-child(2n + 1) {
+            // odd
+            justify-self: flex-start;
+          }
+          div:nth-child(2n) {
+            // even
+            justify-self: flex-end;
+          }
+        }
+      }
+      .buy {
+        @include fn.flex(center, space-between);
+        width: 100%;
+        font-weight: 700;
+        .buy-link {
+          @include fn.text-gradient();
+        }
+        .likes {
+          @include fn.flex(center, center);
+          gap: 10px;
+          img {
+            display: block;
+            height: 100%;
+            width: auto;
+          }
+        }
+      }
+    }
+  }
 }

@@ -11,10 +11,10 @@ import SearchBar from "../SearchBar/SearchBar";
 import "./DropDownSearch.scss";
 
 const CollectionList = ({ list, setSearch }) => {
-  const onClick = (ele) => setSearch(ele);
+  const onClick = (ele: string) => setSearch(ele);
   return (
     <div className="drop-down-list">
-      {list.map((listEle, i) => (
+      {list.map((listEle, i: number) => (
         <button
           className="drop-down-list-element"
           onClick={() => onClick(listEle.name)}
