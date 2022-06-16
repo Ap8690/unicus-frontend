@@ -9,6 +9,8 @@ const AllNFTsBody = ({
   search,
   setSearch,
   arrangement,
+  updateLoaded,
+  ifShowButton,
 }): ReactJSXElement => {
   // Hardcoded data
   const filters = ["New", "Buy now", "On Auction", "Has offers"];
@@ -22,7 +24,12 @@ const AllNFTsBody = ({
         search={search}
         setSearch={setSearch}
       />
-      <AllNFTsElements list={list} arrangement={arrangement} />
+      <AllNFTsElements
+        list={list}
+        arrangement={arrangement}
+        updateLoaded={updateLoaded}
+        ifShowButton={ifShowButton}
+      />
     </div>
   );
 };

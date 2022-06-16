@@ -39,6 +39,8 @@ const AllNFTs = () => {
   const [arrangement, setArrangement]: useStateType<Number> = useState(2);
   const [displayList, setDisplayList]: useStateType<Array<string>> =
     useState(list);
+  // Loading in multiples of 10
+  const [currentLoaded, setCurrentLoaded]: useStateType<number> = useState(10);
 
   // Helper Function
   const ifValid = (element: string) => {
@@ -46,6 +48,13 @@ const AllNFTs = () => {
     // Since structure not known skipping here
     return true;
   };
+
+  // Loading Related
+  const updateLoaded = () => {
+    setCurrentLoaded(currentLoaded + 10);
+  };
+  const ifShowButton: Boolean = currentLoaded < list.length;
+
   // Filtering mechanism
   useEffect(() => {
     // filter all in one to ensure consistency in data
@@ -53,6 +62,13 @@ const AllNFTs = () => {
     const temp = displayList.filter(ifValid);
     setDisplayList(temp);
   }, [search, countFilter, sorting, activeFilters]);
+
+  useEffect(() => {
+    // integrate with the upper one only for consistency
+    const temp = list.slice(0, currentLoaded);
+    setDisplayList(temp);
+  }, [currentLoaded]);
+
   return (
     <div className="all-nfts">
       <BlueBackground />
@@ -71,7 +87,9 @@ const AllNFTs = () => {
         list={displayList}
         search={search}
         setSearch={setSearch}
+        updateLoaded={updateLoaded}
         arrangement={arrangement}
+        ifShowButton={ifShowButton}
       />
     </div>
   );

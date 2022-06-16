@@ -26,7 +26,7 @@ const AllNFTsElement = ({ element }) => {
   );
 };
 
-const AllNFTsElements = ({ list, arrangement }) => {
+const AllNFTsElements = ({ list, arrangement, updateLoaded, ifShowButton }) => {
   // Grid Format decided by arrangement
   const style = {
     display: "grid",
@@ -34,11 +34,25 @@ const AllNFTsElements = ({ list, arrangement }) => {
     gridRowGap: "30px",
     gridTemplateColumns: `repeat(${arrangement}, 1fr)`,
   };
+  const btnStyle = !ifShowButton
+    ? {
+        display: "none",
+      }
+    : {};
   return (
-    <div className="all-nfts-elements" style={style}>
-      {list.map((element, index) => (
-        <AllNFTsElement element={element} key={`anfte${index}`} />
-      ))}
+    <div className="all-nfts-elements">
+      <div className="elements" style={style}>
+        {list.map((element, index) => (
+          <AllNFTsElement element={element} key={`anfte${index}`} />
+        ))}
+      </div>
+      <button
+        onClick={() => updateLoaded()}
+        style={btnStyle}
+        className="load-more-button"
+      >
+        Load More
+      </button>
     </div>
   );
 };
