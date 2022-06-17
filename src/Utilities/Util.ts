@@ -19,7 +19,7 @@ export const BASE_URL =
     : process.env.REACT_APP_ENV === "development"
     ? "https://unicus-storefront-backend-test.herokuapp.com"
     : process.env.REACT_APP_ENV === "staging"
-    ? "https://backend.qa.unicu.one"
+    ? "https://backend.qa.unicus.one"
     : process.env.REACT_APP_ENV === "demo"
     ? "https://unicus-storefront-backend-demo.herokuapp.com"
     : "https://unicus-storefront-backend.herokuapp.com";
@@ -145,6 +145,9 @@ export interface WalletsPopupProps {
   show: boolean;
   handleClose: () => void;
 }
+export const METAMASK = "MetaMask";
+export const TRONLINK = "TronLink";
+
 export const defaultPrivacyText = `<p>Welcome to the User Privacy Policy of 1 (the “SaaS Platform”). This Privacy Policy is made available to you by Unicus One. (“Unicus”, “us”, “we”, or “our”). We highly value protection of your Personal Data (as defined below), and our teams are working tirelessly around the clock for its upkeep. As used herein, the term “User” or “You” (including any variant) refers to each individual user of Services, (the scope of “Services” as defined in our <a href="terms" target="_blank" rel="noopener">Terms of Use</a>), who enters into these Privacy Policy on such individual’s own behalf or any entity on behalf of which an individual enters into this Privacy Policy. This policy also aims to, provide you an insight on how we collect, use and share your personal and ancillary information in our access (“Personal Data”), and to help you in exercising the rights you have in relation to your Personal Data. Also, this Privacy Policy entails the categories of Personal Data that comes in our access from the usage of our Services.</p>
 <p>By using any of the Services, you acknowledge, and agree with this Privacy Policy. In case you do not agree with our Privacy Policy it is highly advisable that you must refrain from any further usage of our Services. To understand how Unicus collects and uses your Personal Data, please read, understand and note the information.</p>
 <p>Please Note that Unicus currently does not respond to ‘Do Not Track’ requests. Normally browsers these days come with a setting known as ‘Do Not Track’ which signals to the SaaS Platform that a User chooses or wishes not to be tracked.</p>
@@ -216,8 +219,7 @@ export const defaultPrivacyText = `<p>Welcome to the User Privacy Policy of 1 (t
 <p>If there are any further questions, queries, concerns or complaints in relation to Unicus's Privacy Policy, please feel free to contact us at , you can contact us at support@Unicus.com.</p>
 <p>NOTE: If you choose to visit the Services, your visit and/or any dispute over privacy is subject to this Privacy Policy and our Terms.</p>`;
 
-export const METAMASK = "MetaMask";
-export const TRONLINK = "TronLink";
+
 
 export const UNICUS_STORE =
   process.env.REACT_APP_ENV === "local"
