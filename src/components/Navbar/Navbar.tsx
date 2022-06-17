@@ -11,6 +11,8 @@ import walletIcon from "../../assets/svgs/walletIcon.svg";
 import { UserContext } from "../../context/UserContext";
 import Button from "@mui/material/Button";
 
+import {getNetwork} from "../../Redux/Profile/actions"
+
 const Navbar = () => {
     const [search, setSearch] = useState("");
     const location = useLocation();

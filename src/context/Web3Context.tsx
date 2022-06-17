@@ -13,10 +13,10 @@ export const TransactionProvider = ({children}) => {
         //@ts-ignore
         if(!window.ethereum) return alert("Please install Metamask")
         //@ts-ignore
-        const accounts = await window.ethereum.request({
+        const accounts : array = await window.ethereum.request({
             method: "eth_requestAccounts",
         });
-        if(accounts.length){
+        if(accounts?.length){
             setWalletAddress(accounts[0])
         }
         setLoading(false)

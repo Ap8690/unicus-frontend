@@ -53,3 +53,16 @@
         }
     }
 }
+
+.input-box input:focus {
+    border-bottom:1px solid colors.$color-purple-2;
+    animation: border_anim 0.1s linear forwards;
+}
+@keyframes border_anim {
+	0%{
+		width: 50%;
+	}
+	100%{
+		width: 100%;
+	}
+}

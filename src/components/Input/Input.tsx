@@ -13,18 +13,18 @@ const Input = (props:any) => {
         </span>
       )}
       {props.time ? (
-        <input type="time" onChange={props.handleChange} value={props.state} />
+        <input type="time" onChange={handleChange} value={props.state} />
       ) : props.date ? (
         <input
           type="date"
-          onChange={props.handleChange}
+          onChange={handleChange}
           value={props.state}
           placeholder={props.placeholder}
         />
       ) : props.multi ? (
         <textarea
           rows={6}
-          onChange={props.handleChange}
+          onChange={handleChange}
           value={props.state}
           placeholder={props.placeholder}
         />
@@ -32,7 +32,7 @@ const Input = (props:any) => {
         <div className="password-field">
         <input
           type={"password"}
-          onChange={props.handleChange}
+          onChange={handleChange}
           value={props.state}
           placeholder={props.placeholder}
           disabled={props.disabled}
@@ -46,7 +46,7 @@ const Input = (props:any) => {
       ) : props.number ? (
         <input
           type={"number"}
-          onChange={props.handleChange}
+          onChange={handleChange}
           value={props.state}
           placeholder={props.placeholder}
           disabled={props.disabled}
@@ -54,7 +54,7 @@ const Input = (props:any) => {
       ) : (
         <input
           type={props.email ? "email" : "text"}
-          onChange={props.handleChange}
+          onChange={handleChange}
           value={props.state}
           placeholder={props.placeholder}
           disabled={props.disabled}

@@ -16,7 +16,7 @@ const MarketPlaceDiscover = ({ categories }) => {
       <h2 className="heading">Discover by category</h2>
       <div className="holder">
         <div className="left-list">
-          {categories.slice(0, 4).map((element, i) => (
+          {categories.slice(0, 4).map((element: any, i: number) => (
             <ListElement element={element} key={`lle${i}`} />
           ))}
         </div>
@@ -26,7 +26,7 @@ const MarketPlaceDiscover = ({ categories }) => {
           className="discover-image"
         />
         <div className="right-list">
-          {categories.slice(4, 8).map((element, i) => (
+          {categories.slice(4, 8).map((element: any, i: number) => (
             <ListElement element={element} key={`lle${i + 4}`} />
           ))}
         </div>

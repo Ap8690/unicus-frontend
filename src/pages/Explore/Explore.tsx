@@ -13,8 +13,11 @@ import ExploreFilters from "./ExploreFilters";
 import ExploreElements from "./ExploreElements";
 import BlueBackground from "../../components/BlueBackground/BlueBackground";
 
+//apis
+import {getMarketplaceNfts} from "../../services/api/supplier"
 const Explore = () => {
   // HardCoded
+  const [skiploading, setskiploading] = useState(true)
   const filters = ["All", "Art", "Photos", "Games", "Music"];
   const elements = [
     {
@@ -64,7 +67,30 @@ const Explore = () => {
   // States
   const [currentFilter, setCurrentFilter] = useState("All");
   const [displayElements, setDisplayItems] = useState(elements);
+  const [sortBy, setsortBy] = useState<any>([['createdAt',-1]])
+  const [sortBy2, setsortBy2] = useState<any>('createdAt')
+  const [skip, setskip] = useState(0)
 
+  async function fetchItems() {
+    if (skiploading) {
+      // getMarketplaceNfts(skip)
+      //       .then((res: any) => {
+      //           settotalAuctions(res.data.totalAuctions)
+      //           const newData = metadata
+      //           newData.push(...res.data.data)
+      //           setmetadata(newData)
+      //           if (res.data.msg) {
+      //               setNFTSLoaded(true)
+      //           } else {
+      //               setskiploading(false)
+      //           }
+      //       })
+      //       .catch((error) => {
+      //           console.log(error)
+      //           setskiploading(false)
+      //       })
+    }
+  }
   // Effect
   useEffect(() => {
     // nothing for now
