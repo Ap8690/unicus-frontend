@@ -1,0 +1,93 @@
+@use "/src/styles/colors";
+@use "/src/styles/mixins" as fn;
+@use "/src/styles/fonts";
+
+.auctions {
+  position: relative;
+  max-width: 1290px;
+  width: 90%;
+  padding: 6rem 2rem;
+  padding-bottom: 25rem;
+
+  .auctions-heading {
+    font-weight: 600;
+    font-size: fonts.$font-size-5xl;
+    background: colors.$gradient-blue;
+    background-clip: text;
+    color: transparent;
+  }
+  .auctions-filters {
+    @include fn.flex(center, flex-start);
+    width: 100%;
+    border-bottom: solid 4px rgba(255, 255, 255, 0.2);
+    font-size: fonts.$font-size-2xl;
+    padding: 20px 0;
+
+    .auctions-filter {
+      position: relative;
+      padding: 0 30px;
+    }
+    .auctions-filter::after {
+      width: 100%;
+      position: absolute;
+      bottom: -24px;
+      left: 0;
+      content: "";
+      height: 4px;
+      background: colors.$gradient-blue;
+      opacity: 0;
+      transition: 0.3s ease-in-out;
+    }
+    .auctions-filter.active::after {
+      opacity: 1;
+    }
+  }
+  .auctions-elements {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    grid-column-gap: 40px;
+    grid-row-gap: 90px;
+    margin-top: 90px;
+    .auctions-element {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-row-gap: 15px;
+      align-items: center;
+      font-size: fonts.$font-size-2xl;
+      font-weight: 400;
+
+      .auctions-element-item-image {
+        grid-column: 1/3;
+        padding-bottom: 36px;
+        overflow: hidden;
+        border-radius: 40px;
+        width: 380px;
+        height: 415px;
+        img {
+          display: block;
+          width: 380px;
+          height: 415px;
+        }
+      }
+      .auctions-element-price {
+        text-align: right;
+        background: colors.$gradient-blue;
+        background-clip: text;
+        color: transparent;
+      }
+      .auctions-element-stock {
+        text-align: right;
+      }
+      .auctions-element-creators {
+        @include fn.flex(center, center);
+        .auctions-element-creator-image {
+          display: block;
+          height: 63px;
+          width: 63px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}
