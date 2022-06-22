@@ -26,6 +26,7 @@ import MarketPlace from "./pages/Marketplace/MarketPlace";
 import CreateStore from "./pages/CreateStore/CreateStore";
 import AllNFTs from "./pages/AllNFTs/AllNFTs";
 import Auctions from "./pages/Auctions/Auctions";
+import Profile from "./pages/Profile/ProfileMain";
 
 const App = () => {
   const { isLogin } = useContext(UserContext);
@@ -51,6 +52,7 @@ const App = () => {
           <Route path="/create-store" element={<CreateStore />} />
           <Route path="/all-nfts" element={<AllNFTs />} />
           <Route path="/auctions" element={<Auctions />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
         <Footer />
       </BrowserRouter>

@@ -9,7 +9,6 @@ import "./CreateStore.scss";
 import BlueBackground from "../../components/BlueBackground/BlueBackground";
 
 // Images
-//@ts-ignore
 import uploadImage from "../../assets/svgs/uploadImage.svg";
 
 const CreateStoreForm = (): ReactJSXElement => {
