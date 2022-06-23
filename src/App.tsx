@@ -52,7 +52,7 @@ const App = () => {
           <Route path="/create-store" element={<CreateStore />} />
           <Route path="/all-nfts" element={<AllNFTs />} />
           <Route path="/auctions" element={<Auctions />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/*" element={<Profile />} />
         </Routes>
         <Footer />
       </BrowserRouter>

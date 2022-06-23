@@ -27,6 +27,10 @@
       padding: 10px 16px;
       font-weight: 500;
       border-radius: 8px;
+      transition: 0.2s ease-in-out;
+    }
+    .edit-profile:hover {
+      background-color: rgba(255, 255, 255, 0.2);
     }
     .user-image {
       position: absolute;
@@ -53,12 +57,13 @@
       }
       .user-links {
         @include fn.flex(center, space-between);
-        width: 30%;
+        gap: 24px;
+        height: 24px;
         a {
           img {
             display: block;
-            width: 100%;
-            height: auto;
+            height: 100%;
+            width: auto;
           }
         }
       }

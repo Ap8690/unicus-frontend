@@ -3,10 +3,11 @@
 @use "/src/styles/fonts";
 
 .profile-navigation {
-  @include fn.flex(center, flex-start);
+  @include fn.flex(center, space-between);
   width: 100%;
   border-bottom: solid 4px rgba(255, 255, 255, 0.2);
-  font-size: fonts.$font-size-2xl;
+  font-size: fonts.$font-size-lg;
+  font-weight: 500;
   padding: 20px 0;
 
   .tab {

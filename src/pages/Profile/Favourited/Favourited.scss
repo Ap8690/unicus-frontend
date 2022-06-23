@@ -1,0 +1,33 @@
+@use "/src/styles/colors";
+@use "/src/styles/mixins" as fn;
+@use "/src/styles/fonts";
+
+.favourited {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 56px;
+  justify-items: center;
+  margin-top: 50px;
+
+  .item {
+    @include fn.flex-col(center, flex-start);
+    .image-holder {
+      height: 350px;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 30px;
+      img {
+        display: block;
+        width: 100%;
+      }
+    }
+    .item-heading {
+      margin: 8px 0;
+      margin-top: 17px;
+      font-size: fonts.$font-size-xl;
+    }
+    .item-text {
+      font-weight: 300;
+    }
+  }
+}

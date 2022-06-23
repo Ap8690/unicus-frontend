@@ -1,13 +1,17 @@
+// Libs
+import { Link } from "react-router-dom";
+
 // Styles
 import "./ProfileNavigation.scss";
 
 // Helper Components
 const Tab = ({ tab, currentTab, onClick, index }) => {
   const className = index === currentTab ? " active" : "";
+  const url = "/profile/" + tab.toLowerCase();
   return (
-    <button className={"tab" + className} onClick={() => onClick(index)}>
+    <Link to={url} className={"tab" + className} onClick={() => onClick(index)}>
       {tab}
-    </button>
+    </Link>
   );
 };
 
