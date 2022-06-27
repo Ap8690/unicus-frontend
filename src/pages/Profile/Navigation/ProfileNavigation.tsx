@@ -12,6 +12,7 @@ const Tab = ({ tab, currentTab, onClick, index }) => {
     <Link to={url} className={"tab" + className} onClick={() => onClick(index)}>
       <img src={tab.image} alt={tab.name} />
       {tab.name}
+      <span className="additional">{tab.add}</span>
     </Link>
   );
 };

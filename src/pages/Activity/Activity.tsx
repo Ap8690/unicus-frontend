@@ -12,7 +12,7 @@ import ActivityHeader from "./ActivityHeader";
 import ActivityBody from "./ActivityBody/ActivityBody";
 import BlueBackground from "../../components/BlueBackground/BlueBackground";
 
-const Activity = () => {
+export const Activity = () => {
   const activities = [
     {
       type: "List",

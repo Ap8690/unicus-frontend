@@ -6,6 +6,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 // Components
 import User from "./User/User";
 import ProfileNavigation from "./Navigation/ProfileNavigation";
+import { Activity } from "../Activity/Activity";
 
 // Images
 import userImg from "../../assets/images/userImage.png";
@@ -28,16 +29,19 @@ import Favourited from "./Favourited/Favourited";
 type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 
 const Profile = (): ReactJSXElement => {
+  // add is additional information
   const tabs = [
-    { name: "Collected", image: profileCollected },
-    { name: "Created", image: profileCreated },
-    { name: "Favourited", image: profileFavourited },
-    { name: "Activity", image: profileActivity },
-    { name: "Listing", image: profileListing },
-    { name: "Offers", image: profileOffers },
+    { name: "Collected", image: profileCollected, add: "5" },
+    { name: "Created", image: profileCreated, add: "" },
+    { name: "Favourited", image: profileFavourited, add: "6" },
+    { name: "Activity", image: profileActivity, add: "" },
+    { name: "Listing", image: profileListing, add: "" },
+    { name: "Offers", image: profileOffers, add: "" },
   ];
   // Index of current element
   const location = useLocation();
+
+  // Name of the current tab
   const tabName = location.pathname.slice(
     location.pathname.lastIndexOf("/") + 1
   );
@@ -94,6 +98,7 @@ const Profile = (): ReactJSXElement => {
       />
       <Routes>
         <Route path="/favourited" element={<Favourited items={items} />} />
+        <Route path="/activity" element={<Activity />} />
       </Routes>
     </div>
   );
