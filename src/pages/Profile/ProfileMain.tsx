@@ -12,6 +12,14 @@ import userImg from "../../assets/images/userImage.png";
 import backgroundImg from "../../assets/images/userBackground.png";
 import favouritedImg from "../../assets/images/favouritedImage.png";
 
+// Icons
+import profileCollected from "../../assets/svgs/profileCollected.svg";
+import profileCreated from "../../assets/svgs/profileCreated.svg";
+import profileFavourited from "../../assets/svgs/profileFavourited.svg";
+import profileActivity from "../../assets/svgs/profileActivity.svg";
+import profileListing from "../../assets/svgs/listing.svg";
+import profileOffers from "../../assets/svgs/list.svg";
+
 // Styles
 import "./ProfileMain.scss";
 import Favourited from "./Favourited/Favourited";
@@ -21,12 +29,12 @@ type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 
 const Profile = (): ReactJSXElement => {
   const tabs = [
-    "Collected",
-    "Created",
-    "Favourited",
-    "Activity",
-    "Listing",
-    "Offers ",
+    { name: "Collected", image: profileCollected },
+    { name: "Created", image: profileCreated },
+    { name: "Favourited", image: profileFavourited },
+    { name: "Activity", image: profileActivity },
+    { name: "Listing", image: profileListing },
+    { name: "Offers", image: profileOffers },
   ];
   // Index of current element
   const location = useLocation();
@@ -34,7 +42,7 @@ const Profile = (): ReactJSXElement => {
     location.pathname.lastIndexOf("/") + 1
   );
   const [currentTab, setCurrentTab]: useStateType<Number> = useState(
-    tabs.findIndex((tab) => tab.toLowerCase() === tabName)
+    tabs.findIndex((tab) => tab.name.toLowerCase() === tabName)
   );
   const user = {
     name: "Kyle Garrick",

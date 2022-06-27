@@ -13,6 +13,10 @@
   .tab {
     position: relative;
     padding: 0 30px;
+    img {
+      vertical-align: middle;
+      margin: 0 10px;
+    }
   }
   .tab::after {
     width: 100%;
