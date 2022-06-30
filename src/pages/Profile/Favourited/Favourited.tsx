@@ -1,5 +1,6 @@
 // Libs
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+import BlueBackground from "../../../components/BlueBackground/BlueBackground";
 
 // Styles
 import "./Favourited.scss";
@@ -31,6 +32,7 @@ const Item = ({ item }: itemInterface): ReactJSXElement => {
 const Favourited = ({ items }): ReactJSXElement => {
   return (
     <div className="favourited">
+      <BlueBackground />
       {items.map((item: itemType, index: number) => (
         <Item item={item} key={`fi${index}`} />
       ))}
