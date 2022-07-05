@@ -237,7 +237,7 @@ const Navbar = () => {
                         {/* <Link to={'/'} className='nav-link'>
               <img src={sunIcon} alt="profile" className='nav-icons' />
             </Link> */}
-                        <Link to={"/wallet"} className="nav-link">
+                        <Link to={"/connect-wallet"} className="nav-link">
                             <img
                                 src={walletIcon}
                                 alt="profile"
