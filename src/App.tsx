@@ -1,6 +1,23 @@
 // Libraries
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import { clusterApiUrl } from '@solana/web3.js';
+import { WalletAdapterNetwork  } from '@solana/wallet-adapter-base';
+import {
+    GlowWalletAdapter,
+    LedgerWalletAdapter,
+    PhantomWalletAdapter,
+    SlopeWalletAdapter,
+    SolflareWalletAdapter,
+    SolflareWalletAdapterConfig,
+    SolletExtensionWalletAdapter,
+    SolletWalletAdapter,
+    TorusWalletAdapter,
+} from '@solana/wallet-adapter-wallets';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
+
 import { UserContext, UserProvider } from "./context/UserContext";
 
 // Components
@@ -28,35 +45,65 @@ import AllNFTs from "./pages/AllNFTs/AllNFTs";
 import Auctions from "./pages/Auctions/Auctions";
 import Profile from "./pages/Profile/ProfileMain";
 
+require('@solana/wallet-adapter-react-ui/styles.css');
+
+
 const App = () => {
   const { isLogin } = useContext(UserContext);
 
+  const network = WalletAdapterNetwork.Mainnet;
+  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+
+  
+  //@ts-ignore
+  const wallets = useMemo(
+        () => [
+            new PhantomWalletAdapter(),
+            new GlowWalletAdapter(),
+            new SlopeWalletAdapter(),
+            new SolflareWalletAdapter({ network }),
+            new TorusWalletAdapter(),
+            new LedgerWalletAdapter(),
+            new SolletExtensionWalletAdapter(),
+            new SolletWalletAdapter(),
+        ],
+        [network]
+    );
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Navbar />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/readblog/:id" element={<ReadBlog />} />
-          <Route path="/connect-wallet" element={<ConnectWallet />} />
-          <Route path="/create-nft" element={<CreateNftSelector />} />
-          <Route path="/create-nft/single-item" element={<CreateNftSingle />} />
-          <Route path="/stats/ranking" element={<Ranking />} />
-          <Route path="/stats/activity" element={<Activity />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/marketplace" element={<MarketPlace />} />
-          <Route path="/create-store" element={<CreateStore />} />
-          <Route path="/all-nfts" element={<AllNFTs />} />
-          <Route path="/auctions" element={<Auctions />} />
-          <Route path="/profile/*" element={<Profile />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
-    </div>
+    <ConnectionProvider endpoint={endpoint}>
+            <WalletProvider wallets={wallets}>
+                <WalletModalProvider>
+                    <div className="App">                    	
+                      <BrowserRouter>
+                        <Navbar />
+                        <ScrollToTop />
+                        <Routes>
+                          <Route path="/" element={<Homepage />} />
+                          <Route path="/login" element={<Login />} />
+                          <Route path="/register" element={<Register />} />
+                          <Route path="/blog" element={<Blog />} />
+                          <Route path="/readblog/:id" element={<ReadBlog />} />
+                          <Route path="/connect-wallet" element={<ConnectWallet />} />
+                          <Route path="/create-nft" element={<CreateNftSelector />} />
+                          <Route path="/create-nft/single-item" element={<CreateNftSingle />} />
+                          <Route path="/stats/ranking" element={<Ranking />} />
+                          <Route path="/stats/activity" element={<Activity />} />
+                          <Route path="/explore" element={<Explore />} />
+                          <Route path="/marketplace" element={<MarketPlace />} />
+                          <Route path="/create-store" element={<CreateStore />} />
+                          <Route path="/all-nfts" element={<AllNFTs />} />
+                          <Route path="/auctions" element={<Auctions />} />
+                          <Route path="/profile/*" element={<Profile />} />
+                        </Routes>
+                        <Footer />
+                      </BrowserRouter>    
+                    </div>
+                </WalletModalProvider>
+            </WalletProvider>
+    </ConnectionProvider>
+
+    
   );
 };
 

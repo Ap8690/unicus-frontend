@@ -3,6 +3,8 @@ import './connectwallet.scss'
 import React, { useState, useContext } from 'react'
 import { Web3Context } from '../../context/Web3Context'
 import useConnect from './useConnect';
+import { WalletMultiButton, useWalletModal } from '@solana/wallet-adapter-react-ui';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 
 import metamaskLogo from '../../assets/svgs/metamask.svg'
 import phantomLogo from '../../assets/svgs/phantomLogo.svg'
@@ -14,13 +16,13 @@ import { useNavigate } from 'react-router-dom'
 
 import { WalletConnection } from 'near-api-js';
 
-type Event = "connect" | "disconnect";
+/*type Event = "connect" | "disconnect";
 
 interface Phantom {
   on: (event: Event, callback: () => void) => void;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-}
+}*/
 
 
 type AuthType = Readonly<{
@@ -35,13 +37,17 @@ const ConnectWallet: React.FC<AuthType> = () => {
   
 
   const connectNear = () => wallet?.requestSignIn();
+
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction } = useWallet();
+  const { setVisible } = useWalletModal();
     
 
     //@ts-ignore
   const { connectMetamask } = useContext(Web3Context);
-  const [phantom, setPhantom] = useState<Phantom | null>(null);
+ /* const [phantom, setPhantom] = useState<Phantom | null>(null);*/
 
-  const connectHandler = () => {
+ /* const connectHandler = () => {
     
     if ("solana" in window) {
       setPhantom(window["solana"]);
@@ -50,7 +56,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
         alert!("Phantom wallet not found, Get Phantom wallet");
     }
     
-  };
+  };*/
 
   const navigate = useNavigate()
 
@@ -80,7 +86,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
                         Metamask
                         <img src={metamaskLogo} alt="metamask" />
                     </button>
-                    <button onClick={connectHandler}>
+                    <button onClick={() => setVisible(true)}>
                         Phantom
                         <img src={phantomLogo} alt="Phantom" />
                     </button>
