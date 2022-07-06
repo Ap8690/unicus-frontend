@@ -87,7 +87,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
                         <img src={metamaskLogo} alt="metamask" />
                     </button>
                     <button onClick={() => setVisible(true)}>
-                        Phantom
+                        SolanaConnect
                         <img src={phantomLogo} alt="Phantom" />
                     </button>
                     <button onClick={connectNear}>
