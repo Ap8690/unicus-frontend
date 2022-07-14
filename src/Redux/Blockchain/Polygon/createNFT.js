@@ -1,6 +1,10 @@
 // mainnet
-export const createNFTAddressP = "0x1549EabD2a47762413ee1A11e667E67A5825ff44";
-
+export const createNFTAddressP =
+  process.env.REACT_APP_ENV !== "prod"
+    ? // mainnet
+      "0x1549EabD2a47762413ee1A11e667E67A5825ff44"
+    : // testnet
+      "0x9fd3F105c9ce43FcF8B337Bf2EaF4fD30fFe49C5";
 // testnet
 // export const createNFTAddressP = "0x9fd3F105c9ce43FcF8B337Bf2EaF4fD30fFe49C5";
 

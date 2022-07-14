@@ -12,7 +12,6 @@ import {
   REGISTER_WALLET,
   USER_ADDRESS,
 } from '../constants'
-import { backendUrl, bscChain, bscChainHex, ethChain, ethChainHex, polygonChainHex } from '../../config'
 // import web3 from '../../web3'
 
 

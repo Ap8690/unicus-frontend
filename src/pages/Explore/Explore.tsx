@@ -15,9 +15,14 @@ import BlueBackground from "../../components/BlueBackground/BlueBackground";
 
 //apis
 import {getMarketplaceNfts} from "../../services/api/supplier"
+import { metadata } from "0xsequence/dist/declarations/src/sequence";
+import { useSelector } from "react-redux";
 const Explore = () => {
   // HardCoded
   const [skiploading, setskiploading] = useState(true)
+  const { networkID } = useSelector((state: any) => state.profile);
+      const [metadata, setmetadata] = useState<any>([]);
+
   const filters = ["All", "Art", "Photos", "Games", "Music"];
   const elements = [
     {
@@ -66,34 +71,32 @@ const Explore = () => {
 
   // States
   const [currentFilter, setCurrentFilter] = useState("All");
-  const [displayElements, setDisplayItems] = useState(elements);
+  const [displayElements, setDisplayItems] = useState([]);
   const [sortBy, setsortBy] = useState<any>([['createdAt',-1]])
   const [sortBy2, setsortBy2] = useState<any>('createdAt')
   const [skip, setskip] = useState(0)
 
   async function fetchItems() {
     if (skiploading) {
-      // getMarketplaceNfts(skip)
-      //       .then((res: any) => {
-      //           settotalAuctions(res.data.totalAuctions)
-      //           const newData = metadata
-      //           newData.push(...res.data.data)
-      //           setmetadata(newData)
-      //           if (res.data.msg) {
-      //               setNFTSLoaded(true)
-      //           } else {
-      //               setskiploading(false)
-      //           }
-      //       })
-      //       .catch((error) => {
-      //           console.log(error)
-      //           setskiploading(false)
-      //       })
+      getMarketplaceNfts(skip, networkID, sortBy)
+            .then((res: any) => {
+              console.log("auc",res.data.totalAuctions);
+              
+                setDisplayItems(res.data.data)
+               console.log(res.data.data);
+               
+                
+            })
+            .catch((error) => {
+                console.log(error)
+                setskiploading(false)
+            })
     }
   }
   // Effect
   useEffect(() => {
     // nothing for now
+    fetchItems()
   }, [currentFilter]);
 
   return (
@@ -105,7 +108,7 @@ const Explore = () => {
         setCurrentFilter={setCurrentFilter}
         currentFilter={currentFilter}
       />
-      <ExploreElements elements={displayElements} />
+      {displayElements.length>0 && <ExploreElements elements={displayElements} />}
     </section>
   );
 };

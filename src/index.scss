@@ -45,7 +45,9 @@ button {
 .App {
   @include helper.flex-col(center, start);
 }
-
+.Toastify__toast{
+  margin-top: 55px;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

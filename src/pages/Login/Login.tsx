@@ -7,7 +7,7 @@ import Input from "../../components/Input/Input"
 import googleLogo from "../../assets/svgs/google.svg"
 import facebookLogo from "../../assets/svgs/facebook.svg"
 import twitterLogo from "../../assets/svgs/twitter.svg"
-import { authLogin } from "../../services/api/supplier"
+import { emailLogin } from "../../services/api/supplier"
 import { getaccessToken, getUserInfo } from "../../Redux/Profile/actions"
 import { useDispatch } from "react-redux"
 import axios from "axios"
@@ -25,7 +25,7 @@ const Login = ({}) => {
         if (!email || !password) {
             setError("Fields should not be empty")
         } else {
-            authLogin(email, password)
+            emailLogin(email, password)
                 .then(async (res: any) => {
                     console.log("in")
                     dispatch(getaccessToken(res.data.accessToken) as any)

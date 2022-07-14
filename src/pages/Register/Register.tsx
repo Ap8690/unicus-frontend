@@ -9,7 +9,6 @@ const Register = () => {
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
   const [conPassword, setConPassword] = useState('')
-  const [walletKey, setWalletKey] = useState('')
   const [password, setPassword] = useState('')
   return (
       <div className="register-page">
@@ -47,12 +46,12 @@ const Register = () => {
               password
               required
             />
-            <Input
+            {/* <Input
               title={"Wallet Key"}
               state={walletKey}
               placeholder="Enter Wallet Key"
               setState={setWalletKey}
-            />
+            /> */}
             <button className="btn large-btn login-btn">REGISTER</button>
             <div className="terms">
               By continuing you are agreeing to our{" "}

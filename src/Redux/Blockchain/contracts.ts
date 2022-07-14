@@ -8,7 +8,7 @@ import TronWeb from 'tronweb'
 
 
 // svgs
-import CC_LOGO from '../../Assets/CC_Logo.svg'
+import CC_LOGO from '../../assets/svgs/CC_Logo.svg'
 
 import {marketPlaceAbiE, marketPlaceAddressE} from './Ethereum/marketPlace'
 import {createNFTAbiE, createNFTAddressE} from './Ethereum/createNFT'
@@ -72,13 +72,9 @@ export const walletConnectorProvider: any = new WalletConnectProvider({
 export let metaMaskProvider: any
 // export let walletConnectorProvider: any
 
-export const getMetamaskProvider = () => async (dispatch: any) => {
+export const getMetamaskProvider = async () => {
   try {
-    metaMaskProvider = await detectEthereumProvider()
-    dispatch({
-      type: PROVIDER,
-      payload: metaMaskProvider,
-    })
+    return await detectEthereumProvider()
   } catch (error: any) {
     console.log(error?.message)
   }
