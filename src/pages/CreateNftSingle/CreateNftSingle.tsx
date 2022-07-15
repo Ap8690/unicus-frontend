@@ -1,13 +1,17 @@
 import './singlenft.scss'
 
 import previewImg from '../../assets/images/Rectangle 8.png'
-import uploadImg from '../../assets/svgs/uploadFile.svg'
+import uploadImg from '../../assets/svgs/uploadImage.svg'
 import dollarImg from '../../assets/svgs/dollarSign.svg'
 import listImg from '../../assets/svgs/list.svg'
 import starImg from '../../assets/svgs/starIcon.svg'
 import statsImg from '../../assets/svgs/statsIcon.svg'
 import unlockImg from '../../assets/svgs/unlock.svg'
 import questionImg from '../../assets/svgs/questionIcon.svg'
+
+import { getConfig } from '../../config'
+import * as nearAPI from 'near-api-js';
+
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Input from '../../components/Input/Input';
@@ -21,10 +25,17 @@ import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import AddProperties from '../../components/modals/Add Properties/AddProperties'
 
-const CreateNftSingle = () => {
+type Props = {
+  currentUser: any;
+  nearConfig: any,
+  walletConnection: any;
+}
+
+function CreateNftSingle(props: any): JSX.Element {
   const [name, setName] = useState('')
   const [extLink, setExtlink] = useState('')
   const [description, setDescription] = useState('')
+  const [imageSrc, setImageSrc] = useState<any>([]);
   const [price, setPrice] = useState('')
   const [chain, setChain] = useState('ethereum');
   const [unlockContent, setUnlockContent] = useState('')
@@ -84,6 +95,38 @@ const CreateNftSingle = () => {
 
   };
 
+  const {
+    utils: {
+      format: { parseNearAmount},
+    },
+  } = nearAPI;
+
+
+  const mintAssetToNft = async () => {
+
+    let functionCallResult = await props.near.walletConnection.account().functionCall({
+      contractId: "nft-contract.boomboom.testnet",
+      methodName: "nft_mint",
+      args: {
+        token_id: `${name}`,
+        metadata: {
+          title: `${name}`,
+          description: `${description}`,
+          media: `${extLink}`,
+        },
+        gas: "200000000000000",
+        receiver_id: props.near.currentUser,
+      },
+      attachedDeposit: parseNearAmount("1"),
+    });
+
+    if (functionCallResult) {
+      console.log("nft created: ");
+    } else {
+      console.log("nft not created");
+    }
+  };
+
 
   const modals = [
     {
@@ -124,16 +167,9 @@ const CreateNftSingle = () => {
         </div>
         <div className="body">
           <div className='input-fields'>
-            <div className='upload-file'>
-              <div className='field-title'>Upload File</div>
-              <button className="field">
-                <img src={uploadImg} alt="uploadImg" />
-              </button>
-              {/* <input type="file" /> */}
-            </div>
             <div className="basic-info">
               <Input title='Name' placeholder={'Item Name'} state={name} setState={setName} />
-              <Input title='External Link' placeholder={'https://www.youtube.com/watch?v=Oz9zw7-_vhM'} state={extLink} setState={setExtlink} />
+              <Input title='External Link' placeholder={'Item url'} state={extLink} setState={setExtlink} />
               <Input title='Description' multi placeholder={'Provide a detailed description of your item.'} state={description} setState={setDescription} />
             </div>
             <div className="blockchain">
@@ -227,7 +263,7 @@ const CreateNftSingle = () => {
 
               </div>
             </div>
-            <button className='btn create-btn'>
+            <button className='btn create-btn' onClick={mintAssetToNft}>
               Create
             </button>
           </div>

@@ -48,11 +48,12 @@ import Profile from "./pages/Profile/ProfileMain";
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 
-const App = () => {
+function App(props: any): JSX.Element {
   const { isLogin } = useContext(UserContext);
 
   const network = WalletAdapterNetwork.Mainnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+
 
   
   //@ts-ignore
@@ -70,6 +71,7 @@ const App = () => {
         [network]
     );
 
+
   return (
     <ConnectionProvider endpoint={endpoint}>
             <WalletProvider wallets={wallets}>
@@ -84,9 +86,9 @@ const App = () => {
                           <Route path="/register" element={<Register />} />
                           <Route path="/blog" element={<Blog />} />
                           <Route path="/readblog/:id" element={<ReadBlog />} />
-                          <Route path="/connect-wallet" element={<ConnectWallet />} />
+                          <Route path="/connect-wallet" element={<ConnectWallet near={props} />} />
                           <Route path="/create-nft" element={<CreateNftSelector />} />
-                          <Route path="/create-nft/single-item" element={<CreateNftSingle />} />
+                          <Route path="/create-nft/single-item" element={<CreateNftSingle near={props}  />} />
                           <Route path="/stats/ranking" element={<Ranking />} />
                           <Route path="/stats/activity" element={<Activity />} />
                           <Route path="/explore" element={<Explore />} />

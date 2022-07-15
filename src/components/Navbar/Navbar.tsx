@@ -46,6 +46,7 @@ const Navbar = () => {
         setAnchorChains(null);
     };
     const handleClickProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
+        console.log("set Login:", isLogin);
         isLogin
             ? setAnchorProfile(event.currentTarget)
             : navigate("/connect-wallet");

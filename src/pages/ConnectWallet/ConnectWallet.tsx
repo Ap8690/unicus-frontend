@@ -2,6 +2,7 @@ import './connectwallet.scss'
 
 import React, { useState, useContext } from 'react'
 import { Web3Context } from '../../context/Web3Context'
+import { UserContext } from '../../context/UserContext'
 import useConnect from './useConnect';
 import { WalletMultiButton, useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
@@ -14,7 +15,12 @@ import mewLogo from '../../assets/svgs/myetherwallet.svg'
 import walletconnectLogo from '../../assets/svgs/walletconnect.svg'
 import { useNavigate } from 'react-router-dom'
 
-import { WalletConnection } from 'near-api-js';
+import { WalletConnection } from 'near-api-js'
+
+const BN = require('bn.js');
+
+
+
 
 /*type Event = "connect" | "disconnect";
 
@@ -25,18 +31,62 @@ interface Phantom {
 }*/
 
 
-type AuthType = Readonly<{
+/*type AuthType = Readonly<{
   wallet?: WalletConnection;
 }>;
 
+type Props = Readonly<{
+  nearConfig: any,
+  walletConnection: any,
+}>;*/
 
 
+//: React.FC<Props>
+function ConnectWallet(props: any): JSX.Element {
 
-const ConnectWallet: React.FC<AuthType> = () => {
-  const { wallet } = useConnect();
+  const { isLogin, setIsLogin } = useContext(UserContext);
+
+
   
+  
+  const connectNear = () => {
+    
 
-  const connectNear = () => wallet?.requestSignIn();
+    if(!props.near.walletConnection.isSignedIn()) {
+
+      props.near.walletConnection.requestSignIn(
+      {
+        contractId: "nft-contract.boomboom.testnet",
+      },
+      "UNICUS", // title. Optional, by the way
+      "", // successUrl. Optional, by the way
+      "" // failureUrl. Optional, by the way
+    );
+    } else {
+      console.log("wallet is already connected");
+    }
+    sendMeta();
+    setIsLogin(true);
+  };
+
+  const sendMeta = async () => {
+    let functionCallResult = await props.near.walletConnection.account().functionCall({
+      contractId: "nft-contract.boomboom.testnet",
+      methodName: "new_default_meta",
+      args: {
+        owner_id: props.near.nearConfig.contractName,
+      },
+      attachedDeposit: new BN(0),
+      walletMeta: "",
+      walletCallbackUrl: "",
+    });
+
+    if (functionCallResult) {
+      console.log("new meta data created: ");
+    } else {
+      console.log("meta data not created");
+    }
+  };
 
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
@@ -86,7 +136,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
                         Metamask
                         <img src={metamaskLogo} alt="metamask" />
                     </button>
-                    <button onClick={() => setVisible(true)}>
+                    <button onClick={() => setVisible(true)}>  
                         SolanaConnect
                         <img src={phantomLogo} alt="Phantom" />
                     </button>
