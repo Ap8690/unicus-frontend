@@ -29,6 +29,7 @@
     "near-api-js": "^0.45.1",
     "node-polyfill-webpack-plugin": "^2.0.0",
     "react": "^18.1.0",
+    "react-bootstrap": "^2.4.0",
     "react-dom": "^18.1.0",
     "react-dropzone": "^14.2.2",
     "react-icons": "^4.4.0",

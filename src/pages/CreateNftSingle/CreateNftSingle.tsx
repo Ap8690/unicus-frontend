@@ -15,7 +15,8 @@ import * as nearAPI from 'near-api-js';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Input from '../../components/Input/Input';
-import { useState } from 'react';
+import { useState , useRef } from 'react';
+import { Image } from "react-bootstrap";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -24,6 +25,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import AddProperties from '../../components/modals/Add Properties/AddProperties'
+
 
 type Props = {
   currentUser: any;
@@ -35,7 +37,9 @@ function CreateNftSingle(props: any): JSX.Element {
   const [name, setName] = useState('')
   const [extLink, setExtlink] = useState('')
   const [description, setDescription] = useState('')
-  const [imageSrc, setImageSrc] = useState<any>([]);
+  const [fileSrc, setFileSrc] = useState<any>();
+  const [royalty, setRoyalty] = useState<any>(5);
+  const [royaltyError, setRoyaltyError] = useState<boolean>(false);
   const [price, setPrice] = useState('')
   const [chain, setChain] = useState('ethereum');
   const [unlockContent, setUnlockContent] = useState('')
@@ -45,6 +49,7 @@ function CreateNftSingle(props: any): JSX.Element {
   const [openProp, setOpenProp] = useState(false)
   const [openStats, setOpenStats] = useState(false)
   const [openLevels, setOpenLevels] = useState(false)
+  const inputFile = useRef(null);
   const [properties, setProperties] = useState([
     {
       property: '',
@@ -88,11 +93,25 @@ function CreateNftSingle(props: any): JSX.Element {
     setOpenLevels(true);
   };
 
+  const handleRoyaltyChange = (e: any) => {
+    setRoyalty(e.target.value);
+
+    const reg = /^[0-9-+()]*$/;
+    if (reg.test(e.target.value)) {
+    }
+  };
+
   const handleClose = (value:any) => {
     setOpenProp(false);
     setOpenStats(false);
     setOpenLevels(false);
 
+  };
+
+  const uploadFile = (e) => {
+    console.log(e.target.files);
+
+    setFileSrc(e.target.files[0]);
   };
 
   const {
@@ -112,7 +131,8 @@ function CreateNftSingle(props: any): JSX.Element {
         metadata: {
           title: `${name}`,
           description: `${description}`,
-          media: `${extLink}`,
+          media: `${fileSrc}`,
+          //extra: `${extLink}`,
         },
         gas: "200000000000000",
         receiver_id: props.near.currentUser,
@@ -167,6 +187,37 @@ function CreateNftSingle(props: any): JSX.Element {
         </div>
         <div className="body">
           <div className='input-fields'>
+            <div className="upload-file">
+              <div className="field-title">Upload File</div>
+              <button
+                className="field"
+                onClick={() => inputFile.current.click()}
+              >
+                {fileSrc && fileSrc.name.split(".").pop() == "mp4" ? (
+                  <video width="100%">
+                    <source
+                      src={fileSrc ? URL.createObjectURL(fileSrc) : ""}
+                      type="video/mp4"
+                    />
+                  </video>
+                ) : (
+                  fileSrc && (
+                    <Image
+                      src={URL.createObjectURL(fileSrc)}
+                      alt=""
+                      style={{ width: "90%" }}
+                    />
+                  )
+                )}{" "}
+              </button>
+              <input
+                type="file"
+                id="file"
+                ref={inputFile}
+                onChange={(e) => uploadFile(e)}
+                className="d-none"
+              />{" "}
+            </div>
             <div className="basic-info">
               <Input title='Name' placeholder={'Item Name'} state={name} setState={setName} />
               <Input title='External Link' placeholder={'Item url'} state={extLink} setState={setExtlink} />
@@ -208,6 +259,16 @@ function CreateNftSingle(props: any): JSX.Element {
                   </button>
                 </div>
                 <Input title={'Price'} placeholder="100" state={price} setState={setPrice} number />
+                <Input
+                  title={"Royalty"}
+                  placeholder="0 - 99 %"
+                  value={royalty}
+                  onChange={(e) => handleRoyaltyChange(e)}
+                  number
+                />
+                {royaltyError && (
+                  <span>Royalty Should be between 0 - 99 %</span>
+                )}
               </div>
               <div className='select-collection'>
                 <FormControl variant="standard" sx={{ m: 0, minWidth: 120, width: '100%' }}>
