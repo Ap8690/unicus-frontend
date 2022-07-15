@@ -251,6 +251,7 @@ const CreateNftSingle = () => {
 
           const createNFT = getCreateNftContract(chain);
 
+          try{
           await createNFT.methods
             .batchMint(
               [
@@ -260,12 +261,12 @@ const CreateNftSingle = () => {
             )
             .send({
               from: "0x41804064E354170d36b7Cbc0e6B49E413106B12A",
-              gas: 3000000,
             })
-            .then((val) => console.log(val))
-            .catch((err) => {
-              console.log(err);
-            });
+          }catch(e){
+            console.log(e);
+            
+          }
+            
           const response: any = await axios
             .post(`${BASE_URL}/nft/upload-pinata`, formData, axiosConfig)
             .catch((err: any) => {

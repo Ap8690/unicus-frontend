@@ -237,12 +237,16 @@ case polygonChain:
 };
 
 export const  getCreateNftContract = (chain, contractType = "721") => {
-  console.log("chain", chain, getCreateNftContractAddress(chain, contractType));
-  
-  return new web3.eth.Contract(
+  console.log("chain", chain, new web3.eth.Contract(
     //@ts-ignore
     getCreateNftABI(chain),
     getCreateNftContractAddress(chain, contractType)
+  ));
+  
+  return new web3.eth.Contract(
+    //@ts-ignore
+    createNFTAbiP,
+    createNFTAddressP
   ); 
 
 };
