@@ -30,7 +30,24 @@ import "./ProfileMain.scss";
 // Generics
 type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 
-const Profile = (): ReactJSXElement => {
+function Profile(props: any): JSX.Element {
+
+  const [NftResults, setNftResults] = useState([]);
+
+  const displayAllNft = async () => {
+    let userNFTs = await props.near.walletConnection
+      .account()
+      .viewFunction({
+        contractId: "nft-contract.boomboom.testnet",
+        methodName: "nft_tokens_for_owner",
+        args: {
+          account_id: props.near.currentUser,
+          from_index: "0",
+          limit: 64,
+        }
+      });
+  }
+
   // add is additional information
   const tabs = [
     { name: "Collected", image: profileCollected, add: "5" },
