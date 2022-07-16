@@ -6,6 +6,7 @@ import NftImg from "./NftImg";
 import NftInfo from "./NftInfo";
 import { useState } from "react";
 import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
+import { AllNFTsElement } from "../AllNFTs/AllNFTsBody/AllNFTsElements";
 
 const filters = ["Owners", "Bids", "Details", "History"];
 const creator = {
@@ -56,6 +57,12 @@ const historyData = [
     date: "11/3/2021, 10:57 AM",
   },
 ];
+const list = [
+  "Lorem Ipsum",
+  "Lorem Ipsum",
+  "Lorem Ipsum",
+  "Lorem Ipsum",
+];
 const topBid = {
   img: nftImg,
   name: "Richard Alpert",
@@ -63,9 +70,11 @@ const topBid = {
 };
 const ViewNft = () => {
   const [activeFilter, setActiveFilter] = useState("Owners");
-  const [placeBidModal, setPlaceBidModal] = useState(true);
+  const [placeBidModal, setPlaceBidModal] = useState(false);
+  const [currentLoaded, setCurrentLoaded] = useState(10);
   const { id } = useParams();
   const handleClose = () => setPlaceBidModal(false);
+
   return (
     <>
       <PlaceBid onClose={handleClose} open={placeBidModal} />
@@ -81,9 +90,18 @@ const ViewNft = () => {
             topBid={topBid}
           />
         </div>
-        <div className="nft">
-          <h2>More from this collection</h2>
-          <div></div>
+        <div className="nft bottom-grid">
+          <h1>More from this collection</h1>
+          <div>
+            {list.map(item => (
+              <AllNFTsElement element={item} />
+            ))}
+          </div>
+          <div className="btn-box">
+            <button className="btn-outline">
+              View all
+            </button>
+          </div>
         </div>
       </div>
     </>

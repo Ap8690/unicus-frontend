@@ -3,20 +3,24 @@ import image from "../../../assets/images/allNFTImage.png";
 import likes from "../../../assets/svgs/likes.svg";
 
 // Components
-const AllNFTsElement = ({ element }) => {
+export const AllNFTsElement = ({ element }) => {
   return (
     <div className="all-nfts-element">
       <img className="element-image" src={image} alt={element} />
       <div className="info">
-        <div>{element}</div>
-        <div>Price</div>
-        <div>{element} #123</div>
-        <div>0.05 ETH </div>
+        <div>
+          <div>{element}</div>
+          <div>Price</div>
+        </div>
+        <div>
+          <div>{element} #123</div>
+          <div>0.05 ETH </div>
+        </div>
       </div>
       <div className="buy">
-        <a href="#" className="buy-link">
-          Buy Now
-        </a>
+        <button className="buy-link">
+          BUY NOW
+        </button>
         <div className="likes">
           <img src={likes} alt="Likes" />
           37
@@ -36,8 +40,8 @@ const AllNFTsElements = ({ list, arrangement, updateLoaded, ifShowButton }) => {
   };
   const btnStyle = !ifShowButton
     ? {
-        display: "none",
-      }
+      display: "none",
+    }
     : {};
   return (
     <div className="all-nfts-elements">

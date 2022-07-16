@@ -3,335 +3,414 @@
 @use "/src/styles/mixins";
 
 .view-nft {
-  display: flex;
-  max-width: 1290px;
-  width: 100%;
-  padding: 6rem 2rem;
-
-  .nft {
-    @include mixins.flex(flex-start, space-between);
-    gap: 3rem;
-    position: relative;
-  }
-}
-
-.nft-img-box {
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-  height: 700px;
-  width: 600px;
-
-  // width: ;
-  .nft-img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-  }
-
-  .nft-interactions {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    padding: 1rem;
-    background-color: rgba($color: #fff, $alpha: 0.2);
-
-    button {
-      width: 100%;
-      @include mixins.flex-center();
-      border-right: 1px solid #fff;
-      font-size: 1.5rem;
-      font-weight: 300;
-      gap: 0.5rem;
-
-      img {
-        width: 1.4rem;
-        height: 1.4rem;
-      }
-    }
-
-    button:last-child {
-      border: none;
-    }
-  }
-}
-
-.nft-info {
-  h2 {
-    font-size: fonts.$font-size-4xl;
-    margin: 0 0 1rem;
-  }
-
-  .nft-price {
-    font-size: fonts.$font-size-lg;
-    font-weight: 300;
-    @include mixins.flex(center, flex-start);
-    gap: 1rem;
-    margin-bottom: 2rem;
-
-    span:first-child {
-      @include mixins.text-gradient();
-    }
-  }
-
-  .nft-description {
-    font-weight: 300;
-    margin-bottom: 1.5rem;
-
-    button {
-      padding: 0;
-      margin-top: 1rem;
-      font-size: fonts.$font-size-xs;
-    }
-  }
-
-  .nft-creator {
-    @include mixins.flex-col(start, start);
-    gap: 1rem;
-
-    span {
-      font-size: fonts.$font-size-lg;
-    }
-
-    >div {
-      @include mixins.flex(center, flex-start);
-      gap: 1rem;
-    }
-  }
-
-  .filters {
-    width: 100%;
-    @include mixins.flex(center, space-between);
-    padding: 2rem 0 0;
-    position: relative;
-    color: rgba($color: #fff, $alpha: 0.6);
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 4px;
-      background-color: rgba($color: #f5f5f5, $alpha: 0.1);
-    }
-
-    .filter-btn {
-      padding-bottom: 1rem;
-      position: relative;
-
-      &:last-child {
-        margin-right: 4rem;
-      }
-    }
-
-    .filter-btn.active {
-      color: #fff;
-
-      &::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 4px;
-        z-index: 10;
-        background: colors.$gradient-blue;
-      }
-    }
-  }
-
-  .bid-buy-box {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-
-    .service-fee {
-      font-size: fonts.$font-size-xs;
-      font-weight: 500;
-      margin-left: 1rem;
-    }
-
-    .btn-box {
-      gap: 1rem;
-      display: flex;
-
-      button {
-        width: 100%;
-        border-radius: 9999999px;
-      }
-    }
-
-    .user-info {
-      display: flex;
-      gap: 1rem;
-      // align-items: center;
-      font-weight: 600;
-
-      >div {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-      }
-
-      .blue-text {
-        color: #5d5fef;
-      }
-
-      .price-info {
-        display: flex;
-        gap: 1rem;
-      }
-
-      .price-info,
-      .blue-head {
-        font-size: fonts.$font-size-2xl !important;
-      }
-    }
-  }
-}
-
-.nft-history-box {
-  margin: 1.5rem 0;
-  @include mixins.flex-col(start, flex-start);
-  gap: 1rem;
-  height: 14rem;
-  overflow-y: scroll;
-
-  .nft-history {
-    @include mixins.flex(center, flex-start);
-    gap: 1rem;
-
-    .msg {
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-    }
-
-    .info {
-      color: #ffffff99;
-      font-size: fonts.$font-size-sm;
-    }
-  }
-
-  &::-webkit-scrollbar {
-    background-color: #202324;
-    color: #aba499;
-    border-radius: 10px;
-    width: 10px;
-  }
-
-  &::-webkit-scrollbar-corner {
-    background-color: #181a1b;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: colors.$gradient-blue;
-    border-radius: 10px;
-  }
-}
-
-.user-img {
-  width: 4rem;
-  height: 4rem;
-  object-fit: cover;
-  border-radius: 9999px;
-}
-
-.bid-buy-box {
-  background: linear-gradient(to bottom, #060714, #06071400);
-  padding: 2rem;
-  border: 1px solid #262840;
-  border-radius: 20px;
-}
-
-@include mixins.max-width(1024px) {
-  .nft-img-box {
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    height: 600px;
-    width: 500px;
-
-    // width: ;
-    .nft-img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-    }
-  }
-}
-
-@include mixins.max-width(992px) {
-  .nft-img-box {
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    height: 450px;
-    width: 350px;
-
-    // width: ;
-    .nft-img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-    }
-  }
-}
-
-@include mixins.max-width(768px) {
-  .nft-img-box {
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    height: 100%;
+    max-width: 1290px;
+    gap: 6rem;
     width: 100%;
-
-    // width: ;
-    .nft-img {
-      height: 400px;
-      width: 100%;
-      object-fit: cover;
-    }
-  }
-
-  .nft-info {
-    h2 {
-      font-size: fonts.$font-size-4xl;
-      margin: 0 0 1rem;
-      text-align: center;
-    }
-
-    .nft-price {
-      font-size: fonts.$font-size-lg;
-      font-weight: 300;
-      @include mixins.flex(center, center);
-      gap: 1rem;
-      margin-bottom: 2rem;
-
-      span:first-child {
-        @include mixins.text-gradient();
-      }
-    }
-
-    .bid-buy-box {
-      padding: 1.5rem;
-
-      button {
-        font-size: fonts.$font-size-sm;
-        padding: 1rem 0.5rem;
-      }
-    }
-  }
-
-  .view-nft {
     padding: 6rem 2rem;
 
     .nft {
-      @include mixins.flex-col(center, space-between);
-      gap: 3rem;
-      position: relative;
-      width: 100%;
+        @include mixins.flex(flex-start, space-between);
+        gap: 3rem;
+        position: relative;
+        &.bottom-grid {
+            flex-direction: column;
+            .btn-box {
+                display: flex;
+                justify-content: center;
+                button {
+                    width: fit-content;
+                    border: 2px solid #5d5fef80;
+                    padding: 1rem 2rem;
+                    border-radius: 14px;
+                }
+            }
+            & > div {
+                display: grid;
+                width: 100%;
+                grid-template-columns: repeat(4, 1fr);
+                justify-items: center;
+                gap: 2rem;
+                .all-nfts-element {
+                    width: fit-content;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                    .element-image {
+                        width: 100%;
+                        height: 280px;
+                        object-fit: cover;
+                        border-radius: 16px;
+                    }
+                    .info {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.5rem;
+                        font-size: fonts.$font-size-sm;
+                        padding: 0 0.5rem;
+                        & > div {
+                            display: flex;
+                            justify-content: space-between;
+                        }
+                    }
+                    .buy {
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 0.5rem;
+                        border-top: 1px solid #ffffff1a;
+                        margin-top: 0.5rem;
+                        .buy-link {
+                            font-weight: 700;
+                            color: colors.$color-purple-1;
+                        }
+                        .likes {
+                            display: flex;
+                            align-items: center;
+                            gap: 0.3rem;
+                        }
+                    }
+                }
+            }
+        }
     }
-  }
+}
+
+.nft-img-box {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    height: 700px;
+    width: 600px;
+
+    // width: ;
+    .nft-img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .nft-interactions {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        display: flex;
+        padding: 1rem;
+        background-color: rgba($color: #fff, $alpha: 0.2);
+
+        button {
+            width: 100%;
+            @include mixins.flex-center();
+            border-right: 1px solid #fff;
+            font-size: 1.5rem;
+            font-weight: 300;
+            gap: 0.5rem;
+
+            img {
+                width: 1.4rem;
+                height: 1.4rem;
+            }
+        }
+
+        button:last-child {
+            border: none;
+        }
+    }
+}
+
+.nft-info {
+    h2 {
+        font-size: fonts.$font-size-4xl;
+        margin: 0 0 1rem;
+    }
+
+    .nft-price {
+        font-size: fonts.$font-size-lg;
+        font-weight: 300;
+        @include mixins.flex(center, flex-start);
+        gap: 1rem;
+        margin-bottom: 2rem;
+
+        span:first-child {
+            @include mixins.text-gradient();
+        }
+    }
+
+    .nft-description {
+        font-weight: 300;
+        margin-bottom: 1.5rem;
+
+        button {
+            padding: 0;
+            margin-top: 1rem;
+            font-size: fonts.$font-size-xs;
+        }
+    }
+
+    .nft-creator {
+        @include mixins.flex-col(start, start);
+        gap: 1rem;
+
+        span {
+            font-size: fonts.$font-size-lg;
+        }
+
+        > div {
+            @include mixins.flex(center, flex-start);
+            gap: 1rem;
+        }
+    }
+
+    .filters {
+        width: 100%;
+        @include mixins.flex(center, space-between);
+        padding: 2rem 0 0;
+        position: relative;
+        color: rgba($color: #fff, $alpha: 0.6);
+
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 4px;
+            background-color: rgba($color: #f5f5f5, $alpha: 0.1);
+        }
+
+        .filter-btn {
+            padding-bottom: 1rem;
+            position: relative;
+
+            &:last-child {
+                margin-right: 4rem;
+            }
+        }
+
+        .filter-btn.active {
+            color: #fff;
+
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 4px;
+                z-index: 10;
+                background: colors.$gradient-blue;
+            }
+        }
+    }
+
+    .bid-buy-box {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .service-fee {
+            font-size: fonts.$font-size-xs;
+            font-weight: 500;
+            margin-left: 1rem;
+        }
+
+        .btn-box {
+            gap: 1rem;
+            display: flex;
+
+            button {
+                width: 100%;
+                border-radius: 9999999px;
+            }
+        }
+
+        .user-info {
+            display: flex;
+            gap: 1rem;
+            // align-items: center;
+            font-weight: 600;
+
+            > div {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+            }
+
+            .blue-text {
+                color: #5d5fef;
+            }
+
+            .price-info {
+                display: flex;
+                gap: 1rem;
+            }
+
+            .price-info,
+            .blue-head {
+                font-size: fonts.$font-size-2xl !important;
+            }
+        }
+    }
+}
+
+.nft-history-box {
+    margin: 1.5rem 0;
+    @include mixins.flex-col(start, flex-start);
+    gap: 1rem;
+    height: 14rem;
+    overflow-y: scroll;
+
+    .nft-history {
+        @include mixins.flex(center, flex-start);
+        gap: 1rem;
+
+        .msg {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .info {
+            color: #ffffff99;
+            font-size: fonts.$font-size-sm;
+        }
+    }
+
+    &::-webkit-scrollbar {
+        background-color: #202324;
+        color: #aba499;
+        border-radius: 10px;
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-corner {
+        background-color: #181a1b;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: colors.$gradient-blue;
+        border-radius: 10px;
+    }
+}
+
+.user-img {
+    width: 4rem;
+    height: 4rem;
+    object-fit: cover;
+    border-radius: 9999px;
+}
+
+.bid-buy-box {
+    background: linear-gradient(to bottom, #060714, #06071400);
+    padding: 2rem;
+    border: 1px solid #262840;
+    border-radius: 20px;
+}
+
+@include mixins.max-width(1024px) {
+    .nft-img-box {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        height: 600px;
+        width: 500px;
+
+        // width: ;
+        .nft-img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
+@include mixins.max-width(992px) {
+    .view-nft {
+        .nft {
+            &.bottom-grid {
+                & > div {
+                    grid-template-columns: repeat(2, 1fr);
+                    .all-nfts-element {
+                        .element-image {
+                            width: 100%;
+                            height: 180px;
+                            object-fit: cover;
+                            border-radius: 16px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .nft-img-box {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        height: 450px;
+        width: 350px;
+
+        // width: ;
+        .nft-img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
+@include mixins.max-width(768px) {
+    .nft-img-box {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        height: 100%;
+        width: 100%;
+
+        // width: ;
+        .nft-img {
+            height: 400px;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .nft-info {
+        h2 {
+            font-size: fonts.$font-size-4xl;
+            margin: 0 0 1rem;
+            text-align: center;
+        }
+
+        .nft-price {
+            font-size: fonts.$font-size-lg;
+            font-weight: 300;
+            @include mixins.flex(center, center);
+            gap: 1rem;
+            margin-bottom: 2rem;
+
+            span:first-child {
+                @include mixins.text-gradient();
+            }
+        }
+
+        .bid-buy-box {
+            padding: 1.5rem;
+
+            button {
+                font-size: fonts.$font-size-sm;
+                padding: 1rem 0.5rem;
+            }
+        }
+    }
+
+    .view-nft {
+        padding: 6rem 2rem;
+
+        .nft {
+            @include mixins.flex-col(center, space-between);
+            gap: 3rem;
+            position: relative;
+            width: 100%;
+        }
+    }
 }
