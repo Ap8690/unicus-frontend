@@ -89,7 +89,7 @@ const App = () => {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/readblog/:id" element={<ReadBlog />} />
                 <Route
-                  path="/connect-wallet/:redirect"
+                  path="/connect-wallet/*"
                   element={<ConnectWallet />}
                 />
                 <Route path="/create-nft" element={<CreateNftSelector />} />

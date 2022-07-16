@@ -52,7 +52,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
   const { setVisible } = useWalletModal();
   const navigate = useNavigate();
 
-  let { redirect } = useParams();
+  let redirect  = useParams();
 
   //@ts-ignore
   /* const [phantom, setPhantom] = useState<Phantom | null>(null);*/

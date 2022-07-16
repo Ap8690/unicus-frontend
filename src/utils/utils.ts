@@ -8,8 +8,8 @@ import { ethereumCoinbase, getMetamaskProvider, metaMaskProvider, tronWeb, walle
 import { createNFTAbiE, createNFTAddressE } from "../Redux/Blockchain/Ethereum/createNFT";
 import { MEWethereum } from "../Redux/Blockchain/mewConfig";
 import { createNFTAbiP, createNFTAddressP } from "../Redux/Blockchain/Polygon/createNFT";
-import web3 from "../web3";
-import { ACCESS_TOKEN } from "./constants";
+import web3, { setWeb3Provider } from "../web3";
+import { ACCESS_TOKEN, RPC_URLS } from "./constants";
 
 export const connectWallet = async (network) => {
   try{
@@ -99,6 +99,7 @@ export const connToMetaMask = async () => {
     const accounts = await metaMaskProvider.request({
       method: "eth_requestAccounts",
     });
+    setWeb3Provider(metaMaskProvider);
     localStorage.setItem("walletType", "Metamask");
     return accounts[0]
   } catch (error: any) {
@@ -111,6 +112,7 @@ export const connToCoinbase = async () => {
     // dispatch(checkAndAddNetwork())
     const accounts = await ethereumCoinbase.enable();
     // coinbaseWeb3.eth.defaultAccount = accounts[0]
+    setWeb3Provider(ethereumCoinbase);
     localStorage.setItem("walletType", "Coinbase");
     return accounts[0];
   } catch (error: any) {
@@ -122,6 +124,7 @@ export const connToWalletConnector =
   async () => {
     try {
       const accounts = await walletConnectorProvider.enable();
+      setWeb3Provider(walletConnectorProvider);
       localStorage.setItem("walletType", "WalletConnect");
       return accounts[0];
     } catch (error: any) {
@@ -134,6 +137,7 @@ export const connToMew = async () => {
     const accounts = await MEWethereum.request({
       method: "eth_requestAccounts",
     });
+    setWeb3Provider(MEWethereum);
     localStorage.setItem("walletType", "MEW");
     return accounts[0];
   } catch (error: any) {
@@ -236,12 +240,9 @@ case polygonChain:
   }
 };
 
-export const  getCreateNftContract = (chain, contractType = "721") => {
-  console.log("chain", chain, new web3.eth.Contract(
-    //@ts-ignore
-    getCreateNftABI(chain),
-    getCreateNftContractAddress(chain, contractType)
-  ));
+export const  getCreateNftContract =async (chain, contractType = "721") => {
+  const web3 = new Web3(RPC_URLS[80001])
+  console.log("chain", chain,await web3.eth.getAccounts());
   
   return new web3.eth.Contract(
     //@ts-ignore

@@ -23,3 +23,12 @@ export const GET_COUNTDOWN: string = "GET_COUNTDOWN";
 export const GET_NETWORK_ID: string = "GET_NETWORK_ID";
 export const GET_ASSET_DATA: string = "GET_ASSET_DATA";
 export const PROVIDER: string = "PROVIDER";
+
+export const RPC_URLS = {
+  1: "https://mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0",
+  4: "https://rinkeby.infura.io/v3/7834b610dbc84b509297a8789ca345e0",
+  137: "https://polygon-mainnet.infura.io/v3/7834b610dbc84b509297a8789ca345e0",
+  80001: "https://rpc-mumbai.maticvigil.com",
+  97: "https://data-seed-prebsc-1-s1.binance.org:8545",
+  56: "https://bsc-dataseed.binance.org/",
+};

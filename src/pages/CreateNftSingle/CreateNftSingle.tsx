@@ -249,7 +249,7 @@ const CreateNftSingle = () => {
             },
           };
 
-          const createNFT = getCreateNftContract(chain);
+          const createNFT = await getCreateNftContract(chain);
 
           try{
           await createNFT.methods
