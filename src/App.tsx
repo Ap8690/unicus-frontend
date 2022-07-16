@@ -92,7 +92,7 @@ function App(props: any): JSX.Element {
                           <Route path="/stats/ranking" element={<Ranking />} />
                           <Route path="/stats/activity" element={<Activity />} />
                           <Route path="/explore" element={<Explore />} />
-                          <Route path="/marketplace" element={<MarketPlace />} />
+                          <Route path="/marketplace" element={<MarketPlace near={props} />} />
                           <Route path="/create-store" element={<CreateStore />} />
                           <Route path="/all-nfts" element={<AllNFTs />} />
                           <Route path="/auctions" element={<Auctions />} />

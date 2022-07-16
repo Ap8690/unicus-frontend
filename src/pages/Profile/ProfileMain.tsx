@@ -2,6 +2,7 @@
 import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { Routes, Route, useLocation } from "react-router-dom";
+import * as nearAPI from 'near-api-js';
 
 // Components
 import User from "./User/User";
@@ -33,6 +34,58 @@ type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 function Profile(props: any): JSX.Element {
 
   const [NftResults, setNftResults] = useState([]);
+  const [assetPrice, setAssetprice] = useState("");
+  const [minimum, setMinimum] = useState("");
+  const [showLoader, setShowLoader] = useState(false);
+ // const [nftMarketResults, setNftMarketResults] = useState([]);
+
+
+  const handleInputChange = (e) => {
+    setAssetprice(e.target.value);
+  };
+
+  useEffect(() => {
+    if (!showLoader) {
+      displayAllNft();
+      //loadSaleItems();
+    }
+  }, [showLoader]);
+
+  /*const loadSaleItems = async () => {
+    let nftTokens = await props.near.walletConnection
+      .account()
+      .viewFunction({
+        contractId: "nft-contract.boomboom.testnet",
+        methodName: "nft_tokens",
+        args: {
+        from_index: "0",
+        limit: 64,
+      }});
+
+    let saleTokens = await props.near.walletConnection
+      .account()
+      .viewFunction({
+        contractId: "market_contract.boomboom.testnet",
+        methodName: "get_sales_by_nft_contract_id",
+        args: {
+          nft_contract_id: "nft-contract.boomboom.testnet",
+          from_index: "0",
+          limit: 64,
+        }
+        });
+
+      let sales = [];
+
+    for (let i = 0; i < nftTokens.length; i++) {
+      const { token_id } = nftTokens[i];
+      let saleToken = saleTokens.find(({ token_id: t }) => t === token_id);
+      if (saleToken !== undefined) {
+        sales[i] = Object.assign(nftTokens[i], saleToken);
+    
+      }
+    }
+    setNftMarketResults(sales);
+  };*/
 
   const displayAllNft = async () => {
     let userNFTs = await props.near.walletConnection
@@ -46,7 +99,58 @@ function Profile(props: any): JSX.Element {
           limit: 64,
         }
       });
+    setNftResults(userNFTs);
+    setShowLoader(true);
   }
+
+  const {
+    utils: {
+      format: { parseNearAmount},
+    },
+  } = nearAPI;
+
+
+  const approveNFTForSale = async (token_id) => {
+    sendStorageDeposit();
+    let sale_conditions = {
+      sale_conditions: assetPrice, // set asset price in ui
+    };
+    await props.near.walletConnection.account().functionCall({
+      contractId: "nft-contract.boomboom.testnet",
+      methodName: "nft_approve",
+      args: {
+        token_id: token_id,
+        account_id: "market_contract.boomboom.testnet",
+        msg: JSON.stringify(sale_conditions),
+      },
+      attachedDeposit: parseNearAmount("0.01"),
+    });
+  };
+
+  const getMinimumStorage = async () => {
+    let minimum_balance = await props.near.walletConnection
+      .account()
+      .viewFunction({
+        contractId: "market_contract.boomboom.testnet",
+        methodName: "storage_minimum_balance"
+      });
+    setMinimum(minimum_balance);
+
+  };
+
+  const sendStorageDeposit = async () => {
+    getMinimumStorage();
+    await props.near.walletConnection.account().functionCall({
+      contractId: "market_contract.boomboom.testnet" ,
+      methodName: "storage_deposit",
+      args: {},
+
+      attachedDeposit: minimum,
+    });
+  }
+
+
+
 
   // add is additional information
   const tabs = [
@@ -143,6 +247,44 @@ function Profile(props: any): JSX.Element {
   }, [search]);
   return (
     <div className="profile">
+      <div>
+        {NftResults
+        ? NftResults.map((nft, index) => (
+          <div>
+            <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          approveNFTForSale(nft.metadata.title);
+                        }}
+                      >
+                        <div className="form-in-wrapper">
+                          <h3 className="text-center pb-1">SELL NFT</h3>
+
+                          <div className="box-wrapper">
+                            <div className="box-in-wrapper">
+                              <div className="input-wrapper">
+                                <input
+                                  className="input-box"
+                                  placeholder="Add sale price"
+                                  name="assetPrice"
+                                  type="text"
+                                  value={assetPrice}
+                                  onChange={handleInputChange}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="form-btn-wrapper">
+                            <button className="form-btn">Sell now</button>
+                          </div>
+                        </div>
+                      </form>
+            
+          </div>
+        ))
+      : "NFTs not found"}
+      </div>
       <User user={user} />
       <ProfileNavigation
         tabs={tabs}

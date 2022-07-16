@@ -16,7 +16,23 @@ import MarketPlaceCreateAndSell from "./MarketPlaceCreateAndSell/MarketPlaceCrea
 import MarketPlaceDiscover from "./MarketPlaceDiscover/MarketPlaceDiscover";
 import StayInLoop from "../../components/StayInLoop/StayInLoop";
 
-const MarketPlace = () => {
+function MarketPlace(props: any): JSX.Element {
+
+  const loadSaleItems = async () => {
+    let nftTokens = await props.near.walletConnection
+      .account()
+      .viewFunction({
+        contractId: "nft-contract.boomboom.testnet",
+        methodName: "nft_tokens",
+        args: {
+          from_index: "0",
+          limit: 64,
+        }
+      });
+  };
+
+  
+  
   const saleStats = {
     artworks: "37k",
     artists: "27k",
