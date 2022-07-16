@@ -4,10 +4,10 @@ import useExplorer from "../useExplorer";
 const Element = ({ element }) => (
   <div className="market-place-featured-element">
     <div className="nft-image-size">
-      <img src={element.cloudinaryUrl} alt={element.name} />
+      <img src={element.image} alt={element.heading} />
     </div>
-    <h3 className="heading">{element.name?.length > 15 ? element.name?.slice(0,15) : element.name}</h3>
-    <p className="text text-center">{element.description}</p>
+    <h3 className="heading">{element.heading?.length > 15 ? element.heading?.slice(0,15) : element.heading}</h3>
+    <p className="text text-center">{element.text}</p>
   </div> 
 );
 const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll }) => {

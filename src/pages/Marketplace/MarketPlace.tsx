@@ -184,8 +184,8 @@ const MarketPlace = () => {
   return (
     <section className="market-place">
       <BlueBackground />
-      <MarketPlaceMain saleStats={saleStats} />
-      <MarketPlaceFeatured list={featuredList} />
+      <MarketPlaceMain saleStats={saleStats} noStats={false} storeTitle={'Create, Sell & Collect Your Own Creative NFT'} />
+      <MarketPlaceFeatured list={featuredList} title={"Featured Artworks"} />
       <MarketPlaceTrending list={trendingList} />
       <MarketPlaceAuctions list={auctionsList} />
       <MarketPlaceTopCollections list={topCollectionsList} />

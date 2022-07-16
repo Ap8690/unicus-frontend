@@ -48,6 +48,8 @@ import Auctions from "./pages/Auctions/Auctions";
 import Profile from "./pages/Profile/ProfileMain";
 import { IStore } from "./models/Store";
 import ViewNft from "./pages/ViewNft/ViewNft";
+import StoreHomepage from "./pages/StoreHomepage/StoreHomepage";
+import StoreSettings from "./pages/StoreSettings/StoreSettings";
 // import NFTById from "./components/NFTById/NFTById";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -101,6 +103,8 @@ const App = () => {
                 <Route path="/stats/ranking" element={<Ranking />} />
                 <Route path="/stats/activity" element={<Activity />} />
                 <Route path="/explore" element={<Explore />} />
+                <Route path="/store" element={<StoreHomepage />} />
+                <Route path="/store/settings" element={<StoreSettings />} />
                 {/* <Route
                   path="/nft/:chain/:contractAddress/:id"
                   element={<NFTById general={store.general}/>}
