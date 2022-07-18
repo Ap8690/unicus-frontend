@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import Web3 from "web3";
 import { tronChain, bscChain, ethChain, polygonChain } from "../config";
+import { IStore } from "../models/Store";
 import {
   createNFTAbiB,
   createNFTAddressB,
@@ -11,7 +12,6 @@ import { marketPlaceAddressB } from "../Redux/Blockchain/Binance/marketPlace";
 import {
   ethereumCoinbase,
   getMetamaskProvider,
-  metaMaskProvider,
   tronWeb,
   walletConnectorProvider,
   walletLink,
@@ -47,6 +47,7 @@ export const connectWallet = async (network:any) => {
         method: "eth_requestAccounts",
       });
       address = accounts[0];
+     await SwitchNetwork(network);
     }
     console.log("add", address.toUpperCase(), userInfo);
     if(!userInfo){
@@ -66,24 +67,20 @@ export const connectWallet = async (network:any) => {
   }
 };
 
-export const AddNetworks = async (network: any) => {
+export const SwitchNetwork = async (network: any) => {
   try {
+    const metaMaskProvider:any = await getMetamaskProvider()
     await metaMaskProvider.request({
       method: "wallet_switchEthereumChain",
       params: [
         {
-          chainId:
-            network === "ethereum"
-              ? ethChain
-              : network === "bnb"
-              ? bscChain
-              : network === "polygon"
-              ? polygonChain
-              : null,
+          chainId: Web3.utils.toHex(network)
         },
       ],
     });
   } catch (error: any) {
+    console.log("err", error);
+    
     if (error?.code === 4902) {
       try {
         // await metaMaskProvider.request({
@@ -203,7 +200,7 @@ export const getUserWallet = async (network) => {
     console.log(e);
   }
 };
-export const connectWalletAndAddWallet = async (chain) => {};
+
 export const getNftContractAddress = (nft) => {
   if (nft.contractAddress != undefined) {
     return nft.contractAddress;
@@ -220,19 +217,16 @@ export const getChainSymbol = (chain) => {
     ? "TRX"
     : "ETH";
 };
-export const selectNetwork = (id: string) => {
+export const selectNetwork = (chain: string) => {
   const type =
-    id.toString() === bscChain
+    chain.toString() === bscChain
       ? "Binance"
-      : id.toString() === ethChain
+      : chain.toString() === ethChain
       ? "ETH"
-      : id.toString() === tronChain
+      : chain.toString() === tronChain
       ? "TRX"
       : "Matic";
-  //@ts-ignore
-  store.dispatch(AddNetworks(type));
-  //@ts-ignore
-  store.dispatch(getNetwork(id));
+  SwitchNetwork(chain);
   toast(`Your are now on ${type} chain`, {
     className: "toast-custom",
   });
@@ -285,22 +279,16 @@ export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
 };
 
 export const getCreateNftContract = async (chain, contractType = "721") => {
-  const web3 = new Web3(RPC_URLS[80001]);
-  console.log("chain", chain, await web3.eth.getAccounts());
 
   return new web3.eth.Contract(
     //@ts-ignore
-    createNFTAbiP,
-    createNFTAddressP
+    getCreateNftABI(chain),
+    getCreateNftContractAddress(chain)
   );
 };
 
-export const getMarketPlace = (chain, contractType = "721") => {
-  console.log("wecc", web3.currentProvider);
-  
-    
-  // console.log("web3", web3.eth.getAccounts().then((val)=> console.log(val)).catch((e)=> console.log(e)));
-  
+export const getMarketPlace = (chain, contractType = "721") => {  
+      
   switch (chain) {
     case ethChain:
       return contractType == "721"
@@ -347,6 +335,15 @@ export const getAuction = (chain, contractType = "721") => {
           new web3.eth.Contract(auctionAbiE, auctionAddressE)
         : //@ts-ignore
           new web3.eth.Contract(auctionAbiE1155, auctionAddressE1155);
+  }
+};
+
+export const getStoreName = () => {
+  const store = JSON.parse(localStorage.getItem("store")) as IStore;
+  if (store && store.general.storeName != "") {
+    return store.general.storeName;
+  } else {
+    return "Unicus";
   }
 };
 

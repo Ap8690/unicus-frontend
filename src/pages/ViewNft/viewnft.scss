@@ -164,6 +164,7 @@
 
     .filters {
         width: 100%;
+        justify-content: normal!important;
         @include mixins.flex(center, space-between);
         padding: 2rem 0 0;
         position: relative;

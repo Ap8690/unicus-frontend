@@ -31,6 +31,8 @@ const NftInfo = ({
   async function buyItem() {
     try {
       const address = await connectWallet(auction.chain);
+      console.log("buy item", address, auction);
+            
       const res = await getMarketPlace(
         auction.chain,
         auction.nftId.contractType

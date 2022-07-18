@@ -4,7 +4,7 @@ import { IAppearance } from "./Appearance";
 import { IGeneral } from "./General";
 import { ISeo } from "./Seo";
 
-export interface IStore {
+export interface .IStore {
   general: IGeneral;
   advance: IAdvance;
   appearance: IAppearance;

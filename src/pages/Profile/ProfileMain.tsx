@@ -32,7 +32,8 @@ import { tronChain, BASE_URL } from "../../config";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import { connectWallet, getCreateNftABI, getMarketPlace, getMarketPlaceContractAddress } from "../../utils/utils";
 import web3 from "../../web3";
-import { createSellApi } from "../../services/api/supplier";
+import { createSellApi, getNftByUserId } from "../../services/api/supplier";
+import { toast } from "react-toastify";
 
 // Generics
 type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
@@ -126,14 +127,28 @@ const Profile = (): ReactJSXElement => {
     },
   ];
   const [displayListing, setDisplayListing] = useState(listing);
+
+  const getNfts=async()=>{
+    try{
+    const res = await getNftByUserId()
+    console.log("res nfts",res);
+    
+    }catch(e){
+      console.log(e);
+      toast.error(e)
+      
+    }
+  }
   useEffect(() => {
     const q = search.toLowerCase();
     const temp = listing.filter((item) => item.item.toLowerCase().includes(q));
     setDisplayListing(temp);
   }, [search]);
 
+  useEffect(() => {
+    getNfts()
+  }, [])
   
-
   return (
     <div className="profile">
       <User user={user} />
