@@ -12,6 +12,22 @@ import questionImg from '../../assets/svgs/questionIcon.svg'
 import { getConfig } from '../../config'
 import * as nearAPI from 'near-api-js';
 
+import * as anchor from "@project-serum/anchor";
+import { Program } from "@project-serum/anchor";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { Button, Result } from "antd";
+import * as ipfsClient from "ipfs-http-client";
+
+import {
+  TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
+  createInitializeMintInstruction,
+  MINT_SIZE,
+} from "@solana/spl-token";
+
+
+
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Input from '../../components/Input/Input';
@@ -27,19 +43,23 @@ import Switch from '@mui/material/Switch';
 import AddProperties from '../../components/modals/Add Properties/AddProperties'
 
 
-type Props = {
-  currentUser: any;
-  nearConfig: any,
-  walletConnection: any;
-}
+
+
+const NFT_SYMBOL = "unicus-nft";
 
 function CreateNftSingle(props: any): JSX.Element {
   const [name, setName] = useState('')
   const [extLink, setExtlink] = useState('')
   const [description, setDescription] = useState('')
   const [fileSrc, setFileSrc] = useState<any>();
+  const [mintSuccess, setMintSuccess] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [minting, setMinting] = useState(false);
+  const [imageFileBuffer, setImageFileBuffer] = useState(null);
   const [royalty, setRoyalty] = useState<any>(5);
   const [royaltyError, setRoyaltyError] = useState<boolean>(false);
+  const { connection } = useConnection();
+  const wallet = useWallet();
   const [price, setPrice] = useState('')
   const [chain, setChain] = useState('ethereum');
   const [unlockContent, setUnlockContent] = useState('')
@@ -112,7 +132,10 @@ function CreateNftSingle(props: any): JSX.Element {
     console.log(e.target.files);
 
     setFileSrc(e.target.files[0]);
+    
   };
+
+  
 
   const {
     utils: {
@@ -120,7 +143,7 @@ function CreateNftSingle(props: any): JSX.Element {
     },
   } = nearAPI;
 
-
+  //NEAR nft mint
   const mintAssetToNft = async () => {
 
     let functionCallResult = await props.near.walletConnection.account().functionCall({
@@ -146,6 +169,18 @@ function CreateNftSingle(props: any): JSX.Element {
       console.log("nft not created");
     }
   };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   const modals = [
