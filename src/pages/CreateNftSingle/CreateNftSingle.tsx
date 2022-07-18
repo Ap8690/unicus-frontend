@@ -26,7 +26,7 @@ import {
   MINT_SIZE,
 } from "@solana/spl-token";
 
-import SolNftMintIDL from "../../idl/sol_mint_nft.json";
+
 
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -43,25 +43,7 @@ import Switch from '@mui/material/Switch';
 import AddProperties from '../../components/modals/Add Properties/AddProperties'
 
 
-type Props = {
-  currentUser: any;
-  nearConfig: any,
-  walletConnection: any;
-}
 
-const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
-  "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
-  );
-
-const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
-  "9FKLho9AUYScrrKgJbG1mExt5nSgEfk1CNEbR8qBwKTZ"
-  );
-
-const ipfs = ipfsClient.create({
-  host: "ipfs.infura.io",
-  port: 5001,
-  protocol: "https",
-});
 
 const NFT_SYMBOL = "unicus-nft";
 
@@ -150,11 +132,7 @@ function CreateNftSingle(props: any): JSX.Element {
     console.log(e.target.files);
 
     setFileSrc(e.target.files[0]);
-    const reader = new window.FileReader();
-    reader.readAsArrayBuffer(e.target.files[0]);
-    reader.onloadend = () => {
-      setImageFileBuffer(Buffer.from(reader.result));
-    };
+    
   };
 
   
@@ -197,198 +175,6 @@ function CreateNftSingle(props: any): JSX.Element {
 
 
 
-
-  //Solana NFT mint
-
-  const onCreate = async () => {
-    console.log("Connection: ", connection);
-    console.log("Wallet: ", wallet);
-
-
-    let uploadedImageUrl = await uploadImageToIpfs();
-    if (uploadImageToIpfs == null) return;
-    console.log("Uploaded image url: ", uploadedImageUrl);
-
-    let uploadedMetatdataUrl = await uploadMetadataToIpfs(
-      name,
-      NFT_SYMBOL,
-      description,
-      uploadedImageUrl,
-    );
-    if (uploadedMetatdataUrl == null) return;
-    console.log("Uploaded meta data url: ", uploadedMetatdataUrl);
-
-    setMinting(true);
-    const result = await mint(name, NFT_SYMBOL, uploadedMetatdataUrl);
-    setMinting(false);
-    setMintSuccess(result);
-  };   
-
-
-  const uploadImageToIpfs = async () => {
-    setUploading(true);
-    const uploadedImage = await ipfs.add(imageFileBuffer);
-    setUploading(false);
-
-    if (!uploadedImage) {
-      console.error("Error Uploading image");
-      return null;
-    }
-
-    return `https://ipfs.infura.io/ipfs/${uploadedImage.path}`;
-  };
-
-  const uploadMetadataToIpfs = async (
-    name,
-    symbol,
-    description,
-    uploadedImage,
-  ) => {
-    const metadata = {
-      name,
-      symbol,
-      description,
-      image: uploadedImage,
-    };
-
-    setUploading(true);
-    const uploadedMetadata = await ipfs.add(JSON.stringify(metadata));
-    setUploading(false);
-
-    if (uploadedMetadata == null) {
-      return null;
-    } else {
-      return `https://ipfs.infura.io/ipfs/${uploadedMetadata.path}`;
-    }
-  };
-
-
-  const mint = async (name, symbol, metadataUrl) => {
-    const provider = new anchor.AnchorProvider(connection, wallet, anchor.AnchorProvider.defaultOptions());
-    anchor.setProvider(provider);
-
-    // @ts-ignore
-    const program = new Program(SolNftMintIDL, SOL_MINT_NFT_PROGRAM_ID, provider );
-      
-    console.log("Program Id: ", program.programId.toBase58());
-    console.log("Mint Size: ", MINT_SIZE);
-    const lamports =
-      await program.provider.connection.getMinimumBalanceForRentExemption(
-        MINT_SIZE
-      );
-    console.log("Mint Account Lamports: ", lamports);
-
-    const getMetadata = async (mint) => {
-      return (
-        await anchor.web3.PublicKey.findProgramAddress(
-          [
-            Buffer.from("metadata"),
-            TOKEN_METADATA_PROGRAM_ID.toBuffer(),
-            mint.toBuffer(),
-          ],
-          TOKEN_METADATA_PROGRAM_ID
-        )
-      )[0];
-    };
-
-    const mintKey = anchor.web3.Keypair.generate();
-
-    const nftTokenAccount = await getAssociatedTokenAddress(
-      mintKey.publicKey,
-      provider.wallet.publicKey
-    );
-    console.log("NFT Account: ", nftTokenAccount.toBase58());
-
-    const mint_tx = new anchor.web3.Transaction().add(
-      anchor.web3.SystemProgram.createAccount({
-        fromPubkey: provider.wallet.publicKey,
-        newAccountPubkey: mintKey.publicKey,
-        space: MINT_SIZE,
-        programId: TOKEN_PROGRAM_ID,
-        lamports,
-      }),
-      createInitializeMintInstruction(
-        mintKey.publicKey,
-        0,
-        provider.wallet.publicKey,
-        provider.wallet.publicKey
-      ),
-      createAssociatedTokenAccountInstruction(
-        provider.wallet.publicKey,
-        nftTokenAccount,
-        provider.wallet.publicKey,
-        mintKey.publicKey
-      )
-    );
-    let blockhashObj = await connection.getLatestBlockhash();
-    console.log("blockhashObj", blockhashObj);
-    mint_tx.recentBlockhash = blockhashObj.blockhash;
-
-    try {
-      const signature = await wallet.sendTransaction(mint_tx, connection, {
-        signers: [mintKey],
-      });
-      await connection.confirmTransaction(signature, "confirmed");
-    } catch {
-      return false;
-    }
-
-    console.log("Mint key: ", mintKey.publicKey.toString());
-    console.log("User: ", provider.wallet.publicKey.toString());
-
-    const metadataAddress = await getMetadata(mintKey.publicKey);
-    console.log("Metadata address: ", metadataAddress.toBase58());
-
-    try {
-      const tx = program.transaction.mintNft(
-        mintKey.publicKey,
-        name,
-        symbol,
-        metadataUrl,
-        {
-          accounts: {
-            mintAuthority: provider.wallet.publicKey,
-            mint: mintKey.publicKey,
-            tokenAccount: nftTokenAccount,
-            tokenProgram: TOKEN_PROGRAM_ID,
-            metadata: metadataAddress,
-            tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
-            payer: provider.wallet.publicKey,
-            systemProgram: anchor.web3.SystemProgram.programId,
-            rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-          },
-        }
-      );
-
-      const signature = await wallet.sendTransaction(tx, connection);
-      await connection.confirmTransaction(signature, "confirmed");
-      console.log("Mint Success!");
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
-  const onMintAgain = () => {
-    setMintSuccess(false);
-  };
-
-  if (mintSuccess) {
-    return (
-      <Result
-        style={{ marginTop: 60 }}
-        status="success"
-        title="Successfully minted new NFT!"
-        subTitle="You can check this new NFT in your wallet."
-        extra={[
-          <Button key="buy" onClick={onMintAgain}>
-            Mint Again
-          </Button>,
-        ]}
-      />
-    );
-  }
-  //sol Nft mint
 
 
 
