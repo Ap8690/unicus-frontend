@@ -3,34 +3,67 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import Web3 from "web3";
 import { tronChain, bscChain, ethChain, polygonChain } from "../config";
-import { createNFTAbiB, createNFTAddressB } from "../Redux/Blockchain/Binance/createNFT";
-import { ethereumCoinbase, getMetamaskProvider, metaMaskProvider, tronWeb, walletConnectorProvider, walletLink } from "../Redux/Blockchain/contracts";
-import { createNFTAbiE, createNFTAddressE } from "../Redux/Blockchain/Ethereum/createNFT";
+import {
+  createNFTAbiB,
+  createNFTAddressB,
+} from "../Redux/Blockchain/Binance/createNFT";
+import { marketPlaceAddressB } from "../Redux/Blockchain/Binance/marketPlace";
+import {
+  ethereumCoinbase,
+  getMetamaskProvider,
+  metaMaskProvider,
+  tronWeb,
+  walletConnectorProvider,
+  walletLink,
+} from "../Redux/Blockchain/contracts";
+import {
+  createNFTAbiE,
+  createNFTAddressE,
+} from "../Redux/Blockchain/Ethereum/createNFT";
+import { marketPlaceAbiE, marketPlaceAddressE } from "../Redux/Blockchain/Ethereum/marketPlace";
 import { MEWethereum } from "../Redux/Blockchain/mewConfig";
-import { createNFTAbiP, createNFTAddressP } from "../Redux/Blockchain/Polygon/createNFT";
-import web3, { setWeb3Provider } from "../web3";
+import {
+  createNFTAbiP,
+  createNFTAddressP,
+} from "../Redux/Blockchain/Polygon/createNFT";
+import { marketPlaceAddressP } from "../Redux/Blockchain/Polygon/marketPlace";
+import { addWalletAdd } from "../services/api/supplier";
 import { ACCESS_TOKEN, RPC_URLS } from "./constants";
 
-export const connectWallet = async (network) => {
-  try{
-  let address;
-  if (network.toString() === tronChain) {
-    // tronLink.request({ method: "tron_requestAccounts" });
-    address = tronWeb.defaultAddress.base58;
-  } else {
-    console.log(3);
-    
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    address = accounts[0];
+export const userInfo: any = localStorage.getItem("userInfo")? JSON.parse(localStorage.getItem("userInfo")):""
+
+export let web3 = new Web3(Web3.givenProvider);
+
+export const connectWallet = async (network:any) => {
+  try {
+    let address;
+    if (network.toString() === tronChain) {
+      // tronLink.request({ method: "tron_requestAccounts" });
+      address = tronWeb.defaultAddress.base58;
+    } else {
+      console.log(3);
+
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      address = accounts[0];
+    }
+    console.log("add", address.toUpperCase(), userInfo);
+    if(!userInfo){
+      toast.error("Please Login")
+      return
+    }
+    // if (userInfo.wallets.length === 0 || !userInfo.wallets.includes(address.toUpperCase())) {
+    //   await addWalletAdd(address).then(async (res: any) => {
+    //     console.log(res);
+    //     localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+    //   });
+    // }
+
+    return address;
+  } catch (e) {
+    console.log(e);
   }
-  console.log("add", address);
-  
-  return address;
-}catch(e){
-  console.log(e);
-}
 };
 
 export const AddNetworks = async (network: any) => {
@@ -94,14 +127,13 @@ export const AddNetworks = async (network: any) => {
 
 export const connToMetaMask = async () => {
   try {
-  
-    const metaMaskProvider:any = await getMetamaskProvider()
+    const metaMaskProvider: any = await getMetamaskProvider();
     const accounts = await metaMaskProvider.request({
       method: "eth_requestAccounts",
     });
-    setWeb3Provider(metaMaskProvider);
+     web3 = new Web3(metaMaskProvider);
     localStorage.setItem("walletType", "Metamask");
-    return accounts[0]
+    return accounts[0];
   } catch (error: any) {
     console.log(error);
   }
@@ -112,7 +144,7 @@ export const connToCoinbase = async () => {
     // dispatch(checkAndAddNetwork())
     const accounts = await ethereumCoinbase.enable();
     // coinbaseWeb3.eth.defaultAccount = accounts[0]
-    setWeb3Provider(ethereumCoinbase);
+     web3 = new Web3(ethereumCoinbase);
     localStorage.setItem("walletType", "Coinbase");
     return accounts[0];
   } catch (error: any) {
@@ -120,24 +152,23 @@ export const connToCoinbase = async () => {
   }
 };
 
-export const connToWalletConnector =
-  async () => {
-    try {
-      const accounts = await walletConnectorProvider.enable();
-      setWeb3Provider(walletConnectorProvider);
-      localStorage.setItem("walletType", "WalletConnect");
-      return accounts[0];
-    } catch (error: any) {
-      console.error(error?.message);
-    }
-  };
+export const connToWalletConnector = async () => {
+  try {
+    const accounts = await walletConnectorProvider.enable();
+     web3 = new Web3(walletConnectorProvider);
+    localStorage.setItem("walletType", "WalletConnect");
+    return accounts[0];
+  } catch (error: any) {
+    console.error(error?.message);
+  }
+};
 
 export const connToMew = async () => {
   try {
     const accounts = await MEWethereum.request({
       method: "eth_requestAccounts",
     });
-    setWeb3Provider(MEWethereum);
+     web3 = new Web3(MEWethereum);
     localStorage.setItem("walletType", "MEW");
     return accounts[0];
   } catch (error: any) {
@@ -145,10 +176,10 @@ export const connToMew = async () => {
   }
 };
 
-export const disConnectWallet = ()=> {
+export const disConnectWallet = () => {
   localStorage.removeItem("walletType");
   localStorage.removeItem("userAddress");
-  
+
   Cookies.remove(ACCESS_TOKEN, {
     expires: 30,
   });
@@ -158,39 +189,37 @@ export const disConnectWallet = ()=> {
 };
 
 export const getUserWallet = async (network) => {
-  try{
-  let accounts = [];
-  if (network.toString() === tronChain) {
-    //@ts-ignore
-    const address = window.tronWeb.defaultAddress.base58;
-    accounts.push(address);
-  } else {
-    accounts = await web3.eth.getAccounts();
+  try {
+    let accounts = [];
+    if (network.toString() === tronChain) {
+      //@ts-ignore
+      const address = window.tronWeb.defaultAddress.base58;
+      accounts.push(address);
+    } else {
+      accounts = await web3.eth.getAccounts();
+    }
+    return accounts;
+  } catch (e) {
+    console.log(e);
   }
-  return accounts;
-}catch(e){
-  console.log(e);
-  
-}
 };
-export const getNftContractAddress=(nft)=>{
-  if(nft.contractAddress != undefined){
+export const connectWalletAndAddWallet = async (chain) => {};
+export const getNftContractAddress = (nft) => {
+  if (nft.contractAddress != undefined) {
     return nft.contractAddress;
+  } else {
+    return getCreateNftContractAddress(nft.chain);
   }
-  else{
-    
-    return getCreateNftContractAddress(nft.chain)
-  }
-}
-export const getChainSymbol = (chain)=>{
+};
+export const getChainSymbol = (chain) => {
   return chain.toString() === bscChain
-    ? "Bsc"
+    ? "BSC"
     : chain.toString() === polygonChain
-    ? "Matic"
+    ? "MATIC"
     : chain.toString() === tronChain
     ? "TRX"
-    : "Eth";
-}
+    : "ETH";
+};
 export const selectNetwork = (id: string) => {
   const type =
     id.toString() === bscChain
@@ -226,33 +255,52 @@ export const getCreateNftABI = (chain) => {
 export const getCreateNftContractAddress = (chain, contractType = "721") => {
   switch (chain) {
     case ethChain:
-      return contractType == "721" ? createNFTAddressE : createNFTAddressE;    
-case bscChain:
+      return contractType == "721" ? createNFTAddressE : createNFTAddressE;
+    case bscChain:
       return createNFTAddressB;
-case polygonChain:
+    case polygonChain:
       return createNFTAddressP;
 
     default:
       return contractType == "721"
-        ? 
-          "0x424bb7731c056a52b45cbd613ef08c69c628735f"
+        ? "0x424bb7731c056a52b45cbd613ef08c69c628735f"
         : "0x424bb7731c056a52b45CBD613Ef08c69c628735f";
   }
 };
 
-export const  getCreateNftContract =async (chain, contractType = "721") => {
-  const web3 = new Web3(RPC_URLS[80001])
-  console.log("chain", chain,await web3.eth.getAccounts());
-  
+export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
+  switch (chain) {
+    case ethChain:
+      return contractType == "721" ? marketPlaceAddressE : marketPlaceAddressE;
+    case bscChain:
+      return marketPlaceAddressB;
+    case polygonChain:
+      return marketPlaceAddressP;
+
+    default:
+      return contractType == "721"
+        ? "0x424bb7731c056a52b45cbd613ef08c69c628735f"
+        : "0x424bb7731c056a52b45CBD613Ef08c69c628735f";
+  }
+};
+
+export const getCreateNftContract = async (chain, contractType = "721") => {
+  const web3 = new Web3(RPC_URLS[80001]);
+  console.log("chain", chain, await web3.eth.getAccounts());
+
   return new web3.eth.Contract(
     //@ts-ignore
     createNFTAbiP,
     createNFTAddressP
-  ); 
-
+  );
 };
 
 export const getMarketPlace = (chain, contractType = "721") => {
+  console.log("wecc", web3.currentProvider);
+  
+    
+  // console.log("web3", web3.eth.getAccounts().then((val)=> console.log(val)).catch((e)=> console.log(e)));
+  
   switch (chain) {
     case ethChain:
       return contractType == "721"

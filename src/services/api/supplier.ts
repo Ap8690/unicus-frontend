@@ -1,23 +1,38 @@
-import axios from 'axios';
+import axios from "axios";
+import Cookies from "js-cookie";
+import { userInfo } from "os";
 import { BASE_URL } from "../../config";
+import { ACCESS_TOKEN } from "../../utils/constants";
+import { getChainSymbol } from "../../utils/utils";
+
+const accessToken = Cookies.get(ACCESS_TOKEN);
+const axiosConfig: any = {
+  headers: {
+    Authorization: `Bearer ${accessToken}`,
+  },
+};
 
 export async function getFeaturedNft(number: number) {
   return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}`);
-} 
+}
 
 export async function getTrendingNft(number: number, category: string) {
   return await axios.get(
     `${BASE_URL}/nft/getTrendingNfts/${number}/${category}`
   );
-} 
+}
 
-export async function getAuctions(number:number, auctionType:string) {
+export async function getAuctions(number: number, auctionType: string) {
   return await axios.get(
     `${BASE_URL}/auction/getAuctions/${number}/${auctionType}`
   );
 }
 
-export async function getMarketplaceNfts(skip:any,networkID:number,sortBy:string) {
+export async function getMarketplaceNfts(
+  skip: any,
+  networkID: number,
+  sortBy: string
+) {
   return await axios.get(
     `${BASE_URL}/auction/getAllExplore/${skip}/${networkID}/${encodeURIComponent(
       JSON.stringify(sortBy)
@@ -25,7 +40,13 @@ export async function getMarketplaceNfts(skip:any,networkID:number,sortBy:string
   );
 }
 
-export async function uploadToPinata(formData: FormData, axiosConfig:any) {
+export async function getNftById(chain: any, contractAddress: any, nftId: any) {
+  return await axios.get(
+    `${BASE_URL}/nft/getNftById/${chain}/${contractAddress}/${nftId}`
+  );
+}
+
+export async function uploadToPinata(formData: FormData, axiosConfig: any) {
   return await axios.post(
     `${BASE_URL}/nft/upload-pinata`,
     formData,
@@ -33,13 +54,100 @@ export async function uploadToPinata(formData: FormData, axiosConfig:any) {
   );
 }
 
-export async function createNft(nftObj: {}, axiosConfig: any) {
+export async function createNft(nftObj: {}) {
   return await axios.post(`${BASE_URL}/nft/create`, nftObj, axiosConfig);
 }
 
+export async function createSellApi(createObj: any) {
+  return await axios.post(`${BASE_URL}/auction/sell`, createObj, axiosConfig);
+}
+
+export async function createAuctionApi(createObj:any){
+  return await axios
+    .post(`${BASE_URL}/auction/create`, createObj, axiosConfig)
+    
+}
+
+export async function buyItemApi(
+  auction: any,
+  hash: string,
+  username: string,
+  userId: string
+) {
+  return await axios.post(
+    `${BASE_URL}/auction/buy`,
+    {
+      nftId: auction.nftId,
+      name: auction.name,
+      auctionId: auction._id,
+      owner: userId,
+      endAuctionHash: hash,
+      userInfo: username,
+    },
+    axiosConfig
+  );
+}
+
+export async function placeBidApi(
+  auction: any,
+  hash: string,
+  bid: any,
+  username: string,
+  email: string
+) {
+  return await axios.post(
+    `${BASE_URL}/auction/placeBid`,
+    {
+      nftId: auction.nftId,
+      auctionId: auction._id,
+      bidValue: bid,
+      bidCurrency: getChainSymbol(auction.chain),
+      bidHash: hash,
+      username,
+      email,
+      bidSuccess: true,
+      bidObj: {},
+    },
+    axiosConfig
+  );
+}
+
+export async function endSaleApi(
+  auction: any,
+  hash: string,
+  username: string,
+) {
+  return await axios.post(
+    `${BASE_URL}/auction/end`,
+    {
+      nftId: auction.nftId,
+      auctionId: auction._id,
+      userInfo: username,
+      endAuctionHash: hash,
+    },
+    axiosConfig
+  );
+}
 
 
-export async function emailLogin(email:string, password: string) {
+export async function cancelAuctionApi(
+  auction: any,
+  hash: string,
+  username: string,
+) {
+  return await axios.post(
+    `${BASE_URL}/auction/cancel`,
+    {
+      nftId: auction.nftId,
+      auctionId: auction._id,
+      userInfo: username,
+      transactionHash: hash,
+    },
+    axiosConfig
+  );
+}
+
+export async function emailLogin(email: string, password: string) {
   return await axios.post(`${BASE_URL}/auth/login`, {
     email: email,
     password: password,
@@ -48,14 +156,13 @@ export async function emailLogin(email:string, password: string) {
 
 export async function walletLogin(walletAddress: string) {
   return await axios.post(`${BASE_URL}/auth/login`, {
-    walletAddress
+    walletAddress,
   });
 }
 
-export async function addWalletAdd(userWallet: string, axiosConfig: any) {
+export async function addWalletAdd(userWallet: string) {
   return await axios.get(
     `${BASE_URL}/users/addWallet/${userWallet}`,
     axiosConfig
   );
-
 }

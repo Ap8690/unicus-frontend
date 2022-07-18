@@ -46,8 +46,8 @@ const Navbar = () => {
     };
     const handleClickProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
         accessToken
-            ? setAnchorProfile(event.currentTarget)
-            : navigate(`/connect-wallet${location.pathname}`);
+          ? setAnchorProfile(event.currentTarget)
+          : navigate(`../connect-wallet${location.pathname}`, { replace: true });
     };
     const handleCloseProfile = () => {
         disConnectWallet()
@@ -160,32 +160,32 @@ const Navbar = () => {
                 }}
               >
                 <MenuItem onClick={handleCloseProfile}>
-                  <Link to={"/"} className="menu-link">
+                  <Link to={"/profile"} className="menu-link" replace>
                     Profile
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseProfile}>
-                  <Link to={"/"} className="menu-link">
+                  <Link to={"/profile/favourite"} className="menu-link">
                     Favourites
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseProfile}>
-                  <Link to={"/"} className="menu-link">
+                  <Link to={"/profile/my-tickets"} className="menu-link">
                     My Tickets
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseProfile}>
-                  <Link to={"/"} className="menu-link">
+                  <Link to={"/profile/my-collections"} className="menu-link">
                     My Collections
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseProfile}>
-                  <Link to={"/"} className="menu-link">
+                  <Link to={"/profile/notification"} className="menu-link">
                     Notification
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseProfile}>
-                  <Link to={"/"} className="menu-link">
+                  <Link to={"/profile/settings"} className="menu-link">
                     Account Settings
                   </Link>
                 </MenuItem>

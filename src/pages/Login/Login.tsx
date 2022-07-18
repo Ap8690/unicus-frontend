@@ -32,7 +32,6 @@ const Login = ({}) => {
                     axios.defaults.headers.common["Authorization"] =
                         "Bearer" + res.data.accessToken
                     localStorage.setItem("accessToken", res.data.accessToken)
-                    dispatch(getUserInfo(res.data.user) as any)
                     localStorage.setItem(
                         "userInfo",
                         JSON.stringify(res.data.user)

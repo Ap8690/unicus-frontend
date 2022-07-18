@@ -1,4 +1,20 @@
 import "./viewnft.scss";
+import nftImg from "../../assets/images/marketPlaceMain.png";
+import {
+  connectWallet,
+  getAuction,
+  getChainSymbol,
+  getMarketPlace,
+} from "../../utils/utils";
+import {
+  buyItemApi,
+  cancelAuctionApi,
+  endSaleApi,
+  placeBidApi,
+} from "../../services/api/supplier";
+import { useState } from "react";
+import web3 from "../../web3";
+import { toast } from "react-toastify";
 
 const NftInfo = ({
   filters,
@@ -7,27 +23,180 @@ const NftInfo = ({
   setActiveFilter,
   historyData,
   topBid,
+  nft,
+  auction,
 }) => {
+  const [bid, setbid] = useState<any>("");
+
+  async function buyItem() {
+    try {
+      const address = await connectWallet(auction.chain);
+      const res = await getMarketPlace(
+        auction.chain,
+        auction.nftId.contractType
+      ).methods.buyItem(auction.auctionId)
+        .send({
+          from: address,
+          value: auction.startBid,
+        });
+      console.log(res);
+
+      if (res?.transactionHash) {
+        await buyItemApi(
+          auction,
+          res.transactionHash,
+          creator.name,
+          creator.id
+        ).then((res: any) => {
+          console.log(res.data);
+          toast.success("Bought Item");
+        });
+
+        window.location.reload();
+      }
+    } catch (e) {
+      toast.error(e);
+    }
+  }
+
+  async function placeBid() {
+    try {
+      const address = await connectWallet(auction.chain);
+
+      const res = await getAuction(auction.chain, nft.contractType)
+        .methods.placeBid(auction.auctionId)
+        .send({
+          from: address,
+          value: web3.utils.toWei(bid, "ether"),
+        });
+      console.log(res);
+      if (res?.transactionHash) {
+        await placeBidApi(
+          auction,
+          res?.transactionHash,
+          bid,
+          creator.name,
+          creator.email
+        )
+          .then((res) => {
+            console.log(res.data);
+            toast.success("Placed Bid");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    } catch (e) {
+      toast.error(e);
+    }
+  }
+  async function endSale() {
+    try {
+      const address = await connectWallet(auction.chain);
+
+      const res = await getMarketPlace(
+        auction.chain,
+        auction.nftId.contractType
+      )
+        .methods.EndSale(auction.auctionId)
+        .send({ from: address });
+      if (res?.transactionHash) {
+        await endSaleApi(auction, res.transactionHash, creator.name).then(
+          (res) => {
+            console.log(res.data);
+            toast.success("Sale Ended");
+          }
+        );
+
+        window.location.reload();
+      }
+    } catch (e) {
+      toast.error(e);
+    }
+  }
+
+  async function endAuction() {
+    try {
+      if (new Date() < auction.auctionTimer) {
+        toast.error("Auction is ongoing. Try cancelling.");
+        return console.log("Auction Not ended Yet");
+      }
+
+      const address = await connectWallet(auction.chain);
+
+      const res = await getMarketPlace(
+        auction.chain,
+        auction.nftId.contractType
+      )
+        .methods.EndSale(auction.auctionId)
+        .send({ from: address });
+      if (res?.transactionHash) {
+        await endSaleApi(auction, res.transactionHash, creator.name).then(
+          (res) => {
+            console.log(res.data);
+            toast.success("Sale Ended");
+          }
+        );
+
+        window.location.reload();
+      }
+    } catch (e) {
+      console.log(e);
+      toast.error(e);
+    }
+  }
+
+  async function cancelAuction() {
+    try {
+      const address = await connectWallet(auction.chain);
+
+      const res = await getMarketPlace(
+        auction.chain,
+        auction.nftId.contractType
+      )
+        .methods.EndSale(auction.auctionId)
+        .send({ from: address });
+      if (res?.transactionHash) {
+        await cancelAuctionApi(auction, res.transactionHash, creator.name).then(
+          (res) => {
+            console.log(res.data);
+            toast.success("Auction Cancelled");
+          }
+        );
+
+        window.location.reload();
+      }
+    } catch (e) {
+      console.log(e);
+      toast.error(e);
+    }
+  }
   return (
     <div className="nft-info">
-      <h2>Lorem Ipsum</h2>
+      <h2>{nft.name}</h2>
       <div className="nft-price">
-        <span>0.45 ETH</span>
-        <span>$ 5768.6</span>
-        <span>12 in stock</span>
+        <span>
+          {auction?.lastBid
+            ? (auction?.lastBid / Math.pow(10, 18)).toFixed(4)
+            : (auction?.startBid / Math.pow(10, 18)).toFixed(4)}{" "}
+          {getChainSymbol(nft.chain)}
+        </span>
+        {/* <span>$ 5768.6</span>
+        <span>12 in stock</span> */}
       </div>
       <div className="nft-description">
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore,
-          quasi.
-        </p>
-        <button>Read More</button>
+        <p>{nft.description}</p>
+        {/* <button>Read More</button> */}
       </div>
       <div className="nft-creator">
         <span>Creator</span>
         <div>
-          <img src={creator.img} alt="creator" className="user-img" />
-          <span>{creator.name}</span>
+          <img
+            src={creator.profileUrl ? creator.profileUrl : nftImg}
+            alt="creator"
+            className="user-img"
+          />
+          <span>{creator.username}</span>
         </div>
       </div>
       <div className="more-info">
@@ -60,8 +229,12 @@ const NftInfo = ({
           </div>
         </div>
         <div className="btn-box">
-          <button className="btn">Place a bid</button>
-          <button className="btn-outline-blue">Purchase Now</button>
+          {/* <button className="btn" onClick={() => placeBid()}>
+            Place a bid
+          </button> */}
+          <button className="btn" onClick={() => buyItem()}>
+            Purchase Now
+          </button>
         </div>
         <span className="service-fee">Service fees 2%</span>
       </div>

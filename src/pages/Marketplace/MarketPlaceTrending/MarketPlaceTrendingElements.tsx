@@ -1,6 +1,8 @@
 // Custom Hook
 import useExplorer from "../useExplorer";
 import userImg from "../../../assets/images/Rectangle 8 (1).png";
+import { Link } from "react-router-dom";
+import { getNftContractAddress } from "../../../utils/utils";
 const Element = ({ element }) => {
   return (
     <div className="market-place-trending-element">
@@ -28,8 +30,17 @@ const MarketPlaceTrendingElements = ({ list, currentScroll }) => {
   const holderRef = useExplorer(currentScroll);
   return (
     <div className="market-place-trending-elements" ref={holderRef}>
-      {list.map((element:any, i:number) => (
-        <Element element={element} key={`mpte${i}`} />
+      {list.map((element: any, i: number) => (
+        <Link
+          to={{
+            pathname: `/nft/${element.chain}/${getNftContractAddress(
+              element
+            )}/${element.tokenId}`,
+          }}
+        >
+          {" "}
+          <Element element={element} key={`mpte${i}`} />
+        </Link>
       ))}
     </div>
   );

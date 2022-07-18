@@ -7,6 +7,8 @@ import getTime from "./getTime";
 // Images
 import verified from "../../../assets/svgs/verified.svg";
 import useExplorer from "../useExplorer";
+import { Link } from "react-router-dom";
+import { getNftContractAddress } from "../../../utils/utils";
 
 const getTimeString = (days, hours, minutes) => {
   return `${days}d ${hours}h ${minutes}m`;
@@ -49,8 +51,20 @@ const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType }) => {
   const holderRef = useExplorer(currentScroll);
   return (
     <div className="market-place-auctions-elements" ref={holderRef}>
-      {list.map((element:any, i:number) => (
-        <Element element={element} key={`mpae${i}${element.tokenId}`} currentType={currentType} />
+      {list.map((element: any, i: number) => (
+        <Link
+          to={{
+            pathname: `/nft/${element.chain}/${getNftContractAddress(
+              element
+            )}/${element.tokenId}`,
+          }}
+        >
+          <Element
+            element={element}
+            key={`mpae${i}${element.tokenId}`}
+            currentType={currentType}
+          />
+        </Link>
       ))}
     </div>
   );

@@ -26,6 +26,13 @@ import profileOffers from "../../assets/svgs/list.svg";
 
 // Styles
 import "./ProfileMain.scss";
+import axios from "axios";
+import { userInfo } from "os";
+import { tronChain, BASE_URL } from "../../config";
+import { setNotification } from "../../Redux/Blockchain/contracts";
+import { connectWallet, getCreateNftABI, getMarketPlace, getMarketPlaceContractAddress } from "../../utils/utils";
+import web3 from "../../web3";
+import { createSellApi } from "../../services/api/supplier";
 
 // Generics
 type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
@@ -124,6 +131,9 @@ const Profile = (): ReactJSXElement => {
     const temp = listing.filter((item) => item.item.toLowerCase().includes(q));
     setDisplayListing(temp);
   }, [search]);
+
+  
+
   return (
     <div className="profile">
       <User user={user} />

@@ -110,8 +110,10 @@ const ConnectWallet: React.FC<AuthType> = () => {
         Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
           expires: 30,
         });
-
-        navigate(`/${redirect}`, { replace: true });
+        localStorage.setItem("userInfo",JSON.stringify(res.data.user))
+        console.log(":redirect", redirect["*"]);
+        
+        navigate(`/${redirect["*"]}`, { replace: true });
       } else {
         toast.error("Wallet connection failed");
       }

@@ -91,10 +91,7 @@ const App = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/readblog/:id" element={<ReadBlog />} />
-                <Route
-                  path="/connect-wallet/*"
-                  element={<ConnectWallet />}
-                />
+                <Route path="/connect-wallet/*" element={<ConnectWallet />} />
                 <Route path="/create-nft" element={<CreateNftSelector />} />
                 <Route
                   path="/create-nft/single-item"
@@ -105,16 +102,19 @@ const App = () => {
                 <Route path="/explore" element={<Explore />} />
                 <Route path="/store" element={<StoreHomepage />} />
                 <Route path="/store/settings" element={<StoreSettings />} />
-                {/* <Route
-                  path="/nft/:chain/:contractAddress/:id"
-                  element={<NFTById general={store.general}/>}
-                /> */}
                 <Route path="/marketplace" element={<MarketPlace />} />
                 <Route path="/create-store" element={<CreateStore />} />
                 <Route path="/all-nfts" element={<AllNFTs />} />
-                <Route path="/nft/:id" element={<ViewNft />} />
+                <Route
+                  path="/nft/:chain/:contractAddress/:nftId"
+                  element={<ViewNft />}
+                />
                 <Route path="/auctions" element={<Auctions />} />
                 <Route path="/profile/*" element={<Profile />} />
+                {/* <Route
+                  path="/edit-profile"
+                  element={<EditProfile />}
+                /> */}
               </Routes>
               <Footer />
             </BrowserRouter>

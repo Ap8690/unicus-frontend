@@ -37,7 +37,7 @@ import {
   getCreateNftContract,
   getCreateNftContractAddress,
 } from "../../utils/utils";
-import { createNft } from "../../services/api/supplier";
+import { addWalletAdd, createNft } from "../../services/api/supplier";
 import { useSelector } from "react-redux";
 
 const CreateNftSingle = () => {
@@ -191,37 +191,7 @@ const CreateNftSingle = () => {
       console.log(2);
       await connectWallet(chain)
         .then(async (address) => {
-          if (networkID === tronChain && !address) {
-            setdefaultErrorModal(true);
-            setdefaultErrorMessage("Login to TronLink");
-            return;
-          }
-          // if (
-          //   userInfo.wallets.length === 0 ||
-          //   !userInfo.wallets.includes(address)
-          // ) {
-          //   const axiosConfig: any = {
-          //     headers: {
-          //       Authorization: "Bearer " + accessToken,
-          //     },
-          //   };
-          //   setNftModalMessage("Adding current wallet address to your account.");
-          //   await addWalletAdd(address, axiosConfig)
-          //     .then(async (res: any) => {
-          //       console.log(res);
-          //       localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-
-          //       setNftLoading(false);
-          //       setdefaultErrorMessage(
-          //         "Unable to connect current account. Please try again."
-          //       );
-          //       setdefaultErrorModal(true);
-          //       throw "Wallet already in use.Please try different address.";
-          //     });
-          // }
+          
           const contractAddress = getCreateNftContractAddress(chain);
 
           setNftModalMessage("Uploading the NFT.");
@@ -338,7 +308,7 @@ const CreateNftSingle = () => {
                 ...nftObj,
                 tags: properties,
               };
-              await createNft(newObject, newaxiosConfig);
+              await createNft(newObject);
             } else {
               setNftLoading(false);
               setdefaultErrorMessage(
