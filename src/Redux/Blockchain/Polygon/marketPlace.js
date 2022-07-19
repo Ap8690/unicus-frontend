@@ -1,6 +1,10 @@
 // mainnet
-export const marketPlaceAddressP = "0xf21C3d3f1bA95c0EfFd4C9D957BFd5ddd8b40cAD";
-
+export const marketPlaceAddressP =
+  process.env.REACT_APP_ENV === "prod"
+    ? // mainnet
+      "0xf21C3d3f1bA95c0EfFd4C9D957BFd5ddd8b40cAD"
+    : // testnet
+      "0x0f4C92F0C4d8eb8650a73a1c02116570227268e8";
 // testnet
 // export const marketPlaceAddressP = "0x0f4C92F0C4d8eb8650a73a1c02116570227268e8";
 

@@ -1,0 +1,48 @@
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.full-loading {
+    z-index: 1055002 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    background: #ffffff61;
+    overflow-y: hidden;
+    color: "#0b3a6a";
+    top: 0;
+    flex-direction: column;
+}
+.full-loading-2 {
+    background: #060303ad;
+    overflow-y: hidden;
+    color: "#0b3a6a";
+    top: 0;
+    flex-direction: column;
+    z-index: 1055002 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+}
+.full-loading-2 > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+  padding:30px 20px;
+}
+.payNow {
+    color: black;
+    margin-top: 58px;
+    background: white;
+}

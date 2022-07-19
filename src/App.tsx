@@ -1,6 +1,6 @@
 // Libraries
 import { useEffect, useMemo, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 import { clusterApiUrl } from "@solana/web3.js";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
@@ -50,12 +50,10 @@ import { IStore } from "./models/Store";
 import ViewNft from "./pages/ViewNft/ViewNft";
 import StoreHomepage from "./pages/StoreHomepage/StoreHomepage";
 import StoreSettings from "./pages/StoreSettings/StoreSettings";
-import axios from "axios";
 import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
-import { UNICUS_STORE } from "./config";
 import { getStoreApi, getStoreByUser } from "./services/api/supplier";
 import { ACCESS_TOKEN } from "./utils/constants";
+import { isMainStore } from "./utils/utils";
 // import NFTById from "./components/NFTById/NFTById";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -69,10 +67,11 @@ const [userStore, setUserStore] = useState({});
 const [accessToken, setAccessToken] = useState("");
 const [showStore, setShowStore] = useState(true);
 const [loading, setLoading] = useState(false);
-const dispatch = useDispatch();
+const navigate = useNavigate()
+const location = useLocation()
 useEffect(() => {
-  if (window.location.host === UNICUS_STORE) {
-    getStore();
+  if (isMainStore()) {
+    getStoreForUser();
   } else {
     init();
     setLogin();
@@ -112,7 +111,7 @@ const setLogin = () => {
     setAccessToken(token)
   }
 };
-const getStore = async () => {
+const getStoreForUser = async () => {
   try {
     if (accessToken) {
       const res = await getStoreByUser();
@@ -124,10 +123,16 @@ const getStore = async () => {
     console.log("err", err);
   }
 };
+useEffect(() => {
+  if (location.pathname == "/") {
+    navigate("/home", {replace:true});
+  }
+}, []);
 
 useEffect(() => {
-  getStore();
+  getStoreForUser();
 }, [accessToken]);
+
 
   //@ts-ignore
   const wallets = useMemo(
@@ -149,44 +154,53 @@ useEffect(() => {
       <WalletProvider wallets={wallets}>
         <WalletModalProvider>
           <div className="App">
-            <BrowserRouter>
-              <Navbar store={userStore} />
-              <ToastContainer limit={3} />
+            <Navbar store={isMainStore() ? userStore : store} />
+            <ToastContainer limit={3} />
 
-              <ScrollToTop />
-              <Routes>
-                <Route path="/" element={<Homepage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/readblog/:id" element={<ReadBlog />} />
-                <Route path="/connect-wallet/*" element={<ConnectWallet />} />
-                <Route path="/create-nft" element={<CreateNftSelector />} />
-                <Route
-                  path="/create-nft/single-item"
-                  element={<CreateNftSingle />}
-                />
-                <Route path="/stats/ranking" element={<Ranking />} />
-                <Route path="/stats/activity" element={<Activity />} />
-                <Route path="/explore" element={<Explore />} />
-                <Route path="/store" element={<StoreHomepage />} />
+            <ScrollToTop />
+            <Routes>
+              {isMainStore() ? (
+                <Route path="/home" element={<Homepage />} />
+              ) : (
+                <Route path="/home" element={<StoreHomepage />} />
+              )}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/readblog/:id" element={<ReadBlog />} />
+              <Route path="/connect-wallet/*" element={<ConnectWallet />} />
+              <Route path="/create-nft" element={<CreateNftSelector />} />
+              <Route
+                path="/create-nft/single-item"
+                element={<CreateNftSingle />}
+              />
+              <Route path="/stats/ranking" element={<Ranking />} />
+              <Route path="/stats/activity" element={<Activity />} />
+              <Route path="/explore" element={<Explore />} />
+              <Route path="/explore/:chain" element={<Explore />} />
+              <Route path="/login/:token/:email" element={<Explore />} />{" "}
+              <Route
+                path="/reset-password/:token/:email"
+                element={<Explore />}
+              />
+              {!isMainStore() && (
                 <Route path="/store/settings" element={<StoreSettings />} />
-                <Route path="/marketplace" element={<MarketPlace />} />
-                <Route path="/create-store" element={<CreateStore />} />
-                <Route path="/all-nfts" element={<AllNFTs />} />
-                <Route
-                  path="/nft/:chain/:contractAddress/:nftId"
-                  element={<ViewNft />}
-                />
-                <Route path="/auctions" element={<Auctions />} />
-                <Route path="/profile/*" element={<Profile />} />
-                {/* <Route
+              )}
+              <Route path="/marketplace" element={<MarketPlace />} />
+              <Route path="/create-store" element={<CreateStore />} />
+              <Route path="/all-nfts" element={<AllNFTs />} />
+              <Route
+                path="/nft/:chain/:contractAddress/:nftId"
+                element={<ViewNft />}
+              />
+              <Route path="/auctions" element={<Auctions />} />
+              <Route path="/profile/*" element={<Profile />} />
+              {/* <Route
                   path="/edit-profile"
                   element={<EditProfile />}
                 /> */}
-              </Routes>
-              <Footer />
-            </BrowserRouter>
+            </Routes>
+            <Footer />
           </div>
         </WalletModalProvider>
       </WalletProvider>

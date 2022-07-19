@@ -1,0 +1,54 @@
+import * as nearAPI from "near-api-js";
+import BN from "bn.js";
+
+
+const { keyStores, connect, transactions, WalletConnection } = nearAPI;
+
+export async function initContract() {
+  const config = {
+    networkId: "testnet",
+    keyStore: new keyStores.BrowserLocalStorageKeyStore(),
+    nodeUrl: "https://rpc.testnet.near.org",
+    walletUrl: "https://wallet.testnet.near.org",
+    helperUrl: "https://helper.testnet.near.org",
+    exploreUrl: "https://explorer.testnet.near.org",
+    headers: {},
+  };
+  const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
+  const near = await nearAPI.connect(config);
+  const walletConnection = new nearAPI.WalletConnection(near, "unicus");
+
+  /*const config = getConfig(process.env.NEAR_ENV || 'testnet');
+  const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore()
+  const near =  await nearAPI.connect({keyStore, ...nearConfig})
+  const walletConnection = new nearAPI.WalletConnection(near)*/
+
+  let currentUser;
+
+  if (walletConnection.getAccountId()) {
+    currentUser = walletConnection.getAccountId();
+  }
+
+  return { currentUser, config, walletConnection };
+}
+
+export const sendMeta = async (walletConnection:any,nearConfig:any ) => {
+  let functionCallResult = await walletConnection
+    .account()
+    .functionCall({
+      contractId: "nft-contract.boomboom.testnet",
+      methodName: "new_default_meta",
+      args: {
+        owner_id: nearConfig.contractName,
+      },
+      attachedDeposit: new BN(0),
+      walletMeta: "",
+      walletCallbackUrl: "",
+    });
+
+  if (functionCallResult) {
+    console.log("new meta data created: ");
+  } else {
+    console.log("meta data not created");
+  }
+};

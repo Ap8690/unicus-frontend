@@ -29,7 +29,7 @@ export async function getAuctions(number: number, auctionType: string) {
 
 export async function getMarketplaceNfts(
   skip: any,
-  networkID: number,
+  networkID: any,
   sortBy: string
 ) {
   return await axios.get(
@@ -177,6 +177,20 @@ export async function emailLogin(email: string, password: string) {
 export async function walletLogin(walletAddress: string) {
   return await axios.post(`${BASE_URL}/auth/login`, {
     walletAddress,
+  });
+}
+export async function verifyEmailApi(token: string, email: string) {
+  return await axios.get(
+    `${BASE_URL}/auth/verify-email?token=${
+      token
+    }&email=${email}`
+  );
+}
+export async function resetPasswordApi(email: string, password: string, token:string) {
+  return await axios.post(`${BASE_URL}/auth/reset-password`, {
+    token,
+    email: email,
+    password: password,
   });
 }
 

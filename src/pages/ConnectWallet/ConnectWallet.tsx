@@ -19,6 +19,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { WalletConnection } from "near-api-js";
 import {
+  connectNear,
   connToCoinbase,
   connToMetaMask,
   connToMew,
@@ -44,8 +45,6 @@ type AuthType = Readonly<{
 
 const ConnectWallet: React.FC<AuthType> = () => {
   const { wallet } = useConnect();
-
-  const connectNear = () => wallet?.requestSignIn();
 
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
@@ -120,7 +119,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
     } catch (e) {
       toast.error(e);
       console.log(e);
-      disConnectWallet();
+      // disConnectWallet();
     }
   };
 

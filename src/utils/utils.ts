@@ -1,8 +1,9 @@
 import { chainPropTypes } from "@mui/utils";
 import Cookies from "js-cookie";
+import { WalletConnection } from "near-api-js";
 import { toast } from "react-toastify";
 import Web3 from "web3";
-import { tronChain, bscChain, ethChain, polygonChain } from "../config";
+import { tronChain, bscChain, ethChain, polygonChain, nearChain, UNICUS_STORE } from "../config";
 import { IStore } from "../models/Store";
 import {
   createNFTAbiB,
@@ -19,6 +20,7 @@ import {
 import {
   createNFTAbiE,
   createNFTAddressE,
+  createNFTAddressE1155,
 } from "../Redux/Blockchain/Ethereum/createNFT";
 import { marketPlaceAbiE, marketPlaceAddressE } from "../Redux/Blockchain/Ethereum/marketPlace";
 import { MEWethereum } from "../Redux/Blockchain/mewConfig";
@@ -29,15 +31,21 @@ import {
 import { marketPlaceAddressP } from "../Redux/Blockchain/Polygon/marketPlace";
 import { addWalletAdd } from "../services/api/supplier";
 import { ACCESS_TOKEN, RPC_URLS } from "./constants";
+import { initContract, sendMeta } from "./helpers";
 
 export const userInfo: any = localStorage.getItem("userInfo")? JSON.parse(localStorage.getItem("userInfo")):""
+
+export let nearWalletConnection;
 
 export let web3 = new Web3(Web3.givenProvider);
 
 export const connectWallet = async (network:any) => {
   try {
     let address;
-    if (network.toString() === tronChain) {
+    if(network.toString()=== nearChain){
+      address = await connectNear()
+    }
+    else if (network.toString() === tronChain) {
       // tronLink.request({ method: "tron_requestAccounts" });
       address = tronWeb.defaultAddress.base58;
     } else {
@@ -173,6 +181,30 @@ export const connToMew = async () => {
   }
 };
 
+ export const connectNear = async() => {
+  const { currentUser, config, walletConnection } = await initContract();
+   if (!walletConnection.isSignedIn()) {
+     const res = await walletConnection.requestSignIn(
+       {
+         contractId: "nft-contract.boomboom.testnet",
+       },
+       "UNICUS", // title. Optional, by the way
+       "", // successUrl. Optional, by the way
+       "" // failureUrl. Optional, by the way
+     );
+    
+   } else {
+      console.log("near wallet", walletConnection.account());
+     console.log("wallet is already connected");
+   }
+
+   sendMeta(walletConnection, config)
+
+   nearWalletConnection = walletConnection
+
+   return walletConnection.account().accountId
+   
+ };
 export const disConnectWallet = () => {
   localStorage.removeItem("walletType");
   localStorage.removeItem("userAddress");
@@ -205,7 +237,7 @@ export const getNftContractAddress = (nft) => {
   if (nft.contractAddress != undefined) {
     return nft.contractAddress;
   } else {
-    return getCreateNftContractAddress(nft.chain);
+    return getCreateNftContractAddress(nft.chain, "721");
   }
 };
 export const getChainSymbol = (chain) => {
@@ -215,6 +247,8 @@ export const getChainSymbol = (chain) => {
     ? "MATIC"
     : chain.toString() === tronChain
     ? "TRX"
+    : chain.toString() === nearChain
+    ?"NEAR"
     : "ETH";
 };
 export const selectNetwork = (chain: string) => {
@@ -246,10 +280,10 @@ export const getCreateNftABI = (chain) => {
       return createNFTAbiE;
   }
 };
-export const getCreateNftContractAddress = (chain, contractType = "721") => {
+export const getCreateNftContractAddress = (chain, contractType) => {
   switch (chain) {
     case ethChain:
-      return contractType == "721" ? createNFTAddressE : createNFTAddressE;
+      return contractType == "1155" ? createNFTAddressE1155 : createNFTAddressE;
     case bscChain:
       return createNFTAddressB;
     case polygonChain:
@@ -257,8 +291,8 @@ export const getCreateNftContractAddress = (chain, contractType = "721") => {
 
     default:
       return contractType == "721"
-        ? "0x424bb7731c056a52b45cbd613ef08c69c628735f"
-        : "0x424bb7731c056a52b45CBD613Ef08c69c628735f";
+        ? createNFTAddressE
+        : createNFTAddressE1155;
   }
 };
 
@@ -282,8 +316,8 @@ export const getCreateNftContract = async (chain, contractType = "721") => {
 
   return new web3.eth.Contract(
     //@ts-ignore
-    getCreateNftABI(chain),
-    getCreateNftContractAddress(chain)
+    getCreateNftABI(chain, contractType),
+    getCreateNftContractAddress(chain, contractType)
   );
 };
 
@@ -347,6 +381,9 @@ export const getStoreName = () => {
   }
 };
 
+export const isMainStore=()=>{
+  return window.location.host === UNICUS_STORE;
+}
 export interface WalletsPopupProps {
   show: boolean;
   handleClose: () => void;
