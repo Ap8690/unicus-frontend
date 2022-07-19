@@ -32,4 +32,17 @@ export const bscChainHex = "0x61"
 export const ethChainHex = "0x4"
 export const polygonChainHex = "0x13881"
 
+export const UNICUS_STORE =
+  process.env.REACT_APP_ENV === "local"
+    ? "http://localhost:3000"
+    : process.env.REACT_APP_ENV === "development"
+    ? "marketplace.test.unicus.one"
+    : process.env.REACT_APP_ENV === "staging"
+    ? "marketplace.qa.unicus.one"
+    : process.env.REACT_APP_ENV === "demo"
+    ? "marketplace.test.unicus.one"
+    : "marketplace.unicus.one";
+
+
+
 

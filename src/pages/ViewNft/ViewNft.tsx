@@ -9,7 +9,7 @@ import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import { AllNFTsElement } from "../AllNFTs/AllNFTsBody/AllNFTsElements";
 import { getNftById } from "../../services/api/supplier";
 
-const filters = ["Owners", "Bids", "Details", "History"];
+const filters = ["Details", "History"];
 const creator = {
   name: "David",
   img: nftImg,
@@ -65,7 +65,7 @@ const topBid = {
   bid: "2.45",
 };
 const ViewNft = () => {
-  const [activeFilter, setActiveFilter] = useState("Owners");
+  const [activeFilter, setActiveFilter] = useState("Details");
   const [placeBidModal, setPlaceBidModal] = useState(false);
   const [currentLoaded, setCurrentLoaded] = useState(10);
   const [nft, setNft] = useState("");

@@ -1,9 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { userInfo } from "os";
 import { BASE_URL } from "../../config";
 import { ACCESS_TOKEN } from "../../utils/constants";
-import { getChainSymbol } from "../../utils/utils";
+import { getChainSymbol, userInfo } from "../../utils/utils";
 
 const accessToken = Cookies.get(ACCESS_TOKEN);
 const axiosConfig: any = {
@@ -46,7 +45,13 @@ export async function getNftById(chain: any, contractAddress: any, nftId: any) {
   );
 }
 
-export async function uploadToPinata(formData: FormData, axiosConfig: any) {
+export async function getNftByUserId() {
+  return await axios.get(
+    `${BASE_URL}/nft/getNFTByUserId/${userInfo && userInfo._id}`
+  );
+}
+
+export async function uploadToPinata(formData: FormData) {
   return await axios.post(
     `${BASE_URL}/nft/upload-pinata`,
     formData,
@@ -129,7 +134,6 @@ export async function endSaleApi(
   );
 }
 
-
 export async function cancelAuctionApi(
   auction: any,
   hash: string,
@@ -145,6 +149,22 @@ export async function cancelAuctionApi(
     },
     axiosConfig
   );
+}
+
+export async function createStore(generals){
+  return await axios.post(
+    `${BASE_URL}/store/create`,
+    { store: generals, user: userInfo },
+    axiosConfig
+  );
+}
+
+export async function getStoreApi() {
+  return await axios.get(`${BASE_URL}/store`);
+}
+
+export async function getStoreByUser(){
+  return await axios.get(`${BASE_URL}/store/getStoreByUser`, axiosConfig);
 }
 
 export async function emailLogin(email: string, password: string) {

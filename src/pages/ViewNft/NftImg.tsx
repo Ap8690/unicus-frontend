@@ -13,14 +13,14 @@ const NftImg = ({ img, likes, views, shares }) => {
                     {views} <img src={viewImg} alt="views" />
                 </button>
                 <button>
-                    {shares} <img src={shareImg} alt="shares" />
+                    <img src={shareImg} alt="shares" />
                 </button>
-                <button>
+                {/* <button>
                     {likes} <img src={likesImg} alt="likes" />
-                </button>
-                <button>
+                </button> */}
+                {/* <button>
                     <img src={flagImg} alt="flag" />
-                </button>
+                </button> */}
             </div>
         </div>
     )

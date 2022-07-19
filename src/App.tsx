@@ -1,5 +1,5 @@
 // Libraries
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { clusterApiUrl } from "@solana/web3.js";
@@ -50,6 +50,12 @@ import { IStore } from "./models/Store";
 import ViewNft from "./pages/ViewNft/ViewNft";
 import StoreHomepage from "./pages/StoreHomepage/StoreHomepage";
 import StoreSettings from "./pages/StoreSettings/StoreSettings";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { UNICUS_STORE } from "./config";
+import { getStoreApi, getStoreByUser } from "./services/api/supplier";
+import { ACCESS_TOKEN } from "./utils/constants";
 // import NFTById from "./components/NFTById/NFTById";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -57,8 +63,71 @@ require("@solana/wallet-adapter-react-ui/styles.css");
 const App = () => {
   const network = WalletAdapterNetwork.Mainnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-  // @ts-ignore
-  const [store, setStore] = useState<IStore>({});
+//@ts-ignore
+const [store, setStore] = useState<IStore>({});
+const [userStore, setUserStore] = useState({});
+const [accessToken, setAccessToken] = useState("");
+const [showStore, setShowStore] = useState(true);
+const [loading, setLoading] = useState(false);
+const dispatch = useDispatch();
+useEffect(() => {
+  if (window.location.host === UNICUS_STORE) {
+    getStore();
+  } else {
+    init();
+    setLogin();
+  }
+
+  // document.documentElement.setAttribute("data-theme", "green");
+}, []);
+useEffect(() => {
+  if (store && store.appearance && store.appearance.storeLoader) {
+    localStorage.setItem("storeLoader", store.appearance.storeLoader);
+  }
+}, [store]);
+
+const init = async () => {
+  try {
+    setLoading(true);
+    const res = await getStoreApi();
+    setStore(res.data.store);
+    setShowStore(true);
+    localStorage.setItem("store", JSON.stringify(res.data.store));
+  } catch (err: any) {
+    // window.open("http://store-front.unicus.one/create-store", "_self");
+    setShowStore(false);
+  }
+  setLoading(false);
+};
+const setLogin = () => {
+  const cookieUser = Cookies.get("userInfo");
+
+  let userInfo;
+  if (cookieUser) {
+    userInfo = JSON.parse(cookieUser);
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+  }
+  const token = Cookies.get(ACCESS_TOKEN);
+  if (token) {
+    setAccessToken(token)
+  }
+};
+const getStore = async () => {
+  try {
+    if (accessToken) {
+      const res = await getStoreByUser();
+      if (res.data.store) {
+        setUserStore(res.data.store);
+      }
+    }
+  } catch (err) {
+    console.log("err", err);
+  }
+};
+
+useEffect(() => {
+  getStore();
+}, [accessToken]);
 
   //@ts-ignore
   const wallets = useMemo(
@@ -81,7 +150,7 @@ const App = () => {
         <WalletModalProvider>
           <div className="App">
             <BrowserRouter>
-              <Navbar />
+              <Navbar store={userStore} />
               <ToastContainer limit={3} />
 
               <ScrollToTop />

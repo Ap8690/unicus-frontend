@@ -37,7 +37,11 @@ import {
   getCreateNftContract,
   getCreateNftContractAddress,
 } from "../../utils/utils";
-import { addWalletAdd, createNft } from "../../services/api/supplier";
+import {
+  addWalletAdd,
+  createNft,
+  uploadToPinata,
+} from "../../services/api/supplier";
 import { useSelector } from "react-redux";
 
 const CreateNftSingle = () => {
@@ -191,7 +195,6 @@ const CreateNftSingle = () => {
       console.log(2);
       await connectWallet(chain)
         .then(async (address) => {
-          
           const contractAddress = getCreateNftContractAddress(chain);
 
           setNftModalMessage("Uploading the NFT.");
@@ -206,63 +209,29 @@ const CreateNftSingle = () => {
 
           formData.append("attributes", JSON.stringify(properties));
 
-          let axiosConfig: any = {
-            headers: {
-              "Content-Type":
-                "multipart/form-data;boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
-            },
-          };
-
-          let newaxiosConfig: any = {
-            headers: {
-              Authorization: "Bearer " + accessToken,
-            },
-          };
-
-          const createNFT = await getCreateNftContract(chain);
-
-          try{
-          await createNFT.methods
-            .batchMint(
-              [
-                "https://unicus.mypinata.cloud/ipfs/QmXzeZxaiyrtu7pjaSyrVftwS94Z3N1nZTYzd3z14C6shg",
-              ],
-              [0]
-            )
-            .send({
-              from: "0x41804064E354170d36b7Cbc0e6B49E413106B12A",
-            })
-          }catch(e){
-            console.log(e);
-            
-          }
-            
-          const response: any = await axios
-            .post(`${BASE_URL}/nft/upload-pinata`, formData, axiosConfig)
-            .catch((err: any) => {
-              setNftLoading(false);
-              setdefaultErrorMessage(err.message);
-              setdefaultErrorModal(true);
-            });
-          if (!response) {
-            setdefaultErrorMessage("Network Error");
-            return;
-          }
-          var tokenHash = response.data;
-          var tokenUri = "https://unicus.mypinata.cloud/ipfs/" + tokenHash;
-          let imageUrl;
-          let tokenId;
-          await axios.get(tokenUri).then((val) => {
-            imageUrl = val.data.image;
-            console.log("imaged add", val);
-          });
           try {
+            const response: any = await uploadToPinata(formData);
+            if (!response) {
+              setdefaultErrorMessage("Network Error");
+              return;
+            }
+            var tokenHash = response.data;
+            var tokenUri = "https://unicus.mypinata.cloud/ipfs/" + tokenHash;
+            let imageUrl;
+            let tokenId;
+            await axios.get(tokenUri).then((val) => {
+              imageUrl = val.data.image;
+              console.log("imaged add", val); 
+            });
             toast.success("NFT Uploaded...");
             setNftModalMessage("An Awesome Asset is getting Minted");
-            console.log(address, royalty, tokenUri, createNFT.methods);
+            const createNFT = await getCreateNftContract(chain);
 
-            let res: any;
-            
+            const res: any = await createNFT.methods
+              .batchMint([tokenUri], [royalty])
+              .send({
+                from: address,
+              });
 
             let tranIsSuccess = false;
             console.log("mint result", res);
@@ -459,7 +428,7 @@ const CreateNftSingle = () => {
                 </FormControl>
               </div>
               <div className="set-price">
-                <div className="btn-box">
+                {/* <div className="btn-box">
                   <button className="btn-outline">
                     <img src={dollarImg} alt="dollar" />
                     <span>Fixed Price</span>
@@ -472,14 +441,14 @@ const CreateNftSingle = () => {
                     <img src={listImg} alt="dollar" />
                     <span>Open For Bids</span>
                   </button>
-                </div>
-                <Input
+                </div> */}
+                {/* <Input
                   title={"Price"}
                   placeholder="100"
                   state={price}
                   setState={setPrice}
                   number
-                />
+                /> */}
                 <Input
                   title={"Royalty"}
                   placeholder="0 - 99 %"
@@ -519,7 +488,7 @@ const CreateNftSingle = () => {
                   </div>
                   <AddRoundedIcon />
                 </button>
-                <button className="btn-outline" onClick={handleClickOpenLevels}>
+                {/* <button className="btn-outline" onClick={handleClickOpenLevels}>
                   <div className="btn-text">
                     <img src={starImg} alt="dollar" />
                     <span>Levels</span>
@@ -551,7 +520,7 @@ const CreateNftSingle = () => {
                   }
                   state={unlockContent}
                   useState={setUnlockContent}
-                />
+                /> */}
                 <div className="btn-outline">
                   <div className="btn-text">
                     <img src={questionImg} alt="dollar" />
