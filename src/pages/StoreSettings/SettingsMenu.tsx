@@ -32,7 +32,7 @@ const SettingsMenu = ({
                 }`}
             >
                 <img src={advanceIcon} alt="" />
-                <span>Advanced</span>
+                <span>Advance</span>
             </button>
             <button
                 onClick={()=>handleSettingChange('appearance')}

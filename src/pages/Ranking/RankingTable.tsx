@@ -15,16 +15,18 @@ const RankingTableData = ({ item, i }) => {
         {item.collection}
       </td>
       <td>
-        <img
-          src={ethereum}
-          alt="ethereum"
-          style={{
-            position: "relative",
-            bottom: "0.1rem",
-            verticalAlign: "middle",
-          }}
-        />
-        {item.volume}
+        <div>
+          <img
+            src={ethereum}
+            alt="ethereum"
+            style={{
+              position: "relative",
+              bottom: "0.1rem",
+              verticalAlign: "middle",
+            }}
+          />
+          {item.volume}
+        </div>
       </td>
       <td className={item.h24 < 0 ? "red" : "green"}>{item.h24}%</td>
       <td className={item.d7 < 0 ? "red" : "green"}>{item.d7}%</td>
@@ -42,6 +44,21 @@ const RankingTableData = ({ item, i }) => {
       </td>
       <td>{item.owners}K</td>
       <td>{item.assets}K</td>
+      <td className="mobile-only">
+          <span className={item.h24 < 0 ? "red" : "green"}>{item.h24}%</span>
+          <div className="eth-box">
+          <img
+            src={ethereum}
+            alt="ethereum"
+            style={{
+              position: "relative",
+              bottom: "0.1rem",
+              verticalAlign: "middle",
+            }}
+          />
+          {item.volume}
+        </div>
+      </td>
     </tr>
   );
 };
