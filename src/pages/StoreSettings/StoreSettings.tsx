@@ -3,6 +3,8 @@ import SettingsMenu from "./SettingsMenu"
 import "./storesettings.scss"
 import emptyImg from "../../assets/svgs/emptyImg.svg"
 import GeneralSettings from "./GeneralSettings/GeneralSettings"
+import AdvancedSettings from "./AdvancedSettings/AdvancedSettings"
+import AppearanceSettings from "./AppearanceSettings/AppearanceSettings"
 
 const StoreSettings = () => {
     const [currentSetting, setCurrentSetting] = useState("general")
@@ -21,6 +23,8 @@ const StoreSettings = () => {
                         storeImg={emptyImg}
                     />
                     {currentSetting === "general" && <GeneralSettings />}
+                    {currentSetting === "advanced" && <AdvancedSettings />}
+                    {currentSetting === "appearance" && <AppearanceSettings />}
                 </div>
             </div>
         </div>

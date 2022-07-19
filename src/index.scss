@@ -146,6 +146,15 @@ p {
   margin: 0;
 }
 
+.noScrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.noScrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+
 ::-webkit-scrollbar {
   background-color: #202324;
   color: #aba499;

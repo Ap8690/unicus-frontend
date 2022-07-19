@@ -35,7 +35,7 @@ const GeneralNameAndLogo = () => {
                 />
                 <button className="btn">Save Changes</button>
             </div>
-            <div>
+            <div className="file-upload-container" >
                 <div className="title">Logo</div>
                 <label className="file-upload-box">
                     <img src={uploadImg} alt="" />

@@ -18,7 +18,7 @@ const RankingHeader = ({
           The top NFTs on OpenSea, ranked by volume, floor price and other
           statistics.
         </p>
-        <div className="ranking-filters">
+        <div className="ranking-filters noScrollbar">
           <div className="ranking-filter">
             <p>Last {timeFilter} days</p>
             <button className="ranking-filter-expand">

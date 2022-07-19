@@ -5,12 +5,14 @@
 .ranking {
   width: 100%;
   max-width: 1290px;
-  padding: 6rem 2rem;
+  padding: 3rem 2rem;
   position: relative;
   
   .ranking-header {
+    width: 100%;
+    position: relative;
     .ranking-heading {
-      font-size: fonts.$font-size-6xl;
+      font-size: fonts.$font-size-5xl;
       background: colors.$gradient-blue;
       color: transparent;
       background-clip: text;
@@ -19,7 +21,7 @@
       @include fn.flex(center, space-between);
       .ranking-intro {
         width: 40%;
-        font-size: fonts.$font-size-xl;
+        font-size: fonts.$font-size-lg;
         font-weight: 500;
       }
       .ranking-filters {
@@ -46,7 +48,7 @@
   }
   // Ranking Table
   .ranking-table {
-    margin-top: 8rem;
+    margin-top: 4rem;
     width: 100%;
     table {
       table-layout: fixed;
@@ -57,13 +59,13 @@
         width: 100%;
         tr {
           th:nth-child(1) {
-            width: 30%;
+            width: 300px;
             text-align: left;
             padding-left: 4rem;
           }
           th {
             text-align: center;
-            font-size: fonts.$font-size-xl;
+            font-size: fonts.$font-size-lg;
             width: auto;
             font-weight: 600;
           }
@@ -72,7 +74,7 @@
       tbody:before {
         content: "-";
         display: block;
-        line-height: 3rem;
+        line-height: 1.5rem;
         color: transparent;
       }
       tbody {
@@ -83,17 +85,25 @@
             width: 30%;
             text-align: left;
           }
+            .eth-box{
+              display: flex;
+              gap: 0.1rem;
+            }
           td {
             border: none !important;
-            padding: 2rem 0;
+            padding: 1rem 0;
             text-align: center;
-            font-size: fonts.$font-size-xl;
+            font-size: fonts.$font-size-base;
             width: auto;
             font-weight: 600;
 
             .collection-image {
               display: inline-block;
               height: 3rem;
+              width: 3rem;
+              border-radius: 99999px;
+              overflow: hidden;
+              object-fit: cover;
               border-radius: 50%;
               vertical-align: middle;
               margin: 0 1rem;
@@ -136,10 +146,112 @@
     .ranking-switcher-element {
       cursor: pointer;
       font-weight: 600;
-      font-size: fonts.$font-size-xl;
+      font-size: fonts.$font-size-base;
     }
     .ranking-switcher-element.current {
       opacity: 0.4;
     }
+  }
+}
+.mobile-only{
+  display: none;
+}
+
+@media screen and (max-width: 992px) {
+  th{
+    font-size: fonts.$font-size-sm !important;
+    width: fit-content !important;
+    &:nth-child(1){
+      padding: 1rem !important;
+      width: 225px !important;
+    }
+  }
+  td{
+    font-size: fonts.$font-size-sm !important;
+    width: fit-content !important;
+    &:nth-child(1){
+      padding: 1rem !important;
+    }
+  }
+  .ranking-header, .ranking-filter-etc{
+    align-items: center !important;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    h3{
+      width: 100%;
+      text-align: center;
+      margin-top: 0;
+    }
+    .ranking-intro{
+      text-align: center;
+      width: 100% !important;
+    }
+    .ranking-filter{
+      margin-top: 2rem;
+      min-width: fit-content;
+    }
+    .ranking-filters{
+      justify-content: flex-start !important;
+      overflow-x: scroll;
+      width: 100% !important;
+      max-width: 100%;
+    }
+  }
+}
+@media screen and (max-width: 860px) {
+  table {
+    border-collapse: separate !important;
+  }
+  thead{
+    display: none !important;
+  }
+  td{
+    display: none;
+    font-size: fonts.$font-size-xs !important;
+    &:nth-child(1){
+      display: block !important;
+      img{
+        margin: 0 0.5rem !important;
+      }
+    }
+  }
+  tr{
+    display: flex;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+    padding-right: 1rem;
+    align-items: center;
+    background: none !important;
+    position: relative;
+    .green {
+      color: #22c16c;
+    }
+    .red {
+      color: #f94025;
+    }
+    .eth-box{
+      color: rgba($color: #fff, $alpha: 0.21);
+    }
+    span{
+      text-align: left;
+      padding-left: 1rem;
+    }
+    &::before{
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px dashed rgba($color: #fff, $alpha: 0.31);
+    }
+  }
+  td.mobile-only{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .collection-image {
+    height: 2rem !important;
+    width: 2rem !important;
   }
 }
