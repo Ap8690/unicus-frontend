@@ -9,14 +9,14 @@ const Header = () => {
         <img src={filter} alt="Filter" />
         Filter
       </div>
-      <div className="misc">
+      {/* <div className="misc">
         <div className="inactive-listing">
           <img src={invalid} alt="Invalid" />
           Inactive Listing
           <a href="#">learn more</a>
         </div>
-        <div className="cancel">Cancel all listings and offers</div>
-      </div>
+        <div className="cancel">Cancel all listings and offers</div> */}
+      {/* </div> */}
     </div>
   );
 };

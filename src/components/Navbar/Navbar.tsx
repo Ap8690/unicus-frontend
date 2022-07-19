@@ -1,5 +1,5 @@
 import "./navbar.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import unicusLogo from "../../assets/images/Unicus-logo.png";
 import profileLogo from "../../assets/svgs/profileIcon.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -14,7 +14,8 @@ import MenuRoundedIcon from '@mui/icons-material/MenuRounded'
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { disConnectWallet, isMainStore } from "../../utils/utils";
 
-const Navbar = (store: any) => {
+const 
+Navbar = ({store}) => {
   const [search, setSearch] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
@@ -62,6 +63,12 @@ const Navbar = (store: any) => {
     if (window.scrollY > 0) return setSolidNav(true);
     setSolidNav(false);
   });
+
+  useEffect(() => {
+    console.log("store",store);
+    
+  }, [])
+  
 
   return (
     <nav className={solidNav ? "solid-nav" : ""}>

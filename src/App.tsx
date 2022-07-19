@@ -106,6 +106,9 @@ const setLogin = () => {
     userInfo = JSON.parse(cookieUser);
     localStorage.setItem("userInfo", JSON.stringify(userInfo));
   }
+  else{
+    localStorage.removeItem("userInfo")
+  }
   const token = Cookies.get(ACCESS_TOKEN);
   if (token) {
     setAccessToken(token)
@@ -118,6 +121,9 @@ const getStoreForUser = async () => {
       if (res.data.store) {
         setUserStore(res.data.store);
       }
+    }
+    else{
+      setUserStore({})
     }
   } catch (err) {
     console.log("err", err);
@@ -169,7 +175,7 @@ useEffect(() => {
               <Route path="/blog" element={<Blog />} />
               <Route path="/readblog/:id" element={<ReadBlog />} />
               <Route path="/connect-wallet/*" element={<ConnectWallet />} />
-              <Route path="/create-nft" element={<CreateNftSelector />} />
+              <Route path="/create-nft" element={<CreateNftSingle />} />
               <Route
                 path="/create-nft/single-item"
                 element={<CreateNftSingle />}

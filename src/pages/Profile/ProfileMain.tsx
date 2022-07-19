@@ -11,8 +11,7 @@ import Favourited from "./Favourited/Favourited";
 import Listing from "./Listing/Listing";
 
 // Images
-import userImg from "../../assets/images/userImage.png";
-import backgroundImg from "../../assets/images/userBackground.png";
+
 import favouritedImg from "../../assets/images/favouritedImage.png";
 import itemPic from "../../assets/images/itemPic.png";
 
@@ -30,7 +29,12 @@ import axios from "axios";
 import { userInfo } from "os";
 import { tronChain, BASE_URL } from "../../config";
 import { setNotification } from "../../Redux/Blockchain/contracts";
-import { connectWallet, getCreateNftABI, getMarketPlace, getMarketPlaceContractAddress } from "../../utils/utils";
+import {
+  connectWallet,
+  getCreateNftABI,
+  getMarketPlace,
+  getMarketPlaceContractAddress,
+} from "../../utils/utils";
 import web3 from "../../web3";
 import { createSellApi, getNftByUserId } from "../../services/api/supplier";
 import { toast } from "react-toastify";
@@ -41,9 +45,9 @@ type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 const Profile = (): ReactJSXElement => {
   // add is additional information
   const tabs = [
-    { name: "Collected", image: profileCollected, add: "5" },
+    // { name: "Collected", image: profileCollected, add: "5" },
     { name: "Created", image: profileCreated, add: "" },
-    { name: "Favourited", image: profileFavourited, add: "6" },
+    // { name: "Favourited", image: profileFavourited, add: "6" },
     { name: "Activity", image: profileActivity, add: "" },
     { name: "Listing", image: profileListing, add: "" },
     { name: "Offers", image: profileOffers, add: "" },
@@ -59,20 +63,7 @@ const Profile = (): ReactJSXElement => {
     tabs.findIndex((tab) => tab.name.toLowerCase() === tabName)
   );
   const [search, setSearch]: useStateType<String> = useState("");
-  const user = {
-    name: "Kyle Garrick",
-    id: "6xc4c16a6451as56dfgf1ghdsa6db21a",
-    joinDate: "21 July 2022",
-    image: userImg,
-    backimg: backgroundImg,
-    social: {
-      twitter: "#",
-      instagram: "#",
-      facebook: "#",
-    },
-    collected: null,
-    favourited: null,
-  };
+  
   const items = [
     {
       image: favouritedImg,
@@ -126,19 +117,27 @@ const Profile = (): ReactJSXElement => {
       exp: "July 25, 2022",
     },
   ];
-  const [displayListing, setDisplayListing] = useState(listing);
+    const createdColumns = [
+      "Item",
+      "Chain",
+      "Created"
+    ];
+  const listingColumns = ["Item", "Unit Price", "Status", "Created"];
 
-  const getNfts=async()=>{
-    try{
-    const res = await getNftByUserId()
-    console.log("res nfts",res);
-    
-    }catch(e){
+  const [displayListing, setDisplayListing] = useState(listing);
+  const [displayCreated, setDisplayCreated] = useState(listing);
+
+  const getNfts = async () => {
+    try {
+      const res = await getNftByUserId();
+      console.log("res nfts", res);
+      setDisplayCreated(res.data.nfts)
+      setDisplayListing(res.data.auctions)
+    } catch (e) {
       console.log(e);
-      toast.error(e)
-      
+      toast.error(e);
     }
-  }
+  };
   useEffect(() => {
     const q = search.toLowerCase();
     const temp = listing.filter((item) => item.item.toLowerCase().includes(q));
@@ -146,12 +145,12 @@ const Profile = (): ReactJSXElement => {
   }, [search]);
 
   useEffect(() => {
-    getNfts()
-  }, [])
-  
+    getNfts();
+  }, []);
+
   return (
     <div className="profile">
-      <User user={user} />
+      <User />
       <ProfileNavigation
         tabs={tabs}
         currentTab={currentTab}
@@ -166,8 +165,16 @@ const Profile = (): ReactJSXElement => {
             <Listing
               list={displayListing}
               search={search}
-              setSearch={setSearch}
-            />
+              setSearch={setSearch} columns={listingColumns}            />
+          }
+        />
+        <Route
+          path="/created"
+          element={
+            <Listing
+              list={displayCreated}
+              search={search}
+              setSearch={setSearch} columns={createdColumns}            />
           }
         />
       </Routes>

@@ -200,3 +200,36 @@ export async function addWalletAdd(userWallet: string) {
     axiosConfig
   );
 }
+
+export async function updateProfilePic(url:string) {
+  return await axios.post(
+    `${BASE_URL}/users/update/profilePicture`,
+    {
+      userId: userInfo._id,
+      cloudinaryUrl: url,
+    },
+    axiosConfig
+  );
+}
+export async function updateProfileBg(url: string) {
+  return await axios.post(
+    `${BASE_URL}/users/update/backgroundPicture`,
+    {
+      userId: userInfo._id,
+      cloudinaryUrl: url,
+    },
+    axiosConfig
+  );
+}
+export async function getCollectionsByUser() {
+  return await axios.post(
+    `${BASE_URL}/nft/getCollectionsByUser`,
+    axiosConfig
+  );
+}
+export async function getNftByCollection(collection: string) {
+  return await axios.get(
+    `${BASE_URL}/nft/getNftByCollections/${collection}`,
+    axiosConfig
+  );
+}

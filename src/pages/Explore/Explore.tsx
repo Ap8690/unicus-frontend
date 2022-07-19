@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { getChainId } from "../../utils/utils";
 const Explore = () => {
   // HardCoded
   const [skiploading, setskiploading] = useState(true);
@@ -89,7 +90,9 @@ const Explore = () => {
 
   const fetchItems = async () => {
     if (skiploading) {
-      getMarketplaceNfts(skip, chain, sortBy)
+    console.log("explore chian", chain, getChainId(chain));
+    
+      getMarketplaceNfts(skip, getChainId(chain), sortBy)
         .then((res: any) => {
           console.log("auc", res.data.totalAuctions);
 

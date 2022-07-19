@@ -112,7 +112,9 @@ button {
   // font-size: fonts.$font-size-xl;
   border-radius: 10px;
 }
-
+input[type="file"]{
+  display: none!important;
+}
 .blue-head {
   font-size: helper.$font-size-4xl;
   font-weight: bold;

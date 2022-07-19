@@ -40,7 +40,7 @@ const MarketPlaceAuctions = ({ list }) => {
         currentType={currentType}
         setCurrentType={setCurrentType}
       />
-      <MarketPlaceAuctionsElements list={displayList} currentScroll={currentScroll} currentType={currentType} />
+      {displayList && <MarketPlaceAuctionsElements list={displayList} currentScroll={currentScroll} currentType={currentType} />}
       <BottomNavigationMarker currentPage={currentScroll} length={length} />
     </div>
   );
