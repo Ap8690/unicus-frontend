@@ -45,6 +45,9 @@ nav{
         width: 1.5rem;
     }
 }
+.nav-menu-icons{
+    display: none;
+}
 
 .MuiMenu-paper{
     .balance-box{
@@ -60,5 +63,29 @@ nav{
     .menu-link{
         width: 100%;
         height: 100%;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .navbar{
+        .nav-links{
+            font-size: fonts.$font-size-sm;
+            gap: 1rem;
+        }
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .navbar{
+        .nav-links{
+            display: none;
+        }
+        .search-bar-box{
+            display: none;
+        }
+    }
+    .nav-menu-icons{
+        display: flex;
+        align-items: center;
     }
 }

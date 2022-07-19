@@ -8,6 +8,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import Cookies from 'js-cookie'
+import searchIcon from '../../assets/svgs/searchIcon.svg'
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded'
 
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { disConnectWallet } from "../../utils/utils";
@@ -67,7 +69,17 @@ const Navbar = () => {
           <Link to={"/"} className="brand-link">
             <img src={unicusLogo} className="navbar-brand" alt="unicus" />
           </Link>
-          <SearchBar search={search} setSearch={setSearch} />
+          <div className="search-bar-box">
+            <SearchBar search={search} setSearch={setSearch} />
+          </div>
+          <div className="nav-menu-icons">
+            <button className="nav-menu-icon">
+                <img src={searchIcon} alt="" />
+            </button>
+            <button className="nav-menu-icon">
+                <MenuRoundedIcon />
+            </button>
+          </div>
           {location.pathname === "/" || location.pathname === "/blog" ? (
             <div className="nav-links">
               <Link to={"/about"} className="nav-link">

@@ -6,6 +6,7 @@
   position: relative;
   max-width: 1290px;
   padding: 6rem 2rem;
+  width: 100%;
 
   // Some Common Elements
   .navigation-marker {
@@ -55,13 +56,27 @@
   }
   // Main
   .market-place-main {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 175px;
+    display: flex;
+    flex-direction: column;
+
+    gap: 4rem;
     align-items: center;
+    .market{
+      display: grid;
+      width: 100%;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4rem;
+      align-items: center;
+      &>img{
+        width: 100%;
+        height: 500px;
+        border-radius: 1rem;
+        object-fit: cover;
+      }
+    }
     .market-place-main-text {
       .market-place-main-heading {
-        font-size: fonts.$font-size-5xl;
+        font-size: fonts.$font-size-4xl;
         font-weight: 700;
         margin: 0;
       }
@@ -71,14 +86,14 @@
         font-weight: 300;
       }
       .market-place-main-button-holder {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-column-gap: 25px;
-        width: 80%;
+        display: flex;
+        grid-column-gap: 1.5rem;
+        // width: 80%;
         margin-top: 42px;
         button {
           font-size: fonts.$font-size-xl;
           font-weight: 700;
+          width: fit-content;
           padding: 10px 20px;
           border-radius: 10px;
         }
@@ -106,7 +121,7 @@
     }
     .market-place-banner {
       width: 100%;
-      grid-column: 1/3;
+      // grid-column: 1/3;
       img {
         display: block;
         width: 100%;
@@ -122,7 +137,7 @@
       .header {
         @include fn.flex(center, space-between);
         .heading {
-          font-size: fonts.$font-size-4xl;
+          font-size: fonts.$font-size-3xl;
           font-weight: 700;
         }
       }
@@ -168,7 +183,7 @@
       .header {
         @include fn.flex(center, space-between);
         .heading {
-          font-size: fonts.$font-size-4xl;
+          font-size: fonts.$font-size-3xl;
           font-weight: 700;
           .category-selector {
             padding-left: 10px;
@@ -278,7 +293,7 @@
         @include fn.flex(center, flex-start);
         gap: 60px;
         .heading {
-          font-size: fonts.$font-size-4xl;
+          font-size: fonts.$font-size-3xl;
           font-weight: 700;
         }
         .types {
@@ -372,14 +387,14 @@
         gap: 10px;
         h2 {
           margin: 0;
-          font-size: fonts.$font-size-4xl;
+          font-size: fonts.$font-size-3xl;
           font-weight: 700;
         }
         .day-selector {
           position: relative;
           .day-filter,
           .day-button {
-            font-size: fonts.$font-size-4xl !important;
+            font-size: fonts.$font-size-3xl;
             font-weight: 700;
             color: #5d5fef;
           }
@@ -400,13 +415,13 @@
     }
     .market-place-top-collections-elements {
       display: grid;
-      grid-template-columns: repeat(2, 50%);
+      grid-template-columns: repeat(2, 1fr);
       grid-column-gap: 36px;
       grid-row-gap: 24px;
       margin-top: 58px;
 
       .market-place-top-collections-element {
-        @include fn.flex(center, flex-start);
+        @include fn.flex(center, space-between);
         gap: 20px;
         padding: 20px;
         border: 1px dashed rgba(255, 255, 255, 0.32);
@@ -417,12 +432,19 @@
           width: 4em;
           border-radius: 50%;
         }
+        .indivisual-container{
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
         .name {
-          font-size: fonts.$font-size-2xl;
+          font-size: fonts.$font-size-xl;
           font-weight: 700;
         }
         .price {
-          margin-left: auto;
+          display: flex;
+          gap: 0.1rem;
+          align-items: center;
           color: rgba(255, 255, 255, 0.21);
           font-weight: 700;
           img {
@@ -433,6 +455,9 @@
           }
         }
         .change {
+          display: flex;
+          gap: 0.1rem;
+          align-items: center;
           color: #5d5fef;
           font-weight: 500;
         }
@@ -448,7 +473,7 @@
     .left {
       .heading {
         font-weight: 700;
-        font-size: fonts.$font-size-5xl;
+        font-size: fonts.$font-size-4xl;
         margin: 0;
         margin-bottom: 40px;
       }
@@ -459,7 +484,7 @@
     }
     .right {
       display: grid;
-      grid-template-columns: 50% 50%;
+      grid-template-columns: repeat(2, 1fr);
       grid-row-gap: 100px;
       grid-column-gap: 80px;
       .info-div {
@@ -494,7 +519,7 @@
     margin-top: 171px;
     gap: 104px;
     .heading {
-      font-size: fonts.$font-size-4xl;
+      font-size: fonts.$font-size-3xl;
       margin: 0;  
     }
     .holder {
@@ -528,4 +553,172 @@
 }
 .type {
   text-transform: capitalize;
+}
+.goto-ranking.hid{
+  display: none;
+}
+
+@media screen and (max-width: 992px) {
+  .market-place-top-collections-element {
+    gap: 1rem !important;
+    padding: 1rem !important;
+    font-size: fonts.$font-size-base !important;
+    img {
+      height: 3rem !important;
+      width: 3rem !important;
+    }
+    .name {
+      font-size: fonts.$font-size-lg !important;
+    }
+    .price{
+      img{
+        width: 1.5rem !important;
+      }
+    }
+  }
+  .market-place-top-collections-elements{
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  .market-place-create-and-sell{
+    flex-direction: column !important;
+    margin-top: 4rem !important;
+    .info-heading{
+      text-align: center;
+    }
+    .heading{
+      font-size: fonts.$font-size-xl !important;
+    }
+    .btn.nav-link{
+      display: none;
+    }
+    .right{
+      grid-template-columns: repeat(1, 1fr) !important;
+      .info-div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        p{
+          text-align: center;
+        }
+      }
+    }
+  }
+  .market-place-discover{
+    .left-list, .right-list{
+      display: none !important;
+    }
+    .heading{
+      font-size: fonts.$font-size-xl !important;
+    }
+    .discover-image{
+      width: 300px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .market-place {
+    padding: 2rem;
+  }
+  .goto-ranking.hid{
+    display: flex !important;
+    // height: 3rem;
+    justify-content: center;
+    padding: 2rem;
+    .goto-ranking{
+      display: block;
+    }
+  }
+  .market-place-main{
+    width: 100%;
+    .market{
+      display: flex !important;
+      flex-direction: column-reverse;
+      &>img{
+        height: 300px !important;
+      }
+    }
+  }
+  .btn-holder{
+    display: none !important;
+  }
+  .market-place-featured{
+    margin-top: 4rem !important;
+  }
+  .market-place-featured-navigator{
+    .header{
+      justify-content: center !important;
+      .heading{
+        text-align: center;
+        font-size: fonts.$font-size-2xl !important;
+      }
+    }
+  }
+  .market-place-trending-navigator{
+    .header{
+      justify-content: center !important;
+      .heading{
+        text-align: center;
+        font-size: fonts.$font-size-2xl !important;
+      }
+    }
+  }
+  .market-place-auctions-navigator{
+    .header{
+      justify-content: center !important;
+      gap: 2rem !important;
+      .heading{
+        text-align: center;
+        font-size: fonts.$font-size-2xl !important;
+      }
+      .types{
+        gap: 1rem !important;
+        button{
+          font-size: fonts.$font-size-base !important;
+          padding: 0;
+        }
+      }
+    }
+  }
+  .market-place-top-collections{
+    .header{
+      justify-content: center !important;
+      gap: 2rem !important;
+      .heading{
+        flex-direction: column;
+        h2, .day-filter{
+          text-align: center;
+          font-size: fonts.$font-size-2xl !important;
+          img{
+            width: 1.5rem !important;
+          }
+        }
+      }
+    }
+    .goto-ranking{
+      display: none;
+    }
+  }
+  .market-place-top-collections-element {
+    gap: 0.5rem !important;
+    padding: 1rem !important;
+    font-size: fonts.$font-size-sm !important;
+    img {
+      height: 2.5rem !important;
+      width: 2.5rem !important;
+    }
+    .indivisual-container{
+    gap: 0.5rem !important;
+
+    }
+    .name {
+      font-size: fonts.$font-size-sm !important;
+    }
+    .price{
+      img{
+        width: 1.5rem !important;
+      }
+    }
+  }
+  
 }

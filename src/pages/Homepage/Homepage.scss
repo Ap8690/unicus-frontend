@@ -6,7 +6,8 @@
   position: relative;
   max-width: 1290px;
   padding: 6rem 2rem;
-  padding-bottom: 25rem;
+  padding-bottom: 4rem;
+  width: 100%;
 }
 
 .topBanner {
@@ -122,7 +123,7 @@
 }
 
 .soln-head {
-  width: 85%;
+  width: 100%;
   position: relative;
   text-align: left;
   font-size: fonts.$font-size-3xl;
@@ -143,7 +144,6 @@
     left: -18%;
   }
   .soln-head {
-    width: 75%;
     .background-particle-number {
       right: 0;
       top: -150%;
@@ -174,6 +174,7 @@
 .soln-2 {
   position: relative;
   margin-bottom: 6rem;
+  width: 100%;
   .title {
     @include fn.text-gradient;
     font-weight: 500;
@@ -208,6 +209,16 @@
 }
 
 .soln-info1,
+.soln-info2,
+.soln-info3{
+  img{
+    width: 550px;
+    height: 500px;
+    object-fit: cover;
+  }
+}
+
+.soln-info1,
 .soln-info3 {
   @include fn.flex(center, space-between);
   gap: 4rem;
@@ -220,6 +231,7 @@
 
 .roadmap {
   margin-top: 10rem;
+  width: 100%;
   > p {
     text-align: center;
     margin-top: 1rem;
@@ -231,6 +243,10 @@
     flex-direction: column;
     position: relative;
     margin: 8rem 0;
+    width: 100%;
+    img{
+      width: 100%;
+    }
     .roadmap-info {
       width: 100%;
       margin-top: 4rem;
@@ -257,8 +273,11 @@
   .token-info {
     margin: 6rem 0;
     @include fn.flex(start, space-between);
+    gap: 2rem;
     img {
-      width: 600px;
+      width: 550px;
+      height: 500px;
+      object-fit: cover;
     }
     div {
       @include fn.flex-col(start, flex-start);
@@ -286,13 +305,19 @@
   .blog-grid {
     margin: 4rem 0;
     display: grid;
-    gap: 4rem;
+    gap: 2rem;
     grid-template-columns: repeat(3, 1fr);
   }
 }
 .blog-card {
   @include fn.flex-col(start, flex-start);
   gap: 1rem;
+  width: 300px;
+  .blog-img{
+    width: 300px;
+    height: 350px;
+    border-radius: 1.5rem;
+  }
   .category {
     font-weight: 500;
     font-size: fonts.$font-size-xs;
@@ -352,14 +377,14 @@
   .testimonial-grid {
     margin: 4rem 0;
     display: grid;
-    gap: 4rem;
+    gap: 2rem;
     grid-template-columns: repeat(3, 1fr);
   }
 }
 .testimonial-card {
   border-radius: 10px;
   background: #121214;
-  padding: 4rem;
+  padding: 3rem;
   @include fn.flex-col(center, center);
   gap: 1rem;
   position: relative;
@@ -414,6 +439,198 @@
     button {
       font-weight: 500;
       font-family: fonts.$font-rubik;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .soln-info1,
+  .soln-info2,
+  .soln-info3{
+    img{
+      width: 450px;
+      height: 400px;
+    }
+  }
+  .token{
+    .token-info{
+      img{
+        width: 350px;
+        height: 300px;
+      }
+    }
+  }
+  .blog-card {
+    width: 250px;
+    .blog-img{
+      width: 250px;
+      height: 300px;
+    }
+  }
+  .testimonial-card {
+    padding: 2rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    img {
+      width: 150px;
+      height: 150px;
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .homepage{
+    padding: 2rem;
+  }
+  .topBanner{
+    .largeText{
+      font-size: fonts.$font-size-3xl;
+    }
+  }
+  .unicusEcosystem {
+    .ecosystemGrid {
+      gap: 2rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .soln-head{
+    text-align: center !important;
+  }
+  .soln-info1,
+  .soln-info2,
+  .soln-info3{
+    img{
+      width: 350px;
+      height: 300px;
+    }
+  }
+  .soln-grid{
+    gap: 2rem !important;
+  }
+  .token{
+    .token-info{
+      img{
+        width: 350px;
+        height: 300px;
+      }
+    }
+  }
+  .blog-card {
+    width: 200px;
+    .blog-img{
+      width: 200px;
+      height: 250px;
+    }
+  }
+  .stay-in-loop{
+    flex-direction: column-reverse;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .topBanner{
+    flex-direction: column-reverse;
+    padding-top: 0;
+    p{
+      width: 100%;
+    }
+    img{
+      width: 100%;
+    }
+    .largeText{
+      font-size: fonts.$font-size-3xl;
+    }
+  }
+  .unicusEcosystem {
+    margin-top: 6rem;
+    .ecosystemGrid {
+      grid-template-columns: repeat(1, 1fr);
+      margin-top: 4rem;
+      .gridData {
+        @include fn.flex-col(center, flex-start);
+        p{
+          text-align: center;
+        }
+      }
+    }
+  }
+  .soln-info1,
+  .soln-info2,
+  .soln-info3{
+    flex-direction: column;
+    img{
+      width: 300px;
+      height: 250px;
+    }
+  }
+  .soln-3{
+    margin-bottom: 0 ;
+  }
+  .soln-grid{
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  .roadmap{
+    margin-top: 0;
+    .roadmap-info{
+      .blue-head{
+        font-size: fonts.$font-size-base;
+      }
+      p{
+        font-size: fonts.$font-size-sm;
+      }
+    }
+  }
+  .roadmap-img{
+    margin: 4rem 0 !important;
+    img{
+      width: 100%;
+    }
+  }
+  .token{
+    margin-top: 4rem;
+    .token-info{
+      flex-direction: column;
+      align-items: center;
+      img{
+        width: 300px;
+        height: 250px;
+      }
+    }
+  }
+  .blogs{
+    margin-top: 0;
+    width: 100%;
+    .blog-grid{
+      grid-template-columns: repeat(1, 1fr);
+      .blog-card{
+        width: 100%;
+        align-items: center;
+        .blog-img{
+          width: 250px;
+          height: 300px;
+        }
+      }
+    }
+  }
+  .testimonial-grid{
+    grid-template-columns: repeat(1, 1fr) !important;
+    .testimonial-card{
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+      img{
+        width: 200px;
+        height: 200px;
+      }
+    }
+  }
+  .stay-in-loop{
+    img{
+      width: 100%;
+    }
+    .inputs{
+      flex-direction: column;
+      align-items: center;
+      row-gap: 1rem;
     }
   }
 }

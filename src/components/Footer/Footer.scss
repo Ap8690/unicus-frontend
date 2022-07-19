@@ -3,7 +3,7 @@
 @use "/src/styles/colors";
 
 footer {
-  padding: 2.8rem 0;
+  padding: 2.8rem 2rem;
   @include fn.flex-col(center, flex-start);
   gap: 4.2rem;
   width: 100%;
@@ -22,22 +22,21 @@ footer {
     width: 100%;
     font-size: fonts.$font-size-xl;
     text-align: center;
-    padding: 0 2rem;
     margin: 0;
     font-weight: 400;
   }
   .footer-nav-bar {
-    width: 70%;
     .footer-nav-links {
-      @include fn.flex(center, space-evenly);
+      @include fn.flex(center, center);
       width: 100%;
       text-align: center;
-      flex-wrap: wrap;
-      gap: 4rem;
+      // flex-wrap: wrap;
+      gap: 3rem;
       .footer-nav-link {
         width: fit-content;
         font-size: fonts.$font-size-base;
         font-weight: 400;
+        white-space: nowrap;
         &:hover {
           color: #999;
         }
@@ -45,19 +44,39 @@ footer {
     }
   }
   .footer-social-links {
-    @include fn.flex(center, space-between);
-    flex-wrap: wrap;
-    gap: 5.2rem;
+    @include fn.flex(center, center);
+    // flex-wrap: wrap;
+    gap: 3rem;
     .footer-social-link {
-      height: 4rem;
-      width: 4rem;
       &:hover {
         opacity: 0.5;
+      }
+      img{
+        width: 2rem;
+        height: 2rem;
       }
     }
   }
   .footer-copyright {
-    font-size: fonts.$font-size-2xl;
+    font-size: fonts.$font-size-base;
     font-weight: 400;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .footer-social-links {
+    gap: 2rem !important;
+  }
+  .footer-nav-links {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem !important;
+    .footer-nav-link{
+      width: 100% !important;
+      text-align: left;
+    }
+    .footer-nav-link:nth-child(even){
+      text-align: right;
+    }
   }
 }
