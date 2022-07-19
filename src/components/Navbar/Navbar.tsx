@@ -12,7 +12,7 @@ import searchIcon from '../../assets/svgs/searchIcon.svg'
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded'
 
 import { ACCESS_TOKEN } from "../../utils/constants";
-import { disConnectWallet } from "../../utils/utils";
+import { disConnectWallet, isMainStore } from "../../utils/utils";
 
 const Navbar = (store: any) => {
   const [search, setSearch] = useState("");
@@ -41,8 +41,11 @@ const Navbar = (store: any) => {
     console.log(event.currentTarget);
     setAnchorChains(event.currentTarget);
   };
-  const handleCloseChains = () => {
+  const handleCloseChains = (chain:any) => {
     setAnchorChains(null);
+    if(chain != ""){
+      navigate(`/explore/${chain}`)
+    }
   };
   const handleClickProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
     accessToken
@@ -63,21 +66,22 @@ const Navbar = (store: any) => {
   return (
     <nav className={solidNav ? "solid-nav" : ""}>
       <div className={`navbar`}>
-        <Link to={"/"} className="brand-link">
+        <Link to={"/home"} className="brand-link">
           <img src={unicusLogo} className="navbar-brand" alt="unicus" />
         </Link>
         <div className="search-bar-box">
-            <SearchBar search={search} setSearch={setSearch} />
-          </div>
-          <div className="nav-menu-icons">
-            <button className="nav-menu-icon">
-                <img src={searchIcon} alt="" />
-            </button>
-            <button className="nav-menu-icon">
-                <MenuRoundedIcon />
-            </button>
-          </div>
-        {location.pathname === "/" || location.pathname === "/blog" ? (
+          <SearchBar search={search} setSearch={setSearch} />
+        </div>
+        <div className="nav-menu-icons">
+          <button className="nav-menu-icon">
+            <img src={searchIcon} alt="" />
+          </button>
+          <button className="nav-menu-icon">
+            <MenuRoundedIcon />
+          </button>
+        </div>
+        {isMainStore() &&
+        (location.pathname === "/home" || location.pathname === "/blog") ? (
           <div className="nav-links">
             <Link to={"/about"} className="nav-link">
               About
@@ -155,17 +159,29 @@ const Navbar = (store: any) => {
             <Menu
               anchorEl={anchorChains}
               open={openChains}
-              onClose={handleCloseChains}
+              onClose={() => handleCloseChains("")}
               MenuListProps={{
                 "aria-labelledby": "basic-button",
               }}
             >
-              <MenuItem onClick={handleCloseChains}>Ethereum</MenuItem>
-              <MenuItem onClick={handleCloseChains}>Polygon</MenuItem>
-              <MenuItem onClick={handleCloseChains}>Tron</MenuItem>
-              <MenuItem onClick={handleCloseChains}>Binance</MenuItem>
-              <MenuItem onClick={handleCloseChains}>Solana</MenuItem>
-              <MenuItem onClick={handleCloseChains}>Avalanche</MenuItem>
+              <MenuItem onClick={() => handleCloseChains("ethereum")}>
+                Ethereum
+              </MenuItem>
+              <MenuItem onClick={() => handleCloseChains("polygon")}>
+                Polygon
+              </MenuItem>
+              <MenuItem onClick={() => handleCloseChains("binance")}>
+                Binance
+              </MenuItem>
+              <MenuItem onClick={() => handleCloseChains("tron")}>
+                Tron
+              </MenuItem>
+              <MenuItem onClick={() => handleCloseChains("near")}>
+                Near
+              </MenuItem>
+              <MenuItem onClick={() => handleCloseChains("solona")}>
+                Solona
+              </MenuItem>
             </Menu>
             <Link to={"/create-nft"} className="nav-link">
               Create NFT
@@ -217,7 +233,7 @@ const Navbar = (store: any) => {
                 <div>Total Balance</div>
               </div>
             </Menu>
-            {store && Object.keys(store).length !== 0 ? (
+            {isMainStore() && store && Object.keys(store).length !== 0 ? (
               <a
                 href={
                   store.domain && store.domain.length > 0
@@ -228,12 +244,14 @@ const Navbar = (store: any) => {
               >
                 <button className="btn nav-link">Go to My Store</button>
               </a>
-            ) :<button
-              onClick={() => navigate("/create-store")}
-              className="btn nav-link"
-            >
-              Create Store
-            </button>}
+            ) : (
+              <button
+                onClick={() => navigate("/create-store")}
+                className="btn nav-link"
+              >
+                Create Store
+              </button>
+            )}
 
             <button
               onClick={() => navigate(`/connect-wallet${location.pathname}`)}

@@ -14,14 +14,19 @@ import ExploreElements from "./ExploreElements";
 import BlueBackground from "../../components/BlueBackground/BlueBackground";
 
 //apis
-import {getMarketplaceNfts} from "../../services/api/supplier"
+import {
+  getMarketplaceNfts,
+  verifyEmailApi,
+} from "../../services/api/supplier";
 import { metadata } from "0xsequence/dist/declarations/src/sequence";
 import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { ACCESS_TOKEN } from "../../utils/constants";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 const Explore = () => {
   // HardCoded
-  const [skiploading, setskiploading] = useState(true)
-  const { networkID } = useSelector((state: any) => state.profile);
-      const [metadata, setmetadata] = useState<any>([]);
+  const [skiploading, setskiploading] = useState(true);
+  const [metadata, setmetadata] = useState<any>([]);
 
   const filters = ["All", "Art", "Photos", "Games", "Music"];
   const elements = [
@@ -69,35 +74,67 @@ const Explore = () => {
     },
   ];
 
+  const { chain } = useParams();
+
   // States
   const [currentFilter, setCurrentFilter] = useState("All");
   const [displayElements, setDisplayItems] = useState([]);
-  const [sortBy, setsortBy] = useState<any>([['createdAt',-1]])
-  const [sortBy2, setsortBy2] = useState<any>('createdAt')
-  const [skip, setskip] = useState(0)
+  const [sortBy, setsortBy] = useState<any>([["createdAt", -1]]);
+  const [sortBy2, setsortBy2] = useState<any>("createdAt");
+  const [skip, setskip] = useState(0);
+  const [ResetPasswordPopUpShow, setResetPasswordPopUpShow] =
+    useState<any>(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  async function fetchItems() {
+  const fetchItems = async () => {
     if (skiploading) {
-      getMarketplaceNfts(skip, networkID, sortBy)
-            .then((res: any) => {
-              console.log("auc",res.data.totalAuctions);
-              
-                setDisplayItems(res.data.data)
-               console.log(res.data.data);
-               
-                
-            })
-            .catch((error) => {
-                console.log(error)
-                setskiploading(false)
-            })
+      getMarketplaceNfts(skip, chain, sortBy)
+        .then((res: any) => {
+          console.log("auc", res.data.totalAuctions);
+
+          setDisplayItems(res.data.data);
+          console.log(res.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          setskiploading(false);
+        });
     }
-  }
+  };
+
+  const verifyEmail = async (token, email) => {
+    const res = await verifyEmailApi(token, email);
+    Cookies.set(ACCESS_TOKEN, res.data.accessToken);
+    localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+    navigate("/home", { replace: true });
+  };
+  const resetPassword = async () => {};
   // Effect
   useEffect(() => {
     // nothing for now
-    fetchItems()
-  }, [currentFilter]);
+    fetchItems();
+  }, [currentFilter, chain]);
+
+  useEffect(() => {
+    console.log("store", location.pathname.split("/"));
+
+    if (
+      location.pathname.includes("/login") &&
+      location.pathname.split("/").length > 3
+    ) {
+      verifyEmail(
+        location.pathname.split("/")[2],
+        location.pathname.split("/")[3]
+      );
+    }
+    if (
+      location.pathname.includes("/reset-password") &&
+      location.pathname.split("/").length > 3
+    ) {
+      setResetPasswordPopUpShow(true);
+    }
+  }, []);
 
   return (
     <section className="explore">
@@ -108,7 +145,9 @@ const Explore = () => {
         setCurrentFilter={setCurrentFilter}
         currentFilter={currentFilter}
       />
-      {displayElements.length>0 && <ExploreElements elements={displayElements} />}
+      {displayElements.length > 0 && (
+        <ExploreElements elements={displayElements} />
+      )}
     </section>
   );
 };

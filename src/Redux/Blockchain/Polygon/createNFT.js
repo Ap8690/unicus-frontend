@@ -1,6 +1,6 @@
 // mainnet
 export const createNFTAddressP =
-  process.env.REACT_APP_ENV !== "prod"
+  process.env.REACT_APP_ENV === "prod"
     ? // mainnet
       "0x1549EabD2a47762413ee1A11e667E67A5825ff44"
     : // testnet

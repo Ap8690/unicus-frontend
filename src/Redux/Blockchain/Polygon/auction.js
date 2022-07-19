@@ -1,6 +1,10 @@
 // mainnet
-export const auctionAddressP = "0x0F900C4c5CDAf1cBd5Dd9947080051485b7bbE64";
-
+export const auctionAddressP =
+  process.env.REACT_APP_ENV === "prod"
+    ? // mainnet
+      "0x0F900C4c5CDAf1cBd5Dd9947080051485b7bbE64"
+    : // testnet
+      "0xA360d3C2Fc489E3047C177d7278a61963cE32831";
 // testnet
 // export const auctionAddressP = "0xA360d3C2Fc489E3047C177d7278a61963cE32831";
 

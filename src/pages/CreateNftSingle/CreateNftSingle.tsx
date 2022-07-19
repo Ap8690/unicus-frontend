@@ -36,6 +36,8 @@ import {
   getChainSymbol,
   getCreateNftContract,
   getCreateNftContractAddress,
+  nearWalletConnection,
+  userInfo,
 } from "../../utils/utils";
 import {
   addWalletAdd,
@@ -43,10 +45,13 @@ import {
   uploadToPinata,
 } from "../../services/api/supplier";
 import { useSelector } from "react-redux";
+import * as nearAPI from "near-api-js";
+import BN from "bn.js";
+import FullLoading from "../../components/modals/Loading/FullLoading";
+import { Navigate, useNavigate } from "react-router-dom";
+
 
 const CreateNftSingle = () => {
-  const { walletType, userAddress, accessToken, networkID, userInfo } =
-    useSelector((state: any) => state.profile);
 
   const [name, setName] = useState("");
   const [extLink, setExtlink] = useState("");
@@ -71,6 +76,7 @@ const CreateNftSingle = () => {
   const [defaultErrorModal, setdefaultErrorModal] = useState<any>(false);
   const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
   const inputFile = useRef(null);
+  const navigate = useNavigate()
 
   const [properties, setProperties] = useState([
     {
@@ -136,10 +142,16 @@ const CreateNftSingle = () => {
   };
 
   const uploadFile = (e) => {
-    console.log(e.target.files);
+    console.log("upload", e.target.files[0]);
 
     setFileSrc(e.target.files[0]);
   };
+
+  const {
+    utils: {
+      format: { parseNearAmount },
+    },
+  } = nearAPI;
 
   useEffect(() => {
     if (Number(royalty) < 100 && royalty !== "") {
@@ -175,7 +187,34 @@ const CreateNftSingle = () => {
       description: propDescription.levels,
     },
   ];
+  const mintAssetToNft = async (name, description, tokenUri) => {
+    console.log("mintint started");
+    console.log("near mint", nearWalletConnection);
+    
+    let functionCallResult = await nearWalletConnection.account().functionCall({
+      contractId: "nft-contract.boomboom.testnet",
+      methodName: "nft_mint",
+      args: {
+        token_id: `${name}`,
+        metadata: {
+          title: `${name}`,
+          description: `${description}`,
+          media: `${tokenUri}`,
+          //extra: `${extLink}`,
+        },
+        gas: "200000000000000",
+        receiver_id: nearWalletConnection.getAccountId(),
+      },
+      attachedDeposit: parseNearAmount("1"),
+    });
 
+    if (functionCallResult) {
+      
+      console.log("nft created: ", functionCallResult);
+    } else {
+      console.log("nft not created");
+    }
+  };
   const cryptoPayment = async () => {
     try {
       console.log(1);
@@ -195,7 +234,7 @@ const CreateNftSingle = () => {
       console.log(2);
       await connectWallet(chain)
         .then(async (address) => {
-          const contractAddress = getCreateNftContractAddress(chain);
+          const contractAddress = getCreateNftContractAddress(chain, "721");
 
           setNftModalMessage("Uploading the NFT.");
           setNftLoading(true);
@@ -210,6 +249,7 @@ const CreateNftSingle = () => {
           formData.append("attributes", JSON.stringify(properties));
 
           try {
+            toast("Uploading the NFT...")
             const response: any = await uploadToPinata(formData);
             if (!response) {
               setdefaultErrorMessage("Network Error");
@@ -221,71 +261,90 @@ const CreateNftSingle = () => {
             let tokenId;
             await axios.get(tokenUri).then((val) => {
               imageUrl = val.data.image;
-              console.log("imaged add", val); 
+              console.log("imaged add", val);
             });
+            setNftLoading(false);
             toast.success("NFT Uploaded...");
             setNftModalMessage("An Awesome Asset is getting Minted");
-            const createNFT = await getCreateNftContract(chain);
-
-            const res: any = await createNFT.methods
-              .batchMint([tokenUri], [royalty])
-              .send({
-                from: address,
-              });
-
-            let tranIsSuccess = false;
-            console.log("mint result", res);
-
-            if (chain === tronChain) {
-              tokenId = res;
-              setNftModalMessage(
-                "Waiting for transaction confirmation.(It can take upto a min to confirm)"
+            if (chain == nearChain) {
+              await mintAssetToNft(
+                name,
+                description,
+                tokenUri
               );
-              const success = await setNotification(res);
-              console.log("ss", success);
+            } else {
+              setNftLoading(true);
+              toast("Minting The Asset")
+              const createNFT = await getCreateNftContract(chain);
 
-              if (!success) {
-                tranIsSuccess = false;
-                throw Error("Transaction Failed");
-              } else {
+              const res: any = await createNFT.methods
+                .batchMint([tokenUri], [royalty])
+                .send({
+                  from: address,
+                });
+
+              let tranIsSuccess = false;
+              setNftLoading(false);
+              toast("Asset  Minted");
+              console.log("mint result", res);
+
+              if (chain === tronChain) {
+                tokenId = res;
+                setNftModalMessage(
+                  "Waiting for transaction confirmation.(It can take upto a min to confirm)"
+                );
+                const success = await setNotification(res);
+                console.log("ss", success);
+
+                if (!success) {
+                  tranIsSuccess = false;
+                  throw Error("Transaction Failed");
+                } else {
+                  tranIsSuccess = true;
+                }
+              } else if (res?.transactionHash) {
+                tokenId = res.events.Minted.returnValues._NftId; //returnValues NFTId
                 tranIsSuccess = true;
               }
-            } else if (res?.transactionHash) {
-              tokenId = res.events.Minted.returnValues._NftId; //returnValues NFTId
-              tranIsSuccess = true;
-            }
-
-            if (tranIsSuccess) {
-              const nftObj = {
-                name,
-                royalty,
-                description,
-                category,
-                jsonIpfs: tokenUri,
-                nftType: fileSrc.split(".").pop(),
-                chain,
-                contractAddress,
-                owner: userInfo._id,
-                uploadedBy: userInfo._id,
-                mintedBy: userInfo._id,
-                mintedInfo: userInfo.username,
-                userInfo: userInfo.username,
-                image: imageUrl,
-                tokenId,
-              };
-              var newObject = {
-                ...nftObj,
-                tags: properties,
-              };
-              await createNft(newObject);
-            } else {
-              setNftLoading(false);
-              setdefaultErrorMessage(
-                "Couldn't add NFT to the site. You can manually add it in my profile section."
-              );
-              setdefaultErrorModal(true);
+              let user = userInfo
+              if(!user){
+                user = localStorage.getItem('userInfo')
+              }
+              toast("Storing Details")
+              if (tranIsSuccess) {
+                const nftObj = {
+                  name,
+                  royalty,
+                  description,
+                  category,
+                  jsonIpfs: tokenUri,
+                  nftType: fileSrc.type,
+                  chain,
+                  contractAddress,
+                  owner: user._id,
+                  uploadedBy: user._id,
+                  mintedBy: user._id,
+                  mintedInfo: user.username,
+                  userInfo: user.username,
+                  image: imageUrl,
+                  tokenId,
+                };
+                var newObject = {
+                  ...nftObj,
+                  tags: properties,
+                };
+                await createNft(newObject);
+                navigate("/profile")
+              } else {
+                setNftLoading(false);
+                setdefaultErrorMessage(
+                  "Couldn't add NFT to the site. You can manually add it in my profile section."
+                );
+                setdefaultErrorModal(true);
+              }
             }
           } catch (error) {
+            toast.error("Minting Failed")
             console.log(error, error.message);
             setdefaultErrorMessage(error);
             setNftLoading(false);
@@ -318,6 +377,7 @@ const CreateNftSingle = () => {
           setInputs={e.setState}
         />
       ))}
+      {nftLoading && <FullLoading />}
       <div className="create-nft-single-page">
         <div className="head">
           <div className="blue-head">Create single item</div>
@@ -521,7 +581,7 @@ const CreateNftSingle = () => {
                   state={unlockContent}
                   useState={setUnlockContent}
                 /> */}
-                <div className="btn-outline">
+                {/* <div className="btn-outline">
                   <div className="btn-text">
                     <img src={questionImg} alt="dollar" />
                     <span>Explicit & Sensitive Content</span>
@@ -531,7 +591,7 @@ const CreateNftSingle = () => {
                     checked={explicit}
                     onChange={(e: any) => setExplicit(e.target.checked)}
                   />
-                </div>
+                </div> */}
               </div>
             </div>
             <button className="btn create-btn" onClick={() => cryptoPayment()}>
