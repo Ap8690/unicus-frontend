@@ -37,12 +37,12 @@ export const UNICUS_STORE =
   process.env.REACT_APP_ENV === "local"
     ? "localhost:3000"
     : process.env.REACT_APP_ENV === "development"
-    ? "marketplace.test.unicus.one"
+    ? "test.unicus.one"
     : process.env.REACT_APP_ENV === "staging"
     ? "marketplace.qa.unicus.one"
     : process.env.REACT_APP_ENV === "demo"
-    ? "marketplace.test.unicus.one"
-    : "marketplace.unicus.one";
+    ? "demo.unicus.one"
+    : "unicus.one";
 
 
 
