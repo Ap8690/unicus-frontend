@@ -32,6 +32,7 @@ import { duration } from "@mui/material";
 import axios from "axios";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import { getDecimal } from "../../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
 const NftInfo = ({
   filters,
@@ -43,9 +44,10 @@ const NftInfo = ({
   nft,
   auction,
 }) => {
-  const [startBid, setStartbid] = useState<any>("0.05");
+  const [startBid, setStartbid] = useState<any>(auction? auction.startBid: 0.005);
   const [bid, setBid] = useState("");
   const [button, setButton] = useState("Buy Now");
+  const navigate = useNavigate();
 
   async function createSell() {
     try {
@@ -55,7 +57,7 @@ const NftInfo = ({
         nftId: nft._id,
         sellerInfo: userInfo.username,
         auctionId: "",
-        startBid: startBid * getDecimal(nft.chain),
+        startBid: parseFloat(startBid) * getDecimal(nft.chain),
         auctionType: "Sale",
         auctionHash: "",
         tokenId: nft.tokenId,
@@ -192,6 +194,7 @@ const NftInfo = ({
       let transactionHash;
       if (nft.chain == nearChain) {
         await offerPrice(nft.tokenId, auction.startBid);
+        return 
       } else {
         const res = await getMarketPlace(
           auction.chain,
@@ -352,7 +355,7 @@ const NftInfo = ({
       return "Connect Wallet";
     }
   };
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     if (userInfo) {
       if (userInfo._id == nft.uploadedBy) {
         if (nft.nftStatus == 2) {
@@ -374,7 +377,7 @@ const NftInfo = ({
         }
       }
     } else {
-      connectWallet(nft.chain);
+      await connectWallet(nft.chain);
     }
   };
 
@@ -389,6 +392,8 @@ const NftInfo = ({
       obj.auctionHash = txhash
       createSellApi(obj).then((res) => {
         toast.success("Sale created");
+        localStorage.removeItem("nearSellObj");
+        navigate("/explore")
         console.log(res.data);
       });
     }
@@ -399,8 +404,8 @@ const NftInfo = ({
       <div className="nft-price">
         <span>
           {auction?.lastBid
-            ? (auction?.lastBid / Math.pow(10, 18)).toFixed(4)
-            : (auction?.startBid / Math.pow(10, 18)).toFixed(4)}{" "}
+            ? (auction?.lastBid / getDecimal(nft.chain)).toFixed(4)
+            : (auction?.startBid / getDecimal(nft.chain)).toFixed(4)}{" "}
           {getChainSymbol(nft.chain)}
         </span>
         {/* <span>$ 5768.6</span>

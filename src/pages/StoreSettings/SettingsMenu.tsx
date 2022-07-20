@@ -43,7 +43,7 @@ const SettingsMenu = ({
                 <img src={bellIcon} alt="" />
                 <span>Appearance</span>
             </button>
-            <button
+            {/* <button
                 onClick={()=>handleSettingChange('team')}
                 className={`setting-btn ${
                     currentSetting === "team" && "active"
@@ -51,7 +51,7 @@ const SettingsMenu = ({
             >
                 <img src={tagIcon} alt="" />
                 <span>Team</span>
-            </button>
+            </button> */}
             <button
                 onClick={()=>handleSettingChange('support')}
                 className={`setting-btn ${

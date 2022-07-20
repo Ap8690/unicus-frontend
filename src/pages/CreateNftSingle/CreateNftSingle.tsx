@@ -60,6 +60,8 @@ const CreateNftSingle = () => {
   const [category, setCategory] = useState("art");
   const [price, setPrice] = useState("0.00");
   const [chain, setChain] = useState(ethChain);
+  const [contractType, setContractType] = useState("721");
+  const [supply, setSupply] = useState(1);
   const [unlockContent, setUnlockContent] = useState("");
   const [unlockable, setUnlockable] = useState(false);
   const [collection, setCollection] = useState<any>("");
@@ -188,7 +190,13 @@ const CreateNftSingle = () => {
       description: propDescription.levels,
     },
   ];
-  const mintAssetToNft = async (tokenId, name, description, tokenUri) => {
+  const mintAssetToNft = async (
+    tokenId,
+    name,
+    description,
+    tokenUri,
+    imageUrl
+  ) => {
     console.log("mintint started");
     console.log("near mint", nearWalletConnection);
 
@@ -200,13 +208,14 @@ const CreateNftSingle = () => {
         metadata: {
           title: `${name}`,
           description: `${description}`,
-          media: `${tokenUri}`,
+          media: `${imageUrl}`,
+          reference: `${tokenUri}`,
           //extra: `${extLink}`,
         },
         gas: "200000000000000",
         receiver_id: nearWalletConnection.getAccountId(),
       },
-      attachedDeposit: parseNearAmount("1"),
+      attachedDeposit: new BN(parseNearAmount("1")),
     });
 
     if (functionCallResult) {
@@ -234,7 +243,10 @@ const CreateNftSingle = () => {
       console.log(2);
       await connectWallet(chain)
         .then(async (address) => {
-          const contractAddress = getCreateNftContractAddress(chain, "721");
+          const contractAddress = getCreateNftContractAddress(
+            chain,
+            contractType
+          );
 
           setNftModalMessage("Uploading the NFT.");
           setNftLoading(true);
@@ -260,6 +272,8 @@ const CreateNftSingle = () => {
             let imageUrl;
             let tokenId;
             let tranIsSuccess = false;
+
+            console.log("tokenuri", tokenUri);
 
             await axios.get(tokenUri).then((val) => {
               imageUrl = val.data.image;
@@ -293,27 +307,53 @@ const CreateNftSingle = () => {
                 tags: properties,
               };
               localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
-              await mintAssetToNft(tokenId, name, description, tokenUri);
-              return 
+              await mintAssetToNft(
+                tokenId,
+                name,
+                description,
+                tokenUri,
+                imageUrl
+              );
+              return;
             } else {
               setNftLoading(true);
               toast("Minting The Asset");
-              const createNFT = getCreateNftContract(chain);
+              const createNFT = getCreateNftContract(chain, contractType);
 
               console.log("nft", createNFT);
-              
-              const res: any = await createNFT.methods
-                .batchMint([tokenUri], [royalty])
-                .send({
-                  from: address,
-                });
+              let res: any;
+              if (contractType == "721") {
+                res = await createNFT.methods
+                  .batchMint([tokenUri], [royalty])
+                  .send({
+                    from: address,
+                  });
+                   if (res?.transactionHash) {
+                     tokenId = res.events.Minted.returnValues._NftId; //returnValues NFTId
+                   }
+              } else if (contractType == "1155") {
+                console.log("user add", address);
+                
+                res = await createNFT.methods
+                  .mintNFT(tokenUri,supply,address, parseInt(royalty))
+                  .send({
+                    from: address,
+                  });
+                  console.log("1155",res);
+                  if (res?.transactionHash) {
+                    tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
+                  }
+                  
+              } else {
+                toast.error("Contract not found");
+                return;
+              }
 
               setNftLoading(false);
               toast("Asset  Minted");
               console.log("mint result", res);
 
               if (chain === tronChain) {
-                tokenId = res;
                 setNftModalMessage(
                   "Waiting for transaction confirmation.(It can take upto a min to confirm)"
                 );
@@ -322,12 +362,15 @@ const CreateNftSingle = () => {
 
                 if (!success) {
                   tranIsSuccess = false;
-                  throw Error("Transaction Failed");
+                  throw Error("Tron Transaction Failed");
                 } else {
                   tranIsSuccess = true;
+                  const result = axios.get(
+                    `https://api.shasta.trongrid.io/events/transaction/${res}`
+                  );
+                  tokenId = result[1].result._NftId
                 }
               } else if (res?.transactionHash) {
-                tokenId = res.events.Minted.returnValues._NftId; //returnValues NFTId
                 tranIsSuccess = true;
               }
 
@@ -347,6 +390,7 @@ const CreateNftSingle = () => {
                   nftType: fileSrc.type,
                   chain,
                   contractAddress,
+                  contractType,
                   owner: user._id,
                   uploadedBy: user._id,
                   mintedBy: user._id,
@@ -397,12 +441,23 @@ const CreateNftSingle = () => {
     const txhash = urlParams.get("transactionHashes");
 
     console.log("sear", urlParams, txhash);
-    
+
     if (txhash != null) {
       const obj = JSON.parse(localStorage.getItem("nearNftObj"));
-      toast("Storing details")
-      createNft(obj).then(()=>navigate("/profile/created")).catch((e)=> console.log(e)
-      );
+      toast("Storing details");
+      if (!nftLoading) {
+        setNftLoading(true);
+        createNft(obj)
+          .then(() => {
+            localStorage.removeItem("nearNftObj");
+            navigate("/profile/created");
+            setNftLoading(false);
+          })
+          .catch((e) => {
+            console.log(e);
+            setNftLoading(false);
+          });
+      }
     }
   }, []);
 
@@ -505,6 +560,30 @@ const CreateNftSingle = () => {
                   </Select>
                 </FormControl>
               </div>
+              {chain == ethChain && 
+                <>
+                  <div className="field-title">Contract Type</div>
+                  <div className="select-chain">
+                    <FormControl
+                      variant="standard"
+                      sx={{ m: 0, minWidth: 120, width: "100%" }}
+                    >
+                      <Select
+                        labelId="category-select-label"
+                        id="chain-select"
+                        defaultValue="art"
+                        value={contractType}
+                        onChange={(e)=> setContractType(e.target.value)}
+                        label="Category"
+                      >
+                        <MenuItem value={"721"}>ERC 721</MenuItem>
+                        <MenuItem value={"1155"}>ERC 1155</MenuItem>
+                     
+                      </Select>
+                    </FormControl>
+                  </div>
+                </>
+              }
               <div className="field-title">Category</div>
               <div className="select-chain">
                 <FormControl
@@ -552,6 +631,15 @@ const CreateNftSingle = () => {
                   setState={setPrice}
                   number
                 /> */}
+                {contractType == "1155" && (
+                  <Input
+                    title={"Supply"}
+                    placeholder=""
+                    value={supply}
+                    onChange={(e) => setSupply(e.target.value)}
+                    number
+                  />
+                )}
                 <Input
                   title={"Royalty"}
                   placeholder="0 - 99 %"

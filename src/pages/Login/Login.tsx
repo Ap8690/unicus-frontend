@@ -88,7 +88,7 @@ const Login = ({}) => {
                         </div>
                     </form>
                     <div className="connect-using">or connect using</div>
-                    <div className="social-login">
+                    {/* <div className="social-login">
                         <button className="large-btn-outline">
                             <img src={googleLogo} alt="google login" />
                             <span>Google</span>
@@ -101,7 +101,7 @@ const Login = ({}) => {
                             <img src={twitterLogo} alt="google login" />
                             <span>Twitter</span>
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </>

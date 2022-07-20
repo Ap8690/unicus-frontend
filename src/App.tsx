@@ -189,7 +189,7 @@ useEffect(() => {
                 path="/reset-password/:token/:email"
                 element={<Explore />}
               />
-              {!isMainStore() && (
+              {isMainStore() && (
                 <Route path="/store/settings" element={<StoreSettings />} />
               )}
               <Route path="/marketplace" element={<MarketPlace />} />

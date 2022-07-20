@@ -11,7 +11,6 @@ import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
     <Provider store={store}>
       <UserProvider>
         <TransactionProvider>
@@ -21,5 +20,4 @@ root.render(
         </TransactionProvider>
       </UserProvider>
     </Provider>
-  </React.StrictMode>
 );

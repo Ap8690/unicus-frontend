@@ -229,6 +229,11 @@ Navbar = ({store}) => {
                   Notification
                 </Link>
               </MenuItem>
+              {!isMainStore() && <MenuItem onClick={handleCloseProfile}>
+                <Link to={"/store/settings"} className="menu-link">
+                  My Store Settings
+                </Link>
+              </MenuItem>}
               <MenuItem onClick={handleCloseProfile}>
                 <Link to={"/profile/settings"} className="menu-link">
                   Account Settings

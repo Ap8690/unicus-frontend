@@ -34,24 +34,28 @@ export async function initContract() {
 }
 
 export const sendMeta = async (walletConnection:any,nearConfig:any ) => {
-  let functionCallResult = await walletConnection
-    .account()
-    .functionCall({
-      contractId: "nft-contract.boomboom.testnet",
-      methodName: "new_default_meta",
-      args: {
-        owner_id: nearConfig.contractName,
-      },
-      attachedDeposit: new BN(0),
-      walletMeta: "",
-      walletCallbackUrl: "",
-    });
+  console.log("near", nearConfig);
+  try{
+  let functionCallResult = await walletConnection.account().functionCall({
+    contractId: "nft-contract.boomboom.testnet",
+    methodName: "new_default_meta",
+    args: {
+      owner_id: "nft-contract.boomboom.testnet",
+    },
+    attachedDeposit: new BN(0),
+    walletMeta: "",
+    walletCallbackUrl: "",
+  });
 
   if (functionCallResult) {
     console.log("new meta data created: ");
   } else {
     console.log("meta data not created");
   }
+}catch(e){
+  console.log(e);
+  
+}
 };
 
 export const getDecimal=(chain)=>{

@@ -23,6 +23,7 @@ export const BASE_URL =
 // testnet
 export const bscChain =process.env.REACT_APP_ENV == 'prod'? "56":"97"
 export const ethChain = process.env.REACT_APP_ENV== 'prod'?"1":"4"
+export const ethChain1155 = process.env.REACT_APP_ENV == "prod" ? "1" : "4";
 export const polygonChain = process.env.REACT_APP_ENV== 'prod'?"137":"80001"
 export const tronChain =process.env.REACT_APP_ENV== 'prod'? "8700":"8766"
 export const solonaChain=process.env.REACT_APP_ENV== 'prod'?"6700":"6766"

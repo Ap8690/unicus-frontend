@@ -39,6 +39,7 @@ import {
 } from "../Redux/Blockchain/Ethereum/auction";
 import {
   createNFTAbiE,
+  createNFTAbiE1155,
   createNFTAddressE,
   createNFTAddressE1155,
 } from "../Redux/Blockchain/Ethereum/createNFT";
@@ -67,6 +68,9 @@ import * as nearAPI from "near-api-js";
 import { createNFTAbiT, createNFTAddressT } from "../Redux/Blockchain/Tron/createNFT";
 import { marketPlaceAbiT, marketPlaceAddressT } from "../Redux/Blockchain/Tron/marketplace";
 import { auctionAbiT, auctionAddressT } from "../Redux/Blockchain/Tron/auction";
+import { useNavigate } from "react-router-dom";
+import BN from "bn.js";
+
 const {
   utils: {
     format: { parseNearAmount },
@@ -83,14 +87,13 @@ export const userInfo: any = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : "";
 
-export let nearWalletConnection;
+export let nearWalletConnection:WalletConnection;
 
 export let web3 = new Web3(Web3.givenProvider);
 
 //@ts-ignore
 export let tronWeb = window.tronWeb? window.tronWeb
   : new TronWeb({ fullNode, solidityNode, privateKey });
-
 
 export const connectWallet = async (network: any) => {
   try {
@@ -110,10 +113,11 @@ export const connectWallet = async (network: any) => {
     }
     console.log("add", address.toUpperCase(), userInfo);
     if (!userInfo) {
-      toast.error("Please Login");
+      toast.error("New Address. Please Login");
+      window.location.href = "/login";
       return;
     }
-    // if (userInfo.wallets.length === 0 || !userInfo.wallets.includes(address.toUpperCase())) {
+    // if (userInfo.wallets.length === 0 || !userInfo.wallets.includes(address)) {
     //   await addWalletAdd(address).then(async (res: any) => {
     //     console.log(res);
     //     localStorage.setItem("userInfo", JSON.stringify(res.data.user));
@@ -356,10 +360,10 @@ export const selectNetwork = (chain: string) => {
   });
 };
 
-export const getCreateNftABI = (chain) => {
+export const getCreateNftABI = (chain, contractType) => {
   switch (chain.toString()) {
     case ethChain:
-      return createNFTAbiE;
+      return contractType == "1155"?createNFTAbiE1155:createNFTAbiE;
     case bscChain:
       return createNFTAbiB;
 
@@ -426,9 +430,9 @@ export const getCreateNftContractAddress = (chain, contractType) => {
 export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
   switch (chain.toString()) {
     case ethChain:
-      return contractType == "721"
-        ? marketPlaceAddressE
-        : marketPlaceAddressE1155;
+      return contractType == "1155"
+        ? marketPlaceAddressE1155
+      : marketPlaceAddressE;
     case bscChain:
       return marketPlaceAddressB;
     case polygonChain:
@@ -445,7 +449,7 @@ export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
 export const getAuctionContractAddress = (chain, contractType = "721") => {
   switch (chain.toString()) {
     case ethChain:
-      return contractType == "721" ? auctionAddressE : auctionAddressE1155;
+      return contractType == "1155" ? auctionAddressE1155 : auctionAddressE;
     case bscChain:
       return auctionAddressB;
     case polygonChain:
@@ -454,7 +458,7 @@ export const getAuctionContractAddress = (chain, contractType = "721") => {
       return auctionAddressT;
 
     default:
-      return contractType == "721" ? auctionAddressE : auctionAddressE1155;
+      return contractType == "1155" ? auctionAddressE1155 : auctionAddressE;
   }
 };
 
@@ -493,7 +497,8 @@ export const getAuctionContract = (chain, contractType = "721") => {
  );
   }
 };
-export const offerPrice = async (token_id, assetBid) => {
+export const offerPrice = async (token_id:string, assetBid:string) => {
+  try{
   await nearWalletConnection.account().functionCall({
     contractId: "market_contract.boomboom.testnet",
     methodName: "offer",
@@ -501,12 +506,15 @@ export const offerPrice = async (token_id, assetBid) => {
       nft_contract_id: "nft-contract.boomboom.testnet",
       token_id,
     },
-    attachedDeposit: parseNearAmount(assetBid),
-    gas: "200000000000000",
+    attachedDeposit: new BN(assetBid),
+    gas: new BN("200000000000000"),
   });
+}catch(e){
+  console.log(e);
+}
 };
 
-export const approveNFTForSale = async (token_id, assetPrice) => {
+export const approveNFTForSale = async (token_id:string, assetPrice:string) => {
   await sendStorageDeposit();
   let sale_conditions = {
     sale_conditions: assetPrice, // set asset price in ui
@@ -519,7 +527,7 @@ export const approveNFTForSale = async (token_id, assetPrice) => {
       account_id: "market_contract.boomboom.testnet",
       msg: JSON.stringify(sale_conditions),
     },
-    attachedDeposit: parseNearAmount("0.01"),
+    attachedDeposit: new BN(parseNearAmount("0.01")),
   });
 };
 
