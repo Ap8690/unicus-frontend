@@ -160,7 +160,12 @@ const CreateStoreForm = (store:any): ReactJSXElement => {
       <h3 className="form-heading">Upload File</h3>
       <div className="create-store-image-holder">
         <button className="upload-image-button" onClick={uploadImage}>
-          <img src={placeHolder} alt="Upload Image" />
+          {generals.logoUrl == "" && (
+            <img src={placeHolder} alt="Upload Image" />
+          )}
+          {generals.logoUrl !== "" && (
+            <img src={generals.logoUrl} alt="" style={{ width: "90%" }} />
+          )}
           <input
             type="file"
             id="file"
@@ -244,3 +249,7 @@ const CreateStore = (store): ReactJSXElement => {
 };
 
 export default CreateStore;
+function fileSrc(fileSrc: any) {
+  throw new Error("Function not implemented.");
+}
+

@@ -53,7 +53,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
   const { setVisible } = useWalletModal();
   const navigate = useNavigate();
 
-  let redirect  = useParams();
+  let redirect = useParams();
 
   //@ts-ignore
   /* const [phantom, setPhantom] = useState<Phantom | null>(null);*/
@@ -92,9 +92,9 @@ const ConnectWallet: React.FC<AuthType> = () => {
 
           break;
         }
-        case "tron":{
-          address = await connToTron()
-          break
+        case "tron": {
+          address = await connToTron();
+          break;
         }
         case "sol": {
           address = await connToMetaMask();
@@ -115,9 +115,11 @@ const ConnectWallet: React.FC<AuthType> = () => {
         Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
           expires: 30,
         });
-        localStorage.setItem("userInfo",JSON.stringify(res.data.user))
+        Cookies.set("userInfo", JSON.stringify(res.data.user));
+
+        localStorage.setItem("userInfo", JSON.stringify(res.data.user));
         console.log(":redirect", redirect["*"]);
-        
+
         navigate(`/${redirect["*"]}`, { replace: true });
       } else {
         toast.error("Wallet connection failed");

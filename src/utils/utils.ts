@@ -83,7 +83,7 @@ const solidityNode = new HttpProvider("https://shasta.api.trongrid.io");
 const eventServer = new HttpProvider("https://shasta.api.trongrid.io");
 const privateKey = "01";
 
-export const userInfo: any = localStorage.getItem("userInfo")
+export const userInfo: any = Cookies.get("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : "";
 
