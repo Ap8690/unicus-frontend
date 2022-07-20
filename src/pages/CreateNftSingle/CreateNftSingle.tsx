@@ -45,6 +45,7 @@ import {
 import {
   addWalletAdd,
   createNft,
+  getAccessToken,
   uploadToPinata,
 } from "../../services/api/supplier";
 import { useSelector } from "react-redux";
@@ -52,6 +53,7 @@ import * as nearAPI from "near-api-js";
 import BN from "bn.js";
 import FullLoading from "../../components/modals/Loading/FullLoading";
 import { Navigate, useNavigate } from "react-router-dom";
+import { access } from "fs";
 
 const CreateNftSingle = () => {
   const [name, setName] = useState("");
@@ -162,7 +164,13 @@ const CreateNftSingle = () => {
     } else {
       setRoyaltyError(true);
     }
-  }, [royalty]);
+  }, [royalty]);        
+
+   useEffect(() => {
+     if (!getAccessToken()) {
+      navigate("/connect-wallet");
+      } 
+   }, []);
 
   const modals = [
     {

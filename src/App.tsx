@@ -189,11 +189,11 @@ useEffect(() => {
                 path="/reset-password/:token/:email"
                 element={<Explore />}
               />
-              {isMainStore() && (
+              {!isMainStore() && (
                 <Route path="/store/settings" element={<StoreSettings />} />
               )}
               <Route path="/marketplace" element={<MarketPlace />} />
-              <Route path="/create-store" element={<CreateStore />} />
+              {isMainStore() && <Route path="/create-store" element={<CreateStore />} />}
               <Route path="/all-nfts" element={<AllNFTs />} />
               <Route
                 path="/nft/:chain/:contractAddress/:nftId"

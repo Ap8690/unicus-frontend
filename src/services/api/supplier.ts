@@ -11,6 +11,9 @@ const axiosConfig: any = {
   },
 };
 
+export const getAccessToken=()=>{
+  return Cookies.get(ACCESS_TOKEN);
+}
 export async function getFeaturedNft(number: number) {
   return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}`);
 }

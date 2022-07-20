@@ -11,7 +11,7 @@ import BlueBackground from "../../components/BlueBackground/BlueBackground";
 // Images
 import placeHolder from "../../assets/svgs/uploadImage.svg";
 import { toast } from "react-toastify";
-import { createStore } from "../../services/api/supplier";
+import { createStore, getAccessToken } from "../../services/api/supplier";
 import countryList from "react-select-country-list";
 import validator from "validator";
 import { useSelector } from "react-redux";
@@ -128,7 +128,7 @@ const CreateStoreForm = (store:any): ReactJSXElement => {
         setTimeout(function () {
           history("/");
           window.open(
-            `https://${res.data.createStore.domain[0]}/my-store/general`
+            `http://${res.data.createStore.domain[0]}/store/settings`
           );
           window.location.reload();
         }, 3000);
@@ -150,6 +150,11 @@ const CreateStoreForm = (store:any): ReactJSXElement => {
     }
     setLoading(false);
   };
+   useEffect(() => {
+     if (!getAccessToken()) {
+       history("/connect-wallet");
+     }
+   }, []);
   return (
     <div className="create-store-form-holder">
       <h3 className="form-heading">Upload File</h3>
