@@ -2,7 +2,9 @@ import './register.scss'
 
 import { useState } from 'react'
 import Input from '../../components/Input/Input'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { emailRegister } from '../../services/api/supplier'
+import { toast } from 'react-toastify'
 
 
 const Register = () => {
@@ -10,6 +12,34 @@ const Register = () => {
   const [username, setUsername] = useState('')
   const [conPassword, setConPassword] = useState('')
   const [password, setPassword] = useState('')
+      const navigate = useNavigate();
+
+  async function handleLogin(e: any) {
+    e.preventDefault();
+    if (!email || !password || username) {
+      toast.error("Fill all fields")
+    } else if(password !== conPassword){
+      toast.error("Password do not match")
+    }
+    else {
+      emailRegister(email, password, username)
+        .then(async (res: any) => {
+          console.log("in");
+
+          // Cookies.set("accessToken", res.data.accessToken, {
+          //     domain: "unicus.one",
+          // })
+          // Cookies.set("userInfo", JSON.stringify(res.data.user), {
+          //     domain: "unicus.one",
+          // })
+          toast("Registration Successful. Please Verify the mail");
+          navigate("/home", { replace: true });
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
+    }
+  }
   return (
       <div className="register-page">
         <div className="register-wrapper">

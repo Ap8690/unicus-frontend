@@ -24,13 +24,14 @@ import {
   endSaleApi,
   placeBidApi,
 } from "../../services/api/supplier";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import web3 from "../../web3";
 import { toast } from "react-toastify";
 import { BASE_URL, nearChain, tronChain } from "../../config";
 import { duration } from "@mui/material";
 import axios from "axios";
 import { setNotification } from "../../Redux/Blockchain/contracts";
+import { getDecimal } from "../../utils/helpers";
 
 const NftInfo = ({
   filters,
@@ -54,7 +55,7 @@ const NftInfo = ({
         nftId: nft._id,
         sellerInfo: userInfo.username,
         auctionId: "",
-        startBid: startBid,
+        startBid: startBid * getDecimal(nft.chain),
         auctionType: "Sale",
         auctionHash: "",
         tokenId: nft.tokenId,
@@ -63,10 +64,14 @@ const NftInfo = ({
         cloudinaryUrl: nft.cloudinaryUrl,
         sellerWallet: address,
         sellerId: userInfo && userInfo._id,
+
       };
 
       if (nft.chain == nearChain) {
+        obj.auctionId = nft.tokenId
+        localStorage.setItem("nearSellObj",JSON.stringify(obj))
         await approveNFTForSale(nft.tokenId, startBid)
+        return
       } else {
         const listContract = new web3.eth.Contract(
           //@ts-ignore
@@ -325,8 +330,10 @@ const NftInfo = ({
     }
   }
   const getButtonName = () => {
+    console.log(nft, userInfo);
+    
     if (userInfo) {
-      if (userInfo._id == nft.owner) {
+      if (userInfo._id == nft.uploadedBy) {
         if (nft.nftStatus == 2) {
           return "End Sale";
         } else if (nft.v == 3) {
@@ -347,7 +354,7 @@ const NftInfo = ({
   };
   const handleButtonClick = () => {
     if (userInfo) {
-      if (userInfo._id == nft.owner) {
+      if (userInfo._id == nft.uploadedBy) {
         if (nft.nftStatus == 2) {
           endSale();
         } else if (nft.nftStatus == 3) {
@@ -370,6 +377,22 @@ const NftInfo = ({
       connectWallet(nft.chain);
     }
   };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const txhash = urlParams.get("transactionHashes");
+
+    console.log("sear", urlParams, txhash);
+
+    if (txhash != null) {
+      const obj = JSON.parse(localStorage.getItem("nearSellObj"));
+      obj.auctionHash = txhash
+      createSellApi(obj).then((res) => {
+        toast.success("Sale created");
+        console.log(res.data);
+      });
+    }
+  }, []);
   return (
     <div className="nft-info">
       <h2>{nft.name}</h2>
@@ -431,7 +454,7 @@ const NftInfo = ({
           {/* <button className="btn" onClick={() => placeBid()}>
             Place a bid
           </button> */}
-          {userInfo && userInfo._id == nft.owner && nft.nftStatus == 1 ? (
+          {userInfo && userInfo._id == nft.uploadedBy && nft.nftStatus == 1 ? (
             <div style={{ width: "100%", display: "flex" }}>
               <button className="btn" onClick={() => createSell()}>
                 Sell

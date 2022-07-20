@@ -10,6 +10,7 @@ import {
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
 import metamaskLogo from "../../assets/svgs/metamask.svg";
+import tronLinkLogo from "../../assets/svgs/tron-link.svg";
 import phantomLogo from "../../assets/svgs/phantomLogo.svg";
 import nearLogo from "../../assets/svgs/nearLogo.svg";
 import coinbaseLogo from "../../assets/svgs/coinbase.svg";
@@ -23,6 +24,7 @@ import {
   connToCoinbase,
   connToMetaMask,
   connToMew,
+  connToTron,
   connToWalletConnector,
   disConnectWallet,
 } from "../../utils/utils";
@@ -90,6 +92,10 @@ const ConnectWallet: React.FC<AuthType> = () => {
 
           break;
         }
+        case "tron":{
+          address = await connToTron()
+          break
+        }
         case "sol": {
           address = await connToMetaMask();
 
@@ -151,6 +157,10 @@ const ConnectWallet: React.FC<AuthType> = () => {
             <button onClick={() => loginWallet("meta")}>
               Metamask
               <img src={metamaskLogo} alt="metamask" />
+            </button>
+            <button onClick={() => loginWallet("tron")}>
+              TronLink
+              <img src={tronLinkLogo} alt="tronlink" />
             </button>
             <button onClick={() => loginWallet("sol")}>
               SolanaConnect

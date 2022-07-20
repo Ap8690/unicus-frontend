@@ -1,7 +1,7 @@
 import "./login.scss"
 
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 import Input from "../../components/Input/Input"
 
 import googleLogo from "../../assets/svgs/google.svg"
@@ -12,6 +12,8 @@ import { getaccessToken, getUserInfo } from "../../Redux/Profile/actions"
 import { useDispatch } from "react-redux"
 import axios from "axios"
 import Cookies from "js-cookie"
+import { ACCESS_TOKEN } from "../../utils/constants"
+import { toast } from "react-toastify"
 
 const Login = ({}) => {
     const dispatch = useDispatch()
@@ -19,6 +21,7 @@ const Login = ({}) => {
     const [password, setPassword] = useState("")
 
     const [error, setError] = useState("")
+    const navigate = useNavigate()
 
     async function handleLogin(e:any) {
         e.preventDefault()
@@ -28,22 +31,20 @@ const Login = ({}) => {
             emailLogin(email, password)
                 .then(async (res: any) => {
                     console.log("in")
-                    dispatch(getaccessToken(res.data.accessToken) as any)
-                    axios.defaults.headers.common["Authorization"] =
-                        "Bearer" + res.data.accessToken
-                    localStorage.setItem("accessToken", res.data.accessToken)
+                    
+                    Cookies.set(ACCESS_TOKEN, res.data.accessToken)
                     localStorage.setItem(
                         "userInfo",
                         JSON.stringify(res.data.user)
                     )
-                    Cookies.set("accessToken", res.data.accessToken, {
-                        domain: "unicus.one",
-                    })
-                    Cookies.set("userInfo", JSON.stringify(res.data.user), {
-                        domain: "unicus.one",
-                    })
-
-                    alert("LOGIN SUCCESS")
+                    // Cookies.set("accessToken", res.data.accessToken, {
+                    //     domain: "unicus.one",
+                    // })
+                    // Cookies.set("userInfo", JSON.stringify(res.data.user), {
+                    //     domain: "unicus.one",
+                    // })
+                    toast("Login successful")
+                    navigate("/home", {replace:true})
                 })
                 .catch((err) => {
                     console.log(err.response.data);

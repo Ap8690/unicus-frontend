@@ -59,7 +59,7 @@ const Table = ({ rows, columns }) => {
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <Link to={`/nft/${row.chain}/${row.contractAddress? row.contractAddress: row.nftId && row.nftId.contractAddress}/${row.tokenId}}`}>
+            <Link to={`/nft/${row.chain}/${row.contractAddress? row.contractAddress: row.nftId && row.nftId.contractAddress}/${row.tokenId}`}>
               <TableData activity={row} key={`atd${i}`} />
             </Link>
           ))}

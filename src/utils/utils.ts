@@ -1,7 +1,7 @@
-import { chainPropTypes } from "@mui/utils";
 import Cookies from "js-cookie";
 import { WalletConnection } from "near-api-js";
 import { toast } from "react-toastify";
+import TronWeb from "tronweb";
 import Web3 from "web3";
 import {
   tronChain,
@@ -28,7 +28,6 @@ import {
 import {
   ethereumCoinbase,
   getMetamaskProvider,
-  tronWeb,
   walletConnectorProvider,
   walletLink,
 } from "../Redux/Blockchain/contracts";
@@ -65,11 +64,20 @@ import { addWalletAdd } from "../services/api/supplier";
 import { ACCESS_TOKEN, RPC_URLS } from "./constants";
 import { initContract, sendMeta } from "./helpers";
 import * as nearAPI from "near-api-js";
+import { createNFTAbiT, createNFTAddressT } from "../Redux/Blockchain/Tron/createNFT";
+import { marketPlaceAbiT, marketPlaceAddressT } from "../Redux/Blockchain/Tron/marketplace";
+import { auctionAbiT, auctionAddressT } from "../Redux/Blockchain/Tron/auction";
 const {
   utils: {
     format: { parseNearAmount },
   },
 } = nearAPI;
+//testnet
+const HttpProvider = TronWeb.providers.HttpProvider;
+const fullNode = new HttpProvider("https://shasta.api.trongrid.io");
+const solidityNode = new HttpProvider("https://shasta.api.trongrid.io");
+const eventServer = new HttpProvider("https://shasta.api.trongrid.io");
+const privateKey = "01";
 
 export const userInfo: any = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
@@ -79,13 +87,17 @@ export let nearWalletConnection;
 
 export let web3 = new Web3(Web3.givenProvider);
 
+//@ts-ignore
+export let tronWeb = window.tronWeb? window.tronWeb
+  : new TronWeb({ fullNode, solidityNode, privateKey });
+
+
 export const connectWallet = async (network: any) => {
   try {
     let address;
     if (network.toString() === nearChain) {
       address = await connectNear();
     } else if (network.toString() === tronChain) {
-      // tronLink.request({ method: "tron_requestAccounts" });
       address = tronWeb.defaultAddress.base58;
     } else {
       console.log(3);
@@ -220,6 +232,25 @@ export const connToMew = async () => {
   }
 };
 
+export const connToTron = async () => {
+  try {
+    var obj = setInterval(async () => {
+      //@ts-ignore
+      if (window.tronWeb && window.tronWeb.defaultAddress.base58) {
+        clearInterval(obj);
+        //@ts-ignore
+        tronWeb = window.tronWeb;
+        console.log(tronWeb.defaultAddress.base58);
+        
+         return tronWeb.defaultAddress.base58;
+      }
+    }, 100);
+    return obj
+  } catch (error: any) {
+    console.error(error?.message);
+  }
+};
+
 export const connectNear = async () => {
   const { currentUser, config, walletConnection } = await initContract();
   if (!walletConnection.isSignedIn()) {
@@ -334,7 +365,8 @@ export const getCreateNftABI = (chain) => {
 
     case polygonChain:
       return createNFTAbiP;
-
+    case tronChain:
+      return createNFTAbiT;  
     default:
       return createNFTAbiE;
   }
@@ -348,7 +380,8 @@ export const getMarketplaceABI = (chain) => {
 
     case polygonChain:
       return marketPlaceAbiP;
-
+    case tronChain:
+      return marketPlaceAbiT;
     default:
       return marketPlaceAbiE;
   }
@@ -363,7 +396,8 @@ export const getAuctionABI = (chain) => {
 
     case polygonChain:
       return auctionAbiP;
-
+    case tronChain:
+      return auctionAbiT;
     default:
       return auctionAbiE;
   }
@@ -379,7 +413,8 @@ export const getCreateNftContractAddress = (chain, contractType) => {
         return createNFTAddressB;
       case polygonChain:
         return createNFTAddressP;
-
+      case tronChain:
+        return createNFTAddressT;
       default:
         return contractType == "721"
           ? createNFTAddressE
@@ -398,6 +433,8 @@ export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
       return marketPlaceAddressB;
     case polygonChain:
       return marketPlaceAddressP;
+    case tronChain:
+      return marketPlaceAddressT;
 
     default:
       return contractType == "721"
@@ -413,6 +450,8 @@ export const getAuctionContractAddress = (chain, contractType = "721") => {
       return auctionAddressB;
     case polygonChain:
       return auctionAddressP;
+    case tronChain:
+      return auctionAddressT;
 
     default:
       return contractType == "721" ? auctionAddressE : auctionAddressE1155;
@@ -420,60 +459,38 @@ export const getAuctionContractAddress = (chain, contractType = "721") => {
 };
 
 export const getCreateNftContract = (chain, contractType = "721") => {
+  if(chain.toString() == tronChain){
+    return tronWeb.contract(createNFTAbiT, createNFTAddressT)
+  }else{
   return new web3.eth.Contract(
     //@ts-ignore
     getCreateNftABI(chain, contractType),
     getCreateNftContractAddress(chain, contractType)
   );
+  }
 };
 
 export const getMarketPlace = (chain, contractType = "721") => {
-  switch (chain.toString()) {
-    case ethChain:
-      return contractType == "721"
-        ? //@ts-ignore
-          new web3.eth.Contract(marketPlaceAbiE, marketPlaceAddressE)
-        : //@ts-ignore
-          new web3.eth.Contract(marketPlaceAbiE1155, marketPlaceAddressE1155);
-    case bscChain:
-      //@ts-ignore
-      return new web3.eth.Contract(marketPlaceAbiB, marketPlaceAddressB);
-
-    case polygonChain:
-      //@ts-ignore
-      return new web3.eth.Contract(marketPlaceAbiP, marketPlaceAddressP);
-
-    default:
-      return contractType == "721"
-        ? //@ts-ignore
-          new web3.eth.Contract(marketPlaceAbiE, marketPlaceAddressE)
-        : //@ts-ignore
-          new web3.eth.Contract(marketPlaceAbiE1155, marketPlaceAddressE1155);
+  if(chain.toString() == tronChain){
+    return tronWeb.contract(marketPlaceAbiT, marketPlaceAddressT)
+  }else{
+  return new web3.eth.Contract(
+    //@ts-ignore
+    getMarketplaceABI(chain, contractType),
+    getMarketPlaceContractAddress(chain, contractType)
+  );
   }
 };
 
 export const getAuctionContract = (chain, contractType = "721") => {
-  switch (chain.toString()) {
-    case ethChain:
-      return contractType == "721"
-        ? //@ts-ignore
-          new web3.eth.Contract(auctionAbiE, auctionAddressE)
-        : //@ts-ignore
-          new web3.eth.Contract(auctionAbiE1155, auctionAddressE1155);
-    case bscChain:
-      //@ts-ignore
-      return new web3.eth.Contract(auctionAbiB, auctionAddressB);
-
-    case polygonChain:
-      //@ts-ignore
-      return new web3.eth.Contract(auctionAbiP, auctionAddressP);
-
-    default:
-      return contractType == "721"
-        ? //@ts-ignore
-          new web3.eth.Contract(auctionAbiE, auctionAddressE)
-        : //@ts-ignore
-          new web3.eth.Contract(auctionAbiE1155, auctionAddressE1155);
+  if(chain.toString() == tronChain){
+    return tronWeb.contract(auctionAbiT, auctionAddressT)
+  }else{
+ return new web3.eth.Contract(
+   //@ts-ignore
+   getAuctionABI(chain, contractType),
+   getAuctionContractAddress(chain, contractType)
+ );
   }
 };
 export const offerPrice = async (token_id, assetBid) => {
@@ -490,7 +507,7 @@ export const offerPrice = async (token_id, assetBid) => {
 };
 
 export const approveNFTForSale = async (token_id, assetPrice) => {
-  sendStorageDeposit();
+  await sendStorageDeposit();
   let sale_conditions = {
     sale_conditions: assetPrice, // set asset price in ui
   };
@@ -507,15 +524,19 @@ export const approveNFTForSale = async (token_id, assetPrice) => {
 };
 
 const getMinimumStorage = async () => {
-  let minimum_balance = await nearWalletConnection.account().viewFunction({
-    contractId: "market_contract.boomboom.testnet",
-    methodName: "storage_minimum_balance",
-  });
+  console.log("min");
+  
+  let minimum_balance = await nearWalletConnection.account().viewFunction(
+    "market_contract.boomboom.testnet",
+    "storage_minimum_balance"
+  );
+  console.log("minimum", minimum_balance);
+  
   return minimum_balance;
 };
 
 const sendStorageDeposit = async () => {
-  const minimum = getMinimumStorage();
+  const minimum = await getMinimumStorage();
   await nearWalletConnection.account().functionCall({
     contractId: "market_contract.boomboom.testnet",
     methodName: "storage_deposit",

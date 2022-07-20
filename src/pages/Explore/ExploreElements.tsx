@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { getDecimal } from "../../utils/helpers";
 import { getChainSymbol, getNftContractAddress } from "../../utils/utils";
 
 const ExploreElement = ({ element }) => {
@@ -17,9 +18,9 @@ const ExploreElement = ({ element }) => {
 
         <div className="explore-element-name">{element.name}</div>
         <div className="explore-element-price">
-          {element && element.lastBid
-            ? (element.lastBid / Math.pow(10, 18)).toFixed(4)
-            : (element.startBid / Math.pow(10, 18)).toFixed(4)}{" "}
+          {element && element.lastBid>0
+            ? (element.lastBid / getDecimal(element.chain)).toFixed(4)
+            : (element.startBid / getDecimal(element.chain)).toFixed(4)}{" "}
           {getChainSymbol(element.chain)}
         </div>
         <div className="explore-element-creators">

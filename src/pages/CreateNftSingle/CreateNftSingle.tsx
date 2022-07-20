@@ -6,7 +6,10 @@ import starImg from "../../assets/svgs/starIcon.svg";
 import statsImg from "../../assets/svgs/statsIcon.svg";
 import unlockImg from "../../assets/svgs/unlock.svg";
 import questionImg from "../../assets/svgs/questionIcon.svg";
+import uploadImg from "../../assets/svgs/uploadImage.svg";
+
 import { Image } from "react-bootstrap";
+import { v4 as uuid } from "uuid";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Input from "../../components/Input/Input";
@@ -50,9 +53,7 @@ import BN from "bn.js";
 import FullLoading from "../../components/modals/Loading/FullLoading";
 import { Navigate, useNavigate } from "react-router-dom";
 
-
 const CreateNftSingle = () => {
-
   const [name, setName] = useState("");
   const [extLink, setExtlink] = useState("");
   const [description, setDescription] = useState("");
@@ -76,7 +77,7 @@ const CreateNftSingle = () => {
   const [defaultErrorModal, setdefaultErrorModal] = useState<any>(false);
   const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
   const inputFile = useRef(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [properties, setProperties] = useState([
     {
@@ -187,15 +188,15 @@ const CreateNftSingle = () => {
       description: propDescription.levels,
     },
   ];
-  const mintAssetToNft = async (name, description, tokenUri) => {
+  const mintAssetToNft = async (tokenId, name, description, tokenUri) => {
     console.log("mintint started");
     console.log("near mint", nearWalletConnection);
-    
+
     let functionCallResult = await nearWalletConnection.account().functionCall({
       contractId: "nft-contract.boomboom.testnet",
       methodName: "nft_mint",
       args: {
-        token_id: `${name}`,
+        token_id: `${tokenId}`,
         metadata: {
           title: `${name}`,
           description: `${description}`,
@@ -209,7 +210,6 @@ const CreateNftSingle = () => {
     });
 
     if (functionCallResult) {
-      
       console.log("nft created: ", functionCallResult);
     } else {
       console.log("nft not created");
@@ -249,7 +249,7 @@ const CreateNftSingle = () => {
           formData.append("attributes", JSON.stringify(properties));
 
           try {
-            toast("Uploading the NFT...")
+            toast("Uploading the NFT...");
             const response: any = await uploadToPinata(formData);
             if (!response) {
               setdefaultErrorMessage("Network Error");
@@ -259,6 +259,8 @@ const CreateNftSingle = () => {
             var tokenUri = "https://unicus.mypinata.cloud/ipfs/" + tokenHash;
             let imageUrl;
             let tokenId;
+            let tranIsSuccess = false;
+
             await axios.get(tokenUri).then((val) => {
               imageUrl = val.data.image;
               console.log("imaged add", val);
@@ -267,23 +269,45 @@ const CreateNftSingle = () => {
             toast.success("NFT Uploaded...");
             setNftModalMessage("An Awesome Asset is getting Minted");
             if (chain == nearChain) {
-              await mintAssetToNft(
+              tokenId = uuid();
+              let user = userInfo;
+              if (!user) {
+                user = localStorage.getItem("userInfo");
+              }
+              const nftObj = {
                 name,
+                royalty,
                 description,
-                tokenUri
-              );
+                category,
+                jsonIpfs: tokenUri,
+                nftType: fileSrc.type,
+                chain,
+                contractAddress,
+                owner: user._id,
+                uploadedBy: user._id,
+                mintedBy: user._id,
+                mintedInfo: user.username,
+                userInfo: user.username,
+                cloudinaryUrl: imageUrl,
+                tokenId,
+                tags: properties,
+              };
+              localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
+              await mintAssetToNft(tokenId, name, description, tokenUri);
+              return 
             } else {
               setNftLoading(true);
-              toast("Minting The Asset")
-              const createNFT = await getCreateNftContract(chain);
+              toast("Minting The Asset");
+              const createNFT = getCreateNftContract(chain);
 
+              console.log("nft", createNFT);
+              
               const res: any = await createNFT.methods
                 .batchMint([tokenUri], [royalty])
                 .send({
                   from: address,
                 });
 
-              let tranIsSuccess = false;
               setNftLoading(false);
               toast("Asset  Minted");
               console.log("mint result", res);
@@ -306,11 +330,12 @@ const CreateNftSingle = () => {
                 tokenId = res.events.Minted.returnValues._NftId; //returnValues NFTId
                 tranIsSuccess = true;
               }
-              let user = userInfo
-              if(!user){
-                user = localStorage.getItem('userInfo')
+
+              let user = userInfo;
+              if (!user) {
+                user = localStorage.getItem("userInfo");
               }
-              toast("Storing Details")
+              toast("Storing Details");
               if (tranIsSuccess) {
                 const nftObj = {
                   name,
@@ -318,6 +343,7 @@ const CreateNftSingle = () => {
                   description,
                   category,
                   jsonIpfs: tokenUri,
+                  cloudinaryUrl: imageUrl,
                   nftType: fileSrc.type,
                   chain,
                   contractAddress,
@@ -334,7 +360,7 @@ const CreateNftSingle = () => {
                   tags: properties,
                 };
                 await createNft(newObject);
-                navigate("/profile")
+                navigate("/profile");
               } else {
                 setNftLoading(false);
                 setdefaultErrorMessage(
@@ -344,7 +370,7 @@ const CreateNftSingle = () => {
               }
             }
           } catch (error) {
-            toast.error("Minting Failed")
+            toast.error("Minting Failed");
             console.log(error, error.message);
             setdefaultErrorMessage(error);
             setNftLoading(false);
@@ -358,12 +384,27 @@ const CreateNftSingle = () => {
         .catch((err) => {
           console.log(err);
           toast.error("Mint failed.");
-          setNftLoading(false);
         });
     } catch (e) {
       console.log(e);
+      setNftLoading(false);
     }
+    setNftLoading(false);
   };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const txhash = urlParams.get("transactionHashes");
+
+    console.log("sear", urlParams, txhash);
+    
+    if (txhash != null) {
+      const obj = JSON.parse(localStorage.getItem("nearNftObj"));
+      toast("Storing details")
+      createNft(obj).then(()=>navigate("/profile/created")).catch((e)=> console.log(e)
+      );
+    }
+  }, []);
 
   return (
     <>
@@ -410,6 +451,7 @@ const CreateNftSingle = () => {
                     />
                   )
                 )}{" "}
+                {!fileSrc && <img src={uploadImg} alt="Upload" />}
               </button>
               <input
                 type="file"
@@ -456,8 +498,8 @@ const CreateNftSingle = () => {
                   >
                     <MenuItem value={ethChain}>Ethereum</MenuItem>
                     <MenuItem value={polygonChain}>Polygon</MenuItem>
-                    <MenuItem value={tronChain}>Tron</MenuItem>
                     <MenuItem value={bscChain}>Binance</MenuItem>
+                    <MenuItem value={tronChain}>Tron</MenuItem>
                     <MenuItem value={solonaChain}>Solana</MenuItem>
                     <MenuItem value={nearChain}>Near</MenuItem>
                   </Select>
@@ -471,7 +513,8 @@ const CreateNftSingle = () => {
                 >
                   <Select
                     labelId="category-select-label"
-                    id="category-select"
+                    id="chain-select"
+                    defaultValue="art"
                     value={category}
                     onChange={handleCategoryChange}
                     label="Category"

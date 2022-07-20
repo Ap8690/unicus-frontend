@@ -167,6 +167,14 @@ export async function getStoreByUser(){
   return await axios.get(`${BASE_URL}/store/getStoreByUser`, axiosConfig);
 }
 
+export async function emailRegister(email: string, password: string, username:string) {
+  return await axios.post(`${BASE_URL}/auth/register`, {
+    email: email,
+    password: password,
+    username
+  });
+}
+
 export async function emailLogin(email: string, password: string) {
   return await axios.post(`${BASE_URL}/auth/login`, {
     email: email,

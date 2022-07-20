@@ -13341,7 +13341,7 @@ tr46@~0.0.3:
 
 tronweb@^4.2.0:
   version "4.2.0"
-  resolved "https://registry.npmjs.org/tronweb/-/tronweb-4.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/tronweb/-/tronweb-4.2.0.tgz#332aa4df1dc8f24b5260377c3127532280eb2143"
   integrity sha512-zNWG9iHCfpmRHBpiC2YpRlBdtmfdG1VNJw0uMg/lxZYyFpHghf2LvGCS34Kv7HvoLH7tck/O/CZGYudKkoLF7w==
   dependencies:
     "@babel/runtime" "^7.0.0"
