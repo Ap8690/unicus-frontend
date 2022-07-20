@@ -7,17 +7,30 @@ import ethIcon from "../../../assets/svgs/ethereum.svg";
 import checkImg from "../../../assets/svgs/checkedBox.svg";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 
-const PlaceBid = (props: PlaceBidProps) => {
+interface DefaultModalProps {
+  show: boolean;
+  handleClose: () => void;
+  children: React.ReactNode;
+  title?: string;
+  type: "success" | "fail" | "loading";
+}
+
+const PlaceBid = ({
+  title,
+  show,
+  handleClose,
+  children,
+  type,
+}: DefaultModalProps) => {
   const [currState, setCurrState] = useState("bid");
   const [price, setPrice] = useState(0);
-  const { onClose, open } = props;
   const handlePlaceBid = () => {
     setCurrState("checkout");
   };
   return (
     <Dialog
-      onClose={onClose}
-      open={open}
+      onClose={handleClose}
+      open={show}
       PaperProps={{
         sx: {
           padding: 0,
@@ -30,35 +43,19 @@ const PlaceBid = (props: PlaceBidProps) => {
     >
       <div className="place-bid-dialog">
         <div className="dialog-title">
-          {currState === "bid" && "Add Properties"}
-          {currState === "checkout" && "Add Properties"}
-          <button onClick={onClose}>
+          {title}
+          <button onClick={handleClose}>
             <CloseRoundedIcon />
           </button>
         </div>
         <div className="props">
-          <div className="info">
+          {/* <div className="info">
             You are about to place a bid for dddd by furkanmia
-          </div>
+          </div> */}
           <div className="your-bid">
-            <div>Your Bid</div>
-            <div className="priceBar">
-              <div className="eth">
-                <img src={ethIcon} alt="" />
-                <span>ETH</span>
-              </div>
-              <input
-                type="number"
-                min={0}
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
-              />
-              <div onClick={() => setPrice(100)} className="priceset">
-                $100
-              </div>
-            </div>
+            {children}
           </div>
-          {currState === "bid" && (
+          {/* {currState === "bid" && (
             <div className="terms">
               <Checkbox
                 icon={<CheckBoxOutlineBlankIcon />}
@@ -99,7 +96,8 @@ const PlaceBid = (props: PlaceBidProps) => {
             <button className="btn">I understand, continue</button>
             <button className="btn-dark btn">Cancel</button>
           </div>
-        )}
+        )} */}
+      </div>
       </div>
     </Dialog>
   );

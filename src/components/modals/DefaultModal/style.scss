@@ -1,0 +1,474 @@
+// .buy__cpt__modal {
+//     padding: 20px;
+//     // max-width: 400px;
+
+//     &.fixWidth {
+//         max-width: 320px;
+//     }
+
+//     @media screen and (max-width: 768px) {
+//         padding: 20px 10px;
+//     }
+
+//     .buy__cpt__header {
+//         text-align: center;
+
+//         &__tile {
+//             h4 {
+//                 font-size: 25px;
+//                 font-weight: 600;
+//                 color: var(--white_pure);
+//             }
+//         }
+
+//         &__close {
+//             position: absolute !important;
+//             right: -15px;
+//             top: -12px !important;
+//             cursor: pointer;
+//             min-width: 30px;
+//             min-height: 30px;
+//             display: flex;
+//             align-items: center;
+//             justify-content: center;
+//             border-radius: 50%;
+//             transition: all 0.5s ease-in-out;
+//             background-color: #000;
+
+//             svg {
+//                 font-size: 15px;
+//                 color: var(--white_pure);
+//             }
+
+//             &:hover {
+//                 svg {
+//                     color: var(--white_pure);
+//                 }
+//             }
+//         }
+//     }
+
+//     // &__instructions {
+//     //     margin: 30px 0 20px 0;
+//     //     @include displayCenter(center, space-between);
+//     //     flex-wrap: wrap;
+
+//     //     p {
+//     //         margin: 0;
+//     //     }
+
+//     //     &__left {
+//     //         @include displayCenter(center, center);
+
+//     //         h6 {
+//     //             margin: 0;
+//     //             margin-left: 10px;
+//     //         }
+//     //     }
+//     // }
+
+//     //   form {
+//     //     .input__wrapper {
+//     //       @include displayCenter(center, space-between);
+//     //       border: 1px solid rgb(221, 221, 221);
+//     //       border-radius: 5px;
+//     //       padding: 5px;
+//     //       margin: 10px 0;
+
+//     //       .cpt {
+//     //         font-size: 13px;
+//     //         min-width: 90px;
+//     //         border-right: 2px solid rgba(221, 221, 221, 0.733) !important;
+//     //         cursor: default !important;
+//     //         img {
+//     //           margin-right: 5px;
+//     //         }
+//     //       }
+
+//     //       //   react-select-
+
+//     //       .css-2b097c-container {
+//     //         min-width: 90px;
+//     //         .css-yk16xz-control {
+//     //           border: 0;
+//     //           background-color: transparent;
+//     //           box-shadow: none;
+//     //           font-size: 12px !important;
+//     //           color: var(--primary_theme) !important;
+//     //           &:hover {
+//     //             border-color: transparent;
+//     //           }
+//     //         }
+//     //       }
+//     //       .css-yk16xz-control,
+//     //       .css-1pahdxg-control {
+//     //         border-color: transparent !important;
+//     //         box-shadow: none !important;
+//     //         background-color: transparent !important;
+//     //         border-right: 2px solid rgba(221, 221, 221, 0.733) !important;
+//     //         border-radius: 0 !important;
+//     //         font-size: 12px !important;
+//     //         color: var(--primary_theme) !important;
+
+//     //         &:hover {
+//     //           border-color: transparent !important;
+//     //           border-right: 2px solid rgba(221, 221, 221, 0.733) !important;
+//     //         }
+//     //       }
+//     //       .css-1wa3eu0-placeholder {
+//     //         color: var(--primary_theme);
+//     //       }
+//     //       input {
+//     //         background-color: transparent;
+//     //         border: 0;
+//     //         &:focus {
+//     //           outline: none;
+//     //         }
+//     //         &::placeholder {
+//     //           color: #000;
+//     //         }
+//     //       }
+//     //       .input-group-text {
+//     //         background-color: transparent;
+//     //         color: var(--primary_theme);
+//     //         font-weight: 500;
+//     //         user-select: none;
+//     //         cursor: pointer;
+//     //         border: 0;
+//     //         border-left: 2px solid rgba(221, 221, 221, 0.733);
+//     //       }
+//     //       .css-1okebmr-indicatorSeparator {
+//     //         display: none;
+//     //       }
+//     //     }
+//     //     .danger {
+//     //       font-size: 10px;
+//     //       text-align: left;
+//     //       padding: 0;
+//     //       margin: -5px 0;
+//     //     }
+//     //     .buy__btn__wrapper {
+//     //       text-align: center;
+//     //       margin-top: 20px;
+//     //       button {
+//     //         padding: 8px 60px;
+//     //       }
+//     //     }
+//     //     p {
+//     //       margin: 0;
+//     //       margin: 20px 0;
+//     //       font-size: 12px;
+//     //       text-align: center;
+//     //     }
+//     //   }
+// }
+
+// .buy__token__modal {
+//     background: #a7a5a53d;
+
+//     .modal-dialog {
+//         max-width: 600px;
+//     }
+// }
+
+// .successModal {
+//     .success__body {
+//         // @include displayCenter(center, center);
+//         // flex-direction: column;
+//         text-align: center;
+
+//         &_column {
+//             width: 100% !important;
+
+//         }
+
+//         .info {
+//             font-size: 14px;
+//             margin: 30px 0 20px 0;
+//         }
+
+//         h4 {
+//             font-weight: 500;
+//             margin-bottom: 0;
+//         }
+
+//         h6 {
+//             font-size: 13px;
+//             flex-wrap: wrap;
+
+//             .big {
+//                 font-size: 18px;
+//                 margin: 0 5px;
+//             }
+//         }
+
+//         .user__id {
+//             background-color: #1d1d1f;
+//             position: relative;
+//             border-radius: 5px;
+
+//             p {
+//                 cursor: pointer;
+//                 user-select: none;
+//                 padding: 10px;
+//                 margin-top: 10px;
+
+//                 svg {
+//                     margin-left: 10px;
+//                     font-size: 18px;
+//                 }
+//             }
+
+//             &:hover {
+//                 .toolt {
+//                     visibility: visible;
+//                 }
+//             }
+
+//             @media screen and (max-width: 768px) {
+//                 p {
+//                     font-size: 10px;
+//                 }
+//             }
+//         }
+
+//        @media screen and (max-width: 768px) {
+//             .loader {
+//                 width: 60px;
+//             }
+
+//             h3 {
+//                 font-size: 14px;
+//             }
+
+//             h4 {
+//                 font-size: 14px;
+//             }
+
+//             h6 {
+//                 font-size: 13px !important;
+
+//                 .big {
+//                     font-size: 13px !important;
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// .wallets {
+//     .modal-dialog {
+//         max-width: 430px;
+//     }
+
+//     .buy__cpt__header__tile {
+//         margin-bottom: 50px;
+//         margin-bottom: 50px;
+
+//         h4 {
+//             font-size: 20px;
+//         }
+
+//          @media screen and (max-width: 768px) {
+//             margin-bottom: 30px;
+//         }
+//     }
+
+//     .buy__cpt__header__close {
+//         top: 17px;
+//     }
+
+//     // .wallet {
+//     //     border-radius: 5px;
+//     //     // box-shadow: var(--box-shadow-six);
+//     //     padding: 20px;
+//     //     margin: 20px 0;
+//     //     cursor: pointer;
+//     //     transition: $transition;
+//     //     // box-shadow: $box-shadow-four;
+//     //     // @include neonEffectFour(2px);
+//     //     border: 2px solid var(--primary_theme);
+//     //     // border: 2px solid linear-gradient(#181E41, #09B0A0);
+
+//     //     img {
+//     //         max-width: 30px;
+//     //         max-height: 30px;
+//     //         //   margin-right: 15px;
+//     //     }
+
+//     //     h5 {
+//     //         margin: 0;
+//     //         font-size: 16px;
+//     //         color: var(--white_pure) !important;
+//     //     }
+
+//     //     &:hover {
+//     //         // box-shadow: var(--box_shadow_seven);
+//     //         background: #0f3b7bad;
+//     //     }
+
+//     //     @include mQ($sm) {
+//     //         padding: 10px;
+//     //         margin: 15px 0;
+
+//     //         img {
+//     //             max-width: 20px;
+//     //             max-height: 20px;
+//     //         }
+
+//     //         h5 {
+//     //             margin: 0;
+//     //             font-size: 14px;
+//     //         }
+//     //     }
+//     // }
+// }
+
+// .metaMaskNotFound {
+//      @media screen and (max-width: 768px) {
+//         h4 {
+//             font-size: 20px !important;
+//         }
+//     }
+
+//     .metaMask__body {
+//         flex-direction: column;
+
+//         img {
+//             width: 100px;
+//             margin-top: 50px;
+//         }
+
+//         h5 {
+//             margin-top: 20px;
+//             font-size: 20px;
+//         }
+
+//         svg {
+//             font-size: 50px;
+//             color: var(--white_pure)
+//         }
+
+//         .download {
+//             border: 1px solid rgb(196, 196, 196);
+//             border-radius: 33px;
+//             padding: 8px 60px;
+//             transition: $transition;
+//             color: #000;
+
+//             &:hover {
+//                 box-shadow: var(--box_shadow_one);
+//                 transform: translateY(-2px);
+//             }
+//         }
+
+//          @media screen and (max-width: 768px) {
+//             h5 {
+//                 font-size: 16px;
+//             }
+//         }
+//     }
+// }
+
+// // .Disconnecct {
+// //     .modal-dialog {
+// //         max-width: 480px;
+// //     }
+
+// //     .user__id {
+// //         p {
+// //             //   @include userAddress(390px);
+// //             text-align: center;
+// //         }
+
+// //          @media screen and (max-width: 768px) {
+// //             p {
+// //                 @include userAddress(300px);
+// //                 text-align: center;
+// //             }
+// //         }
+
+// //  @media screen and (max-width: 768px) {
+// //      p {
+// //                 @include userAddress(200px);
+// //                 text-align: center;
+// //             }
+// //         }
+// //     }
+
+// //     .wallet_icon {
+// //         width: 50px;
+// //         height: 50px;
+// //         padding: 10px;
+// //         border-radius: 50%;
+// //         margin: auto auto 20px auto;
+// //         box-shadow: var(--box_shadow_seven);
+
+// //         img {
+// //             @include image(contain);
+// //         }
+
+// //         @include mQ($sm) {
+// //             width: 30px;
+// //             height: 30px;
+// //             padding: 5px;
+// //             margin: auto auto 10px auto;
+// //         }
+// //     }
+
+// //     @include mQ($sm) {
+// //         button {
+// //             font-size: 12px;
+// //         }
+// //     }
+// // }
+
+// .modal_fail {
+//     .modal-content {
+//         @include neonEffectModal(0.3rem, var(--neon_background_two));
+//     }
+// }
+
+// .modal_success {
+//     .modal-content {
+//         @include neonEffectModal(0.3rem, var(--neon_background_seven));
+//     }
+// }
+
+// .modal_loading {
+//     .modal-content {
+//         @include neonEffectModal(0.3rem, var(--neon_background_eight));
+//     }
+// }
+
+// .attributes {
+//     .lol {
+//         position: relative;
+//     }
+
+//     .trash {
+//         position: absolute;
+//         top: 35%;
+//         left: 19px;
+//         cursor: pointer;
+//         transform: translateY(50%);
+//         width: 30px;
+//         height: 30px;
+//         background: var(--primary_theme);
+//         border-radius: 50%;
+//         @include displayCenter(center, center);
+//     }
+// }
+
+// .greenpopup {
+//     color: #00d6b3 !important;
+// }
+
+// .redpopup {
+//     color: #ff8282 !important;
+// }
+
+// .newChange {
+//     justify-content: center !important;
+//     width: 50%;
+// }

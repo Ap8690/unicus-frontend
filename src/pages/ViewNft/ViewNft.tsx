@@ -92,7 +92,7 @@ const ViewNft = () => {
 
   return (
     <>
-      <PlaceBid onClose={handleClose} open={placeBidModal} />
+      
       <div className="view-nft">
         <div className="nft">
           <NftImg img={nftImg} likes={7} shares={22} views={50} />

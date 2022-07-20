@@ -87,7 +87,7 @@ export const userInfo: any = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : "";
 
-export let nearWalletConnection:WalletConnection;
+export let nearWalletConnection;
 
 export let web3 = new Web3(Web3.givenProvider);
 
@@ -315,6 +315,7 @@ export const getNftContractAddress = (nft) => {
   }
 };
 export const getChainSymbol = (chain) => {
+  if(chain){
   return chain.toString() === bscChain
     ? "BSC"
     : chain.toString() === polygonChain
@@ -324,6 +325,7 @@ export const getChainSymbol = (chain) => {
     : chain.toString() === nearChain
     ? "NEAR"
     : "ETH";
+  }
 };
 export const getChainId = (chain) => {
   try {
@@ -490,6 +492,8 @@ export const getAuctionContract = (chain, contractType = "721") => {
   if(chain.toString() == tronChain){
     return tronWeb.contract(auctionAbiT, auctionAddressT)
   }else{
+    console.log("auc contract", getAuctionContractAddress(chain, contractType));
+    
  return new web3.eth.Contract(
    //@ts-ignore
    getAuctionABI(chain, contractType),
@@ -497,8 +501,10 @@ export const getAuctionContract = (chain, contractType = "721") => {
  );
   }
 };
-export const offerPrice = async (token_id:string, assetBid:string) => {
+export const offerPrice = async (token_id:string, assetBid:any) => {
   try{
+    console.log("amount",parseNearAmount(assetBid.toString()));
+    
   await nearWalletConnection.account().functionCall({
     contractId: "market_contract.boomboom.testnet",
     methodName: "offer",
@@ -506,7 +512,7 @@ export const offerPrice = async (token_id:string, assetBid:string) => {
       nft_contract_id: "nft-contract.boomboom.testnet",
       token_id,
     },
-    attachedDeposit: new BN(assetBid),
+    attachedDeposit: parseNearAmount(assetBid.toString()),
     gas: new BN("200000000000000"),
   });
 }catch(e){

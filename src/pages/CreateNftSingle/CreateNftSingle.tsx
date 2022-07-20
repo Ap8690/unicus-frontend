@@ -474,6 +474,7 @@ const CreateNftSingle = () => {
         />
       ))}
       {nftLoading && <FullLoading />}
+      
       <div className="create-nft-single-page">
         <div className="head">
           <div className="blue-head">Create single item</div>
@@ -635,16 +636,16 @@ const CreateNftSingle = () => {
                   <Input
                     title={"Supply"}
                     placeholder=""
-                    value={supply}
-                    onChange={(e) => setSupply(e.target.value)}
+                    state={supply}
+                    setState={(e) => setSupply(e.target.value)}
                     number
                   />
                 )}
                 <Input
                   title={"Royalty"}
                   placeholder="0 - 99 %"
-                  value={royalty}
-                  onChange={(e) => handleRoyaltyChange(e)}
+                  state={royalty}
+                  setState={(e) => handleRoyaltyChange(e)}
                   number
                 />
                 {royaltyError && (

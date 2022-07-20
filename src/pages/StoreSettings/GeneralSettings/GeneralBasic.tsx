@@ -1,33 +1,29 @@
 import Switch from "@mui/material/Switch"
 import { styled } from "@mui/material/styles"
 import { useState } from "react"
+import { IGeneral } from "../../../models/General";
 
-const GeneralBasic = () => {
-    const [homeToMarketplace, setHomeToMarketplace] = useState(true)
-    return (
-        <div className="general-basic">
-            <div className="switch-box">
-                <IOSSwitch
-                    defaultChecked
-                    checked={homeToMarketplace}
-                    onChange={(e: any) =>
-                        setHomeToMarketplace(e.target.checked)
-                    }
-                />
-                <div className="terms">
-                    <span className="large-text">
-                        Set Marketplace page as Homepage
-                    </span>
-                    <span>
-                        Turn this ON if you want to use Marketplace page as
-                        Homepage
-                    </span>
-                </div>
-            </div>
-            <button className="btn">Save Changes</button>
+const GeneralBasic = (general: IGeneral) => {
+  const [homeToMarketplace, setHomeToMarketplace] = useState(true);
+  return (
+    <div className="general-basic">
+      <div className="switch-box">
+        <IOSSwitch
+          defaultChecked
+          checked={homeToMarketplace}
+          onChange={(e: any) => setHomeToMarketplace(e.target.checked)}
+        />
+        <div className="terms">
+          <span className="large-text">Set Marketplace page as Homepage</span>
+          <span>
+            Turn this ON if you want to use Marketplace page as Homepage
+          </span>
         </div>
-    )
-}
+      </div>
+      <button className="btn">Save Changes</button>
+    </div>
+  );
+};
 
 export const IOSSwitch = styled((props: any) => (
     <Switch

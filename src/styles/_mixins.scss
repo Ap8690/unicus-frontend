@@ -37,3 +37,16 @@
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
 }
+// responsive breakpoints
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+$xxl: 1400px;
+$transition: all 0.5s ease-in-out;
+
+@mixin mQ($width) {
+    @media screen and (max-width: $width) {
+        @content;
+    }
+}
