@@ -215,13 +215,13 @@ Navbar = ({store}) => {
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseProfile}>
-                <Link to={"/profile/my-tickets"} className="menu-link">
-                  My Tickets
+                <Link to={"/profile/created"} className="menu-link">
+                My NFTs
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseProfile}>
-                <Link to={"/profile/my-collections"} className="menu-link">
-                  My Collections
+                <Link to={"/profile/listings"} className="menu-link">
+                  My Listings
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseProfile}>
@@ -234,16 +234,16 @@ Navbar = ({store}) => {
                   My Store Settings
                 </Link>
               </MenuItem>}
-              <MenuItem onClick={handleCloseProfile}>
+              {/* <MenuItem onClick={handleCloseProfile}>
                 <Link to={"/profile/settings"} className="menu-link">
                   Account Settings
                 </Link>
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem onClick={handleCloseProfile}>Logout</MenuItem>
-              <div className="balance-box">
+              {/* <div className="balance-box">
                 <div className="balance">$ 0.000 USD</div>
                 <div>Total Balance</div>
-              </div>
+              </div> */}
             </Menu>
             {isMainStore() && store && Object.keys(store).length !== 0 ? (
               <a

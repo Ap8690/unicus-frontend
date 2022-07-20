@@ -228,7 +228,7 @@
       margin-top: 58px;
       .market-place-trending-element {
         @include fn.flex-col(flex-start, flex-start);
-        max-width: 25vw;
+        min-width: 30vw;
         font-weight: 300;
         position: relative;
         .nft-image-size {
