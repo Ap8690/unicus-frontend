@@ -2,6 +2,10 @@
   "name": "unicus-marketplace",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "16.x",
+  },
+
   "dependencies": {
     "0xsequence": "^0.39.3",
     "@emotion/react": "^11.9.0",
