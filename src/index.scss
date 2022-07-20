@@ -144,6 +144,16 @@ p {
   margin: 0;
 }
 
+.menuPaperComponent{
+  width: 100%;
+  background-color: #000 !important;
+  z-index: 110000 !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 2rem;
+}
+
 .noScrollbar::-webkit-scrollbar {
   display: none;
 }
