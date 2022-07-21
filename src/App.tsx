@@ -78,7 +78,8 @@ useEffect(() => {
   }
 
   // document.documentElement.setAttribute("data-theme", "green");
-}, []);
+}, [accessToken]);
+
 useEffect(() => {
   if (store && store.appearance && store.appearance.storeLoader) {
     localStorage.setItem("storeLoader", store.appearance.storeLoader);
@@ -87,6 +88,7 @@ useEffect(() => {
 
 const init = async () => {
   try {
+  
     setLoading(true);
     const res = await getStoreApi();
     setStore(res.data.store);
@@ -116,14 +118,15 @@ const setLogin = () => {
 };
 const getStoreForUser = async () => {
   try {
-    if (accessToken) {
+    console.log("main store access", Cookies.get(ACCESS_TOKEN));
+    
+    if (Cookies.get(ACCESS_TOKEN)) {
       const res = await getStoreByUser();
       if (res.data.store) {
         setUserStore(res.data.store);
       }
-    }
-    else{
-      setUserStore({})
+    } else {
+      setUserStore({});
     }
   } catch (err) {
     console.log("err", err);
@@ -135,9 +138,9 @@ useEffect(() => {
   }
 }, []);
 
-useEffect(() => {
-  getStoreForUser();
-}, [accessToken]);
+// useEffect(() => {
+//   getStoreForUser();
+// }, [accessToken]);
 
 
   //@ts-ignore
