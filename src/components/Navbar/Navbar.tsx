@@ -257,12 +257,12 @@ Navbar = ({store}) => {
                 <button className="btn nav-link">Go to My Store</button>
               </a>
             ) : (
-              <button
+              isMainStore() && (<button
                 onClick={() => navigate("/create-store")}
                 className="btn nav-link"
               >
                 Create Store
-              </button>
+              </button>)
             )}
 
             <button

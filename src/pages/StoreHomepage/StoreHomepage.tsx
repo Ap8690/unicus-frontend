@@ -1,4 +1,4 @@
-import featuredImg from "../../assets/images/Rectangle 8 (2).png";
+import featuredImg from "../../assets/images/marketPlaceMain.png"
 import userImg from "../../assets/images/Rectangle 8 (1).png";
 
 import BlueBackground from "../../components/BlueBackground/BlueBackground";
