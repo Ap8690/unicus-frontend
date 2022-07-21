@@ -65,8 +65,14 @@ import { addWalletAdd } from "../services/api/supplier";
 import { ACCESS_TOKEN, RPC_URLS } from "./constants";
 import { initContract, sendMeta } from "./helpers";
 import * as nearAPI from "near-api-js";
-import { createNFTAbiT, createNFTAddressT } from "../Redux/Blockchain/Tron/createNFT";
-import { marketPlaceAbiT, marketPlaceAddressT } from "../Redux/Blockchain/Tron/marketplace";
+import {
+  createNFTAbiT,
+  createNFTAddressT,
+} from "../Redux/Blockchain/Tron/createNFT";
+import {
+  marketPlaceAbiT,
+  marketPlaceAddressT,
+} from "../Redux/Blockchain/Tron/marketplace";
 import { auctionAbiT, auctionAddressT } from "../Redux/Blockchain/Tron/auction";
 import { useNavigate } from "react-router-dom";
 import BN from "bn.js";
@@ -84,9 +90,15 @@ const eventServer = new HttpProvider("https://shasta.api.trongrid.io");
 const privateKey = "01";
 
 export const userInfo: any = Cookies.get("userInfo")
-  ? JSON.parse(localStorage.getItem("userInfo"))
+  ? JSON.parse(Cookies.get("userInfo"))
   : "";
 
+export const getUserInfo = () => {
+  const userInfo: any = Cookies.get("userInfo")
+    ? JSON.parse(Cookies.get("userInfo"))
+    : "";
+  return userInfo;
+};
 export let nearWalletConnection;
 
 export let web3 = new Web3(Web3.givenProvider);
@@ -112,17 +124,17 @@ export const connectWallet = async (network: any) => {
       await SwitchNetwork(network);
     }
     console.log("add", address.toUpperCase(), userInfo);
-    if (!userInfo) {
+    if (!getUserInfo()) {
       toast.error("New Address. Please Login");
       window.location.href = "/login";
       return;
     }
-    // if (userInfo.wallets.length === 0 || !userInfo.wallets.includes(address)) {
-    //   await addWalletAdd(address).then(async (res: any) => {
-    //     console.log(res);
-    //     localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-    //   });
-    // }
+    if (userInfo.wallets.length === 0 || !userInfo.wallets.includes(address)) {
+      await addWalletAdd(address).then(async (res: any) => {
+        console.log(res);
+        localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+      });
+    }
 
     return address;
   } catch (e) {
@@ -245,11 +257,11 @@ export const connToTron = async () => {
         //@ts-ignore
         tronWeb = window.tronWeb;
         console.log(tronWeb.defaultAddress.base58);
-        
-         return tronWeb.defaultAddress.base58;
+
+        return tronWeb.defaultAddress.base58;
       }
     }, 100);
-    return obj
+    return obj;
   } catch (error: any) {
     console.error(error?.message);
   }
@@ -315,20 +327,21 @@ export const getNftContractAddress = (nft) => {
   }
 };
 export const getChainSymbol = (chain) => {
-  if(chain){
-  return chain.toString() === bscChain
-    ? "BSC"
-    : chain.toString() === polygonChain
-    ? "MATIC"
-    : chain.toString() === tronChain
-    ? "TRX"
-    : chain.toString() === nearChain
-    ? "NEAR"
-    : "ETH";
+  if (chain) {
+    return chain.toString() === bscChain
+      ? "BSC"
+      : chain.toString() === polygonChain
+      ? "MATIC"
+      : chain.toString() === tronChain
+      ? "TRX"
+      : chain.toString() === nearChain
+      ? "NEAR"
+      : "ETH";
   }
 };
 export const getChainId = (chain) => {
   try {
+    if(chain){
     return chain.toString() === "ethereum"
       ? ethChain
       : chain.toString() === "binance"
@@ -342,6 +355,9 @@ export const getChainId = (chain) => {
       : chain.toString() === "solona"
       ? solonaChain
       : 0;
+    }else{
+      return 0
+    }
   } catch (e) {
     console.log(e);
     return 0;
@@ -365,14 +381,14 @@ export const selectNetwork = (chain: string) => {
 export const getCreateNftABI = (chain, contractType) => {
   switch (chain.toString()) {
     case ethChain:
-      return contractType == "1155"?createNFTAbiE1155:createNFTAbiE;
+      return contractType == "1155" ? createNFTAbiE1155 : createNFTAbiE;
     case bscChain:
       return createNFTAbiB;
 
     case polygonChain:
       return createNFTAbiP;
     case tronChain:
-      return createNFTAbiT;  
+      return createNFTAbiT;
     default:
       return createNFTAbiE;
   }
@@ -434,7 +450,7 @@ export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
     case ethChain:
       return contractType == "1155"
         ? marketPlaceAddressE1155
-      : marketPlaceAddressE;
+        : marketPlaceAddressE;
     case bscChain:
       return marketPlaceAddressB;
     case polygonChain:
@@ -465,65 +481,69 @@ export const getAuctionContractAddress = (chain, contractType = "721") => {
 };
 
 export const getCreateNftContract = (chain, contractType = "721") => {
-  if(chain.toString() == tronChain){
-    return tronWeb.contract(createNFTAbiT, createNFTAddressT)
-  }else{
-  return new web3.eth.Contract(
-    //@ts-ignore
-    getCreateNftABI(chain, contractType),
-    getCreateNftContractAddress(chain, contractType)
-  );
+  if (chain.toString() == tronChain) {
+    return tronWeb.contract(createNFTAbiT, createNFTAddressT);
+  } else {
+    return new web3.eth.Contract(
+      //@ts-ignore
+      getCreateNftABI(chain, contractType),
+      getCreateNftContractAddress(chain, contractType)
+    );
   }
 };
 
 export const getMarketPlace = (chain, contractType = "721") => {
-  if(chain.toString() == tronChain){
-    return tronWeb.contract(marketPlaceAbiT, marketPlaceAddressT)
-  }else{
-  return new web3.eth.Contract(
-    //@ts-ignore
-    getMarketplaceABI(chain, contractType),
-    getMarketPlaceContractAddress(chain, contractType)
-  );
+  if (chain.toString() == tronChain) {
+    return tronWeb.contract(marketPlaceAbiT, marketPlaceAddressT);
+  } else {
+    return new web3.eth.Contract(
+      //@ts-ignore
+      getMarketplaceABI(chain, contractType),
+      getMarketPlaceContractAddress(chain, contractType)
+    );
   }
 };
 
 export const getAuctionContract = (chain, contractType = "721") => {
-  if(chain.toString() == tronChain){
-    return tronWeb.contract(auctionAbiT, auctionAddressT)
-  }else{
+  if (chain.toString() == tronChain) {
+    return tronWeb.contract(auctionAbiT, auctionAddressT);
+  } else {
     console.log("auc contract", getAuctionContractAddress(chain, contractType));
-    
- return new web3.eth.Contract(
-   //@ts-ignore
-   getAuctionABI(chain, contractType),
-   getAuctionContractAddress(chain, contractType)
- );
+
+    return new web3.eth.Contract(
+      //@ts-ignore
+      getAuctionABI(chain, contractType),
+      getAuctionContractAddress(chain, contractType)
+    );
   }
 };
-export const offerPrice = async (token_id:string, assetBid:any) => {
-  try{
-    console.log("amount",parseNearAmount(assetBid.toString()));
-    
-  await nearWalletConnection.account().functionCall({
-    contractId: "market_contract.boomboom.testnet",
-    methodName: "offer",
-    args: {
-      nft_contract_id: "nft-contract.boomboom.testnet",
-      token_id,
-    },
-    attachedDeposit: parseNearAmount(assetBid.toString()),
-    gas: new BN("200000000000000"),
-  });
-}catch(e){
-  console.log(e);
-}
+export const offerPrice = async (token_id: string, assetBid: any) => {
+  try {
+    console.log("amount", parseNearAmount(assetBid.toString()));
+
+    await nearWalletConnection.account().functionCall({
+      contractId: "market_contract.boomboom.testnet",
+      methodName: "offer",
+      args: {
+        nft_contract_id: "nft-contract.boomboom.testnet",
+        token_id,
+      },
+      attachedDeposit: parseNearAmount(assetBid.toString()),
+      gas: new BN("200000000000000"),
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-export const approveNFTForSale = async (token_id:string, assetPrice:string) => {
-  await sendStorageDeposit();
+export const approveNFTForSale = async (
+  token_id: string,
+  assetPrice: any
+) => {
+  console.log("approve near",assetPrice);
+  
   let sale_conditions = {
-    sale_conditions: assetPrice, // set asset price in ui
+    sale_conditions: parseNearAmount(assetPrice.toString()), // set asset price in ui
   };
   await nearWalletConnection.account().functionCall({
     contractId: "nft-contract.boomboom.testnet",
@@ -539,17 +559,19 @@ export const approveNFTForSale = async (token_id:string, assetPrice:string) => {
 
 const getMinimumStorage = async () => {
   console.log("min");
-  
-  let minimum_balance = await nearWalletConnection.account().viewFunction(
-    "market_contract.boomboom.testnet",
-    "storage_minimum_balance"
-  );
+
+  let minimum_balance = await nearWalletConnection
+    .account()
+    .viewFunction(
+      "market_contract.boomboom.testnet",
+      "storage_minimum_balance"
+    );
   console.log("minimum", minimum_balance);
-  
+
   return minimum_balance;
 };
 
-const sendStorageDeposit = async () => {
+export const sendStorageDeposit = async () => {
   const minimum = await getMinimumStorage();
   await nearWalletConnection.account().functionCall({
     contractId: "market_contract.boomboom.testnet",

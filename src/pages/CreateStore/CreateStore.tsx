@@ -18,13 +18,16 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import { userInfo } from "../../utils/utils";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import FullLoading from "../../components/modals/Loading/FullLoading";
 
 
-const CreateStoreForm = (store:any): ReactJSXElement => {
+const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
  
   //@ts-ignore
   const [generals, setGeneral] = useState<IGeneral>({});
-  const [loadingImage, setLoadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -156,95 +159,108 @@ const CreateStoreForm = (store:any): ReactJSXElement => {
      }
    }, []);
   return (
-    <div className="create-store-form-holder">
-      <h3 className="form-heading">Upload File</h3>
-      <div className="create-store-image-holder">
-        <button className="upload-image-button" onClick={uploadImage}>
-          {generals.logoUrl == "" && (
-            <img src={placeHolder} alt="Upload Image" />
-          )}
-          {generals.logoUrl !== "" && (
-            <img src={generals.logoUrl} alt="" style={{ width: "90%" }} />
-          )}
-          <input
-            type="file"
-            id="file"
-            ref={inputFile}
-            accept="image/jpeg, image/png , image/svg+xml"
-            onChange={(e) => getImageUrl(e)}
-            className="d-none"
-          />
-        </button>
-      </div>
-      <form
-        action=""
-        className="create-store-form"
-        onSubmit={(e) => handleCreateStore(e)}
-      >
-        <div className="form-input">
-          <label htmlFor="store-name">Store Name</label>
-          <input
-            type="text"
-            id="store-name"
-            value={generals.storeName}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleStoreName(e.target.value)
-            }
-            placeholder="Enter Store Name"
-            maxLength={25}
-          />
-          <div className="store-name-length">
-            {generals.storeName ? generals.storeName.length : "0"}/25
+    <>
+      <div className="create-store-form-holder">
+        <h3 className="form-heading">Upload File</h3>
+        <div className="create-store-image-holder">
+          <button className="upload-image-button" onClick={uploadImage}>
+            {generals.logoUrl == "" && (
+              <img src={placeHolder} alt="Upload Image" />
+            )}
+            {generals.logoUrl !== "" && (
+              <img src={generals.logoUrl} alt="" style={{ width: "90%" }} />
+            )}
+            <input
+              type="file"
+              id="file"
+              ref={inputFile}
+              accept="image/jpeg, image/png , image/svg+xml"
+              onChange={(e) => getImageUrl(e)}
+              className="d-none"
+            />
+          </button>
+        </div>
+        <form
+          action=""
+          className="create-store-form"
+          onSubmit={(e) => handleCreateStore(e)}
+        >
+          <div className="form-input">
+            <label htmlFor="store-name">Store Name</label>
+            <input
+              type="text"
+              id="store-name"
+              value={generals.storeName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleStoreName(e.target.value)
+              }
+              placeholder="Enter Store Name"
+              maxLength={25}
+            />
+            <div className="store-name-length">
+              {generals.storeName ? generals.storeName.length : "0"}/25
+            </div>
           </div>
-        </div>
-        <div className="form-input">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={generals.email}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleEmail(e.target.value)
-            }
-            placeholder="Enter Email"
-          />
-        </div>
-        <div className="form-input">
-          <label htmlFor="country">Country</label>
-          <select
-            className="form-control cursor-pointer"
-            value={generals.country}
-            onChange={(e) => handleCountry(e.target.value)}
-          >
-            {options.map((item) => (
-              <option key={item.value} value={item.value}>
-                {item.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button className="btn nav-link" type="submit">
-          Create Store
-        </button>
-      </form>
-      <p className="upload-instructions">
-        Please upload a jpeg, png or svg file for your logo in 400x300 pixel
-        size or similar ratio{" "}
-      </p>
-    </div>
+          <div className="form-input">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={generals.email}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleEmail(e.target.value)
+              }
+              placeholder="Enter Email"
+            />
+          </div>
+          <div className="form-input">
+            <label htmlFor="country">Country</label>
+            <FormControl
+              variant="standard"
+              sx={{ m: 0, minWidth: 120, width: "100%" }}
+            >
+              <Select
+                labelId="chain-select-label"
+                id="chain-select"
+                value={generals.country}
+                onChange={(e) => handleCountry(e.target.value)}
+              >
+                {options.map((item) => (
+                  <MenuItem key={item.value} value={item.value}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <button className="btn nav-link" type="submit">
+            Create Store
+          </button>
+        </form>
+        <p className="upload-instructions">
+          Please upload a jpeg, png or svg file for your logo in 400x300 pixel
+          size or similar ratio{" "}
+        </p>
+      </div>
+    </>
   );
 };
 const CreateStore = (store): ReactJSXElement => {
+    const [loadingImage, setLoadingImage] = useState(false);
+
   return (
-    <div className="create-store">
-      <BlueBackground />
-      <h2 className="heading">Create Store</h2>
-      <p className="intro">
-        Launch your own white-label NFT store or NFT Marketplace without any
-        technical knowledge.
-      </p>
-      <CreateStoreForm store={store}/>
-    </div>
+    <>
+      {loadingImage && <FullLoading />}
+      <div className="create-store">
+        <BlueBackground />
+        <h2 className="heading">Create Store</h2>
+        <p className="intro">
+          Launch your own white-label NFT store or NFT Marketplace without any
+          technical knowledge.
+        </p>
+        <CreateStoreForm store={store} setLoadingImage={setLoadingImage} />
+      </div>
+    </>
   );
 };
 

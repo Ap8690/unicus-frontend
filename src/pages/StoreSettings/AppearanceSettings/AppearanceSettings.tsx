@@ -9,12 +9,12 @@ const AppearanceSettings = () => {
             <h2>Appearance</h2>
             <div className="setting-box">
                 <div className="filter">
-                    <button
+                    {/* <button
                         className={currentFilter === "header" && "active"}
                         onClick={() => setCurrentFilter("header")}
                     >
                         Header Sections
-                    </button>
+                    </button> */}
                     <button
                         className={currentFilter === "other" && "active"}
                         onClick={() => setCurrentFilter("other")}

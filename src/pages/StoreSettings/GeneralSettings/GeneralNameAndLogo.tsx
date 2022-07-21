@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { BASE_URL } from "../../../config";
 import { v4 as uuid } from "uuid";
 import { Form } from "react-bootstrap";
+import { FormControl, MenuItem, Select } from "@mui/material";
 
 const GeneralNameAndLogo = (general: IGeneral) => {
   //@ts-ignore
@@ -98,26 +99,34 @@ const GeneralNameAndLogo = (general: IGeneral) => {
           value={generals.email}
           onChange={(e) => handleEmail(e.target.value)}
         />
-        <Form.Group className="mb-4 d-flex flex-column">
-          <Form.Label>Country</Form.Label>
-          <select
-            className="form-control cursor-pointer"
+        <FormControl
+          variant="standard"
+          sx={{ m: 0, minWidth: 120, width: "100%" }}
+        >
+          <Select
+            labelId="chain-select-label"
+            id="chain-select"
             value={generals.country}
             onChange={(e) => handleCountry(e.target.value)}
           >
             {options.map((item) => (
-              <option key={item.value} value={item.value}>
+              <MenuItem key={item.value} value={item.value}>
                 {item.label}
-              </option>
+              </MenuItem>
             ))}
-          </select>
-        </Form.Group>
-        <button className="btn" onClick={()=> handleSave()}>Save Changes</button>
+          </Select>
+        </FormControl>
+        <button className="btn" onClick={() => handleSave()}>
+          Save Changes
+        </button>
       </div>
       <div className="file-upload-container">
         <div className="title">Logo</div>
         <label className="file-upload-box">
           {generals.logoUrl == "" && <img src={uploadImg} alt="" />}
+          {generals.logoUrl !== "" && (
+            <img src={generals.logoUrl} alt="" style={{ width: "90%" }} />
+          )}
           <input
             type="file"
             id="file"

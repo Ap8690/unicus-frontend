@@ -482,7 +482,7 @@ const CreateNftSingle = () => {
         />
       ))}
       {nftLoading && <FullLoading />}
-      
+
       <div className="create-nft-single-page">
         <div className="head">
           <div className="blue-head">Create single item</div>
@@ -560,17 +560,17 @@ const CreateNftSingle = () => {
                     onChange={handleChange}
                     label="Chain"
                   >
+                    <MenuItem value={nearChain}>Near</MenuItem>
                     <MenuItem value={ethChain}>Ethereum</MenuItem>
                     <MenuItem value={polygonChain}>Polygon</MenuItem>
                     <MenuItem value={bscChain}>Binance</MenuItem>
                     <MenuItem value={tronChain}>Tron</MenuItem>
                     <MenuItem value={solonaChain}>Solana</MenuItem>
-                    <MenuItem value={nearChain}>Near</MenuItem>
                   </Select>
                 </FormControl>
               </div>
               {chain == ethChain && 
-                <>
+                <>(
                   <div className="field-title">Contract Type</div>
                   <div className="select-chain">
                     <FormControl
@@ -583,17 +583,16 @@ const CreateNftSingle = () => {
                         defaultValue="art"
                         value={contractType}
                         onChange={(e)=> setContractType(e.target.value)}
-                        label="Category"
+                        label="Catego ry"
                       >
                         <MenuItem value={"721"}>ERC 721</MenuItem>
                         <MenuItem value={"1155"}>ERC 1155</MenuItem>
-                     
                       </Select>
                     </FormControl>
                   </div>
                 </>
               }
-              <div className="field-title">Category</div>
+              )<div className="field-title">Category</div>
               <div className="select-chain">
                 <FormControl
                   variant="standard"

@@ -33,6 +33,10 @@ const Login = ({}) => {
                     console.log("in")
                     
                     Cookies.set(ACCESS_TOKEN, res.data.accessToken)
+                    Cookies.set(
+                              "userInfo",
+                              JSON.stringify(res.data.user)
+                            );
                     localStorage.setItem(
                         "userInfo",
                         JSON.stringify(res.data.user)
@@ -48,7 +52,7 @@ const Login = ({}) => {
                 })
                 .catch((err) => {
                     console.log(err.response.data);
-                    setError(err.response.data.msg)
+                    toast.error(err.response.data.msg)
                 })
         }
     }

@@ -16,7 +16,7 @@ const Register = () => {
 
   async function handleLogin(e: any) {
     e.preventDefault();
-    if (!email || !password || username) {
+    if (!email || !password || !username) {
       toast.error("Fill all fields")
     } else if(password !== conPassword){
       toast.error("Password do not match")
@@ -37,6 +37,7 @@ const Register = () => {
         })
         .catch((err) => {
           console.log(err.response.data);
+          toast.error(err.response.data.msg);
         });
     }
   }
@@ -82,7 +83,7 @@ const Register = () => {
               placeholder="Enter Wallet Key"
               setState={setWalletKey}
             /> */}
-            <button className="btn large-btn login-btn">REGISTER</button>
+            <button className="btn large-btn login-btn" onClick={handleLogin}>REGISTER</button>
             <div className="terms">
               By continuing you are agreeing to our{" "}
               <Link to={"/"}>Terms of use</Link>

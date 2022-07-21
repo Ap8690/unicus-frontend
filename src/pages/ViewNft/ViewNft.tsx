@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import { AllNFTsElement } from "../AllNFTs/AllNFTsBody/AllNFTsElements";
 import { getNftById } from "../../services/api/supplier";
+import FullLoading from "../../components/modals/Loading/FullLoading";
 
 const filters = ["Details", "History"];
 const creator = {
@@ -72,14 +73,17 @@ const ViewNft = () => {
   const [auction, setAuction] = useState("");
   const [nftImg, setNftImg] = useState("");
   const [creator, setCreator] = useState("");
+  const [nftLoading, setNftLoading] = useState<boolean>(false);
   const { chain, contractAddress, nftId } = useParams();
   const handleClose = () => setPlaceBidModal(false);
 
   async function fetchItem() {
     console.log(chain, contractAddress, nftId);
-
+setNftLoading(true)
     const res = await getNftById(chain, contractAddress, nftId);
     console.log(res, "res");
+    setNftLoading(false);
+
     setNft(res.data.nft);
     setAuction(res.data.auction);
     setNftImg(res.data.nft.cloudinaryUrl);
@@ -92,22 +96,23 @@ const ViewNft = () => {
 
   return (
     <>
-      
+      {nftLoading && <FullLoading />}
       <div className="view-nft">
         <div className="nft">
           <NftImg img={nftImg} likes={7} shares={22} views={50} />
-          {nft && 
-          <NftInfo
-            filters={filters}
-            creator={creator}
-            activeFilter={activeFilter}
-            setActiveFilter={setActiveFilter}
-            historyData={historyData}
-            topBid={topBid}
-            nft={nft}
-            auction={auction}
-          />
-}
+          {nft && (
+            <NftInfo
+              filters={filters}
+              creator={creator}
+              activeFilter={activeFilter}
+              setActiveFilter={setActiveFilter}
+              historyData={historyData}
+              topBid={topBid}
+              nft={nft}
+              auction={auction}
+              setNftLoading={setNftLoading}
+            />
+          )}
         </div>
         <div className="nft bottom-grid">
           <h1>More from this collection</h1>

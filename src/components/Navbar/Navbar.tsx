@@ -209,11 +209,11 @@ Navbar = ({store}) => {
                   Profile
                 </Link>
               </MenuItem>
-              <MenuItem onClick={handleCloseProfile}>
+              {/* <MenuItem onClick={handleCloseProfile}>
                 <Link to={"/profile/favourite"} className="menu-link">
                   Favourites
                 </Link>
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem onClick={handleCloseProfile}>
                 <Link to={"/profile/created"} className="menu-link">
                 My NFTs
@@ -224,11 +224,11 @@ Navbar = ({store}) => {
                   My Listings
                 </Link>
               </MenuItem>
-              <MenuItem onClick={handleCloseProfile}>
+              {/* <MenuItem onClick={handleCloseProfile}>
                 <Link to={"/profile/notification"} className="menu-link">
                   Notification
                 </Link>
-              </MenuItem>
+              </MenuItem> */}
               {!isMainStore() && <MenuItem onClick={handleCloseProfile}>
                 <Link to={"/store/settings"} className="menu-link">
                   My Store Settings

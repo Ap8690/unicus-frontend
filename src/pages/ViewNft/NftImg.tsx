@@ -2,12 +2,14 @@ import viewImg from '../../assets/svgs/views.svg'
 import shareImg from '../../assets/svgs/share.svg'
 import likesImg from '../../assets/svgs/likes.svg'
 import flagImg from '../../assets/svgs/flag.svg'
+import nftImg from "../../assets/images/marketPlaceMain.png";
+
 import './viewnft.scss'
 
 const NftImg = ({ img, likes, views, shares }) => {
     return (
         <div className='nft-img-box'>
-            <img src={img} alt="" className='nft-img' />
+            <img src={img? img : nftImg} alt="" className='nft-img' />
             <div className='nft-interactions'>
                 <button>
                     {views} <img src={viewImg} alt="views" />
