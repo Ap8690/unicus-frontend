@@ -61,7 +61,7 @@ const CreateNftSingle = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("art");
   const [price, setPrice] = useState("0.00");
-  const [chain, setChain] = useState(ethChain);
+  const [chain, setChain] = useState(nearChain);
   const [contractType, setContractType] = useState("721");
   const [supply, setSupply] = useState(1);
   const [unlockContent, setUnlockContent] = useState("");
@@ -237,6 +237,7 @@ const CreateNftSingle = () => {
       console.log(1);
 
       setAddNFTModalOpen(false);
+      //@ts-ignore
       if (!window.ethereum) {
         setNftLoading(false);
         setMetamaskNotFound(true);
@@ -560,17 +561,17 @@ const CreateNftSingle = () => {
                     onChange={handleChange}
                     label="Chain"
                   >
-                    <MenuItem value={nearChain}>Near</MenuItem>
                     <MenuItem value={ethChain}>Ethereum</MenuItem>
                     <MenuItem value={polygonChain}>Polygon</MenuItem>
                     <MenuItem value={bscChain}>Binance</MenuItem>
                     <MenuItem value={tronChain}>Tron</MenuItem>
+                    <MenuItem value={nearChain}>Near</MenuItem>
                     <MenuItem value={solonaChain}>Solana</MenuItem>
                   </Select>
                 </FormControl>
               </div>
-              {chain == ethChain && 
-                <>(
+              {chain == ethChain && (
+                <>
                   <div className="field-title">Contract Type</div>
                   <div className="select-chain">
                     <FormControl
@@ -582,8 +583,8 @@ const CreateNftSingle = () => {
                         id="chain-select"
                         defaultValue="art"
                         value={contractType}
-                        onChange={(e)=> setContractType(e.target.value)}
-                        label="Catego ry"
+                        onChange={(e) => setContractType(e.target.value)}
+                        label="Category"
                       >
                         <MenuItem value={"721"}>ERC 721</MenuItem>
                         <MenuItem value={"1155"}>ERC 1155</MenuItem>
@@ -591,8 +592,8 @@ const CreateNftSingle = () => {
                     </FormControl>
                   </div>
                 </>
-              }
-              )<div className="field-title">Category</div>
+              )}
+              <div className="field-title">Category</div>
               <div className="select-chain">
                 <FormControl
                   variant="standard"
