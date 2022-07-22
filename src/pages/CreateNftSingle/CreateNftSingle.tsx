@@ -6,6 +6,7 @@ import starImg from "../../assets/svgs/starIcon.svg";
 import statsImg from "../../assets/svgs/statsIcon.svg";
 import unlockImg from "../../assets/svgs/unlock.svg";
 import questionImg from "../../assets/svgs/questionIcon.svg";
+import uploadFile from "../../assets/svgs/uploadFile.svg"
 import { Image } from "react-bootstrap";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";

@@ -11,7 +11,7 @@
         font-weight: 500;
     }
     .head{
-        width: 50%;
+        width: 600px;
         >div{
             text-align: left !important;
         }
@@ -98,7 +98,12 @@
                     height: 300px;
                     border-radius: 18px;
                     border: 2px dashed rgba($color: #666, $alpha: 0.8);
-                    
+                    background-image: url('../../assets/svgs/uploadFile.svg');
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
+                input[type=file]{
+                    opacity: 0;
                 }
             }
             .basic-info{
@@ -149,6 +154,33 @@
                 }
             }
 
+        }
+    }
+}
+
+@media screen and (max-width: 768px){
+    .create-nft-single-page{
+        padding: 2rem;
+        .head{
+            width: 100%;
+            .blue-head, .head-text{
+                text-align: center !important;
+            }
+        }
+        .body{
+            .preview-field{
+                display: none;
+            }
+        }
+        .input-fields{
+            .upload-file{
+                width: 100%;
+                .field{
+                    width: 100% !important;
+                    height: auto !important;
+                    aspect-ratio: 1/1;
+                }
+            }
         }
     }
 }
