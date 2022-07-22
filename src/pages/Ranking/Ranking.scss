@@ -158,6 +158,7 @@
 }
 
 @media screen and (max-width: 992px) {
+  .ranking{
   th{
     font-size: fonts.$font-size-sm !important;
     width: fit-content !important;
@@ -199,7 +200,9 @@
     }
   }
 }
+}
 @media screen and (max-width: 860px) {
+  .ranking{
   table {
     border-collapse: separate !important;
   }
@@ -254,4 +257,5 @@
     height: 2rem !important;
     width: 2rem !important;
   }
+}
 }

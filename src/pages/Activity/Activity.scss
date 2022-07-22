@@ -5,18 +5,21 @@
 .activity {
   width: 100%;
   max-width: 1290px;
-  padding: 6rem 2rem;
+  padding: 4rem 2rem;
   position: relative;
   .activity-header {
-    display: grid;
-    grid-template-columns: 32% 68%;
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
     .filter-icon {
       @include fn.flex(center, flex-start);
       font-weight: 500;
       gap: 10px;
-      font-size: fonts.$font-size-3xl;
+      width: 300px;
+      font-size: fonts.$font-size-2xl;
       img {
         display: block;
+        width: 1.5rem;
       }
     }
     .active-filters {
@@ -45,10 +48,167 @@
     }
   }
   .activity-body {
-    display: grid;
-    grid-template-columns: 30% 70%;
-    grid-template-rows: repeat(2, 1fr);
-    margin-top: 2.3rem;
-    grid-column-gap: 22px;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    &>div:last-child{
+      width: 100%;
+    }
+  }
+}
+.activity-table{
+  width: 100%;
+  .price{
+    text-align: center;
+  }
+  thead{
+    tr{
+      position: relative;
+      &::before, &::after{
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        border-top: 2px dashed rgba($color: #fff, $alpha: 0.2);
+      }
+      &::before{
+        top: 0;
+      }
+      &::after{
+        bottom: 0;
+      }
+    }
+  }
+  th, td{
+    text-align: left;
+    padding: 1.5rem 0;
+  }
+  .activity-table-data-icon{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .activity-table-data-item-name{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    img{
+      height: 2.5rem;
+      width: 4rem;
+      overflow: hidden;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .item-info{
+      display: flex;
+      flex-direction: column;
+      span:last-child{
+        font-weight: 500;
+        font-size: fonts.$font-size-sm;
+      }
+    }
+  }
+  .activity-table-data-price{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: flex-end;
+    .eth-price{
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+      font-size: fonts.$font-size-sm;
+      img{
+        height: 1rem;
+      }
+    }
+  }
+  .activity-table-data-qty{
+    text-align: center;
+    padding: 1.5rem 1rem;
+  }
+  .activity-table-data-from,
+  .activity-table-data-to,
+  .activity-table-data-time{
+    color: colors.$color-purple-2;
+  }
+}
+
+.activity-body-filters{
+  width: 300px;
+  min-width: 300px;
+}
+
+@media screen and (max-width: 1100px) {
+  .activity-table{
+    tr,td{
+      font-size: fonts.$font-size-sm;
+    }
+    .activity-table-data-item-name{
+      .item-info{
+        span:last-child{
+          font-size: fonts.$font-size-xs;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .activity{
+    padding: 2rem;
+    .activity-header {
+      justify-content: center;
+      .filter-icon{
+        width: fit-content;
+        cursor: pointer;
+      }
+      .active-filters{
+        display: none;
+      }
+    }
+    .activity-body-filters{
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .activity{
+    .activity-table{
+      thead{
+        display: none;
+      }
+      tbody{
+        td:first-child{
+          display: none;
+        }
+        td:nth-child(4), 
+        td:nth-child(5), 
+        td:nth-child(6), 
+        td:nth-child(7){
+          display: none;
+        }
+        .activity-table-data-price{
+          .sale, .time{
+            font-size: fonts.$font-size-xs;
+            font-weight: 300;
+            display: block  ;
+          }
+          .dollar-price{
+            display: none;
+          }
+        }
+      }
+      .activity-table-data-item-name{
+        img{
+          width: 5rem;
+          height: 3rem;
+        }
+        .item-info{
+          gap: 0.5rem;
+        }
+      }
+    }
   }
 }

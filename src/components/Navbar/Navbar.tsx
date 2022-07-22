@@ -89,9 +89,6 @@ const Navbar = (store: any) => {
                         <SearchBar search={search} setSearch={setSearch} />
                     </div>
                     <div className="nav-menu-icons">
-                        <button className="nav-menu-icon">
-                            <img src={searchIcon} alt="" />
-                        </button>
                         <ProfileButton accessToken={accessToken} />
                         <button
                             className="nav-menu-icon"

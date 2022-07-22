@@ -5,41 +5,54 @@
 .explore {
   position: relative;
   max-width: 1290px;
-  width: 90%;
-  padding: 6rem 2rem;
-  padding-bottom: 25rem;
+  width: 100%;
+  padding: 3rem 2rem;
+  // padding-bottom: 25rem;
 
   .explore-heading {
     font-weight: 600;
-    font-size: fonts.$font-size-5xl;
+    margin-top: 0;
+    font-size: fonts.$font-size-3xl;
     background: colors.$gradient-blue;
     background-clip: text;
     color: transparent;
   }
-  .explore-filters {
-    @include fn.flex(center, flex-start);
+  .explore-border{
+    height: 3px;
     width: 100%;
-    border-bottom: solid 4px rgba(255, 255, 255, 0.2);
-    font-size: fonts.$font-size-2xl;
-    padding: 20px 0;
+    position: relative;
+    top: -3px;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  .explore-filters {
+    @include fn.flex(center, space-between);
+    width: 100%;
+    gap: 1rem;
+    font-size: fonts.$font-size-lg;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    // padding: 1rem 0;
+    position: relative;
 
     .explore-filter {
       position: relative;
-      padding: 0 30px;
+      white-space: nowrap;
+      padding: 0;
+      padding-bottom: 1rem;
     }
-    .explore-filter::after {
-      width: 100%;
-      position: absolute;
-      bottom: -24px;
-      left: 0;
-      content: "";
-      height: 4px;
-      background: colors.$gradient-blue;
-      opacity: 0;
-      transition: 0.3s ease-in-out;
-    }
-    .explore-filter.active::after {
-      opacity: 1;
+    // .explore-filter::after {
+    //   width: 100%;
+    //   position: absolute;
+    //   bottom: -24px;
+    //   left: 0;
+    //   content: "";
+    //   height: 4px;
+    //   background: colors.$gradient-blue;
+    //   opacity: 0;
+    //   transition: 0.3s ease-in-out;
+    // }
+    .explore-filter.active{
+      border-bottom: 3px solid colors.$color-purple-2;
     }
   }
   .explore-elements {

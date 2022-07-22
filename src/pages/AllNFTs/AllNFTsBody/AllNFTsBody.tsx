@@ -11,9 +11,15 @@ const AllNFTsBody = ({
   arrangement,
   updateLoaded,
   ifShowButton,
+  collections,
+  filters,
+  priceRange,
+  handlePriceRange,
+  currency,
+  setCurrency,
 }): ReactJSXElement => {
   // Hardcoded data
-  const filters = ["New", "Buy now", "On Auction", "Has offers"];
+  
 
   return (
     <div className="all-nfts-body">
@@ -23,6 +29,11 @@ const AllNFTsBody = ({
         setActiveFilters={setActiveFilters}
         search={search}
         setSearch={setSearch}
+        collections={collections}
+        priceRange={priceRange}
+        handlePriceRange={handlePriceRange}
+        currency={currency}
+        setCurrency={setCurrency}
       />
       <AllNFTsElements
         list={list}

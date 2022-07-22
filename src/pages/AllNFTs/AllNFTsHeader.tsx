@@ -2,6 +2,7 @@
 import { useState, Dispatch, SetStateAction, ReactPropTypes } from "react";
 import filter from "../../assets/svgs/filter.svg";
 import chevronDown from "../../assets/svgs/chevronDown.svg";
+import useWindowDimensions from "../../utils/getDimensions";
 
 // Types
 type SortingType = {
@@ -52,6 +53,7 @@ const AllNFTsHeader = ({
   arrangement,
   setArrangement,
   list,
+  setFilterMenu
 }) => {
   // states
   const [sortingOpen, setSortingOpen]: useStateType<Boolean> = useState(false);
@@ -66,6 +68,7 @@ const AllNFTsHeader = ({
     { criteria: "Price", type: "descending" },
   ];
 
+  const { width } = useWindowDimensions()
   // Event Callbacks
   const onClickSorting = (filter: SortingType) => {
     setSorting(filter);
@@ -85,14 +88,18 @@ const AllNFTsHeader = ({
     backgroundColor: arrangement === 3 ? "#fff" : "transparent",
     border: arrangement === 3 ? "none" : "solid 1px white",
   };
+  const handleMenuOpen = () => {
+    if(width > 768) return
+    setFilterMenu(true)
+}
   const garb2 = new Array(4).fill(1);
   const garb3 = new Array(9).fill(1);
 
   return (
     <div className="all-nfts-header">
-      <div className="filter-icon">
+      <div className="filter-icon" onClick={handleMenuOpen}>
         <img src={filter} alt="Filter" />
-        Filter
+        Filters
       </div>
       <div className="filter-options">
         <div className="total-length">{length} results</div>
@@ -154,18 +161,18 @@ const AllNFTsHeader = ({
             ))}
           </div>
         </div>
-      </div>
-      <div className="arrangement-options">
-        <button className="btn-2" onClick={() => setArrangement(2)}>
-          {garb2.map((garb: number, index: number) => (
-            <div className="btn-box" key={`btnb2${index}`} style={btn2x2}></div>
-          ))}
-        </button>
-        <button className="btn-3" onClick={() => setArrangement(3)}>
-          {garb3.map((garb: number, index: number) => (
-            <div className="btn-box" key={`btnb3${index}`} style={btn3x3}></div>
-          ))}
-        </button>
+        <div className="arrangement-options">
+          <button className="btn-2" onClick={() => setArrangement(2)}>
+            {garb2.map((garb: number, index: number) => (
+              <div className="btn-box" key={`btnb2${index}`} style={btn2x2}></div>
+              ))}
+          </button>
+          <button className="btn-3" onClick={() => setArrangement(3)}>
+            {garb3.map((garb: number, index: number) => (
+              <div className="btn-box" key={`btnb3${index}`} style={btn3x3}></div>
+              ))}
+          </button>
+        </div>
       </div>
     </div>
   );

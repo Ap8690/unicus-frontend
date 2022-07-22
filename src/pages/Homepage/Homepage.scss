@@ -11,7 +11,7 @@
 }
 
 .topBanner {
-  padding-top: 10rem;
+  padding-top: 3rem;
   @include fn.flex(center, space-between);
   gap: 3rem;
   p {

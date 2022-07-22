@@ -28,7 +28,7 @@ const Explore = () => {
   const [skiploading, setskiploading] = useState(true);
   const [metadata, setmetadata] = useState<any>([]);
 
-  const filters = ["All", "Art", "Photos", "Games", "Music"];
+  const filters = ["All Nfts", "Art", "Photos", "Games", "Domains", "Sports", "Trading Cards", "Utility", "Virtual Worlds"];
   const elements = [
     {
       name: "Lorem Collection",

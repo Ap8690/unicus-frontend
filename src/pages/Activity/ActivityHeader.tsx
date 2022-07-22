@@ -1,6 +1,7 @@
 // Images
 import filter from "../../assets/svgs/filter.svg";
 import cross from "../../assets/svgs/cross.svg";
+import useWindowDimensions from "../../utils/getDimensions";
 
 const ActiveFilterComponent = ({ acFilter, removeFilter }) => {
   return (
@@ -13,7 +14,8 @@ const ActiveFilterComponent = ({ acFilter, removeFilter }) => {
   );
 };
 
-const ActivityHeader = ({ activeFilters, setActiveFilters }) => {
+const ActivityHeader = ({ activeFilters, setActiveFilters, setFilterMenu }) => {
+  const { width } = useWindowDimensions()
   const removeFilter = (rmFilter: string) => {
     const temp = activeFilters.filter((filter: string) => filter != rmFilter);
     setActiveFilters(temp);
@@ -21,11 +23,17 @@ const ActivityHeader = ({ activeFilters, setActiveFilters }) => {
   const clearAllFilter = () => {
     setActiveFilters([]);
   };
+
+  const handleMenuOpen = () => {
+      if(width > 768) return
+      setFilterMenu(true)
+  }
+
   return (
     <div className="activity-header">
-      <div className="filter-icon">
+      <div className="filter-icon" onClick={handleMenuOpen}>
         <img src={filter} alt="Filter" />
-        Filter
+        Filters
       </div>
       <div className="active-filters">
         {activeFilters.map((acFilter:string, i: number) => (

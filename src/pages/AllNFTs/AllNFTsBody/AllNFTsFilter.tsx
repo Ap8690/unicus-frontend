@@ -3,6 +3,7 @@ import itemPic from "../../../assets/images/itemPic.png";
 
 // Components
 import DropDownFilter from "../../../components/DropDownFilter/DropDownFilter";
+import DropDownPrice from "../../../components/DropDownPrice/DropDownPrice";
 import DropDownSearch from "../../../components/DropDownSearch/DropDownSearch";
 
 const AllNFTsFilter = ({
@@ -11,28 +12,22 @@ const AllNFTsFilter = ({
   setActiveFilters,
   search,
   setSearch,
+  collections,
+  priceRange,
+  handlePriceRange,
+  currency,
+  setCurrency,
 }) => {
-  const collections = [
-    {
-      name: "Leslie Alexander",
-      image: itemPic,
-    },
-    {
-      name: "Untitled Collection",
-      image: itemPic,
-    },
-    {
-      name: "Guy Hawkins",
-      image: itemPic,
-    },
-    {
-      name: "Webbed",
-      image: itemPic,
-    },
-  ];
+
 
   return (
-    <div className="all-nfts-filters">
+    <div className="activity-body-filters">
+      <DropDownPrice
+        priceRange={priceRange}
+        handlePriceRange={handlePriceRange}
+        currency={currency}
+        setCurrency={setCurrency}
+      />
       <DropDownFilter
         heading={"Status"}
         filters={filters}

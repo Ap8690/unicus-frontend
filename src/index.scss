@@ -152,6 +152,26 @@ p {
   display: flex !important;
   flex-direction: column !important;
   padding: 2rem;
+  .menu-accordion{
+    background-color: #000 !important;
+    color: #fff !important;
+  }
+  .accordion-menu{
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      font-weight: 400 !important;
+      font-size: fonts.$font-size-base !important;
+  }
+  .expandIcon{
+      color: #fff;
+  }
+  .summary{
+      padding: 1rem 0;
+  }
+  .MuiAccordionSummary-content{
+      margin: 0 !important;
+  }
 }
 
 .noScrollbar::-webkit-scrollbar {

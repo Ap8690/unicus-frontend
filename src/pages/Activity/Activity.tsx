@@ -11,12 +11,14 @@ import "./Activity.scss";
 import ActivityHeader from "./ActivityHeader";
 import ActivityBody from "./ActivityBody/ActivityBody";
 import BlueBackground from "../../components/BlueBackground/BlueBackground";
+import FilterMenu from "../../components/menu/FIlterMenu/FilterMenu";
 
 export const Activity = () => {
   const activities = [
     {
       type: "List",
       item: "Untitled Collection",
+      creator: 'abcdef1234',
       priceEth: "1.2",
       priceDollar: "3317.99",
       qty: 1,
@@ -26,8 +28,9 @@ export const Activity = () => {
       image: itemPic,
     },
     {
-      type: "Sale",
+      type: "List",
       item: "Untitled Collection",
+      creator: 'abcdef1234',
       priceEth: "1.2",
       priceDollar: "3317.99",
       qty: 1,
@@ -37,8 +40,9 @@ export const Activity = () => {
       image: itemPic,
     },
     {
-      type: "Minted",
+      type: "List",
       item: "Untitled Collection",
+      creator: 'abcdef1234',
       priceEth: "1.2",
       priceDollar: "3317.99",
       qty: 1,
@@ -48,8 +52,21 @@ export const Activity = () => {
       image: itemPic,
     },
     {
-      type: "Transfer",
+      type: "List",
       item: "Untitled Collection",
+      creator: 'abcdef1234',
+      priceEth: "1.2",
+      priceDollar: "3317.99",
+      qty: 1,
+      from: "Null Address",
+      to: "50CIAF",
+      time: "2 days ago",
+      image: itemPic,
+    },
+    {
+      type: "List",
+      item: "Untitled Collection",
+      creator: 'abcdef1234',
       priceEth: "1.2",
       priceDollar: "3317.99",
       qty: 1,
@@ -59,9 +76,6 @@ export const Activity = () => {
       image: itemPic,
     },
   ];
-
-  // Filter for event types
-  const eventTypes = ["Listings", "Sales", "Bids", "Transfers"];
 
   // To be used in collection filter
   const collections = [
@@ -83,9 +97,15 @@ export const Activity = () => {
     },
   ];
 
+  const filter = {
+    name: 'Event Types',
+    filters: ["Listings", "Sales", "Bids", "Transfers"]
+  }
+
   const [activeFilters, setActiveFilters] = useState(["Listings"]);
   const [displayActivities, setDisplayActivities] = useState(activities);
   const [search, setSearch] = useState("");
+  const [filterMenu, setFilterMenu] = useState(false)
 
   // Search via filter
   useEffect(() => {
@@ -115,22 +135,35 @@ export const Activity = () => {
     setDisplayActivities(temp);
   }, [search]);
   return (
-    <section className="activity">
-      <BlueBackground />
-      <ActivityHeader
-        activeFilters={activeFilters}
-        setActiveFilters={setActiveFilters}
-      />
-      <ActivityBody
-        activities={displayActivities}
-        eventTypes={eventTypes}
-        activeFilters={activeFilters}
-        setActiveFilters={setActiveFilters}
-        collections={collections}
+    <>
+      <FilterMenu 
+        open={filterMenu} 
+        setOpen={setFilterMenu} 
+        activeFilters={activeFilters} 
+        setActiveFilters={setActiveFilters} 
         search={search}
         setSearch={setSearch}
+        collections={collections}
+        filter={filter}
       />
-    </section>
+      <section className="activity">
+        <BlueBackground />
+        <ActivityHeader
+          activeFilters={activeFilters}
+          setActiveFilters={setActiveFilters}
+          setFilterMenu={setFilterMenu}
+          />
+        <ActivityBody
+          activities={displayActivities}
+          eventTypes={filter.filters}
+          activeFilters={activeFilters}
+          setActiveFilters={setActiveFilters}
+          collections={collections}
+          search={search}
+          setSearch={setSearch}
+          />
+      </section>
+    </>
   );
 };
 

@@ -10,31 +10,30 @@
   gap: 25px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
-  padding: 3rem 0;
-  padding-bottom: 2rem;
+  padding: 1.5rem;
   max-width: 356px;
 
   .drop-down-search-heading {
     @include fn.flex(center, space-between);
-    width: 80%;
+    width: 100%;
     margin: 0;
     text-align: left;
-    font-size: fonts.$font-size-3xl;
+    font-size: fonts.$font-size-xl;
     font-weight: 300;
-    padding-bottom: 20px;
+    padding-bottom: 1rem;
     border-bottom: solid 1px rgba(255, 255, 255, 0.12);
 
     img {
       display: block;
       margin-left: auto;
-      height: 2rem;
+      height: 1rem;
       width: auto;
     }
   }
   .drop-down-search-holder {
     @include fn.flex-col(center, flex-start);
     overflow: hidden;
-    max-width: 356px;
+    // max-width: 356px;
     min-height: 0;
     height: 300px;
     gap: 30px;
@@ -44,6 +43,7 @@
       background-color: transparent;
       padding-top: 15px;
       padding-bottom: 15px;
+      gap: 0 !important;
       .search-icon {
         @include fn.flex(center, center);
         img {
@@ -54,22 +54,22 @@
     .search-bar {
       border: 1px solid rgba(255, 255, 255, 0.3);
       position: relative;
-      width: 90%;
+      width: 100%;
       height: 56px;
       min-height: 56px;
       input {
         color: #fff;
-        font-size: fonts.$font-size-base;
+        font-size: fonts.$font-size-sm;
       }
       input::placeholder {
         color: #fff;
-        font-size: fonts.$font-size-base;
+        font-size: fonts.$font-size-sm;
       }
     }
     .drop-down-list {
       @include fn.flex-col(flex-start, flex-start);
       gap: 30px;
-      width: 80%;
+      width: 100%;
 
       .drop-down-list-element {
         @include fn.flex(center, flex-start);

@@ -114,7 +114,7 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
                         Explore
                     </Link>
 
-                    <Accordion disableGutters className="navmenu-accordion">
+                    <Accordion disableGutters className="menu-accordion">
                         <AccordionSummary
                             expandIcon={
                                 <ExpandMoreIcon className="expandIcon" />
@@ -141,7 +141,7 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
                             </Link>
                         </AccordionDetails>
                     </Accordion>
-                    <Accordion disableGutters className="navmenu-accordion">
+                    <Accordion disableGutters className="menu-accordion">
                         <AccordionSummary
                             expandIcon={
                                 <ExpandMoreIcon className="expandIcon" />

@@ -23,20 +23,35 @@ const ActivityTableData = ({ activity }) => {
   const image = getImage(smolActivityType);
   return (
     <tr className="activity-table-data">
-      <td className="activity-table-data-icon">
-        <img src={image} alt={activity.type} />
-        {activity.type}
+      <td>
+        <div className="activity-table-data-icon">
+          <img src={image} alt={activity.type} />
+          {activity.type}
+        </div>
       </td>
-      <td className="activity-table-data-item-name">
-        <img src={activity.image} alt={activity.item} />
-        {activity.item}
+      <td>
+        <div className="activity-table-data-item-name">
+          <img src={activity.image} alt={activity.item} />
+          <div className="item-info">
+            <span className="item-name">
+              {activity.item}
+            </span>
+            <span className="item-name">
+              {activity.creator}
+            </span>
+          </div>
+        </div>
       </td>
-      <td className="activity-table-data-price">
-        <span className="eth-price">
-          <img src={ethereum} alt="Ethereum" />
-          {activity.priceEth}
-        </span>
-        <span className="dollar-price">${activity.priceDollar}</span>
+      <td>
+        <div className="activity-table-data-price">
+          <span className="mobile-only sale">sale</span>
+          <span className="eth-price">
+            <img src={ethereum} alt="Ethereum" />
+            {activity.priceEth}
+          </span>
+          <span className="dollar-price">${activity.priceDollar}</span>
+          <span className="mobile-only time">{activity.time}</span>
+        </div>
       </td>
       <td className="activity-table-data-qty">{activity.qty}</td>
       <td className="activity-table-data-from">{activity.from}</td>
@@ -47,13 +62,13 @@ const ActivityTableData = ({ activity }) => {
 };
 const ActivityTable = ({ activities, search }) => {
   return (
-    <div className="activity-table">
-      <table>
+    <div>
+      <table className="activity-table">
         <thead>
           <tr>
             <th>Item</th>
-            <th>Price</th>
-            <th>Qty</th>
+            <th className="price">Price</th>
+            <th className="activity-table-data-qty">Qty</th>
             <th>From</th>
             <th>To</th>
             <th>Time</th>
