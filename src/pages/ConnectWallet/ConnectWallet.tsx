@@ -1,6 +1,6 @@
 import "./connectwallet.scss";
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Web3Context } from "../../context/Web3Context";
 import useConnect from "./useConnect";
 import {
@@ -70,6 +70,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
   };*/
 
   const loginWallet = async (wallet) => {
+    toast("Connecting to wallet...")
     try {
       let address;
       switch (wallet) {
@@ -103,7 +104,6 @@ const ConnectWallet: React.FC<AuthType> = () => {
         }
         case "near": {
           address = await connectNear();
-
           break;
         }
       }
@@ -121,8 +121,11 @@ const ConnectWallet: React.FC<AuthType> = () => {
         console.log(":redirect", redirect["*"]);
 
         navigate(`/${redirect["*"]}`, { replace: true });
+        window.location.reload();
       } else {
-        toast.error("Wallet connection failed");
+        if (wallet != "near") {
+          toast.error("Wallet connection failed");
+        }
       }
     } catch (e) {
       toast.error(e);
@@ -130,6 +133,28 @@ const ConnectWallet: React.FC<AuthType> = () => {
       // disConnectWallet();
     }
   };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const nearAccountId = urlParams.get("account_id");
+    const nearPublicKey = urlParams.get("public_key");
+    if (nearAccountId != null && nearPublicKey != null) {
+      toast("Connection successful...")
+      walletLogin(nearAccountId).then((res) => {
+        toast.success("Login successful");
+        Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
+          expires: 30,
+        });
+        Cookies.set("userInfo", JSON.stringify(res.data.user));
+
+        localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+        console.log(":redirect", redirect["*"]);
+
+        navigate(`/${redirect["*"]}`, { replace: true });
+        window.location.reload();
+      });
+    } 
+  }, []);
 
   return (
     <div className="connect-wallet-page">

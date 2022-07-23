@@ -106,7 +106,7 @@ Navbar = ({store}) => {
               <a
                 href={
                   store.domain && store.domain.length > 0
-                    ? `https://${store.domain[0]}`
+                    ? `http://${store.domain[0]}`
                     : ""
                 }
                 target="_blank"
@@ -249,7 +249,7 @@ Navbar = ({store}) => {
               <a
                 href={
                   store.domain && store.domain.length > 0
-                    ? `https://${store.domain[0]}`
+                    ? `http://${store.domain[0]}`
                     : ""
                 }
                 target="_blank"

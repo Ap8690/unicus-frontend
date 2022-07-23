@@ -168,7 +168,7 @@ const CreateNftSingle = () => {
 
    useEffect(() => {
      if (!getAccessToken()) {
-      navigate("/connect-wallet");
+      navigate("/connect-wallet/create-nft");
       } 
    }, []);
 

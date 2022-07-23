@@ -155,7 +155,7 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
   };
    useEffect(() => {
      if (!getAccessToken()) {
-       history("/connect-wallet");
+       history("/connect-wallet/create-store");
      }
    }, []);
   return (

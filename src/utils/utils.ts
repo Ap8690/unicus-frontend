@@ -111,12 +111,17 @@ export const connectWallet = async (network: any) => {
   try {
     let address;
     if (network.toString() === nearChain) {
-      address = await connectNear();
+      if (nearWalletConnection && nearWalletConnection.account()){
+        address = nearWalletConnection.account().accountId;
+      } else{
+        address = await connectNear();
+
+      }
     } else if (network.toString() === tronChain) {
       address = tronWeb.defaultAddress.base58;
     } else {
       console.log(3);
-
+      //@ts-ignore
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
