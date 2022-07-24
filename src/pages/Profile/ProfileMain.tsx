@@ -118,7 +118,7 @@ function Profile(props: any): JSX.Element {
       sale_conditions: assetPrice, // set asset price in ui
     };
     await props.near.walletConnection.account().functionCall({
-      contractId: "nft-contract.boomboom.testnet",
+      contractId: "nft-contract.unicus.testnet",
       methodName: "nft_approve",
       args: {
         token_id: token_id,
@@ -136,7 +136,7 @@ function Profile(props: any): JSX.Element {
       sale_conditions: assetPrice, // set asset price in ui
     };
     await props.near.walletConnection.account().functionCall({
-      contractId: "nft-contract.boomboom.testnet",
+      contractId: "nft-contract.unicus.testnet",
       methodName: "approve_nft_auction",
       args: {
         token_id: token_id,
@@ -146,7 +146,7 @@ function Profile(props: any): JSX.Element {
         msg: JSON.stringify(sale_conditions),
       },
       attachedDeposit: parseNearAmount("0.01"),
-    });
+    });  
   };
 
   const getMinimumStorage = async () => {
