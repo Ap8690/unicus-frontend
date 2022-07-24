@@ -75,7 +75,7 @@ function ConnectWallet(props: any): JSX.Element {
       contractId: "nft-contract.unicus.testnet",
       methodName: "new_default_meta",
       args: {
-        owner_id: props.near.nearConfig.contractName,
+        owner_id: "nft-contract.unicus.testnet",
       },
       attachedDeposit: new BN(0),
       walletMeta: "",
