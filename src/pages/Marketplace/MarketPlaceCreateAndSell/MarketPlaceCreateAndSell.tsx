@@ -91,6 +91,19 @@ function MarketPlaceCreateAndSell(props: any): JSX.Element {
     })
   }
 
+  const RemoveSale = async (token_id) => {
+    await props.near.walletConnection.account().functionCall({
+      contractId: "market_contract.unicus.testnet",
+      methodName: "remove_sale",
+      args: {
+        nft_contract_id: "nft-contract.unicus.testnet",
+        token_id,
+      },
+      attachedDeposit: parseNearAmount("1"),
+      gas: "200000000000000",
+    })
+  }
+
 
   const elements = [
     {
