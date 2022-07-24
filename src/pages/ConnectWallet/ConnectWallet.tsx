@@ -43,12 +43,13 @@ type Props = Readonly<{
 
 //: React.FC<Props>
 function ConnectWallet(props: any): JSX.Element {
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction } = useWallet();
+  const { setVisible } = useWalletModal();
 
   const { isLogin, setIsLogin } = useContext(UserContext);
 
 
-  
-  
   const connectNear = () => {
     
 
@@ -56,7 +57,7 @@ function ConnectWallet(props: any): JSX.Element {
 
       props.near.walletConnection.requestSignIn(
       {
-        contractId: "nft-contract.boomboom.testnet",
+        contractId: "nft-contract.unicus.testnet",
       },
       "UNICUS", // title. Optional, by the way
       "", // successUrl. Optional, by the way
@@ -71,7 +72,7 @@ function ConnectWallet(props: any): JSX.Element {
 
   const sendMeta = async () => {
     let functionCallResult = await props.near.walletConnection.account().functionCall({
-      contractId: "nft-contract.boomboom.testnet",
+      contractId: "nft-contract.unicus.testnet",
       methodName: "new_default_meta",
       args: {
         owner_id: props.near.nearConfig.contractName,
@@ -88,9 +89,7 @@ function ConnectWallet(props: any): JSX.Element {
     }
   };
 
-  const { connection } = useConnection();
-  const { publicKey, sendTransaction } = useWallet();
-  const { setVisible } = useWalletModal();
+  
     
 
     //@ts-ignore

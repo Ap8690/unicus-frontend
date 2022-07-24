@@ -37,6 +37,8 @@ function Profile(props: any): JSX.Element {
   const [assetPrice, setAssetprice] = useState("");
   const [minimum, setMinimum] = useState("");
   const [showLoader, setShowLoader] = useState(false);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
  // const [nftMarketResults, setNftMarketResults] = useState([]);
 
 
@@ -91,7 +93,7 @@ function Profile(props: any): JSX.Element {
     let userNFTs = await props.near.walletConnection
       .account()
       .viewFunction({
-        contractId: "nft-contract.boomboom.testnet",
+        contractId: "nft-contract.unicus.testnet",
         methodName: "nft_tokens_for_owner",
         args: {
           account_id: props.near.currentUser,
@@ -120,7 +122,27 @@ function Profile(props: any): JSX.Element {
       methodName: "nft_approve",
       args: {
         token_id: token_id,
-        account_id: "market_contract.boomboom.testnet",
+        account_id: "market_contract.unicus.testnet",
+        msg: JSON.stringify(sale_conditions),
+      },
+      attachedDeposit: parseNearAmount("0.01"),
+    });
+  };
+
+
+  const approveNFTForAuction = async (token_id) => {
+    sendStorageDeposit();
+    let sale_conditions = {
+      sale_conditions: assetPrice, // set asset price in ui
+    };
+    await props.near.walletConnection.account().functionCall({
+      contractId: "nft-contract.boomboom.testnet",
+      methodName: "approve_nft_auction",
+      args: {
+        token_id: token_id,
+        account_id: "market_contract.unicus.testnet",
+        start_time: startTime, // Time in seconds (as type u64)
+        end_time: endTime,  // Time in seconds (as type u64)
         msg: JSON.stringify(sale_conditions),
       },
       attachedDeposit: parseNearAmount("0.01"),
@@ -131,7 +153,7 @@ function Profile(props: any): JSX.Element {
     let minimum_balance = await props.near.walletConnection
       .account()
       .viewFunction({
-        contractId: "market_contract.boomboom.testnet",
+        contractId: "market_contract.unicus.testnet",
         methodName: "storage_minimum_balance"
       });
     setMinimum(minimum_balance);
@@ -141,7 +163,7 @@ function Profile(props: any): JSX.Element {
   const sendStorageDeposit = async () => {
     getMinimumStorage();
     await props.near.walletConnection.account().functionCall({
-      contractId: "market_contract.boomboom.testnet" ,
+      contractId: "market_contract.unicus.testnet" ,
       methodName: "storage_deposit",
       args: {},
 

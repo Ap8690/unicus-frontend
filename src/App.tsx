@@ -51,7 +51,7 @@ require('@solana/wallet-adapter-react-ui/styles.css');
 function App(props: any): JSX.Element {
   const { isLogin } = useContext(UserContext);
 
-  const network = WalletAdapterNetwork.Mainnet;
+  const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
 
@@ -59,7 +59,7 @@ function App(props: any): JSX.Element {
   //@ts-ignore
   const wallets = useMemo(
         () => [
-            new PhantomWalletAdapter(),
+            new PhantomWalletAdapter({ network }),
             new GlowWalletAdapter(),
             new SlopeWalletAdapter(),
             new SolflareWalletAdapter({ network }),

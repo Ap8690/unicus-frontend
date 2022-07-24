@@ -22,7 +22,7 @@ function MarketPlace(props: any): JSX.Element {
     let nftTokens = await props.near.walletConnection
       .account()
       .viewFunction({
-        contractId: "nft-contract.boomboom.testnet",
+        contractId: "nft-contract.unicus.testnet",
         methodName: "nft_tokens",
         args: {
           from_index: "0",

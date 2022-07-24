@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import * as nearAPI from 'near-api-js';
@@ -42,9 +42,9 @@ async function initContract() {
   return { currentUser, config, walletConnection}
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+//const root = ReactDOM.createRoot(document.getElementById('root'));
 initContract().then(({ currentUser, config, walletConnection})=> {
-  root.render(
+  ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
     <UserProvider>
@@ -53,7 +53,8 @@ initContract().then(({ currentUser, config, walletConnection})=> {
       </TransactionProvider>
     </UserProvider>
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 })
 

@@ -36,7 +36,7 @@ function MarketPlaceCreateAndSell(props: any): JSX.Element {
     let nftTokens = await props.near.walletConnection
       .account()
       .viewFunction({
-        contractId: "nft-contract.boomboom.testnet",
+        contractId: "nft-contract.unicus.testnet",
         methodName: "nft_tokens",
         args: {
         from_index: "0",
@@ -46,10 +46,10 @@ function MarketPlaceCreateAndSell(props: any): JSX.Element {
     let saleTokens = await props.near.walletConnection
       .account()
       .viewFunction({
-        contractId: "market_contract.boomboom.testnet",
+        contractId: "market_contract.unicus.testnet",
         methodName: "get_sales_by_nft_contract_id",
         args: {
-          nft_contract_id: "nft-contract.boomboom.testnet",
+          nft_contract_id: "nft-contract.unicus.testnet",
           from_index: "0",
           limit: 64,
         }
@@ -80,10 +80,10 @@ function MarketPlaceCreateAndSell(props: any): JSX.Element {
   -> Loop through nftmarketResults.map(nft, index), execute OfferPrice(nft.token_id)*/
   const OfferPrice = async (token_id) => {
     await props.near.walletConnection.account().functionCall({
-      contractId: "market_contract.boomboom.testnet",
+      contractId: "market_contract.unicus.testnet",
       methodName: "offer",
       args: {
-        nft_contract_id: "nft-contract.boomboom.testnet",
+        nft_contract_id: "nft-contract.unicus.testnet",
         token_id,
       },
       attachedDeposit: parseNearAmount(assetBid),
