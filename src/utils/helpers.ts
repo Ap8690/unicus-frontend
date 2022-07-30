@@ -26,11 +26,7 @@ export async function initContract() {
 
   let currentUser;
 
-  if (walletConnection.getAccountId()) {
-    currentUser = walletConnection.getAccountId();
-  }
-
-  return { currentUser, config, walletConnection };
+  return { config, walletConnection };
 }
 
 export const sendMeta = async (walletConnection:any,nearConfig:any ) => {

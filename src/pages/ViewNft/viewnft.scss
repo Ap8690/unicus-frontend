@@ -120,6 +120,9 @@
 
 .nft-info {
     width: 50%;
+    @media screen and (max-width:768px) {
+        width: 90%
+    }
     h2 {
         font-size: fonts.$font-size-4xl;
         margin: 0 0 1rem;

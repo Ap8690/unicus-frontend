@@ -164,13 +164,13 @@ const CreateNftSingle = () => {
     } else {
       setRoyaltyError(true);
     }
-  }, [royalty]);        
+  }, [royalty]);
 
-   useEffect(() => {
-     if (!getAccessToken()) {
+  useEffect(() => {
+    if (!getAccessToken()) {
       navigate("/connect-wallet/create-nft");
-      } 
-   }, []);
+    }
+  }, []);
 
   const modals = [
     {
@@ -209,7 +209,7 @@ const CreateNftSingle = () => {
     console.log("near mint", nearWalletConnection);
 
     let functionCallResult = await nearWalletConnection.account().functionCall({
-      contractId: "nft-contract.boomboom.testnet",
+      contractId: "nft.subauction.testnet",
       methodName: "nft_mint",
       args: {
         token_id: `${tokenId}`,
@@ -337,22 +337,21 @@ const CreateNftSingle = () => {
                   .send({
                     from: address,
                   });
-                   if (res?.transactionHash) {
-                     tokenId = res.events.Minted.returnValues._NftId; //returnValues NFTId
-                   }
+                if (res?.transactionHash) {
+                  tokenId = res.events.Minted.returnValues._NftId; //returnValues NFTId
+                }
               } else if (contractType == "1155") {
                 console.log("user add", address);
-                
+
                 res = await createNFT.methods
-                  .mintNFT(tokenUri,supply,address, parseInt(royalty))
+                  .mintNFT(tokenUri, supply, address, parseInt(royalty))
                   .send({
                     from: address,
                   });
-                  console.log("1155",res);
-                  if (res?.transactionHash) {
-                    tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
-                  }
-                  
+                console.log("1155", res);
+                if (res?.transactionHash) {
+                  tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
+                }
               } else {
                 toast.error("Contract not found");
                 return;
@@ -377,7 +376,7 @@ const CreateNftSingle = () => {
                   const result = axios.get(
                     `https://api.shasta.trongrid.io/events/transaction/${res}`
                   );
-                  tokenId = result[1].result._NftId
+                  tokenId = result[1].result._NftId;
                 }
               } else if (res?.transactionHash) {
                 tranIsSuccess = true;

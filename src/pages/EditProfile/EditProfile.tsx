@@ -8,10 +8,10 @@
 // import Menu from "@mui/material/Menu";
 // import MenuItem from "@mui/material/MenuItem";
 // import WalletAdd from "../../components/Wallet/WalletAdd";
-// import { changePassword, updateDetails } from "../../api/api-client";
 // import axios from "axios";
 // import {toast} from 'react-toastify'
 // import {useNavigate} from 'react-router-dom'
+// import { BASE_URL } from "../../config";
 
 // const EditProfile = (props) => {
 //   const [active, setActive] = useState("general");
@@ -26,7 +26,7 @@
 //   };
 //   const getUserProfile = async () => {
 //     const res = await axios.get(
-//       `${process.env.REACT_APP_BACKEND_URL}/users/getMyProfile`,
+//       `${BASE_URL}/users/getMyProfile`,
 //       {
 //         headers: {
 //           Authorization:"Bearer " + `${props.isLogin}`,
@@ -415,5 +415,4 @@
 // }
 
 // export default EditProfile;
-
 export {}

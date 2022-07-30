@@ -1,0 +1,50 @@
+@use '/src/styles/fonts';
+
+.navMenuComponent {
+  gap: 1rem;
+  background-color: #000002!important;
+  padding: 20px 20px;
+  z-index: 1000!important;
+  .search-close {
+    color: #fff;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    &>button {
+      display: flex;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .search-bar {
+    margin: 0;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    gap: 1rem;
+  }
+
+  .menu-link,
+  .nav-link {
+    padding: 1rem 0;
+  }
+
+  button.menu-link {
+    text-align: left;
+  }
+
+  .btn {
+    padding: 1rem;
+    text-align: center !important;
+  }
+
+  .main {
+    font-weight: 500;
+    font-size: fonts.$font-size-lg;
+  }
+}

@@ -111,11 +111,10 @@ export const connectWallet = async (network: any) => {
   try {
     let address;
     if (network.toString() === nearChain) {
-      if (nearWalletConnection && nearWalletConnection.account()){
+      if (nearWalletConnection && nearWalletConnection.account()) {
         address = nearWalletConnection.account().accountId;
-      } else{
+      } else {
         address = await connectNear();
-
       }
     } else if (network.toString() === tronChain) {
       address = tronWeb.defaultAddress.base58;
@@ -273,11 +272,11 @@ export const connToTron = async () => {
 };
 
 export const connectNear = async () => {
-  const { currentUser, config, walletConnection } = await initContract();
+  const { config, walletConnection } = await initContract();
   if (!walletConnection.isSignedIn()) {
     const res = await walletConnection.requestSignIn(
       {
-        contractId: "nft-contract.boomboom.testnet",
+        contractId: "nft.subauction.testnet",
       },
       "UNICUS", // title. Optional, by the way
       "", // successUrl. Optional, by the way
@@ -286,6 +285,8 @@ export const connectNear = async () => {
   } else {
     console.log("near wallet", walletConnection.account());
     console.log("wallet is already connected");
+    nearWalletConnection = walletConnection;
+    return walletConnection.account().accountId;
   }
 
   sendMeta(walletConnection, config);
@@ -294,6 +295,7 @@ export const connectNear = async () => {
 
   return walletConnection.account().accountId;
 };
+
 export const disConnectWallet = () => {
   localStorage.removeItem("walletType");
   localStorage.removeItem("userAddress");
@@ -346,22 +348,22 @@ export const getChainSymbol = (chain) => {
 };
 export const getChainId = (chain) => {
   try {
-    if(chain){
-    return chain.toString() === "ethereum"
-      ? ethChain
-      : chain.toString() === "binance"
-      ? bscChain
-      : chain.toString() === "polygon"
-      ? polygonChain
-      : chain.toString() === "near"
-      ? nearChain
-      : chain.toString() === "tron"
-      ? tronChain
-      : chain.toString() === "solona"
-      ? solonaChain
-      : 0;
-    }else{
-      return 0
+    if (chain) {
+      return chain.toString() === "ethereum"
+        ? ethChain
+        : chain.toString() === "binance"
+        ? bscChain
+        : chain.toString() === "polygon"
+        ? polygonChain
+        : chain.toString() === "near"
+        ? nearChain
+        : chain.toString() === "tron"
+        ? tronChain
+        : chain.toString() === "solona"
+        ? solonaChain
+        : 0;
+    } else {
+      return 0;
     }
   } catch (e) {
     console.log(e);
@@ -522,15 +524,17 @@ export const getAuctionContract = (chain, contractType = "721") => {
     );
   }
 };
+
+//Near MarketPlace
 export const offerPrice = async (token_id: string, assetBid: any) => {
   try {
     console.log("amount", parseNearAmount(assetBid.toString()));
 
     await nearWalletConnection.account().functionCall({
-      contractId: "market_contract.boomboom.testnet",
+      contractId: "market_auct.subauction.testnet",
       methodName: "offer",
       args: {
-        nft_contract_id: "nft-contract.boomboom.testnet",
+        nft_contract_id: "nft.subauction.testnet",
         token_id,
       },
       attachedDeposit: parseNearAmount(assetBid.toString()),
@@ -541,24 +545,97 @@ export const offerPrice = async (token_id: string, assetBid: any) => {
   }
 };
 
-export const approveNFTForSale = async (
-  token_id: string,
-  assetPrice: any
-) => {
-  console.log("approve near",assetPrice);
-  
+export const approveNFTForSale = async (token_id: string, assetPrice: any) => {
+  console.log("approve near", assetPrice);
+
   let sale_conditions = {
     sale_conditions: parseNearAmount(assetPrice.toString()), // set asset price in ui
   };
   await nearWalletConnection.account().functionCall({
-    contractId: "nft-contract.boomboom.testnet",
+    contractId: "nft.subauction.testnet",
     methodName: "nft_approve",
     args: {
       token_id: token_id,
-      account_id: "market_contract.boomboom.testnet",
+      account_id: "market_auct.subauction.testnet",
       msg: JSON.stringify(sale_conditions),
     },
     attachedDeposit: new BN(parseNearAmount("0.01")),
+  });
+};
+
+export const removeSale = async (token_id) => {
+  await nearWalletConnection.account().functionCall({
+    contractId: "market_auct.subauction.testnet",
+    methodName: "remove_sale",
+    args: {
+      nft_contract_id: "nft.subauction.testnet",
+      token_id,
+    },
+    attachedDeposit: parseNearAmount("1"),
+    gas: "200000000000000",
+  });
+};
+
+//Near Auctions
+export const approveNFTForAuction = async (
+  token_id,
+  assetPrice,
+  startTime,
+  endTime
+) => {
+  let sale_conditions = {
+    sale_conditions: parseNearAmount(assetPrice.toString()), // set asset price in ui
+  };
+  await nearWalletConnection.account().functionCall({
+    contractId: "nft.subauction.testnet",
+    methodName: "approve_nft_auction",
+    args: {
+      auction_token: token_id,
+      account_id: "market_auct.subauction.testnet",
+      start_time: startTime, // Time in seconds (as type u64)
+      end_time: endTime, // Time in seconds (as type u64)
+      msg: JSON.stringify(sale_conditions),
+    },
+    attachedDeposit: parseNearAmount("0.01"),
+  });
+};
+export const offerBid = async (token_id, assetBid) => {
+  await nearWalletConnection.account().functionCall({
+    contractId: "market_auct.subauction.testnet",
+    methodName: "offer_bid",
+    args: {
+      nft_contract_id: "nft.subauction.testnet",
+      token_id,
+    },
+    attachedDeposit: parseNearAmount(assetBid.toString()),
+    gas: "200000000000000",
+  });
+};
+//removes auction and refunds if there is any existing bid
+export const removeAuction = async (token_id) => {
+  await nearWalletConnection.account().functionCall({
+    contractId: "market_auct.subauction.testnet",
+    methodName: "remove_auction",
+    args: {
+      nft_contract_id: "nft.subauction.testnet",
+      token_id,
+    },
+    attachedDeposit: "1",
+    gas: "200000000000000",
+  });
+};
+
+//remove the auction and resolve purchase
+export const processPurchase = async (token_id) => {
+  await nearWalletConnection.account().functionCall({
+    contractId: "market_auct.subauction.testnet",
+    methodName: "process_auction_purchase",
+    args: {
+      nft_contract_id: "nft.subauction.testnet",
+      token_id,
+    },
+    attachedDeposit: 0,
+    gas: "200000000000000",
   });
 };
 
@@ -567,10 +644,7 @@ const getMinimumStorage = async () => {
 
   let minimum_balance = await nearWalletConnection
     .account()
-    .viewFunction(
-      "market_contract.boomboom.testnet",
-      "storage_minimum_balance"
-    );
+    .viewFunction("market_auct.subauction.testnet", "storage_minimum_balance");
   console.log("minimum", minimum_balance);
 
   return minimum_balance;
@@ -579,7 +653,7 @@ const getMinimumStorage = async () => {
 export const sendStorageDeposit = async () => {
   const minimum = await getMinimumStorage();
   await nearWalletConnection.account().functionCall({
-    contractId: "market_contract.boomboom.testnet",
+    contractId: "market_auct.subauction.testnet",
     methodName: "storage_deposit",
     args: {},
 

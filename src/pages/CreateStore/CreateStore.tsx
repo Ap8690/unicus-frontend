@@ -161,25 +161,32 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
   return (
     <>
       <div className="create-store-form-holder">
-        <h3 className="form-heading">Upload File</h3>
-        <div className="create-store-image-holder">
-          <button className="upload-image-button" onClick={uploadImage}>
-            {generals.logoUrl == "" && (
-              <img src={placeHolder} alt="Upload Image" />
-            )}
-            {generals.logoUrl !== "" && (
-              <img src={generals.logoUrl} alt="" style={{ width: "90%" }} />
-            )}
-            <input
-              type="file"
-              id="file"
-              ref={inputFile}
-              accept="image/jpeg, image/png , image/svg+xml"
-              onChange={(e) => getImageUrl(e)}
-              className="d-none"
-            />
-          </button>
+        <div>
+          <h3 className="form-heading">Upload File</h3>
+          <div className="create-store-image-holder">
+            <button className="upload-image-button" onClick={uploadImage}>
+              {generals.logoUrl == "" && (
+                <img src={placeHolder} alt="Upload Image" />
+              )}
+              {generals.logoUrl !== "" && (
+                <img src={generals.logoUrl} alt="" style={{ width: "90%" }} />
+              )}
+              <input
+                type="file"
+                id="file"
+                ref={inputFile}
+                accept="image/jpeg, image/png , image/svg+xml"
+                onChange={(e) => getImageUrl(e)}
+                className="d-none"
+              />
+            </button>
+          </div>
+          <p className="upload-instructions">
+            Please upload a jpeg, png or svg file for your logo in 400x300 pixel
+            size or similar ratio{" "}
+          </p>
         </div>
+
         <form
           action=""
           className="create-store-form"
@@ -237,10 +244,6 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
             Create Store
           </button>
         </form>
-        <p className="upload-instructions">
-          Please upload a jpeg, png or svg file for your logo in 400x300 pixel
-          size or similar ratio{" "}
-        </p>
       </div>
     </>
   );

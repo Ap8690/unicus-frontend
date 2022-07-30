@@ -17,7 +17,7 @@ nav{
     height: 4rem;
     width: 100%;
     max-width: 1290px;
-
+    z-index: 900;
     @include fn.flex(center, space-between);
     padding: 0 2rem;
     .brand-link{
