@@ -246,7 +246,6 @@ const ProfileButton = ({ accessToken }) => {
         });
   };
   const handleCloseProfile = () => {
-    disConnectWallet();
     setAnchorProfile(null);
   };
 
@@ -283,6 +282,8 @@ const ProfileButton = ({ accessToken }) => {
             My Listings
           </Link>
         </MenuItem>
+        <MenuItem onClick={ ()=> disConnectWallet()}>Logout</MenuItem>
+
         {/* <MenuItem onClick={handleCloseProfile}>
           <Link to={"/profile/notification"} className="menu-link">
             Notification
@@ -293,7 +294,6 @@ const ProfileButton = ({ accessToken }) => {
             Account Settings
           </Link>
         </MenuItem>
-        <MenuItem onClick={handleCloseProfile}>Logout</MenuItem>
         <div className="balance-box">
           <div className="balance">$ 0.000 USD</div>
           <div>Total Balance</div>

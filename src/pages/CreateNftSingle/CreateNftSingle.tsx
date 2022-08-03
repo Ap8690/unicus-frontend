@@ -652,7 +652,7 @@ const CreateNftSingle = () => {
                   title={"Royalty"}
                   placeholder="0 - 99 %"
                   state={royalty}
-                  setState={(e) => handleRoyaltyChange(e)}
+                  setState={handleRoyaltyChange}
                   number
                 />
                 {royaltyError && (

@@ -420,47 +420,7 @@ const NftInfo = ({
       toast.error(e);
     }
   }
-  const loadAuctionItems = async () => {
-    try{
-    const address = await connectWallet(nft.chain);
-    console.log("sear listing started",address,  nearWalletConnection);
-
-    let nftTokens = await nearWalletConnection.account().viewFunction(
-       "nft.subauction.testnet",
-      "nft_tokens",
-      {
-        from_index: "0",
-        limit: 64,
-      },
-    );
-    let auctionTokens = await nearWalletConnection.account().viewFunction(
-      "market_auct.subauction.testnet",
-      "get_auctions_by_nft_contract_id",
-      {
-        nft_contract_id: "nft.subauction.testnet",
-        from_index: "0",
-        limit: 64,
-      },
-    );
-    let auctions = [];
-    for (let i = 0; i < nftTokens.length; i++) {
-      const { token_id } = nftTokens[i];
-      let auctionToken = auctionTokens.find(
-        ({ auction_token: t }) => t === token_id
-      );
-      if (auctionToken !== undefined) {
-        auctions[i] = Object.assign(nftTokens[i], auctionToken);
-      }
-    }
-
-    console.log("sear listed auctions", auctions);
-  }catch(e){
-    console.log("sear list error", e);
-    
-  }
-    
-    
-  };
+  
   const getButtonName = () => {
     const userInfo = getUserInfo();
     console.log("button name",nft, userInfo);
@@ -527,7 +487,6 @@ const NftInfo = ({
 
   //@ts-ignore
   useEffect(async () => {
-    loadAuctionItems();
     const urlParams = new URLSearchParams(window.location.search);
     const txhash = urlParams.get("transactionHashes");
     const errorCode = urlParams.get("errorCode");
@@ -791,10 +750,9 @@ const NftInfo = ({
               {/* <span>
               Highest bid by <span className="blue-text">{topBid.name}</span>
             </span> */}
-              {/* <div className="price-info">
-              <span className="blue-head">{topBid.bid} ETH</span>
-              <span>${topBid.price}</span>
-            </div> */}
+              {auction && <div className="price-info">
+              <span className="blue-head">{auction.lastBid && auction.lastBid != 0? auction.lastBid : auction.startBid/ getDecimal(nft.chain)} {getChainSymbol(nft.chain)}</span>
+            </div>}
             </div>
           </div>
           <div className="btn-box">
