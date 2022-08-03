@@ -108,7 +108,14 @@ const Explore = () => {
 
   const verifyEmail = async (token, email) => {
     const res = await verifyEmailApi(token, email);
-    Cookies.set(ACCESS_TOKEN, res.data.accessToken);
+    Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
+      domain: "unicus.one",
+      expires: 30,
+    });
+     Cookies.set("userInfo", JSON.stringify(res.data.user), {
+       domain: "unicus.one",
+       expires: 30,
+     });
     localStorage.setItem("userInfo", JSON.stringify(res.data.user));
     navigate("/home", { replace: true });
   };

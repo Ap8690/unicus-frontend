@@ -112,10 +112,13 @@ const ConnectWallet: React.FC<AuthType> = () => {
       if (address) {
         const res = await walletLogin(address);
         toast.success("Login successful");
-        Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
+        Cookies.set(ACCESS_TOKEN, res.data.accessToken, { domain:'unicus.one',
           expires: 30,
         });
-        Cookies.set("userInfo", JSON.stringify(res.data.user));
+        Cookies.set("userInfo", JSON.stringify(res.data.user), {
+          domain: "unicus.one",
+          expires: 30,
+        });
 
         localStorage.setItem("userInfo", JSON.stringify(res.data.user));
         console.log(":redirect", redirect["*"]);
