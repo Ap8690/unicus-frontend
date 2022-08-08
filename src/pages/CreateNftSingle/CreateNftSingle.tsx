@@ -8,14 +8,15 @@ import statsImg from '../../assets/svgs/statsIcon.svg'
 import unlockImg from '../../assets/svgs/unlock.svg'
 import questionImg from '../../assets/svgs/questionIcon.svg'
 
-
 import * as nearAPI from 'near-api-js';
 
 import { useConnection, useWallet, useAnchorWallet } from "@solana/wallet-adapter-react";
 import {
-  u64,
-  Token,
   ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAssociatedTokenAddress,
+  createInitializeMintInstruction,
+  MINT_SIZE,
+  createAssociatedTokenAccountInstruction,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 
@@ -29,13 +30,13 @@ import {
   SYSVAR_RENT_PUBKEY,
 } from "@solana/web3.js";
 
-import * as metaplex from "@metaplex/js";
+
 import * as ipfsClient from "ipfs-http-client";
 
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Input from '../../components/Input/Input';
-import { useState , useRef } from 'react';
+import { useState , useRef, useContext } from 'react';
 import { Image } from "react-bootstrap";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -45,6 +46,8 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import AddProperties from '../../components/modals/Add Properties/AddProperties'
+
+import SolMintNftIdl from "../../utils/sol_mint_nft.json";
 
 const ipfs = ipfsClient.create({
   host: "ipfs.infura.io",
@@ -57,10 +60,9 @@ const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
   );
 
 
-const MetadataDataData = metaplex.programs.metadata.MetadataDataData;
-const CreateMetadata = metaplex.programs.metadata.CreateMetadata;
-
-declare const Buffer;
+const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
+  "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
+);
 
 const NFT_SYMBOL = "unicus-nft";
 
@@ -85,6 +87,8 @@ function CreateNftSingle(props: any): JSX.Element {
   const [openStats, setOpenStats] = useState(false)
   const [openLevels, setOpenLevels] = useState(false)
   const inputFile = useRef(null);
+
+
   const [properties, setProperties] = useState([
     {
       property: '',
@@ -149,7 +153,7 @@ function CreateNftSingle(props: any): JSX.Element {
     reader.readAsArrayBuffer(e.target.files[0]);
     
     reader.onloadend = () => {
-      setImageFileBuffer(new Buffer(reader.result));
+    //setImageFileBuffer(new Buffer(reader.result));
     };
     return false;
   };
@@ -158,7 +162,7 @@ function CreateNftSingle(props: any): JSX.Element {
     console.log(e.target.files);
 
     setFileSrc(e.target.files[0]);
-    //onFileSelected(e);
+    onFileSelected(e);
   };
 
   
@@ -202,10 +206,12 @@ function CreateNftSingle(props: any): JSX.Element {
 
 
 
+
+
+
   //Solana NFT mint
 
-  let nftMintClient: Token;
-  let metadata: PublicKey;
+
 
   
   const {connection} = useConnection();
@@ -215,82 +221,21 @@ function CreateNftSingle(props: any): JSX.Element {
 
   const tokenProgram = TOKEN_PROGRAM_ID;
 
-  const mintSolanaNft = async () => {
-    console.log("Wallet", wallet);
-    console.log("connectiion", connection);
+/*  const mintSolanaNft = async () => {
+    //console.log("Wallet", wallet);
+    //console.log("connectiion", connection);
     
-    /*const provider = new anchor.AnchorProvider(connection, wallet, {commitment: 'processed'});
-    anchor.setProvider(provider);
-    return provider;
-
-    const pro = getProvider();*/
-
-    let payer = wallet as Wallet;
+    const provider = new anchor.AnchorProvider(connection, wallet, {commitment: 'processed'});
     
-    
-    console.log("provider wallet", payer.payer);
-    console.log("provider publicKey", payer.publicKey.toString());
-
-   
-    try {
-      nftMintClient = await Token.createMint(
-      connection,
-      // @ts-ignore
-      payer.payer,
-      payer.publicKey,
-      null,
-      6,
-      tokenProgram
-    );
-    } catch(err) {
-      console.log(err)
-    }
+    console.log("provider wallet", wallet.wallet);
+    console.log("provider publicKey", provider.wallet.publicKey.toString());
 
 
-    
-
-    const uploadImageToIpfs = async () => {
-    setUploading(true);
-    const uploadedImage = await ipfs.add(imageFileBuffer);
-    setUploading(false);
-
-    if (!uploadedImage) {
-      console.error("Something went wrong when updloading the file");
-      return null;
-    }
-
-    return `https://ipfs.infura.io/ipfs/${uploadedImage.path}`;
-  };
-
-  let uploadedImageUrl = await uploadImageToIpfs();
+    let uploadedImageUrl = await uploadImageToIpfs();
     if (uploadImageToIpfs == null) return;
     console.log("Uploaded image url: ", uploadedImageUrl);
-  
-  const uploadMetadataToIpfs = async (
-    name,
-    symbol,
-    description,
-    uploadedImage,
-  ) => {
-    const metadata = {
-      name,
-      symbol,
-      description,
-      image: uploadedImage,
-    };
 
-    setUploading(true);
-    const uploadedMetadata = await ipfs.add(JSON.stringify(metadata));
-    setUploading(false);
-
-    if (uploadedMetadata == null) {
-      return null;
-    } else {
-      return `https://ipfs.infura.io/ipfs/${uploadedMetadata.path}`;
-    }
-  };
-
-  let uploadedMetatdataUrl = await uploadMetadataToIpfs(
+    let uploadedMetatdataUrl = await uploadMetadataToIpfs(
       name,
       NFT_SYMBOL,
       description,
@@ -299,38 +244,189 @@ function CreateNftSingle(props: any): JSX.Element {
     if (uploadedMetatdataUrl == null) return;
     console.log("Uploaded meta data url: ", uploadedMetatdataUrl);
 
+   const uploadImageToIpfs = async () => {
+    setUploading(true);
+    const uploadedImage = await ipfs.add(imageFileBuffer);
+    setUploading(false);
 
+    if (!uploadedImage) {
+      notification["error"]({
+        message: "Error",
+        description: "Something went wrong when updloading the file",
+      });
+      return null;
+    }
+
+    return `https://ipfs.infura.io/ipfs/${uploadedImage.path}`;
+  };
+
+
+    const uploadMetadataToIpfs = async (
+    name,
+    symbol,
+    description,
+    uploadedImage,
+    ) => {
+      const metadata = {
+        name,
+        symbol,
+        description,
+        image: uploadedImage,
+      };
+
+      setUploading(true);
+      const uploadedMetadata = await ipfs.add(JSON.stringify(metadata));
+      setUploading(false);
+
+      if (uploadedMetadata == null) {
+        return null;
+      } else {
+        return `https://ipfs.infura.io/ipfs/${uploadedMetadata.path}`;
+      }
+    };
+
+
+
+
+
+
+  }; */
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+  const mintSolana = async () => {
+    const provider = new anchor.AnchorProvider(connection, wallet, {commitment: 'processed'});
+    anchor.setProvider(provider);
+
+    const program = new Program(
+      // @ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
+    console.log("Program Id: ", program.programId.toBase58());
+    console.log("Mint Size: ", MINT_SIZE);
+    const lamports =
+      await program.provider.connection.getMinimumBalanceForRentExemption(
+        MINT_SIZE
+      );
+    console.log("Mint Account Lamports: ", lamports);
+
+    const getMetadata = async (mint) => {
+      return (
+        await anchor.web3.PublicKey.findProgramAddress(
+          [
+            Buffer.from("metadata"),
+            TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+            mint.toBuffer(),
+          ],
+          TOKEN_METADATA_PROGRAM_ID
+        )
+      )[0];
+    };
+
+    const mintKey = anchor.web3.Keypair.generate();
+
+    const nftTokenAccount = await getAssociatedTokenAddress(
+      mintKey.publicKey,
+      provider.wallet.publicKey
+    );
+    console.log("NFT Account: ", nftTokenAccount.toBase58());
+
+    const mint_tx = new anchor.web3.Transaction().add(
+      anchor.web3.SystemProgram.createAccount({
+        fromPubkey: provider.wallet.publicKey,
+        newAccountPubkey: mintKey.publicKey,
+        space: MINT_SIZE,
+        programId: TOKEN_PROGRAM_ID,
+        lamports,
+      }),
+      createInitializeMintInstruction(
+        mintKey.publicKey,
+        0,
+        provider.wallet.publicKey,
+        provider.wallet.publicKey
+      ),
+      createAssociatedTokenAccountInstruction(
+        provider.wallet.publicKey,
+        nftTokenAccount,
+        provider.wallet.publicKey,
+        mintKey.publicKey
+      )
+    );
+    let blockhashObj = await connection.getLatestBlockhash();
+    console.log("blockhashObj", blockhashObj);
+    mint_tx.recentBlockhash = blockhashObj.blockhash;
+
+    try {
+      const signature = await sendTransaction(mint_tx, connection, {
+        signers: [mintKey],
+      });
+      const latestBlockhash = await connection.getLatestBlockhash();
+      await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+    } catch {
+      return false;
+    }
+
+    console.log("Mint key: ", mintKey.publicKey.toString());
+    console.log("User: ", provider.wallet.publicKey.toString());
+
+    const metadataAddress = await getMetadata(mintKey.publicKey);
+    console.log("Metadata address: ", metadataAddress.toBase58());
+
+    try {
+      const tx = program.transaction.mintNft(
+        mintKey.publicKey,
+        name,
+        description, 
+        fileSrc, //metadatauri
+        {
+          accounts: {
+            mintAuthority: provider.wallet.publicKey,
+            mint: mintKey.publicKey,
+            tokenAccount: nftTokenAccount,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            metadata: metadataAddress,
+            tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+            payer: provider.wallet.publicKey,
+            systemProgram: anchor.web3.SystemProgram.programId,
+            rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+          },
+        }
+      );
+
+      const signature = await sendTransaction(tx, connection);
+      const latestBlockhash = await connection.getLatestBlockhash();
+
+      await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+      console.log("Mint Success!");
+      
 
     
-
-    // Create the metadata.
-    const [_metadata] = await PublicKey.findProgramAddress(
-      [
-        Buffer.from("metadata"),
-        TOKEN_METADATA_PROGRAM_ID.toBuffer(),
-        nftMintClient.publicKey.toBuffer(),
-      ],
-      TOKEN_METADATA_PROGRAM_ID
-    );
-    metadata = _metadata;
-    const tx = new CreateMetadata(
-      { feePayer: payer.publicKey },
-      {
-        metadata,
-        metadataData: new MetadataDataData({
-          name: name,
-          symbol: NFT_SYMBOL,
-          uri: uploadedMetatdataUrl,
-          sellerFeeBasisPoints: 1,
-          creators: null,
-        }),
-        updateAuthority: payer.publicKey,
-        mint: nftMintClient.publicKey,
-        mintAuthority: payer.publicKey,
-      }
-    );
-    await sendTransaction(tx, connection);
+      return true;
+    } catch {
+      return false;
+    }
   };
+
   
 
   
@@ -519,7 +615,7 @@ function CreateNftSingle(props: any): JSX.Element {
 
               </div>
             </div>
-            <button className='btn create-btn' onClick={mintAssetToNft}>
+            <button className='btn create-btn' onClick={mintSolana}>
               Create
             </button>
           </div>

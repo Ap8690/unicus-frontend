@@ -74,7 +74,7 @@ function App(props: any): JSX.Element {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-            <WalletProvider wallets={wallets}>
+            <WalletProvider wallets={wallets} >
                 <WalletModalProvider>
                     <div className="App">                    	
                       <BrowserRouter>

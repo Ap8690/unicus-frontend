@@ -1,12 +1,36 @@
 // Libs
 import { useEffect, useState } from "react";
+
+
+import { useConnection, useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
 import * as nearAPI from 'near-api-js';
+
+
+
+import { Metaplex, keypairIdentity, bundlrStorage } from "@metaplex-foundation/js";
+import * as anchor from "@project-serum/anchor";
+import { Program, getProvider, Provider, Wallet } from "@project-serum/anchor";
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
+
+
+import SolMintNftIdl from "../../../utils/sol_mint_nft.json";
 
 // Components
 import MarketPlaceAuctionsElements from "./MarketPlaceAuctionsElements"
 import MarketPlaceAuctionsNavigator from "./MarketPlaceAuctionsNavigator"
 import BottomNavigationMarker from "../BottomNavigationMarker"
 import {getAuctions} from "../../../services/api/supplier"
+
+
+
+const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
+  "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
+);
 
 //function MarketPlaceAuctions(props: any): JSX.Element {
 const MarketPlaceAuctions = ({ list }) =>{
@@ -122,6 +146,312 @@ const MarketPlaceAuctions = ({ list }) =>{
   }
   
   */
+
+
+
+
+
+  //------ solana auction------//
+
+
+
+
+
+  const {connection} = useConnection();
+      
+  const wallet = useAnchorWallet();
+  const { publicKey, sendTransaction  } = useWallet();
+
+  const { LAMPORTS_PER_SOL } = anchor.web3;
+
+  const provider = new anchor.AnchorProvider(connection, wallet, {commitment: 'processed'});
+    anchor.setProvider(provider);
+
+   const program = new Program(
+      // @ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
+
+  const metaplex = new Metaplex(connection);
+  /*const metaplex = Metaplex.make(connection)
+    .use(keypairIdentity(wallet))
+    .use(bundlrStorage()); */
+
+  //get all the auction items
+
+
+  //this will return all the auction instances created
+  const allAuctionAccounts = await program.account.auction.all();
+
+
+  //this will return  nft by its mintkey. we can get the mintkey by the auction accounts we fetched in "allAuctionAccounts"
+  const nft = await metaplex.nfts().findByMint(auction.mintKey).run();
+
+
+
+  const bidAuction = async () => {
+
+    let mintKey = auction.mintKey;
+
+    let price = assetPrice * LAMPORTS_PER_SOL;
+
+    const [auctionAccount] = await anchor.web3.PublicKey.findProgramAddress(
+    [Buffer.from("auction"), mintKey.toBytes()],
+    program.programId
+    );
+
+
+    let bidderTokenAccount = await getAssociatedTokenAddress(
+    mintKey,
+    wallet.publicKey
+    );
+
+
+    try {
+    const tx = new anchor.web3.Transaction().add(
+      createAssociatedTokenAccountInstruction(
+        wallet.publicKey,
+        bidderTokenAccount,
+        wallet.publicKey,
+        mintKey
+      )
+    );
+
+    const signature = await sendTransaction(tx, connection);
+    const latestBlockhash = await connection.getLatestBlockhash();
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+
+
+    } catch (err) {
+    console.log(err);
+    return false;
+    }
+
+
+
+    try {
+    const tx = program.transaction.bid(
+      new anchor.BN(price),
+      {
+      accounts: {
+        auction: auctionAccount,
+        mintKey: mintKey,
+        creator: auction.creator,
+        bidder: wallet.publicKey,
+        refundReceiver: auction.refundReceiver,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      },
+    });
+
+    const signature = await sendTransaction(tx, connection);
+    const latestBlockhash = await connection.getLatestBlockhash();
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+    console.log("bid Success!");
+    return true;
+    } catch (err) {
+    console.log(err);
+    return false;
+    }
+
+
+  }
+
+
+
+  //auction resolve
+
+
+  const auctionResolve = async () => {
+
+    let mintKey = auction.mintKey;
+
+    const [auctionAccount] = await anchor.web3.PublicKey.findProgramAddress(
+    [Buffer.from("auction"), mintKey.toBytes()],
+    program.programId
+    );
+
+    const auctionTokenAccount = await getAssociatedTokenAddress(
+    mintKey,
+    auctionAccount,
+    true
+    );
+
+    let refundReceiverTokenAccount = await getAssociatedTokenAddress(
+    mintKey,
+    auction.refundReceiver
+    );
+
+
+    try {
+    const tx = new anchor.web3.Transaction().add(
+      createAssociatedTokenAccountInstruction(
+        auction.refundReceiver,
+        refundReceiverTokenAccount,
+        auction.refundReceiver,
+        mintKey
+      )
+    );
+
+    const signature = await sendTransaction(tx, connection);
+    const latestBlockhash = await connection.getLatestBlockhash();
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+
+
+    } catch (err) {
+    console.log(err);
+    return false;
+    }
+
+
+
+    try {
+    const tx = program.transaction.auctionResolve(
+      {
+      accounts: {
+        auction: auctionAccount,
+        auctionTokenAccount: auctionTokenAccount ,
+        mintKey: mintKey,
+        creator: auction.creator,
+        refundReceiver: auction.refundReceiver,
+        refundReceiverTokenAccount: refundReceiverTokenAccount,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      },
+    });
+
+    const signature = await sendTransaction(tx, connection);
+    const latestBlockhash = await connection.getLatestBlockhash();
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+    console.log("auction resolve Success!");
+    return true;
+    } catch (err) {
+    console.log(err);
+    return false;
+    }
+
+
+  }
+
+
+
+
+  const cancelAuction = async () => {
+    let mintKey = auction.mintKey;
+
+    const [auctionAccount] = await anchor.web3.PublicKey.findProgramAddress(
+    [Buffer.from("auction"), mintKey.toBytes()],
+    program.programId
+    );
+
+    const auctionTokenAccount = await getAssociatedTokenAddress(
+    mintKey,
+    auctionAccount,
+    true
+    );
+
+    let creatorTokenAccount = await getAssociatedTokenAddress(
+    mintKey,
+    wallet.publicKey
+    );
+
+
+    try {
+    const tx = new anchor.web3.Transaction().add(
+      createAssociatedTokenAccountInstruction(
+        wallet.publicKey,
+        creatorTokenAccount,
+        wallet.publicKey,
+        mintKey
+      )
+    );
+
+    const signature = await sendTransaction(tx, connection);
+    const latestBlockhash = await connection.getLatestBlockhash();
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+
+
+    } catch (err) {
+    console.log(err);
+    return false;
+    }
+
+
+
+    try {
+    const tx = program.transaction.cancelAuction({
+      accounts: {
+        auction: auctionAccount,
+        auctionTokenAccount: auctionTokenAccount,
+        mintKey: mintKey,
+        creator: wallet.publicKey,
+        creatorTokenAccount: creatorTokenAccount,
+        refundReceiver: auction.refundReceiver,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      },
+    });
+
+    const signature = await sendTransaction(tx, connection);
+    const latestBlockhash = await connection.getLatestBlockhash();
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+    console.log("cancel auction Success!");
+    return true;
+    } catch (err) {
+    console.log(err);
+    return false;
+    }
+
+
+  }
+
+
+
+
+
+
+
 
 
 

@@ -44,10 +44,23 @@ type Props = Readonly<{
 //: React.FC<Props>
 function ConnectWallet(props: any): JSX.Element {
   const { connection } = useConnection();
-  const { publicKey, sendTransaction } = useWallet();
+   const { wallet, connect, connecting, publicKey } = useWallet();
   const { setVisible } = useWalletModal();
 
   const { isLogin, setIsLogin } = useContext(UserContext);
+
+
+  const handleWalletClick = () => {
+    try {
+      if (!wallet) {
+        setVisible(true);
+      } else {
+        connect();
+      }
+    } catch (error) {
+      console.log("Error connecting wallet:", error);
+    }
+  };
 
 
   const connectNear = () => {
@@ -88,6 +101,8 @@ function ConnectWallet(props: any): JSX.Element {
       console.log("meta data not created");
     }
   };
+
+ 
 
   
     
@@ -135,7 +150,7 @@ function ConnectWallet(props: any): JSX.Element {
                         Metamask
                         <img src={metamaskLogo} alt="metamask" />
                     </button>
-                    <button onClick={() => setVisible(true)}>  
+                    <button onClick={handleWalletClick}>  
                         SolanaConnect
                         <img src={phantomLogo} alt="Phantom" />
                     </button>

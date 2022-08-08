@@ -1,13 +1,36 @@
 // Libs
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useConnection, useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
+
 import * as nearAPI from 'near-api-js';
+
+import { Metaplex, keypairIdentity, bundlrStorage } from "@metaplex-foundation/js";
+import * as anchor from "@project-serum/anchor";
+import { Program, getProvider, Provider, Wallet } from "@project-serum/anchor";
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
+
+
+import SolMintNftIdl from "../../../utils/sol_mint_nft.json";
 
 // Images
 import mpWallet from "../../../assets/svgs/mpWallet.svg";
 import mpCreate from "../../../assets/svgs/mpCreate.svg";
 import mpAdd from "../../../assets/svgs/mpAdd.svg";
 import mpList from "../../../assets/svgs/mpList.svg";
+
+
+const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
+  "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
+);
+
+
+
 
 const Element = ({ element }) => {
   return (
@@ -103,6 +126,207 @@ function MarketPlaceCreateAndSell(props: any): JSX.Element {
       gas: "200000000000000",
     })
   }
+
+
+
+
+
+  // solana market-------------////
+
+
+
+
+
+  const {connection} = useConnection();
+      
+  const wallet = useAnchorWallet();
+  const { publicKey, sendTransaction  } = useWallet();
+
+  const { LAMPORTS_PER_SOL } = anchor.web3;
+
+  const provider = new anchor.AnchorProvider(connection, wallet, {commitment: 'processed'});
+    anchor.setProvider(provider);
+
+   const program = new Program(
+      // @ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
+
+
+
+
+  const metaplex = new Metaplex(connection);
+  /*const metaplex = Metaplex.make(connection)
+    .use(keypairIdentity(wallet))
+    .use(bundlrStorage()); */
+
+
+
+  //get all the sale items
+
+
+  //this will return all the order instances created
+  const allOrderAccounts = await program.account.order.all();
+
+  //this will return  nft by its mintkey. we can get the mintkey by the order accounts we fetched in "allOrderAccounts"
+  const nft = await metaplex.nfts().findByMint(order.mintKey).run();
+
+
+
+  //sell a order
+
+
+  const sellOrder = async () => {
+
+    let mintKey = order.mintKey;
+
+
+
+    const [orderAccount] = await anchor.web3.PublicKey.findProgramAddress(
+    [Buffer.from("order"), mintKey.toBytes()],
+    program.programId
+    );
+
+    const orderTokenAccount = await getAssociatedTokenAddress(
+    mintKey,
+    orderAccount,
+    true
+    );
+
+    let buyerTokenAccount = await getAssociatedTokenAddress(
+    mintKey,
+    wallet.publicKey
+    );
+
+
+
+    try {
+    const tx = new anchor.web3.Transaction().add(
+      createAssociatedTokenAccountInstruction(
+        wallet.publicKey,
+        buyerTokenAccount,
+        wallet.publicKey,
+        mintKey
+      )
+    );
+
+    const signature = await sendTransaction(tx, connection);
+    const latestBlockhash = await connection.getLatestBlockhash();
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+
+
+    } catch (err) {
+    console.log(err);
+    return false;
+    }
+
+
+
+
+    try {
+    const tx = program.transaction.fillOrder({
+      accounts: {
+        order: orderAccount,
+        orderTokenAccount: orderTokenAccount,
+        mintKey: mintKey,
+        creator: order.creator,
+        buyer: wallet.publicKey,
+        buyerTokenAccount: buyerTokenAccount,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      },
+    });
+
+    const signature = await sendTransaction(tx, connection);
+    const latestBlockhash = await connection.getLatestBlockhash();
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+    console.log("Fill Order Success!");
+    return true;
+    } catch (err) {
+    console.log(err);
+    return false;
+    }
+
+
+
+  }
+
+
+
+
+  const removeSale = () => {
+
+    let mintKey = order.mintKey;
+
+    const [orderAccount] = await anchor.web3.PublicKey.findProgramAddress(
+    [Buffer.from("order"), mintKey.toBytes()],
+    program.programId
+    );
+
+    const orderTokenAccount = await getAssociatedTokenAddress(
+    mintKey,
+    orderAccount,
+    true
+    );
+
+    const associatedTokenAddress = await getAssociatedTokenAddress(
+      mintKey,
+      wallet.publicKey
+    );
+
+
+    try {
+    const tx = program.transaction.cancelOrder({
+      accounts: {
+        order: orderAccount,
+        orderTokenAccount: orderTokenAccount,
+        mintKey: mintKey,
+        creator: wallet.publicKey,
+        creatorTokenAccount: associatedTokenAddress,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      },
+    });
+
+    const signature = await sendTransaction(tx, connection);
+
+    const latestBlockhash = await connection.getLatestBlockhash();
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+    
+    console.log("Cancel Order Success!");
+    return true;
+    } catch (err) {
+    console.log(err);
+    return false;
+    }
+
+  }
+
+
+
+
+
 
 
   const elements = [
