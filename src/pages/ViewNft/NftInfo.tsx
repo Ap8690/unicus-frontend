@@ -802,9 +802,12 @@ const History = ({ data }) => {
         <div className="nft-history">
           <img className="user-img" src={history.img} alt={history.name} />
           <div>
-            <div className="msg">{history.msg}</div>
+            <div className="msg">{history.state}</div>
             <div className="info">
-              by {history.name} {history.date}
+              from {history.from} {history.date}
+            </div>
+            <div className="info">
+              to {history.to} {history.date}
             </div>
           </div>
         </div>

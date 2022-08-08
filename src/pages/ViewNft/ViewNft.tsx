@@ -1,13 +1,13 @@
 import "./viewnft.scss";
 
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import nftImg from "../../assets/images/marketPlaceMain.png";
 import NftImg from "./NftImg";
 import NftInfo from "./NftInfo";
 import { useEffect, useState } from "react";
 import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import { AllNFTsElement } from "../AllNFTs/AllNFTsBody/AllNFTsElements";
-import { getNftById } from "../../services/api/supplier";
+import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import FullLoading from "../../components/modals/Loading/FullLoading";
 
 const filters = ["Details", "History"];
@@ -69,11 +69,13 @@ const ViewNft = () => {
   const [activeFilter, setActiveFilter] = useState("Details");
   const [placeBidModal, setPlaceBidModal] = useState(false);
   const [currentLoaded, setCurrentLoaded] = useState(10);
-  const [nft, setNft] = useState("");
+  const [nft, setNft] = useState<any>();
   const [auction, setAuction] = useState("");
   const [nftImg, setNftImg] = useState("");
   const [creator, setCreator] = useState("");
+  const [nftStates, setNftStates] = useState<any>()
   const [nftLoading, setNftLoading] = useState<boolean>(false);
+  const [nftByCollection, setNftByCollection] = useState<any>()
   const { chain, contractAddress, nftId } = useParams();
   const handleClose = () => setPlaceBidModal(false);
 
@@ -85,9 +87,14 @@ setNftLoading(true)
     setNftLoading(false);
 
     setNft(res.data.nft);
+    setNftStates(res.data.nftStates)
     setAuction(res.data.auction);
     setNftImg(res.data.nft.cloudinaryUrl);
     setCreator(res.data.user);
+    if(nft.collectionName){
+      const col = await getNftByCollection(nft.collectionName)
+    setNftByCollection(col.data.nft)
+    }
   }
 
   useEffect(() => {
@@ -106,7 +113,7 @@ setNftLoading(true)
               creator={creator}
               activeFilter={activeFilter}
               setActiveFilter={setActiveFilter}
-              historyData={historyData}
+              historyData={nftStates}
               topBid={topBid}
               nft={nft}
               auction={auction}
@@ -114,17 +121,21 @@ setNftLoading(true)
             />
           )}
         </div>
-        <div className="nft bottom-grid">
-          <h1>More from this collection</h1>
-          <div>
-            {list.map((item) => (
-              <AllNFTsElement element={item} />
-            ))}
-          </div>
-          <div className="btn-box">
+        {nft && nft.collectionName && (
+          <div className="nft bottom-grid">
+            <h1>More from this collection</h1>
+            <div>
+              {nftByCollection.map((item) => (
+                <Link to={`/nft/${item.chain}/${item.contractAddress}/${item._id}`}>
+                  <AllNFTsElement element={item} />
+                </Link>
+              ))}
+            </div>
+            {/* <div className="btn-box">
             <button className="btn-outline">View all</button>
+          </div> */}
           </div>
-        </div>
+        )}
       </div>
     </>
   );

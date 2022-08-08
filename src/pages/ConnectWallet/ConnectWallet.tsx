@@ -32,6 +32,7 @@ import { walletLogin } from "../../services/api/supplier";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "../../utils/constants";
+import { cookieDomain } from "../../config";
 
 /*type Event = "connect" | "disconnect";
 
@@ -112,11 +113,11 @@ const ConnectWallet: React.FC<AuthType> = () => {
       if (address) {
         const res = await walletLogin(address);
         toast.success("Login successful");
-        Cookies.set(ACCESS_TOKEN, res.data.accessToken, { domain:'unicus.one',
+        Cookies.set(ACCESS_TOKEN, res.data.accessToken, { domain:cookieDomain,
           expires: 30,
         });
         Cookies.set("userInfo", JSON.stringify(res.data.user), {
-          domain: "unicus.one",
+          domain: cookieDomain,
           expires: 30,
         });
 

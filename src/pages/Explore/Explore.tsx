@@ -24,6 +24,7 @@ import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getChainId } from "../../utils/utils";
+import { cookieDomain } from "../../config";
 const Explore = () => {
   // HardCoded
   const [skiploading, setskiploading] = useState(true);
@@ -109,11 +110,11 @@ const Explore = () => {
   const verifyEmail = async (token, email) => {
     const res = await verifyEmailApi(token, email);
     Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
-      domain: "unicus.one",
+      domain: cookieDomain,
       expires: 30,
     });
      Cookies.set("userInfo", JSON.stringify(res.data.user), {
-       domain: "unicus.one",
+       domain: cookieDomain,
        expires: 30,
      });
     localStorage.setItem("userInfo", JSON.stringify(res.data.user));

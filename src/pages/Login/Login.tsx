@@ -14,6 +14,7 @@ import axios from "axios"
 import Cookies from "js-cookie"
 import { ACCESS_TOKEN } from "../../utils/constants"
 import { toast } from "react-toastify"
+import { cookieDomain } from "../../config"
 
 const Login = ({}) => {
     const dispatch = useDispatch()
@@ -33,11 +34,11 @@ const Login = ({}) => {
                     console.log("in")
                     
                     Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
-                      domain: "unicus.one",
+                      domain: cookieDomain,
                       expires: 30,
                     });
                     Cookies.set("userInfo", JSON.stringify(res.data.user), {
-                      domain: "unicus.one",
+                      domain: cookieDomain,
                       expires: 30,
                     });
                     localStorage.setItem(
