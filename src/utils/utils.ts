@@ -304,6 +304,9 @@ export const disConnectWallet = () => {
   Cookies.remove(ACCESS_TOKEN, {
     expires: 30,
   });
+  Cookies.remove("userInfo", {
+    expires: 30,
+  });
   // web3.currentProvider._handleDisconnect()
   walletConnectorProvider.disconnect();
   walletLink.disconnect();

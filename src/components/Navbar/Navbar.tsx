@@ -282,7 +282,11 @@ const ProfileButton = ({ accessToken }) => {
             My Listings
           </Link>
         </MenuItem>
-        <MenuItem onClick={ ()=> disConnectWallet()}>Logout</MenuItem>
+        <MenuItem onClick={() => disConnectWallet()}>
+          <Link to={"/connect-wallet/marketplace"} className="menu-link">
+            Logout
+          </Link>
+        </MenuItem>
 
         {/* <MenuItem onClick={handleCloseProfile}>
           <Link to={"/profile/notification"} className="menu-link">
