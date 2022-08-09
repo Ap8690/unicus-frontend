@@ -423,7 +423,7 @@ const CreateNftSingle = () => {
                   tags: properties,
                 };
                 await createNft(newObject);
-                navigate("/profile");
+                navigate("/profile/created");
               } else {
                 setNftLoading(false);
                 setdefaultErrorMessage(

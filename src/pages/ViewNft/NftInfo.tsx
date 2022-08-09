@@ -270,7 +270,7 @@ const NftInfo = ({
           toast.success("Bought Item");
         });
         setNftLoading(false);
-        window.location.reload();
+        navigate("/profile/created");
       }
     } catch (e) {
       setNftLoading(false);
@@ -342,7 +342,7 @@ const NftInfo = ({
             }
           );
           setNftLoading(false);
-          window.location.reload();
+          navigate("/profile/created");
         }
       }
     } catch (e) {
@@ -377,7 +377,7 @@ const NftInfo = ({
           );
           setNftLoading(false);
 
-          window.location.reload();
+                navigate("/profile/created");
         }
       }
     } catch (e) {
@@ -412,7 +412,7 @@ const NftInfo = ({
 
           setNftLoading(false);
 
-          window.location.reload();
+                navigate("/profile/created");
         }
       }
     } catch (e) {

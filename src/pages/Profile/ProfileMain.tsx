@@ -1,7 +1,7 @@
 // Lib
 import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 // Components
 import User from "./User/User";
@@ -36,7 +36,7 @@ import {
   getMarketPlaceContractAddress,
 } from "../../utils/utils";
 import web3 from "../../web3";
-import { createSellApi, getNftByUserId } from "../../services/api/supplier";
+import { createSellApi, getAccessToken, getNftByUserId } from "../../services/api/supplier";
 import { toast } from "react-toastify";
 
 // Generics
@@ -126,6 +126,8 @@ const Profile = (): ReactJSXElement => {
 
   const [displayListing, setDisplayListing] = useState(listing);
   const [displayCreated, setDisplayCreated] = useState(listing);
+    const navigate = useNavigate();
+
 
   const getNfts = async () => {
     try {
@@ -146,6 +148,9 @@ const Profile = (): ReactJSXElement => {
 
   useEffect(() => {
     getNfts();
+    if (!getAccessToken()) {
+      navigate("/connect-wallet/profile");
+    }
   }, []);
 
   return (
