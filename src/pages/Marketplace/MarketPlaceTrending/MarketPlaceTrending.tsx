@@ -28,16 +28,16 @@ const MarketPlaceTrending = ({ list }) => {
     console.log(category);
   }, [category]);
 
-  useEffect(() => {
-    getTrendingNft(10,category)
-    .then((res) => {
-      console.log(res)
-      setTrendingNfts(res?.data.nfts);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  },[])
+  // useEffect(() => {
+  //   getTrendingNft(10,category)
+  //   .then((res) => {
+  //     console.log(res)
+  //     setTrendingNfts(res?.data.nfts);
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   });
+  // },[])
 
   return (
     <div className="market-place-trending">
@@ -48,11 +48,11 @@ const MarketPlaceTrending = ({ list }) => {
         currentScroll={currentScroll}
         setCurrentScroll={setCurrentScroll}
         length={length}
-      />
+      />{trendingNfts.length>0?
       <MarketPlaceTrendingElements
         list={trendingNfts}
         currentScroll={currentScroll}
-      />
+      />: <div style={{textAlign:"center", marginTop:"35px"}}>No Nfts Found</div>}
       <BottomNavigationMarker currentPage={currentScroll} length={length} />
     </div>
   );

@@ -56,7 +56,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { access } from "fs";
 
 const CreateNftSingle = () => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState("Item Name");
   const [extLink, setExtlink] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("art");
@@ -139,18 +139,25 @@ const CreateNftSingle = () => {
   };
 
   const handleRoyaltyChange = (e: any) => {
-    setRoyalty(e.target.value);
-
-    const reg = /^[0-9-+()]*$/;
-    if (reg.test(e.target.value)) {
-    }
+    setRoyalty(e);
   };
 
   const uploadFile = (e) => {
     console.log("upload", e.target.files[0]);
 
     setFileSrc(e.target.files[0]);
+    console.log(
+      "check true",
+      e.target.files[0].name.split(".").pop() ==
+        ("jpg" || "png" || "gif" || "svg")
+    );
+    
   };
+
+  const supportedImg = ["jpg", "jpeg", "png", "svg", "gif"]
+  const supportedVid = ["mp4", "webm"]
+  const supportedAud = ["mp3", "wav", "ogg"]
+  const supported3d = ["gltf, glb"]
 
   const {
     utils: {
@@ -252,6 +259,10 @@ const CreateNftSingle = () => {
       console.log(2);
       await connectWallet(chain)
         .then(async (address) => {
+          if(!address){
+            toast.error("Wallet connection failed")
+            return
+          }
           const contractAddress = getCreateNftContractAddress(
             chain,
             contractType
@@ -329,7 +340,7 @@ const CreateNftSingle = () => {
               toast("Minting The Asset");
               const createNFT = getCreateNftContract(chain, contractType);
 
-              console.log("nft", createNFT);
+              console.log("nft", address);
               let res: any;
               if (contractType == "721") {
                 res = await createNFT.methods
@@ -448,9 +459,14 @@ const CreateNftSingle = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const txhash = urlParams.get("transactionHashes");
 
-    console.log("sear", urlParams, txhash);
+    const errorCode = urlParams.get("errorCode");
+    const errMsg = urlParams.get("errorMessage");
 
-    if (txhash != null) {
+    console.log("sear", txhash, errorCode, errMsg);
+
+    if (errorCode) {
+      toast.error(errorCode);
+    } else if (txhash != null) {
       const obj = JSON.parse(localStorage.getItem("nearNftObj"));
       toast("Storing details");
       if (!nftLoading) {
@@ -499,22 +515,30 @@ const CreateNftSingle = () => {
                 className="field"
                 onClick={() => inputFile.current.click()}
               >
-                {fileSrc && fileSrc.name.split(".").pop() == "mp4" ? (
+                {fileSrc &&
+                supportedVid.includes(fileSrc.name.split(".").pop()) ? (
                   <video width="100%">
                     <source
                       src={fileSrc ? URL.createObjectURL(fileSrc) : ""}
                       type="video/mp4"
                     />
                   </video>
+                ) : fileSrc &&
+                  supportedImg.includes(fileSrc.name.split(".").pop()) ? (
+                  <Image
+                    src={URL.createObjectURL(fileSrc)}
+                    alt=""
+                    style={{ width: "90%" }}
+                  />
                 ) : (
-                  fileSrc && (
-                    <Image
+                  fileSrc &&
+                  supportedAud.includes(fileSrc.name.split(".").pop()) && (
+                    <audio
                       src={URL.createObjectURL(fileSrc)}
-                      alt=""
                       style={{ width: "90%" }}
                     />
                   )
-                )}{" "}
+                )}
                 {!fileSrc && <img src={uploadImg} alt="Upload" />}
               </button>
               <input
@@ -644,7 +668,7 @@ const CreateNftSingle = () => {
                     title={"Supply"}
                     placeholder=""
                     state={supply}
-                    setState={(e) => setSupply(e.target.value)}
+                    setState={setSupply}
                     number
                   />
                 )}
@@ -656,7 +680,7 @@ const CreateNftSingle = () => {
                   number
                 />
                 {royaltyError && (
-                  <span>Royalty Should be between 0 - 99 %</span>
+                  <span style={{marginTop:"5px", fontSize:"12px", color:"red"}}>Royalty Should be between 0 - 99 %</span>
                 )}
               </div>
 
@@ -741,16 +765,31 @@ const CreateNftSingle = () => {
             <div className="field-title">Preview</div>
             <div className="preview-card">
               <div className="img-box">
-                {fileSrc && fileSrc.name.split(".").pop() == "mp4" ? (
+                {fileSrc &&
+                supportedVid.includes(fileSrc.name.split(".").pop()) ? (
                   <video width="100%">
                     <source
                       src={fileSrc ? URL.createObjectURL(fileSrc) : ""}
                       type="video/mp4"
                     />
                   </video>
+                ) : fileSrc &&
+                  supportedImg.includes(fileSrc.name.split(".").pop()) ? (
+                  <Image
+                    src={URL.createObjectURL(fileSrc)}
+                    alt=""
+                    style={{ width: "90%" }}
+                  />
                 ) : (
-                  fileSrc && <Image src={URL.createObjectURL(fileSrc)} alt="" />
-                )}{" "}
+                  fileSrc &&
+                  supportedAud.includes(fileSrc.name.split(".").pop()) && (
+                    <audio
+                      src={URL.createObjectURL(fileSrc)}
+                      style={{ width: "90%" }}
+                    />
+                  )
+                )}
+                {!fileSrc && <img src={uploadImg} alt="Upload" />}
               </div>
               <div className="nft-info">
                 <div className="titles">

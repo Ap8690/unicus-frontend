@@ -151,7 +151,7 @@
       margin-top: 58px;
       .market-place-featured-element {
         @include fn.flex-col(center, flex-start);
-        min-width: 30%;
+        min-width: 28vw;
         width: auto;
         font-weight: 300;
         .nft-image-size {

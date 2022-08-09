@@ -135,7 +135,7 @@ const Navbar = (store: any) => {
                 Explore
               </Link>
 
-              <Button
+              {/* <Button
                 id="basic-button"
                 aria-controls={openStats ? "basic-menu" : undefined}
                 aria-haspopup="true"
@@ -144,7 +144,7 @@ const Navbar = (store: any) => {
                 className="nav-link"
               >
                 Stats
-              </Button>
+              </Button> */}
               <Menu
                 anchorEl={anchorStats}
                 open={openStats}

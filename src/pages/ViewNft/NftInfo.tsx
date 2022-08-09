@@ -362,24 +362,24 @@ const NftInfo = ({
 
       const address = await connectWallet(auction.chain);
 
-      if(auction.chain == nearChain){
-        processPurchase(nft.tokenId)
-      }else{
-      const res = await getAuctionContract(auction.chain, nft.contractType)
-        .methods.endAuction(auction.auctionId)
-        .send({ from: address });
-      if (res?.transactionHash) {
-        await endSaleApi(auction, res.transactionHash, creator.name).then(
-          (res) => {
-            console.log(res.data);
-            toast.success("Sale Ended");
-          }
-        );
-        setNftLoading(false);
+      if (auction.chain == nearChain) {
+        processPurchase(nft.tokenId);
+      } else {
+        const res = await getAuctionContract(auction.chain, nft.contractType)
+          .methods.endAuction(auction.auctionId)
+          .send({ from: address });
+        if (res?.transactionHash) {
+          await endSaleApi(auction, res.transactionHash, creator.name).then(
+            (res) => {
+              console.log(res.data);
+              toast.success("Sale Ended");
+            }
+          );
+          setNftLoading(false);
 
-        window.location.reload();
+          window.location.reload();
+        }
       }
-    }
     } catch (e) {
       setNftLoading(false);
 
@@ -394,25 +394,27 @@ const NftInfo = ({
 
       const address = await connectWallet(auction.chain);
 
-      if(auction.chain == nearChain){
-        removeAuction(nft.tokenId)
-      }else{
-      const res = await getAuctionContract(auction.chain, nft.contractType)
-        .methods.cancelAuction(auction.auctionId)
-        .send({ from: address });
-      if (res?.transactionHash) {
-        await cancelAuctionApi(auction, res.transactionHash, creator.name).then(
-          (res) => {
+      if (auction.chain == nearChain) {
+        removeAuction(nft.tokenId);
+      } else {
+        const res = await getAuctionContract(auction.chain, nft.contractType)
+          .methods.cancelAuction(auction.auctionId)
+          .send({ from: address });
+        if (res?.transactionHash) {
+          await cancelAuctionApi(
+            auction,
+            res.transactionHash,
+            creator.name
+          ).then((res) => {
             console.log(res.data);
             toast.success("Auction Cancelled");
-          }
-        );
+          });
 
-        setNftLoading(false);
+          setNftLoading(false);
 
-        window.location.reload();
+          window.location.reload();
+        }
       }
-    }
     } catch (e) {
       setNftLoading(false);
 
@@ -420,10 +422,10 @@ const NftInfo = ({
       toast.error(e);
     }
   }
-  
+
   const getButtonName = () => {
     const userInfo = getUserInfo();
-    console.log("button name",nft, userInfo);
+    console.log("button name", nft, userInfo);
 
     if (userInfo) {
       if (userInfo._id == nft.uploadedBy) {
@@ -434,9 +436,9 @@ const NftInfo = ({
             "datw",
             auction.auctionTimer,
             new Date() > new Date(auction.auctionTimer),
-            new Date() < new Date(auction.auctionTimer),
+            new Date() < new Date(auction.auctionTimer)
           );
-          
+
           if (new Date() < new Date(auction.auctionTimer)) {
             return "Cancel Auction";
           } else {
@@ -485,8 +487,8 @@ const NftInfo = ({
     }
   };
 
-  //@ts-ignore
-  useEffect(async () => {
+  useEffect(() => {
+    (async()=>{
     const urlParams = new URLSearchParams(window.location.search);
     const txhash = urlParams.get("transactionHashes");
     const errorCode = urlParams.get("errorCode");
@@ -496,7 +498,6 @@ const NftInfo = ({
 
     if (errorCode) {
       toast.error(errorCode);
-      return;
     } else if (txhash != null) {
       const address = await connectNear();
       axios
@@ -519,8 +520,12 @@ const NftInfo = ({
               approveNFTForAuction(
                 nft.tokenId,
                 obj.startBid / getDecimal(obj.chain),
-                Math.ceil(new Date().getTime()/1000),
-                Math.ceil(new Date().setSeconds(new Date().getSeconds() + obj.duration)/1000)
+                Math.ceil(new Date().getTime() / 1000),
+                Math.ceil(
+                  new Date().setSeconds(
+                    new Date().getSeconds() + obj.duration
+                  ) / 1000
+                )
               );
             } else if (action == "Sale") {
               const obj = JSON.parse(localStorage.getItem("nearSellObj"));
@@ -610,7 +615,8 @@ const NftInfo = ({
             });
           }
         });
-    }
+    }})()
+    
   }, []);
 
   return (
@@ -740,8 +746,8 @@ const NftInfo = ({
               </button>
             ))}
           </div>
-          {/* {activeFilter === 'History' && <History data={historyData} />} */}
-          <History data={historyData} />
+          {activeFilter === "History" && <History data={historyData} />}
+          {activeFilter === "Properties" && <Properties nft={nft} />}
         </div>
         <div className="bid-buy-box">
           <div className="user-info">
@@ -750,9 +756,16 @@ const NftInfo = ({
               {/* <span>
               Highest bid by <span className="blue-text">{topBid.name}</span>
             </span> */}
-              {auction && <div className="price-info">
-              <span className="blue-head">{auction.lastBid && auction.lastBid != 0? auction.lastBid : auction.startBid/ getDecimal(nft.chain)} {getChainSymbol(nft.chain)}</span>
-            </div>}
+              {auction && (
+                <div className="price-info">
+                  <span className="blue-head">
+                    {auction.lastBid && auction.lastBid != 0
+                      ? auction.lastBid
+                      : auction.startBid / getDecimal(nft.chain)}{" "}
+                    {getChainSymbol(nft.chain)}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           <div className="btn-box">
@@ -772,15 +785,15 @@ const NftInfo = ({
                 >
                   Create Sale
                 </button>
-                  <button
-                    className="btn"
-                    onClick={() => {
-                      setType(1);
-                      setPopUpShow(true);
-                    }}
-                  >
-                    Start Auction
-                  </button>
+                <button
+                  className="btn"
+                  onClick={() => {
+                    setType(1);
+                    setPopUpShow(true);
+                  }}
+                >
+                  Start Auction
+                </button>
               </div>
             ) : (
               <button className="btn" onClick={() => handleButtonClick()}>
@@ -800,18 +813,34 @@ const History = ({ data }) => {
     <div className="nft-history-box">
       {data.map((history) => (
         <div className="nft-history">
-          <img className="user-img" src={history.img} alt={history.name} />
           <div>
-            <div className="msg">{history.state}</div>
-            <div className="info">
-              from {history.from} {history.date}
+            <div className="msg">
+              {history.state} {history.date}
             </div>
-            <div className="info">
-              to {history.to} {history.date}
-            </div>
+            <div className="info">From {history.from}</div>
+            <div className="info">To {history.to}</div>
           </div>
         </div>
       ))}
+    </div>
+  );
+};
+
+const Properties = ({ nft }) => {
+  return (
+    <div className="nft-history-box">
+      {nft && nft.tags && nft.tags.length > 1 ? (
+        nft.tags.map((tag: any) => {
+          return (
+            <div className="gridBbox">
+              <h6>{tag.propertyType}</h6>
+              <h6>{tag.propertyName}</h6>
+            </div>
+          );
+        })
+      ) : (
+        <div>No properties</div>
+      )}
     </div>
   );
 };

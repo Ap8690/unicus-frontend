@@ -15,7 +15,7 @@ const MarketPlaceAuctions = ({ list }) => {
   const [displayList, setDisplayList] = useState(list);
 
   // Some hardcoded data
-  const types = ["Live", "Upcoming", "Ended"]; //"Live", "Upcoming", "Ended"
+  const types = ["Live", "Ended"]; //"Live", "Upcoming", "Ended"
   const length = width > 768 ? Math.ceil(displayList.length / 3) : displayList.length;
 
   // Filter out list on the basis of elements

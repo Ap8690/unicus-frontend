@@ -10,19 +10,27 @@ const Element = ({ element }) => {
         <img src={element.cloudinaryUrl} alt={element.name} />
       </div>
       <div className="info">
-        <img
-          src={userImg}
-          alt={element.name}
-          className="creator-image"
-        />
+        <img src={userImg} alt={element.userInfo} className="creator-image" />
         <div className="info-text">
-          <h3 className="heading">{element?.name.length > 15 ? element?.name.slice(0,15) + "..." : element?.name}</h3>
+          <h3 className="heading">
+            {element?.name.length > 15
+              ? element?.name.slice(0, 15) + "..."
+              : element?.name}
+          </h3>
           <p className="credit">
-            By <span className="creator-name">{element?.owner.slice(0,9)}...</span>
+            By{" "}
+            <span className="creator-name">
+              {element.userInfo? element?.userInfo.slice(0, 9) : element?.owner.slice(0,9)}...
+            </span>
           </p>
         </div>
       </div>
-      <div className="text text-center">{element?.description.length > 36 ? element?.description.slice(0,35) : element?.description}...</div>
+      <div className="text text-center">
+        {element?.description.length > 36
+          ? element?.description.slice(0, 35)
+          : element?.description}
+        ...
+      </div>
     </div>
   );
 };

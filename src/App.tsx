@@ -183,8 +183,8 @@ useEffect(() => {
                 path="/create-nft/single-item"
                 element={<CreateNftSingle />}
               />
-              <Route path="/stats/ranking" element={<Ranking />} />
-              <Route path="/stats/activity" element={<Activity />} />
+              {/* <Route path="/stats/ranking" element={<Ranking />} />
+              <Route path="/stats/activity" element={<Activity />} /> */}
               <Route path="/explore" element={<Explore />} />
               <Route path="/explore/:chain" element={<Explore />} />
               <Route path="/login/:token/:email" element={<Explore />} />{" "}

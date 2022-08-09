@@ -10,7 +10,7 @@ import { AllNFTsElement } from "../AllNFTs/AllNFTsBody/AllNFTsElements";
 import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import FullLoading from "../../components/modals/Loading/FullLoading";
 
-const filters = ["Details", "History"];
+const filters = ["History", "Properties"];
 const creator = {
   name: "David",
   img: nftImg,
@@ -66,39 +66,42 @@ const topBid = {
   bid: "2.45",
 };
 const ViewNft = () => {
-  const [activeFilter, setActiveFilter] = useState("Details");
+  const [activeFilter, setActiveFilter] = useState(filters[0]);
   const [placeBidModal, setPlaceBidModal] = useState(false);
   const [currentLoaded, setCurrentLoaded] = useState(10);
   const [nft, setNft] = useState<any>();
   const [auction, setAuction] = useState("");
   const [nftImg, setNftImg] = useState("");
   const [creator, setCreator] = useState("");
-  const [nftStates, setNftStates] = useState<any>()
+  const [nftStates, setNftStates] = useState<any>();
   const [nftLoading, setNftLoading] = useState<boolean>(false);
-  const [nftByCollection, setNftByCollection] = useState<any>()
+  const [nftByCollection, setNftByCollection] = useState<any>();
   const { chain, contractAddress, nftId } = useParams();
   const handleClose = () => setPlaceBidModal(false);
 
   async function fetchItem() {
     console.log(chain, contractAddress, nftId);
-setNftLoading(true)
+    setNftLoading(true);
     const res = await getNftById(chain, contractAddress, nftId);
     console.log(res, "res");
     setNftLoading(false);
 
     setNft(res.data.nft);
-    setNftStates(res.data.nftStates)
+    setNftStates(res.data.nftStates);
     setAuction(res.data.auction);
     setNftImg(res.data.nft.cloudinaryUrl);
     setCreator(res.data.user);
-    if(nft.collectionName){
-      const col = await getNftByCollection(nft.collectionName)
-    setNftByCollection(col.data.nft)
+    if (nft.collectionName) {
+      const col = await getNftByCollection(nft.collectionName);
+      setNftByCollection(col.data.nft);
     }
   }
 
   useEffect(() => {
     fetchItem();
+    return () => {
+      console.log("This will be logged on unmount");
+    };
   }, []);
 
   return (
@@ -106,7 +109,12 @@ setNftLoading(true)
       {nftLoading && <FullLoading />}
       <div className="view-nft">
         <div className="nft">
-          <NftImg img={nftImg} likes={7} shares={22} views={50} />
+          <NftImg
+            img={nftImg}
+            likes={7}
+            shares={22}
+            views={nft && nft.views ? nft.views : 0}
+          />
           {nft && (
             <NftInfo
               filters={filters}
@@ -126,7 +134,9 @@ setNftLoading(true)
             <h1>More from this collection</h1>
             <div>
               {nftByCollection.map((item) => (
-                <Link to={`/nft/${item.chain}/${item.contractAddress}/${item._id}`}>
+                <Link
+                  to={`/nft/${item.chain}/${item.contractAddress}/${item._id}`}
+                >
                   <AllNFTsElement element={item} />
                 </Link>
               ))}

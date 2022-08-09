@@ -133,7 +133,7 @@ export const connectWallet = async (network: any) => {
       window.location.href = "/login";
       return;
     }
-    if (userInfo.wallets.length === 0 || !userInfo.wallets.includes(address)) {
+    if (userInfo.wallets.length === 0 || !userInfo.wallets.some(el=> {return el.toLowerCase() == address.toLowerCase()})) {
       await addWalletAdd(address).then(async (res: any) => {
         console.log(res);
         localStorage.setItem("userInfo", JSON.stringify(res.data.user));
@@ -143,6 +143,7 @@ export const connectWallet = async (network: any) => {
     return address;
   } catch (e) {
     console.log(e);
+    toast.error(e.code)
   }
 };
 

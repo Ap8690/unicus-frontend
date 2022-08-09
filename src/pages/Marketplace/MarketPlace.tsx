@@ -188,7 +188,7 @@ const MarketPlace = () => {
       <MarketPlaceFeatured list={featuredList} title={"Featured Artworks"} />
       <MarketPlaceTrending list={trendingList} />
       <MarketPlaceAuctions list={auctionsList} />
-      <MarketPlaceTopCollections list={topCollectionsList} />
+      {/* <MarketPlaceTopCollections list={topCollectionsList} /> */}
       <MarketPlaceCreateAndSell />
       <MarketPlaceDiscover categories={categories} />
       <StayInLoop />
