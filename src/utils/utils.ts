@@ -11,6 +11,7 @@ import {
   nearChain,
   UNICUS_STORE,
   solonaChain,
+  cookieDomain,
 } from "../config";
 import { IStore } from "../models/Store";
 import {
@@ -301,10 +302,10 @@ export const disConnectWallet = () => {
   localStorage.removeItem("walletType");
   localStorage.removeItem("userAddress");
 
-  Cookies.remove(ACCESS_TOKEN, {
+  Cookies.remove(ACCESS_TOKEN, { domain:cookieDomain,
     expires: 30,
   });
-  Cookies.remove("userInfo", {
+  Cookies.remove("userInfo", {domain:cookieDomain,
     expires: 30,
   });
   // web3.currentProvider._handleDisconnect()
