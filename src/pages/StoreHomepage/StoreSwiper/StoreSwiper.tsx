@@ -18,7 +18,7 @@ const StoreSwiper = ({ list, title }) => {
                 length={length}
                 heading={title}
             />
-            <MarketPlaceNavigatorPanFeatured list={list} currentScroll={currentScroll} />
+            {list && list.length >0 ?<MarketPlaceNavigatorPanFeatured list={list} currentScroll={currentScroll} />:<div>No NFTs found</div>}
         </div>
     );
 };

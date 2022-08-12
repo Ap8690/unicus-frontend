@@ -5,7 +5,7 @@ import { ACCESS_TOKEN } from "../../utils/constants";
 import { getChainSymbol, userInfo } from "../../utils/utils";
 
 const accessToken = Cookies.get(ACCESS_TOKEN);
-const axiosConfig: any = {
+export const axiosConfig: any = {
   headers: {
     Authorization: `Bearer ${accessToken}`,
   },

@@ -9,6 +9,7 @@ import { BASE_URL } from "../../../config";
 import { v4 as uuid } from "uuid";
 import { Form } from "react-bootstrap";
 import { FormControl, MenuItem, Select } from "@mui/material";
+import { axiosConfig } from "../../../services/api/supplier";
 
 const GeneralNameAndLogo = (general: IGeneral) => {
   //@ts-ignore
@@ -68,7 +69,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
   };
   const handleSave = async () => {
     try {
-      const res = await axios.post(`${BASE_URL}/general`, generals);
+      const res = await axios.post(`${BASE_URL}/general`, generals, axiosConfig);
       if (res) {
         toast.success("Saved Changes");
       } else {
