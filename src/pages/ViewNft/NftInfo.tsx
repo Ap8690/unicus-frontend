@@ -52,6 +52,8 @@ import Input from "../../components/Input/Input";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const NftInfo = ({
   filters,
@@ -73,6 +75,12 @@ const NftInfo = ({
   const [popUpShow, setPopUpShow] = useState(false);
   const [popUpShowBid, setPopUpShowBid] = useState(false);
 
+  const { wallet, connect, publicKey } = useWallet();
+  const { setVisible } = useWalletModal();
+  const getSolWallet = () => {
+    return wallet;
+  };
+
   const [button, setButton] = useState("Buy Now");
   const navigate = useNavigate();
 
@@ -81,7 +89,13 @@ const NftInfo = ({
       console.log("bid", startBid);
 
       setPopUpShow(false);
-      const address = await connectWallet(nft.chain);
+      const address = await connectWallet(
+        nft.chain,
+        publicKey,
+        getSolWallet,
+        connect,
+        setVisible
+      );
       console.log("create sell", address, nft);
       let obj = {
         nftId: nft._id,
@@ -167,7 +181,13 @@ const NftInfo = ({
   async function createAuction() {
     try {
       setPopUpShow(false);
-      const address = await connectWallet(nft.chain);
+      const address = await connectWallet(
+        nft.chain,
+        publicKey,
+        getSolWallet,
+        connect,
+        setVisible
+      );
       console.log("create auction", address, auction);
 
       let obj = {
@@ -234,7 +254,13 @@ const NftInfo = ({
   async function buyItem() {
     try {
       setNftLoading(true);
-      const address = await connectWallet(auction.chain);
+      const address = await connectWallet(
+        auction.chain,
+        publicKey,
+        getSolWallet,
+        connect,
+        setVisible
+      );
       console.log("buy item", address, auction);
 
       let transactionHash;
@@ -281,7 +307,13 @@ const NftInfo = ({
   async function placeBid() {
     try {
       setNftLoading(true);
-      const address = await connectWallet(auction.chain);
+      const address = await connectWallet(
+        auction.chain,
+        publicKey,
+        getSolWallet,
+        connect,
+        setVisible
+      );
 
       if (auction.chain.toString() == nearChain) {
         localStorage.setItem("nearBid", bid.toString());
@@ -322,7 +354,13 @@ const NftInfo = ({
   async function endSale() {
     try {
       setNftLoading(true);
-      const address = await connectWallet(auction.chain);
+      const address = await connectWallet(
+        auction.chain,
+        publicKey,
+        getSolWallet,
+        connect,
+        setVisible
+      );
 
       if (nft.chain.toString() == nearChain) {
         removeSale(nft.tokenId);
@@ -360,7 +398,13 @@ const NftInfo = ({
       //   return console.log("Auction Not ended Yet");
       // }
 
-      const address = await connectWallet(auction.chain);
+      const address = await connectWallet(
+        auction.chain,
+        publicKey,
+        getSolWallet,
+        connect,
+        setVisible
+      );
 
       if (auction.chain == nearChain) {
         processPurchase(nft.tokenId);
@@ -392,7 +436,13 @@ const NftInfo = ({
     try {
       setNftLoading(true);
 
-      const address = await connectWallet(auction.chain);
+      const address = await connectWallet(
+        auction.chain,
+        publicKey,
+        getSolWallet,
+        connect,
+        setVisible
+      );
 
       if (auction.chain == nearChain) {
         removeAuction(nft.tokenId);
@@ -483,7 +533,13 @@ const NftInfo = ({
         }
       }
     } else {
-      await connectWallet(nft.chain);
+      await connectWallet(
+        nft.chain,
+        publicKey,
+        getSolWallet,
+        connect,
+        setVisible
+      );
     }
   };
 

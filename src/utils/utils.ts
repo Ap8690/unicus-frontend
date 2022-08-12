@@ -76,6 +76,10 @@ import {
 } from "../Redux/Blockchain/Tron/marketplace";
 import { auctionAbiT, auctionAddressT } from "../Redux/Blockchain/Tron/auction";
 import { useNavigate } from "react-router-dom";
+import {
+  useWalletModal,
+} from "@solana/wallet-adapter-react-ui";
+
 import BN from "bn.js";
 
 const {
@@ -89,6 +93,7 @@ const fullNode = new HttpProvider("https://shasta.api.trongrid.io");
 const solidityNode = new HttpProvider("https://shasta.api.trongrid.io");
 const eventServer = new HttpProvider("https://shasta.api.trongrid.io");
 const privateKey = "01";
+
 
 export const userInfo: any = Cookies.get("userInfo")
   ? JSON.parse(Cookies.get("userInfo"))
@@ -108,7 +113,13 @@ export let web3 = new Web3(Web3.givenProvider);
 export let tronWeb = window.tronWeb? window.tronWeb
   : new TronWeb({ fullNode, solidityNode, privateKey });
 
-export const connectWallet = async (network: any) => {
+export const connectWallet = async (
+  network: any,
+  publicKey,
+  wallet,
+  connect,
+  setVisible
+) => {
   try {
     let address;
     if (network.toString() === nearChain) {
@@ -119,6 +130,8 @@ export const connectWallet = async (network: any) => {
       }
     } else if (network.toString() === tronChain) {
       address = tronWeb.defaultAddress.base58;
+    } else if (network.toString() === solonaChain) {
+      address = await connToSol(publicKey, wallet, connect, setVisible);
     } else {
       console.log(3);
       //@ts-ignore
@@ -128,15 +141,23 @@ export const connectWallet = async (network: any) => {
       address = accounts[0];
       await SwitchNetwork(network);
     }
-    console.log("add", address.toUpperCase(), userInfo);
     if (!getUserInfo()) {
       toast.error("New Address. Please Login");
       window.location.href = "/login";
       return;
     }
-    if (userInfo.wallets.length === 0 || !userInfo.wallets.some(el=> {return el.toLowerCase() == address.toLowerCase()})) {
+    if (
+      userInfo.wallets.length === 0 ||
+      !userInfo.wallets.some((el) => {
+        return el.toLowerCase() == address.toLowerCase();
+      })
+    ) {
       await addWalletAdd(address).then(async (res: any) => {
         console.log(res);
+        Cookies.set("userInfo", JSON.stringify(res.data.user), {
+          domain: cookieDomain,
+          expires: 30,
+        });
         localStorage.setItem("userInfo", JSON.stringify(res.data.user));
       });
     }
@@ -144,7 +165,7 @@ export const connectWallet = async (network: any) => {
     return address;
   } catch (e) {
     console.log(e);
-    toast.error(e.code)
+    toast.error(e.code);
   }
 };
 
@@ -256,18 +277,21 @@ export const connToMew = async () => {
 
 export const connToTron = async () => {
   try {
-    var obj = setInterval(async () => {
-      //@ts-ignore
-      if (window.tronWeb && window.tronWeb.defaultAddress.base58) {
-        clearInterval(obj);
+    let i = 0;
+    return new Promise(function (resolve) {
+      var obj = setInterval(async () => {
         //@ts-ignore
-        tronWeb = window.tronWeb;
-        console.log(tronWeb.defaultAddress.base58);
+        if (i === 50 || window.tronWeb && window.tronWeb.defaultAddress.base58) {
+          clearInterval(obj);
+          //@ts-ignore
+          tronWeb = window.tronWeb;
+          console.log(tronWeb.defaultAddress.base58);
 
-        return tronWeb.defaultAddress.base58;
-      }
-    }, 100);
-    return obj;
+          resolve(tronWeb.defaultAddress.base58);
+        }
+        i++
+      }, 300);
+    });
   } catch (error: any) {
     console.error(error?.message);
   }
@@ -297,6 +321,28 @@ export const connectNear = async () => {
 
   return walletConnection.account().accountId;
 };
+
+ export const connToSol = async (publicKey, getSolWallet, connect, setVisible) => {
+   try {
+     if (publicKey) {
+       return publicKey.toBase58();
+     }
+
+     if (!getSolWallet()) {
+       setVisible(true);
+     } else {
+       console.log("sol before", publicKey);
+       const res = await connect();
+       if (getSolWallet().adapter.publicKey) {
+         return getSolWallet().adapter.publicKey.toBase58();
+       } else {
+         throw new Error("Connection refused");
+       }
+     }
+   } catch (error) {
+     console.log("Error connecting wallet:", error);
+   }
+ };
 
 export const disConnectWallet = () => {
   localStorage.removeItem("walletType");

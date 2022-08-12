@@ -42,6 +42,8 @@ import {
   nearWalletConnection,
   userInfo,
 } from "../../utils/utils";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import {
   addWalletAdd,
   createNft,
@@ -82,6 +84,14 @@ const CreateNftSingle = () => {
   const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
   const inputFile = useRef(null);
   const navigate = useNavigate();
+
+
+  const { wallet, connect, publicKey } = useWallet();
+  const { setVisible } = useWalletModal();
+
+  const getSolWallet = () => {
+    return wallet;
+  };
 
   const [properties, setProperties] = useState([
     {
@@ -257,11 +267,11 @@ const CreateNftSingle = () => {
         return null;
       }
       console.log(2);
-      await connectWallet(chain)
+      await connectWallet(chain, publicKey, getSolWallet, connect, setVisible)
         .then(async (address) => {
-          if(!address){
-            toast.error("Wallet connection failed")
-            return
+          if (!address) {
+            toast.error("Wallet connection failed");
+            return;
           }
           const contractAddress = getCreateNftContractAddress(
             chain,

@@ -4,7 +4,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { Web3Context } from "../../context/Web3Context";
 import useConnect from "./useConnect";
 import {
-  WalletMultiButton,
   useWalletModal,
 } from "@solana/wallet-adapter-react-ui";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
@@ -24,9 +23,9 @@ import {
   connToCoinbase,
   connToMetaMask,
   connToMew,
+  connToSol,
   connToTron,
   connToWalletConnector,
-  disConnectWallet,
 } from "../../utils/utils";
 import { walletLogin } from "../../services/api/supplier";
 import { toast } from "react-toastify";
@@ -47,13 +46,17 @@ type AuthType = Readonly<{
 }>;
 
 const ConnectWallet: React.FC<AuthType> = () => {
- const { connection } = useConnection();
- const { wallet, connect, connecting, publicKey } = useWallet();
- const { setVisible } = useWalletModal();
+
+  const {wallet, connect, publicKey} = useWallet()
+  const {setVisible} = useWalletModal()
 
   const navigate = useNavigate();
 
   let redirect = useParams();
+
+  const getSolWallet=()=>{
+    return wallet
+  }
 
   //@ts-ignore
   /* const [phantom, setPhantom] = useState<Phantom | null>(null);*/
@@ -69,17 +72,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
     
   };*/
 
-  const connToSol = async () => {
-    try {
-      if (!wallet) {
-        setVisible(true);
-      } else {
-        await connect();
-      }
-    } catch (error) {
-      console.log("Error connecting wallet:", error);
-    }
-  };
+ 
 
   const loginWallet = async (wallet) => {
     toast("Connecting to wallet...")
@@ -110,7 +103,8 @@ const ConnectWallet: React.FC<AuthType> = () => {
           break;
         }
         case "sol": {
-          address = await connToSol();
+        
+          address = await connToSol(publicKey, getSolWallet, connect, setVisible);
 
           break;
         }
@@ -143,7 +137,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
         }
       }
     } catch (e) {
-      toast.error(e);
+      toast.error(e.message);
       console.log(e);
       // disConnectWallet();
     }
@@ -160,7 +154,10 @@ const ConnectWallet: React.FC<AuthType> = () => {
         Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
           expires: 30,
         });
-        Cookies.set("userInfo", JSON.stringify(res.data.user));
+        Cookies.set("userInfo", JSON.stringify(res.data.user), {
+          domain: cookieDomain,
+          expires: 30,
+        });
 
         localStorage.setItem("userInfo", JSON.stringify(res.data.user));
         console.log(":redirect", redirect["*"]);

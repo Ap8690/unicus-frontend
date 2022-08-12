@@ -59,11 +59,11 @@ import { isMainStore } from "./utils/utils";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 const App = () => {
-  const network = WalletAdapterNetwork.Mainnet;
+  const network = WalletAdapterNetwork.Testnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 //@ts-ignore
 const [store, setStore] = useState<IStore>({});
-const [userStore, setUserStore] = useState({});
+const [userStore, setUserStore] = useState<any>();
 const [accessToken, setAccessToken] = useState("");
 const [showStore, setShowStore] = useState(true);
 const [loading, setLoading] = useState(false);
@@ -146,14 +146,14 @@ useEffect(() => {
   //@ts-ignore
   const wallets = useMemo(
     () => [
-      new PhantomWalletAdapter(),
+      new PhantomWalletAdapter({ network }),
       new GlowWalletAdapter(),
       new SlopeWalletAdapter(),
       new SolflareWalletAdapter({ network }),
       new TorusWalletAdapter(),
       new LedgerWalletAdapter(),
-      new SolletExtensionWalletAdapter(),
-      new SolletWalletAdapter(),
+      new SolletExtensionWalletAdapter({ network }),
+      new SolletWalletAdapter({ network }),
     ],
     [network]
   );
