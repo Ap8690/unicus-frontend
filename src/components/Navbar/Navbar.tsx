@@ -275,7 +275,7 @@ const ProfileButton = ({ accessToken, store }) => {
           <Link to={"/profile/favourite"} className="menu-link">
             Favourites
           </Link>
-        </MenuItem> */}
+        </MenuItem> */ }
         <MenuItem onClick={handleCloseProfile}>
           <Link to={"/profile/created"} className="menu-link">
             My NFTs
