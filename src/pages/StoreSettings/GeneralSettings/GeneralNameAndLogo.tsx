@@ -86,7 +86,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
 
   return (
     <div className="general-name-logo">
-      <div>
+      <div className="create-store-form">
         <div className="form-input">
           <label htmlFor="store-name">Store Name</label>
           <input

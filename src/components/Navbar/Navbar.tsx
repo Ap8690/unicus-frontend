@@ -12,7 +12,7 @@ import searchIcon from "../../assets/svgs/searchIcon.svg";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 import { ACCESS_TOKEN } from "../../utils/constants";
-import { disConnectWallet, isMainStore } from "../../utils/utils";
+import { disConnectWallet, isMainStore, userInfo } from "../../utils/utils";
 import NavMenu from "../menu/NavMenu/NavMenu";
 
 const Navbar = (store: any) => {
@@ -199,7 +199,7 @@ const Navbar = (store: any) => {
               <Link to={"/create-nft"} className="nav-link">
                 Create NFT
               </Link>
-              <ProfileButton accessToken={accessToken} />
+              <ProfileButton accessToken={accessToken} store={store} />
               {isMainStore() && store && Object.keys(store).length !== 0 ? (
                 <a
                   href={
@@ -236,7 +236,7 @@ const Navbar = (store: any) => {
   );
 };
 
-const ProfileButton = ({ accessToken }) => {
+const ProfileButton = ({ accessToken, store }) => {
   const [anchorProfile, setAnchorProfile] = useState<null | HTMLElement>(null);
   const openProfile = Boolean(anchorProfile);
   const location = useLocation();
@@ -286,6 +286,11 @@ const ProfileButton = ({ accessToken }) => {
             My Listings
           </Link>
         </MenuItem>
+        {!isMainStore() && store.general.user == userInfo._id && <MenuItem onClick={handleCloseProfile}>
+          <Link to={"/store/settings"} className="menu-link">
+            My Store
+          </Link>
+        </MenuItem>}
         <MenuItem onClick={() => disConnectWallet()}>
           <Link to={"/connect-wallet/marketplace"} className="menu-link">
             Logout
