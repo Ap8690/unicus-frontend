@@ -286,7 +286,7 @@ const ProfileButton = ({ accessToken, store }) => {
             My Listings
           </Link>
         </MenuItem>
-        {!isMainStore() && store && store.general.user == userInfo._id && <MenuItem onClick={handleCloseProfile}>
+        {!isMainStore() && store.general && store.general.user == userInfo._id && <MenuItem onClick={handleCloseProfile}>
           <Link to={"/store/settings"} className="menu-link">
             My Store
           </Link>
