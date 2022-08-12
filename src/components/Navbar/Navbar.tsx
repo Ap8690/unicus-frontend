@@ -118,9 +118,11 @@ const Navbar = (store: any) => {
                   <span className="btn nav-link">Go to My Store</span>
                 </a>
               ) : (
-                <Link to={"/create-store"} className="btn nav-link">
-                  Create Store
-                </Link>
+                isMainStore() && (
+                  <Link to={"/create-store"} className="btn nav-link">
+                    Create Store
+                  </Link>
+                )
               )}
               <Link to={"/launchpad"} className="btn nav-link">
                 Launchpad
@@ -210,12 +212,14 @@ const Navbar = (store: any) => {
                   <button className="btn nav-link">Go to My Store</button>
                 </a>
               ) : (
-                <button
-                  onClick={() => navigate("/create-store")}
-                  className="btn nav-link"
-                >
-                  Create Store
-                </button>
+                isMainStore() && (
+                  <button
+                    onClick={() => navigate("/create-store")}
+                    className="btn nav-link"
+                  >
+                    Create Store
+                  </button>
+                )
               )}
 
               <button

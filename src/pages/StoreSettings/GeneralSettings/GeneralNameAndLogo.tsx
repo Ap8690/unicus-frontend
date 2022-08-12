@@ -87,35 +87,54 @@ const GeneralNameAndLogo = (general: IGeneral) => {
   return (
     <div className="general-name-logo">
       <div>
-        <Input
-          title="Store Name"
-          placeholder="Enter Store Name"
-          value={generals.storeName}
-          onChange={(e) => handleStoreName(e.target.value)}
-        />
-        <Input
-          title="Email"
-          placeholder="Enter Email"
-          value={generals.email}
-          onChange={(e) => handleEmail(e.target.value)}
-        />
-        <FormControl
-          variant="standard"
-          sx={{ m: 0, minWidth: 120, width: "100%" }}
-        >
-          <Select
-            labelId="chain-select-label"
-            id="chain-select"
-            value={generals.country}
-            onChange={(e) => handleCountry(e.target.value)}
+        <div className="form-input">
+          <label htmlFor="store-name">Store Name</label>
+          <input
+            type="text"
+            id="store-name"
+            value={generals.storeName}
+            onChange={(e) =>
+              handleStoreName(e.target.value)
+            }
+            placeholder="Enter Store Name"
+            maxLength={25}
+          />
+          <div className="store-name-length">
+            {generals.storeName ? generals.storeName.length : "0"}/25
+          </div>
+        </div>
+        <div className="form-input">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            value={generals.email}
+            onChange={(e) =>
+              handleEmail(e.target.value)
+            }
+            placeholder="Enter Email"
+          />
+        </div>
+        <div className="form-input">
+          <label htmlFor="country">Country</label>
+          <FormControl
+            variant="standard"
+            sx={{ m: 0, minWidth: 120, width: "100%" }}
           >
-            {options.map((item) => (
-              <MenuItem key={item.value} value={item.value}>
-                {item.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            <Select
+              labelId="chain-select-label"
+              id="chain-select"
+              value={generals.country}
+              onChange={(e) => handleCountry(e.target.value)}
+            >
+              {options.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
         <button className="btn" onClick={() => handleSave()}>
           Save Changes
         </button>
@@ -123,9 +142,16 @@ const GeneralNameAndLogo = (general: IGeneral) => {
       <div className="file-upload-container">
         <div className="title">Logo</div>
         <label className="file-upload-box">
-          {generals.logoUrl == "" && <img src={uploadImg} alt="" />}
+          {generals.logoUrl == "" && (
+            <img src={uploadImg} alt="" onClick={uploadImage} />
+          )}
           {generals.logoUrl !== "" && (
-            <img src={generals.logoUrl} alt="" style={{ width: "90%" }} />
+            <img
+              src={generals.logoUrl}
+              alt=""
+              style={{ width: "90%" }}
+              onClick={uploadImage}
+            />
           )}
           <input
             type="file"

@@ -348,6 +348,8 @@ export const getChainSymbol = (chain) => {
       ? "TRX"
       : chain.toString() === nearChain
       ? "NEAR"
+      : chain.toString() === solonaChain
+      ? "SOL"
       : "ETH";
   }
 };

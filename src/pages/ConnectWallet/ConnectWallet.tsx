@@ -47,11 +47,10 @@ type AuthType = Readonly<{
 }>;
 
 const ConnectWallet: React.FC<AuthType> = () => {
-  const { wallet } = useConnect();
+ const { connection } = useConnection();
+ const { wallet, connect, connecting, publicKey } = useWallet();
+ const { setVisible } = useWalletModal();
 
-  const { connection } = useConnection();
-  const { publicKey, sendTransaction } = useWallet();
-  const { setVisible } = useWalletModal();
   const navigate = useNavigate();
 
   let redirect = useParams();
@@ -69,6 +68,18 @@ const ConnectWallet: React.FC<AuthType> = () => {
     }
     
   };*/
+
+  const connToSol = async () => {
+    try {
+      if (!wallet) {
+        setVisible(true);
+      } else {
+        await connect();
+      }
+    } catch (error) {
+      console.log("Error connecting wallet:", error);
+    }
+  };
 
   const loginWallet = async (wallet) => {
     toast("Connecting to wallet...")
@@ -99,7 +110,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
           break;
         }
         case "sol": {
-          address = await connToMetaMask();
+          address = await connToSol();
 
           break;
         }
