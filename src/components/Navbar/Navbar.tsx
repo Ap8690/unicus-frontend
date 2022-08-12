@@ -85,7 +85,7 @@ const Navbar = (store: any) => {
             <SearchBar search={search} setSearch={setSearch} />
           </div>
           <div className="nav-menu-icons">
-            <ProfileButton accessToken={accessToken} />
+            <ProfileButton accessToken={accessToken} store={store}/>
             <button className="nav-menu-icon" onClick={() => setMenu(true)}>
               <MenuRoundedIcon />
             </button>
