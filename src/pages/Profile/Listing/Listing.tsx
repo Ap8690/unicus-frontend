@@ -9,44 +9,29 @@ import itemPic from "../../../assets/images/itemPic.png";
 import "./Listing.scss";
 import DropDownSearch from "../../../components/DropDownSearch/DropDownSearch";
 import BlueBackground from "../../../components/BlueBackground/BlueBackground";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Listing = ({ list, search, setSearch, columns }) => {
-  const [collections , setCollection] = useState([])
-  // const collections = [
-  //   {
-  //     name: "Leslie Alexander",
-  //     image: itemPic,
-  //   },
-  //   {
-  //     name: "Untitled Collection",
-  //     image: itemPic,
-  //   },
-  //   {
-  //     name: "Guy Hawkins",
-  //     image: itemPic,
-  //   },
-  //   {
-  //     name: "Webbed",
-  //     image: itemPic,
-  //   },
-  // ];
+  const [filteredList, setFilteredList] = useState(list);
 
-  const getCollections=async()=>{
-    
-  }
+ useEffect(() => {
+   setFilteredList(list)
+ 
+ }, [list])
+ 
   return (
     <div className="listing">
       <BlueBackground />
-      <Header />
+      {/* <Header /> */}
       <div className="listing-body">
         <DropDownSearch
-          heading="Collections"
+          heading="Search"
           search={search}
           setSearch={setSearch}
-          searchList={collections}
+          searchList={filteredList}
+          list={list}
         />
-        <Table columns={columns} rows={list}/>
+        <Table columns={columns} rows={filteredList} />
       </div>
     </div>
   );

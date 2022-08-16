@@ -7,6 +7,7 @@ import AdvancedSettings from "./AdvancedSettings/AdvancedSettings"
 import AppearanceSettings from "./AppearanceSettings/AppearanceSettings"
 import Support from "./Support/Support"
 
+
 const StoreSettings = () => {
     const [currentSetting, setCurrentSetting] = useState("general")
     const handleSettingChange = (newSetting: any) => {

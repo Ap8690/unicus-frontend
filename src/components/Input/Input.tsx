@@ -4,6 +4,7 @@ const Input = (props:any) => {
   const handleChange = (e:any) => {
     props.setState(e.target.value);
   };
+  
   return (
     <div className="input-box">
       {props.title && (
@@ -51,7 +52,8 @@ const Input = (props:any) => {
           placeholder={props.placeholder}
           disabled={props.disabled}
         />
-      ) : (
+      ):
+       (
         <input
           type={props.email ? "email" : "text"}
           onChange={handleChange}

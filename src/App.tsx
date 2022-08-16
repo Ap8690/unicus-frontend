@@ -52,14 +52,15 @@ import StoreHomepage from "./pages/StoreHomepage/StoreHomepage";
 import StoreSettings from "./pages/StoreSettings/StoreSettings";
 import Cookies from "js-cookie";
 import { getStoreApi, getStoreByUser } from "./services/api/supplier";
-import { ACCESS_TOKEN } from "./utils/constants";
+import { ACCESS_TOKEN, defaultPrivacyText } from "./utils/constants";
 import { isMainStore } from "./utils/utils";
+import PrivacyPolicy from "./pages/UsefulLinks/PrivacyPolicy";
 // import NFTById from "./components/NFTById/NFTById";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 const App = () => {
-  const network = WalletAdapterNetwork.Testnet;
+  const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 //@ts-ignore
 const [store, setStore] = useState<IStore>({});
@@ -192,11 +193,71 @@ useEffect(() => {
                 path="/reset-password/:token/:email"
                 element={<Explore />}
               />
-              {!isMainStore() && (
-                <Route path="/store/settings" element={<StoreSettings />} />
+              {isMainStore() && Object.keys(store).length>0 && (
+                <>
+                  <Route path="/store/settings" element={<StoreSettings />} />
+                  <Route
+                    path="/privacy-policy"
+                    element={
+                      <PrivacyPolicy
+                        title={"Privacy Policy"}
+                        text={
+                          store.advance.privacyPolicy &&
+                          store.advance.privacyPolicy != ""
+                            ? store.advance.privacyPolicy
+                            : defaultPrivacyText
+                        }
+                      />
+                    }
+                  />
+                  <Route
+                    path="/terms"
+                    element={
+                      <PrivacyPolicy
+                        title={"Terms and Conditions"}
+                        text={
+                          store.advance.terms &&
+                          store.advance.terms != ""
+                            ? store.advance.terms
+                            : defaultPrivacyText
+                        }
+                      />
+                    }
+                  />
+                  <Route
+                    path="/about-us"
+                    element={
+                      <PrivacyPolicy
+                        title={"About Us"}
+                        text={
+                          store.advance.aboutUs &&
+                          store.advance.aboutUs != ""
+                            ? store.advance.aboutUs
+                            : defaultPrivacyText
+                        }
+                      />
+                    }
+                  />
+                  <Route
+                    path="/creators"
+                    element={
+                      <PrivacyPolicy
+                        title={"Creators"}
+                        text={
+                          store.advance.creators &&
+                          store.advance.creators != ""
+                            ? store.advance.creators
+                            : defaultPrivacyText
+                        }
+                      />
+                    }
+                  />
+                </>
               )}
               <Route path="/marketplace" element={<MarketPlace />} />
-              {isMainStore() && <Route path="/create-store" element={<CreateStore />} />}
+              {isMainStore() && (
+                <Route path="/create-store" element={<CreateStore />} />
+              )}
               <Route path="/all-nfts" element={<AllNFTs />} />
               <Route
                 path="/nft/:chain/:contractAddress/:nftId"

@@ -497,6 +497,10 @@ export const getCreateNftContractAddress = (chain, contractType) => {
         return createNFTAddressP;
       case tronChain:
         return createNFTAddressT;
+      case nearChain:
+        return "nft.subauction.testnet";
+      case solonaChain:
+        return 
       default:
         return contractType == "721"
           ? createNFTAddressE

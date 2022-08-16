@@ -31,7 +31,7 @@ const CollectionList = ({ list, setSearch }) => {
     </div>
   );
 };
-const DropDownSearch = ({ searchList, heading, search, setSearch }) => {
+const DropDownSearch = ({ searchList, heading, search, setSearch, list }) => {
   const [ifOpen, setIfOpen] = useState(false);
   const [displayList, setDisplayList] = useState(searchList);
 
@@ -62,7 +62,7 @@ const DropDownSearch = ({ searchList, heading, search, setSearch }) => {
         }
       >
         <SearchBar search={search} setSearch={setSearch} />
-        <CollectionList list={displayList} setSearch={setSearch} />
+        {/* <CollectionList list={displayList} setSearch={setSearch} /> */}
       </div>
     </div>
   );

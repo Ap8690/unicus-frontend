@@ -43,7 +43,7 @@ import {
   userInfo,
 } from "../../utils/utils";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useAnchorWallet, useConnection, useWallet } from "@solana/wallet-adapter-react";
 import {
   addWalletAdd,
   createNft,
@@ -54,8 +54,31 @@ import { useSelector } from "react-redux";
 import * as nearAPI from "near-api-js";
 import BN from "bn.js";
 import FullLoading from "../../components/modals/Loading/FullLoading";
-import { Navigate, useNavigate } from "react-router-dom";
-import { access } from "fs";
+import { useNavigate } from "react-router-dom";
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAssociatedTokenAddress,
+  createInitializeMintInstruction,
+  MINT_SIZE,
+  createAssociatedTokenAccountInstruction,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
+
+import * as anchor from "@project-serum/anchor";
+import { Program, getProvider, Provider, Wallet } from "@project-serum/anchor";
+
+import {
+  clusterApiUrl,
+  PublicKey,
+  SystemProgram,
+  SYSVAR_RENT_PUBKEY,
+} from "@solana/web3.js";
+import SolMintNftIdl from "../../utils/sol_mint_nft.json";
+import {
+  Metaplex,
+  keypairIdentity,
+  bundlrStorage,
+} from "@metaplex-foundation/js";
 
 const CreateNftSingle = () => {
   const [name, setName] = useState("Item Name");
@@ -85,13 +108,30 @@ const CreateNftSingle = () => {
   const inputFile = useRef(null);
   const navigate = useNavigate();
 
+    const { connection } = useConnection();
 
-  const { wallet, connect, publicKey } = useWallet();
+  const { wallet, connect, publicKey, sendTransaction } = useWallet();
   const { setVisible } = useWalletModal();
+
+  const anWallet = useAnchorWallet();
+
 
   const getSolWallet = () => {
     return wallet;
   };
+
+  const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
+    "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+  );
+
+  const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
+    "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
+  );
+
+  const NFT_SYMBOL = "unicus-nft";
+
+
+  //sol Nft mint
 
   const [properties, setProperties] = useState([
     {
@@ -161,13 +201,12 @@ const CreateNftSingle = () => {
       e.target.files[0].name.split(".").pop() ==
         ("jpg" || "png" || "gif" || "svg")
     );
-    
   };
 
-  const supportedImg = ["jpg", "jpeg", "png", "svg", "gif"]
-  const supportedVid = ["mp4", "webm"]
-  const supportedAud = ["mp3", "wav", "ogg"]
-  const supported3d = ["gltf, glb"]
+  const supportedImg = ["jpg", "jpeg", "png", "svg", "gif"];
+  const supportedVid = ["mp4", "webm"];
+  const supportedAud = ["mp3", "wav", "ogg"];
+  const supported3d = ["gltf, glb"];
 
   const {
     utils: {
@@ -215,6 +254,143 @@ const CreateNftSingle = () => {
       description: propDescription.levels,
     },
   ];
+  
+  const mintSolana = async (title, description, fileUrl) => {
+    console.log("sol mint start", anWallet);
+
+    const provider = new anchor.AnchorProvider(connection, anWallet, {
+      commitment: "processed",
+    });
+    anchor.setProvider(provider);
+
+    const program = new Program(
+      // @ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
+    console.log("Program Id: ", program.programId.toBase58());
+    console.log("Mint Size: ", MINT_SIZE);
+    const lamports =
+      await program.provider.connection.getMinimumBalanceForRentExemption(
+        MINT_SIZE
+      );
+    console.log("Mint Account Lamports: ", lamports);
+
+    const getMetadata = async (mint) => {
+      return (
+        await anchor.web3.PublicKey.findProgramAddress(
+          [
+            Buffer.from("metadata"),
+            TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+            mint.toBuffer(),
+          ],
+          TOKEN_METADATA_PROGRAM_ID
+        )
+      )[0];
+    };
+
+    const mintKey = anchor.web3.Keypair.generate();
+
+    const nftTokenAccount = await getAssociatedTokenAddress(
+      mintKey.publicKey,
+      provider.wallet.publicKey
+    );
+    console.log("NFT Account: ", nftTokenAccount.toBase58());
+
+    const mint_tx = new anchor.web3.Transaction().add(
+      anchor.web3.SystemProgram.createAccount({
+        fromPubkey: provider.wallet.publicKey,
+        newAccountPubkey: mintKey.publicKey,
+        space: MINT_SIZE,
+        programId: TOKEN_PROGRAM_ID,
+        lamports,
+      }),
+      createInitializeMintInstruction(
+        mintKey.publicKey,
+        0,
+        provider.wallet.publicKey,
+        provider.wallet.publicKey
+      ),
+      createAssociatedTokenAccountInstruction(
+        provider.wallet.publicKey,
+        nftTokenAccount,
+        provider.wallet.publicKey,
+        mintKey.publicKey
+      )
+    );
+    let blockhashObj = await connection.getLatestBlockhash();
+    console.log("blockhashObj", blockhashObj);
+    mint_tx.recentBlockhash = blockhashObj.blockhash;
+
+    try {
+      const signature = await sendTransaction(mint_tx, connection, {
+        signers: [mintKey],
+      });
+      const latestBlockhash = await connection.getLatestBlockhash();
+      await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+    } catch {
+      return false;
+    }
+
+    console.log("Mint key: ", mintKey.publicKey.toString());
+    console.log("User: ", provider.wallet.publicKey.toString());
+
+    const metadataAddress = await getMetadata(mintKey.publicKey);
+    console.log("Metadata address: ", metadataAddress.toBase58());
+
+    try {
+      const tx = program.transaction.mintNft(
+        mintKey.publicKey,
+        title,
+        description,
+        fileUrl, //metadatauri
+        {
+          accounts: {
+            mintAuthority: provider.wallet.publicKey,
+            mint: mintKey.publicKey,
+            tokenAccount: nftTokenAccount,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            metadata: metadataAddress,
+            tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+            payer: provider.wallet.publicKey,
+            systemProgram: anchor.web3.SystemProgram.programId,
+            rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+          },
+        }
+      );
+
+      const signature = await sendTransaction(tx, connection);
+      const latestBlockhash = await connection.getLatestBlockhash();
+
+      await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+      console.log("Mint Success!", tx, signature);
+
+      
+      const metaplex = new Metaplex(connection);
+
+      //Fetch all nfts of by owner
+      //the returned NFTs may be Metadatas
+      const myNfts = await metaplex
+        .nfts()
+        .findByMint(mintKey.publicKey)
+        .run();
+
+      console.log("metaplex", myNfts);
+
+      return mintKey.publicKey.toBase58();
+    } catch {
+      return false;
+    }
+  };
   const mintAssetToNft = async (
     tokenId,
     name,
@@ -251,7 +427,7 @@ const CreateNftSingle = () => {
   };
   const cryptoPayment = async () => {
     try {
-      console.log(1);
+      console.log(1, chain);
 
       setAddNFTModalOpen(false);
       //@ts-ignore
@@ -312,30 +488,32 @@ const CreateNftSingle = () => {
             setNftLoading(false);
             toast.success("NFT Uploaded...");
             setNftModalMessage("An Awesome Asset is getting Minted");
+            let user = userInfo;
+            if (!user) {
+              user = localStorage.getItem("userInfo");
+            }
+            const nftObj = {
+              name,
+              royalty,
+              description,
+              category,
+              jsonIpfs: tokenUri,
+              nftType: fileSrc.type,
+              chain,
+              contractAddress,
+              owner: user._id,
+              uploadedBy: user._id,
+              mintedBy: user._id,
+              mintedInfo: user.username,
+              userInfo: user.username,
+              cloudinaryUrl: imageUrl,
+              tokenId,
+              tags: properties,
+            };
             if (chain == nearChain) {
-              tokenId = uuid();
-              let user = userInfo;
-              if (!user) {
-                user = localStorage.getItem("userInfo");
-              }
-              const nftObj = {
-                name,
-                royalty,
-                description,
-                category,
-                jsonIpfs: tokenUri,
-                nftType: fileSrc.type,
-                chain,
-                contractAddress,
-                owner: user._id,
-                uploadedBy: user._id,
-                mintedBy: user._id,
-                mintedInfo: user.username,
-                userInfo: user.username,
-                cloudinaryUrl: imageUrl,
-                tokenId,
-                tags: properties,
-              };
+              nftObj.tokenId = uuid();
+              
+              
               localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
               await mintAssetToNft(
                 tokenId,
@@ -345,7 +523,13 @@ const CreateNftSingle = () => {
                 imageUrl
               );
               return;
-            } else {
+            }else if (chain == solonaChain){
+             const mintKey= await mintSolana(name, description, tokenUri)
+             nftObj.tokenId = mintKey
+              await createNft(nftObj);
+              navigate("/profile/created");
+            }
+             else {
               setNftLoading(true);
               toast("Minting The Asset");
               const createNFT = getCreateNftContract(chain, contractType);
@@ -359,7 +543,7 @@ const CreateNftSingle = () => {
                     from: address,
                   });
                 if (res?.transactionHash) {
-                  tokenId = res.events.Minted.returnValues._NftId; //returnValues NFTId
+                  nftObj.tokenId = res.events.Minted.returnValues._NftId; //returnValues NFTId
                 }
               } else if (contractType == "1155") {
                 console.log("user add", address);
@@ -371,7 +555,7 @@ const CreateNftSingle = () => {
                   });
                 console.log("1155", res);
                 if (res?.transactionHash) {
-                  tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
+                  nftObj.tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
                 }
               } else {
                 toast.error("Contract not found");
@@ -397,42 +581,18 @@ const CreateNftSingle = () => {
                   const result = axios.get(
                     `https://api.shasta.trongrid.io/events/transaction/${res}`
                   );
-                  tokenId = result[1].result._NftId;
+                  nftObj.tokenId = result[1].result._NftId;
                 }
               } else if (res?.transactionHash) {
                 tranIsSuccess = true;
               }
 
-              let user = userInfo;
-              if (!user) {
-                user = localStorage.getItem("userInfo");
-              }
+              
               toast("Storing Details");
               if (tranIsSuccess) {
-                const nftObj = {
-                  name,
-                  royalty,
-                  description,
-                  category,
-                  jsonIpfs: tokenUri,
-                  cloudinaryUrl: imageUrl,
-                  nftType: fileSrc.type,
-                  chain,
-                  contractAddress,
-                  contractType,
-                  owner: user._id,
-                  uploadedBy: user._id,
-                  mintedBy: user._id,
-                  mintedInfo: user.username,
-                  userInfo: user.username,
-                  image: imageUrl,
-                  tokenId,
-                };
-                var newObject = {
-                  ...nftObj,
-                  tags: properties,
-                };
-                await createNft(newObject);
+                
+                
+                await createNft(nftObj);
                 navigate("/profile/created");
               } else {
                 setNftLoading(false);
@@ -690,7 +850,11 @@ const CreateNftSingle = () => {
                   number
                 />
                 {royaltyError && (
-                  <span style={{marginTop:"5px", fontSize:"12px", color:"red"}}>Royalty Should be between 0 - 99 %</span>
+                  <span
+                    style={{ marginTop: "5px", fontSize: "12px", color: "red" }}
+                  >
+                    Royalty Should be between 0 - 99 %
+                  </span>
                 )}
               </div>
 
@@ -829,7 +993,7 @@ const CreateNftSingle = () => {
       </div>
     </>
   );
-};
+};;
 
 const IOSSwitch = styled((props: any) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />

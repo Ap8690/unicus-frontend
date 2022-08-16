@@ -9,7 +9,7 @@ import { BASE_URL } from "../../../config";
 import { v4 as uuid } from "uuid";
 import { Form } from "react-bootstrap";
 import { FormControl, MenuItem, Select } from "@mui/material";
-import { axiosConfig } from "../../../services/api/supplier";
+import { axiosConfig, saveGenerals } from "../../../services/api/supplier";
 
 const GeneralNameAndLogo = (general: IGeneral) => {
   //@ts-ignore
@@ -69,7 +69,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
   };
   const handleSave = async () => {
     try {
-      const res = await axios.post(`${BASE_URL}/general`, generals, axiosConfig);
+      const res = await saveGenerals(generals);
       if (res) {
         toast.success("Saved Changes");
       } else {
@@ -90,12 +90,12 @@ const GeneralNameAndLogo = (general: IGeneral) => {
       <div className="create-store-form">
         <div className="form-input">
           <label htmlFor="store-name">Store Name</label>
-          <input
+          <Input
             type="text"
             id="store-name"
-            value={generals.storeName}
-            onChange={(e) =>
-              handleStoreName(e.target.value)
+            set={generals.storeName}
+            setState={
+              handleStoreName
             }
             placeholder="Enter Store Name"
             maxLength={25}
@@ -106,12 +106,12 @@ const GeneralNameAndLogo = (general: IGeneral) => {
         </div>
         <div className="form-input">
           <label htmlFor="email">Email</label>
-          <input
+          <Input
             type="email"
             id="email"
-            value={generals.email}
-            onChange={(e) =>
-              handleEmail(e.target.value)
+            set={generals.email}
+            setState={
+              handleEmail
             }
             placeholder="Enter Email"
           />
@@ -143,10 +143,9 @@ const GeneralNameAndLogo = (general: IGeneral) => {
       <div className="file-upload-container">
         <div className="title">Logo</div>
         <label className="file-upload-box">
-          {generals.logoUrl == "" && (
-            <img src={uploadImg} alt="" onClick={uploadImage} />
-          )}
-          {generals.logoUrl !== "" && (
+          {generals.logoUrl == "" ? (
+            <img src={uploadImg} alt="" onClick={uploadImage} />)
+          :(
             <img
               src={generals.logoUrl}
               alt=""

@@ -52,7 +52,7 @@ const GeneralSettings = () => {
         {currentFilter === "nameLogo" && <GeneralNameAndLogo {...general} />}
         {currentFilter === "basic" && <GeneralBasic {...general} />}
         {currentFilter === "contactUs" && <GeneralContact {...general} />}
-        {currentFilter === "social" && <GeneralSocial {...general} />}
+        {currentFilter === "social" && <GeneralSocial />}
       </div>
     </div>
   );

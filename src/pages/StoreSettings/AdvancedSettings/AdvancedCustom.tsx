@@ -32,35 +32,35 @@ const AdvancedCustom = (advance: IAdvance) => {
         You can add texts with html tags for formatting purposes.
       </div>
       <div className="inputs">
-        <input
+        <Input
           className="input-box"
           title="Privacy policy"
           placeholder="Enter Privacy policy"
-          value={advances.privacyPolicy}
-          onChange={(e) =>
-            setAdvance({ ...advances, privacyPolicy: e.target.value })
-          }
+          set={advances.privacyPolicy}
+          setState={(e) => setAdvance({ ...advances, privacyPolicy: e })}
+          multi
         />
-        <input
+        <Input
           className="input-box"
           title="Terms & Conditions"
           placeholder="Enter Terms & Conditions"
-          value={advances.terms}
-          onChange={(e) => setAdvance({ ...advances, terms: e.target.value })}
+          set={advances.terms}
+          setState={(e) => setAdvance({ ...advances, terms: e })}
+          multi
         />
-        <input
+        <Input
           title="About Us"
           placeholder="Enter About Us"
-          value={advances.aboutUs}
-          onChange={(e) => setAdvance({ ...advances, aboutUs: e.target.value })}
+          set={advances.aboutUs}
+          setState={(e) => setAdvance({ ...advances, aboutUs: e })}
+          multi
         />
-        <input
+        <Input
           title="Creators"
           placeholder="Enter Creators"
-          value={advances.creators}
-          onChange={(e) =>
-            setAdvance({ ...advances, creators: e.target.value })
-          }
+          set={advances.creators}
+          setState={(e) => setAdvance({ ...advances, creators: e })}
+          multi
         />
       </div>
       <button className="btn" onClick={handleSave}>

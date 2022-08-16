@@ -48,6 +48,7 @@ const AdvancedSupported = (advance:IAdvance) => {
           defaultChecked
           checked={bsc}
           onChange={(e: any) => setBsc(e.target.checked)}
+          disabled
         />
         <div className="terms">
           <span className="large-text">Binance Smart Chain (Mainnet)</span>

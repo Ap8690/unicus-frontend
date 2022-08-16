@@ -1,10 +1,39 @@
 import Switch from "@mui/material/Switch"
 import { styled } from "@mui/material/styles"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { IGeneral } from "../../../models/General";
+import { toast } from "react-toastify";
+import { saveGenerals } from "../../../services/api/supplier";
 
 const GeneralBasic = (general: IGeneral) => {
   const [homeToMarketplace, setHomeToMarketplace] = useState(true);
+  //@ts-ignore
+  const [generals, setGeneral] = useState<IGeneral>({});
+  useEffect(() => {
+    setGeneral({
+      ...generals,
+      marketPlaceAsHome: homeToMarketplace,
+    });
+  }, [homeToMarketplace]);
+
+  const handleSave = async () => {
+    try {
+      const res = await saveGenerals(generals);
+      if (res) {
+        toast.success("Saved Changes");
+      } else {
+        throw "Failed";
+      }
+    } catch (err) {
+      console.log("err", err);
+      if (err.response) {
+        toast.error(err.response.data.err);
+      } else {
+        toast.error(err.message);
+      }
+    }
+  };
+
   return (
     <div className="general-basic">
       <div className="switch-box">
@@ -20,7 +49,7 @@ const GeneralBasic = (general: IGeneral) => {
           </span>
         </div>
       </div>
-      <button className="btn">Save Changes</button>
+      <button className="btn" onClick={handleSave}>Save Changes</button>
     </div>
   );
 };

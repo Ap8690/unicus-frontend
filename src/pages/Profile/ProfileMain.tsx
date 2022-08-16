@@ -36,7 +36,11 @@ import {
   getMarketPlaceContractAddress,
 } from "../../utils/utils";
 import web3 from "../../web3";
-import { createSellApi, getAccessToken, getNftByUserId } from "../../services/api/supplier";
+import {
+  createSellApi,
+  getAccessToken,
+  getNftByUserId,
+} from "../../services/api/supplier";
 import { toast } from "react-toastify";
 
 // Generics
@@ -48,7 +52,6 @@ const Profile = (): ReactJSXElement => {
     // { name: "Collected", image: profileCollected, add: "5" },
     { name: "Created", image: profileCreated, add: "" },
     // { name: "Favourited", image: profileFavourited, add: "6" },
-    { name: "Activity", image: profileActivity, add: "" },
     { name: "Listing", image: profileListing, add: "" },
     { name: "Offers", image: profileOffers, add: "" },
   ];
@@ -63,7 +66,7 @@ const Profile = (): ReactJSXElement => {
     tabs.findIndex((tab) => tab.name.toLowerCase() === tabName)
   );
   const [search, setSearch]: useStateType<String> = useState("");
-  
+
   const items = [
     {
       image: favouritedImg,
@@ -91,59 +94,80 @@ const Profile = (): ReactJSXElement => {
     },
   ];
 
-  const listing = [
-    {
-      image: itemPic,
-      item: "Untitled Collection",
-      priceEth: "1.2",
-      priceDollar: "25120",
-      fd: "-",
-      exp: "July 25, 2022",
-    },
-    {
-      image: itemPic,
-      item: "Untitled Collection",
-      priceEth: "1.2",
-      priceDollar: "25120",
-      fd: "-",
-      exp: "July 25, 2022",
-    },
-    {
-      image: itemPic,
-      item: "Untitled Collection",
-      priceEth: "1.2",
-      priceDollar: "25120",
-      fd: "-",
-      exp: "July 25, 2022",
-    },
-  ];
-    const createdColumns = [
-      "Item",
-      "Chain",
-      "Created"
-    ];
+  // const listing = [
+  //   {
+  //     image: itemPic,
+  //     item: "Untitled Collection",
+  //     priceEth: "1.2",
+  //     priceDollar: "25120",
+  //     fd: "-",
+  //     exp: "July 25, 2022",
+  //   },
+  //   {
+  //     image: itemPic,
+  //     item: "Untitled Collection",
+  //     priceEth: "1.2",
+  //     priceDollar: "25120",
+  //     fd: "-",
+  //     exp: "July 25, 2022",
+  //   },
+  //   {
+  //     image: itemPic,
+  //     item: "Untitled Collection",
+  //     priceEth: "1.2",
+  //     priceDollar: "25120",
+  //     fd: "-",
+  //     exp: "July 25, 2022",
+  //   },
+  // ];
+  const createdColumns = ["Item", "Chain", "Created"];
   const listingColumns = ["Item", "Unit Price", "Status", "Created"];
+  const offersColumns = ["Item", "Lastest Bid", "Chain", "Created"];
 
-  const [displayListing, setDisplayListing] = useState(listing);
-  const [displayCreated, setDisplayCreated] = useState(listing);
-    const navigate = useNavigate();
 
+  
+  const [ordisplayListing, setorDisplayListing] = useState([]);
+  const [ordisplayCreated, setorDisplayCreated] = useState([]);
+  const [displayListing, setDisplayListing] = useState([]);
+  const [displayCreated, setDisplayCreated] = useState([]);
+  const navigate = useNavigate();
 
   const getNfts = async () => {
     try {
       const res = await getNftByUserId();
       console.log("res nfts", res);
-      setDisplayCreated(res.data.nfts)
-      setDisplayListing(res.data.auctions)
+      setorDisplayCreated(res.data.nfts);
+      setorDisplayListing(res.data.auctions);
+      setDisplayCreated(res.data.nfts);
+      setDisplayListing(res.data.auctions);
     } catch (e) {
       console.log(e);
       toast.error(e);
     }
   };
   useEffect(() => {
-    const q = search.toLowerCase();
-    const temp = listing.filter((item) => item.item.toLowerCase().includes(q));
-    setDisplayListing(temp);
+    if (currentTab == 0 ) {
+      const q = search.toLowerCase();
+      const temp = ordisplayCreated.filter((item) =>
+        item.name.toLowerCase().includes(q)
+      );
+      
+      setDisplayCreated(temp);
+      if (search == "") {
+        setDisplayCreated(ordisplayCreated);
+      }
+    } else {
+      const q = search.toLowerCase();
+      const temp = ordisplayListing.filter((item) =>
+        item.name.toLowerCase().includes(q)
+      );
+      setDisplayListing(temp);
+
+      if (search == "") {
+        setDisplayListing(ordisplayListing);
+      }
+    
+    }
   }, [search]);
 
   useEffect(() => {
@@ -170,7 +194,20 @@ const Profile = (): ReactJSXElement => {
             <Listing
               list={displayListing}
               search={search}
-              setSearch={setSearch} columns={listingColumns}            />
+              setSearch={setSearch}
+              columns={listingColumns}
+            />
+          }
+        />
+        <Route
+          path="/offers"
+          element={
+            <Listing
+              list={displayListing}
+              search={search}
+              setSearch={setSearch}
+              columns={offersColumns}
+            />
           }
         />
         <Route
@@ -179,7 +216,9 @@ const Profile = (): ReactJSXElement => {
             <Listing
               list={displayCreated}
               search={search}
-              setSearch={setSearch} columns={createdColumns}            />
+              setSearch={setSearch}
+              columns={createdColumns}
+            />
           }
         />
       </Routes>

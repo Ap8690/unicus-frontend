@@ -58,11 +58,11 @@ const Table = ({ rows, columns }) => {
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, i) => (
+          {rows && rows.length> 0 ? rows.map((row, i) => (
             <Link to={`/nft/${row.chain}/${row.contractAddress? row.contractAddress: row.nftId && row.nftId.contractAddress}/${row.tokenId}`}>
               <TableData activity={row} key={`atd${i}`} />
             </Link>
-          ))}
+          )): <div>No NFTs Found</div>}
         </tbody>
       </table>
     </div>

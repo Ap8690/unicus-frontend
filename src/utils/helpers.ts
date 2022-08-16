@@ -1,6 +1,6 @@
 import * as nearAPI from "near-api-js";
 import BN from "bn.js";
-import { nearChain } from "../config";
+import { nearChain, solonaChain } from "../config";
 
 
 const { keyStores, connect, transactions, WalletConnection } = nearAPI;
@@ -57,7 +57,10 @@ export const sendMeta = async (walletConnection:any,nearConfig:any ) => {
 export const getDecimal=(chain)=>{
   if(chain.toString()== nearChain){
     return 10**24
-  }else{
+  }else if(chain.toString() == solonaChain){
+    return 1000000000
+  }
+    else{
     return 10**18
   }
 

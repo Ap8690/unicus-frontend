@@ -20,12 +20,12 @@ const ActivityBodyFilters = ({
         setActiveFilters={setActiveFilters}
         heading="Event Types"
       />
-      <DropDownSearch
+      {/* <DropDownSearch
         searchList={collections}
         heading="Collections"
         search={search}
         setSearch={setSearch}
-      />
+      /> */}
     </div>
   );
 };

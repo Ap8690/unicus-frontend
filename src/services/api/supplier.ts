@@ -1,6 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { BASE_URL } from "../../config";
+import { IAdvance } from "../../models/Advance";
+import { IAppearance } from "../../models/Appearance";
+import { IGeneral } from "../../models/General";
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { getChainSymbol, userInfo } from "../../utils/utils";
 
@@ -164,6 +167,16 @@ export async function createStore(generals){
 
 export async function getStoreApi() {
   return await axios.get(`${BASE_URL}/store`);
+}
+
+export async function saveGenerals(generals:IGeneral){
+  return await axios.post(`${BASE_URL}/general`, generals, axiosConfig);
+}
+export async function saveAdvance(advance: IAdvance) {
+  return await axios.post(`${BASE_URL}/advance`, advance, axiosConfig);
+}
+export async function saveAppearance(appearance: IAppearance) {
+  return await axios.post(`${BASE_URL}/appearance`, appearance, axiosConfig);
 }
 
 export async function getStoreByUser(){

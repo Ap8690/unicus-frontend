@@ -68,8 +68,14 @@
           table-layout: fixed;
           border: none;
           width: 100%;
+          
           border-collapse: collapse;
 
+          tbody{
+            display: block;
+            height: 100vh;
+            overflow: scroll;
+          }
           tbody::before {
             content: "-";
             height: 42px;
@@ -107,11 +113,12 @@
           }
 
           .table-data {
+            
             margin-bottom: 62px;
             border: none !important;
-            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr 1fr 0.8fr;
             grid-column-gap: 20px;
-            align-items: flex-start;
+            align-items: center;
 
             td {
               text-align: center;

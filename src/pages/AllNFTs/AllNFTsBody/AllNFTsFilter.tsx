@@ -39,12 +39,12 @@ const AllNFTsFilter = ({
         activeFilters={activeFilters}
         setActiveFilters={setActiveFilters}
       />
-      <DropDownSearch
+      {/* <DropDownSearch
         heading={"Collections"}
         search={search}
         setSearch={setSearch}
         searchList={collections}
-      />
+      /> */}
     </div>
   );
 };

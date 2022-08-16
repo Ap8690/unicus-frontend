@@ -1,12 +1,41 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { toast } from "react-toastify";
 import Input from "../../../components/Input/Input"
 import { IGeneral } from "../../../models/General";
+import { saveGenerals } from "../../../services/api/supplier";
 import { IOSSwitch } from "./GeneralBasic"
 
 const GeneralContact = (general: IGeneral) => {
   const [contactNumber, setContactNumber] = useState("");
   const [email, setEmail] = useState("");
   const [enableContact, setEnableContact] = useState(true);
+  //@ts-ignore
+  const [generals, setGeneral] = useState<IGeneral>({});
+  
+  useEffect(() => {
+    setGeneral(general);
+  }, [general]);
+
+  const handleChange = (title, e) => {
+    setGeneral({ ...generals, [title]: e });
+  };
+  const handleSave = async () => {
+    try {
+      const res = await saveGenerals(generals);
+      if (res) {
+        toast.success("Saved Changes");
+      } else {
+        throw "Failed";
+      }
+    } catch (err) {
+      console.log("err", err);
+      if (err.response) {
+        toast.error(err.response.data.err);
+      } else {
+        toast.error(err.message);
+      }
+    }
+  };
   return (
     <div className="general-contact">
       <Input
@@ -14,22 +43,22 @@ const GeneralContact = (general: IGeneral) => {
         placeholder="Enter Contact Number"
         state={contactNumber}
         number
-        setState={setContactNumber}
+        setState={(e) => handleChange("phone", e)}
       />
       <Input
         title="Email"
         placeholder="Enter Email"
         state={email}
-        setState={setEmail}
+        setState={(e) => handleChange("contactEmail", e)}
       />
       <Input
-        title="Message"
-        placeholder="Enter Message"
+        title="Address"
+        placeholder="Enter Address"
         state={email}
-        setState={setEmail}
+        setState={(e) => handleChange("address", e)}
         multi
       />
-      <div className="title-tog">Toggle Settings</div>
+      {/* <div className="title-tog">Toggle Settings</div>
       <div className="switch-box">
         <IOSSwitch
           defaultChecked
@@ -40,8 +69,8 @@ const GeneralContact = (general: IGeneral) => {
           <span className="large-text">Contact Us</span>
           <span>Turn this on/off to show/hide the contact us section</span>
         </div>
-      </div>
-      <button className="btn">Save Changes</button>
+      </div> */}
+      <button className="btn" onClick={handleSave}>Save Changes</button>
     </div>
   );
 };

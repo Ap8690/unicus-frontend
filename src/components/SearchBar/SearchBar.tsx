@@ -10,7 +10,7 @@ const SearchBar = ({search, setSearch}) => {
       <button className='search-icon'>
         <img src={searchIcon} alt="search-btn" />
       </button>
-      <input type="text" value={search} onChange={handleChange} placeholder='Search items and collections' />
+      <input type="text" value={search} onChange={handleChange} placeholder='Search items' />
     </div>
   </div>
 }
