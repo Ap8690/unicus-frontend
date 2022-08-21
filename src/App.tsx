@@ -55,6 +55,7 @@ import { getStoreApi, getStoreByUser } from "./services/api/supplier";
 import { ACCESS_TOKEN, defaultPrivacyText } from "./utils/constants";
 import { isMainStore } from "./utils/utils";
 import PrivacyPolicy from "./pages/UsefulLinks/PrivacyPolicy";
+import EditProfile from "./pages/EditProfile/EditProfile";
 // import NFTById from "./components/NFTById/NFTById";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -193,7 +194,7 @@ useEffect(() => {
                 path="/reset-password/:token/:email"
                 element={<Explore />}
               />
-              {isMainStore() && Object.keys(store).length>0 && (
+              {isMainStore() && Object.keys(store).length > 0 && (
                 <>
                   <Route path="/store/settings" element={<StoreSettings />} />
                   <Route
@@ -216,8 +217,7 @@ useEffect(() => {
                       <PrivacyPolicy
                         title={"Terms and Conditions"}
                         text={
-                          store.advance.terms &&
-                          store.advance.terms != ""
+                          store.advance.terms && store.advance.terms != ""
                             ? store.advance.terms
                             : defaultPrivacyText
                         }
@@ -230,8 +230,7 @@ useEffect(() => {
                       <PrivacyPolicy
                         title={"About Us"}
                         text={
-                          store.advance.aboutUs &&
-                          store.advance.aboutUs != ""
+                          store.advance.aboutUs && store.advance.aboutUs != ""
                             ? store.advance.aboutUs
                             : defaultPrivacyText
                         }
@@ -244,8 +243,7 @@ useEffect(() => {
                       <PrivacyPolicy
                         title={"Creators"}
                         text={
-                          store.advance.creators &&
-                          store.advance.creators != ""
+                          store.advance.creators && store.advance.creators != ""
                             ? store.advance.creators
                             : defaultPrivacyText
                         }
@@ -264,6 +262,7 @@ useEffect(() => {
                 element={<ViewNft />}
               />
               <Route path="/auctions" element={<Auctions />} />
+              <Route path="/edit-profile" element={<EditProfile />} />
               <Route path="/profile/*" element={<Profile />} />
               {/* <Route
                   path="/edit-profile"

@@ -18,9 +18,12 @@ import { useRef, useState } from "react";
 import { BASE_URL } from "../../../config";
 import { userInfo } from "../../../utils/utils";
 import { updateProfileBg, updateProfilePic } from "../../../services/api/supplier";
+import { useNavigate } from "react-router-dom";
 
 const User = (): ReactJSXElement => {
 const user = userInfo;
+const navigate = useNavigate()
+
 const [userImage, setUserImage] = useState<any>(
   user.profileUrl ? user.profileUrl : userImg
 );
@@ -116,6 +119,9 @@ const [backgroundImage, setBackgroundImage] = useState<any>(
       console.log("Cloudinary User Image Upload Error ->", err);
     }
   };
+  const handleClick=()=>{
+    navigate("/edit-profile")
+  }
   return (
     <div className="user">
       <div
@@ -160,7 +166,7 @@ const [backgroundImage, setBackgroundImage] = useState<any>(
             </a>}
           </div>
         </div>
-        <button className="edit-profile">Edit Profile</button>
+        <button className="edit-profile" onClick={handleClick}>Edit Profile</button>
       </div>
     </div>
   );

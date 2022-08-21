@@ -218,6 +218,16 @@ export async function resetPasswordApi(email: string, password: string, token:st
   });
 }
 
+export async function changePasswordApi(
+  email: string,
+  password: string,
+) {
+  return await axios.post(`${BASE_URL}/auth/change-password`, {
+    email: email,
+    password: password,
+  });
+}
+
 export async function addWalletAdd(userWallet: string) {
   return await axios.get(
     `${BASE_URL}/users/addWallet/${userWallet}`,
@@ -225,6 +235,32 @@ export async function addWalletAdd(userWallet: string) {
   );
 }
 
+export async function updateProfile(username, bio) {
+  return await axios.post(
+    `${BASE_URL}/users/update/updateUser`,
+    {
+      // displayname: updateUserProfile.displayName,
+      username: username,
+      bio: bio,
+    },
+    axiosConfig
+  );
+}
+
+export async function updateProfileSocial(instagram, facebook, twitter, discord, linkedIn) {
+  return await axios.post(
+    `${BASE_URL}/users/update/updateUser`,
+    {
+      instagram: instagram,
+      facebook: facebook,
+
+      twitter: twitter,
+      discord: discord,
+      linkedIn: linkedIn,
+    },
+    axiosConfig
+  );
+}
 export async function updateProfilePic(url:string) {
   return await axios.post(
     `${BASE_URL}/users/update/profilePicture`,

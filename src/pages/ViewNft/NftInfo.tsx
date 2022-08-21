@@ -53,7 +53,11 @@ import Input from "../../components/Input/Input";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { useAnchorWallet, useConnection, useWallet } from "@solana/wallet-adapter-react";
+import {
+  useAnchorWallet,
+  useConnection,
+  useWallet,
+} from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import {
   Metaplex,
@@ -67,7 +71,8 @@ import {
   MINT_SIZE,
   createAssociatedTokenAccountInstruction,
   TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+} from "@solana/spl-token";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { Program } from "@project-serum/anchor";
 import * as anchor from "@project-serum/anchor";
 import SolMintNftIdl from "../../utils/sol_mint_nft.json";
@@ -105,42 +110,39 @@ const NftInfo = ({
     "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
   );
 
- 
+  useEffect(() => {
+    if (anWallet) {
+      provider = new anchor.AnchorProvider(connection, anWallet, {
+        commitment: "processed",
+      });
+      anchor.setProvider(provider);
 
-   useEffect(() => {
-     if(anWallet){
-     provider = new anchor.AnchorProvider(connection, anWallet, {
-       commitment: "processed",
-     });
-     anchor.setProvider(provider);
+      program = new Program(
+        //@ts-ignore
+        SolMintNftIdl,
+        SOL_MINT_NFT_PROGRAM_ID,
+        provider
+      );
+    }
+  }, [anWallet]);
 
-     program = new Program(
-      //@ts-ignore
-       SolMintNftIdl,
-       SOL_MINT_NFT_PROGRAM_ID,
-       provider
-     );
-     }
-
-   }, [anWallet])
-   
   const [button, setButton] = useState("Buy Now");
   const navigate = useNavigate();
 
   const createSaleSol = async (key, assetPrice) => {
     //use metadata to feth the mintkey like this...
     //const mintKey = new anchor.web3.PublicKey(metatdata.mint.toArray("le"));
-     provider = new anchor.AnchorProvider(connection, anWallet, {
-       commitment: "processed",
-     });
-     anchor.setProvider(provider);
+    provider = new anchor.AnchorProvider(connection, anWallet, {
+      commitment: "processed",
+    });
+    anchor.setProvider(provider);
 
-     program = new Program(
-       //@ts-ignore
-       SolMintNftIdl,
-       SOL_MINT_NFT_PROGRAM_ID,
-       provider
-     );
+    program = new Program(
+      //@ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
 
     const mintKey = new anchor.web3.PublicKey(key);
 
@@ -191,8 +193,7 @@ const NftInfo = ({
       });
 
       let order = await program.account.order.fetch(orderAccount);
-            console.log("Create Order Success!", order);
-
+      console.log("Create Order Success!", order);
 
       return order.mintKey;
     } catch (err) {
@@ -201,9 +202,23 @@ const NftInfo = ({
     }
   };
 
-  const createAuctionSol = async (mintKey, assetPrice, startTime, endTime) => {
+  const createAuctionSol = async (key, assetPrice, startTime, endTime) => {
     //use metadata to feth the mintkey like this...
     //const mintKey = new anchor.web3.PublicKey(metatdata.mint.toArray("le"));
+
+    provider = new anchor.AnchorProvider(connection, anWallet, {
+      commitment: "processed",
+    });
+    anchor.setProvider(provider);
+
+    program = new Program(
+      //@ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
+
+    const mintKey = new anchor.web3.PublicKey(key);
 
     const associatedTokenAddress = await getAssociatedTokenAddress(
       mintKey,
@@ -253,16 +268,29 @@ const NftInfo = ({
       });
 
       let auction = await program.account.auction.fetch(auctionAccount);
-            console.log("Create Auction Success!", auction);
+      console.log("Create Auction Success!", auction);
 
-      return auction;
+      return auction.mintKey;
     } catch (err) {
       console.log(err);
       return null;
     }
   };
 
-  const sellOrderSol = async (mintKey) => {
+  const sellOrderSol = async (key) => {
+    provider = new anchor.AnchorProvider(connection, anWallet, {
+      commitment: "processed",
+    });
+    anchor.setProvider(provider);
+
+    program = new Program(
+      //@ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
+
+    const mintKey = new anchor.web3.PublicKey(key);
 
     const [orderAccount] = await anchor.web3.PublicKey.findProgramAddress(
       [Buffer.from("order"), mintKey.toBytes()],
@@ -298,6 +326,7 @@ const NftInfo = ({
         lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
         signature: signature,
       });
+      
     } catch (err) {
       console.log(err);
       return false;
@@ -327,14 +356,30 @@ const NftInfo = ({
       });
 
       console.log("Fill Order Success!");
-      return true;
+      let order = await program.account.order.fetch(orderAccount);
+      console.log("Create Order Success!", order);
+
+      return order.mintKey;
     } catch (err) {
       console.log(err);
       return false;
     }
   };
 
-  const removeSaleSol = async (mintKey) => {
+  const removeSaleSol = async (key) => {
+    provider = new anchor.AnchorProvider(connection, anWallet, {
+      commitment: "processed",
+    });
+    anchor.setProvider(provider);
+
+    program = new Program(
+      //@ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
+
+    const mintKey = new anchor.web3.PublicKey(key);
 
     const [orderAccount] = await anchor.web3.PublicKey.findProgramAddress(
       [Buffer.from("order"), mintKey.toBytes()],
@@ -377,7 +422,271 @@ const NftInfo = ({
       });
 
       console.log("Cancel Order Success!");
-      return true;
+      let order = await program.account.order.fetch(orderAccount);
+
+      return order.mintKey;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  const bidAuctionSol = async (key, assetPrice) => {
+    provider = new anchor.AnchorProvider(connection, anWallet, {
+      commitment: "processed",
+    });
+    anchor.setProvider(provider);
+
+    program = new Program(
+      //@ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
+
+    const mintKey = new anchor.web3.PublicKey(key);
+
+    let price = assetPrice * LAMPORTS_PER_SOL;
+
+    const [auctionAccount] = await anchor.web3.PublicKey.findProgramAddress(
+      [Buffer.from("auction"), mintKey.toBytes()],
+      program.programId
+    );
+
+    let auction = await program.account.auction.fetch(auctionAccount);
+
+    let bidderTokenAccount = await getAssociatedTokenAddress(
+      mintKey,
+      anWallet.publicKey
+    );
+
+    try {
+      const tx = new anchor.web3.Transaction().add(
+        createAssociatedTokenAccountInstruction(
+          anWallet.publicKey,
+          bidderTokenAccount,
+          anWallet.publicKey,
+          mintKey
+        )
+      );
+
+      const signature = await sendTransaction(tx, connection);
+      const latestBlockhash = await connection.getLatestBlockhash();
+
+      await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+      
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+
+    try {
+      const tx = program.transaction.bid(new anchor.BN(price), {
+        accounts: {
+          auction: auctionAccount,
+          mintKey: mintKey,
+          creator: auction.creator,
+          bidder: anWallet.publicKey,
+          refundReceiver: auction.refundReceiver,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        },
+      });
+
+      const signature = await sendTransaction(tx, connection);
+      const latestBlockhash = await connection.getLatestBlockhash();
+
+      await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+      console.log("Create Auction Success!", auction);
+
+      return auction.mintKey;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  //auction resolve
+
+  const auctionResolveSol = async (key) => {
+    provider = new anchor.AnchorProvider(connection, anWallet, {
+      commitment: "processed",
+    });
+    anchor.setProvider(provider);
+
+    program = new Program(
+      //@ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
+
+    const mintKey = new anchor.web3.PublicKey(key);
+    const [auctionAccount] = await anchor.web3.PublicKey.findProgramAddress(
+      [Buffer.from("auction"), mintKey.toBytes()],
+      program.programId
+    );
+
+    let auction = await program.account.auction.fetch(auctionAccount);
+
+    const auctionTokenAccount = await getAssociatedTokenAddress(
+      mintKey,
+      auctionAccount,
+      true
+    );
+
+    let refundReceiverTokenAccount = await getAssociatedTokenAddress(
+      mintKey,
+      auction.refundReceiver
+    );
+
+    try {
+      const tx = new anchor.web3.Transaction().add(
+        createAssociatedTokenAccountInstruction(
+          auction.refundReceiver,
+          refundReceiverTokenAccount,
+          auction.refundReceiver,
+          mintKey
+        )
+      );
+
+      const signature = await sendTransaction(tx, connection);
+      const latestBlockhash = await connection.getLatestBlockhash();
+
+      await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+
+    try {
+      const tx = program.transaction.auctionResolve({
+        accounts: {
+          auction: auctionAccount,
+          auctionTokenAccount: auctionTokenAccount,
+          mintKey: mintKey,
+          creator: auction.creator,
+          refundReceiver: auction.refundReceiver,
+          refundReceiverTokenAccount: refundReceiverTokenAccount,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        },
+      });
+
+      const signature = await sendTransaction(tx, connection);
+      const latestBlockhash = await connection.getLatestBlockhash();
+
+      await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+      console.log("Create Auction Success!", auction);
+
+      return auction.mintKey;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  const cancelAuctionSol = async (key) => {
+    provider = new anchor.AnchorProvider(connection, anWallet, {
+      commitment: "processed",
+    });
+    anchor.setProvider(provider);
+
+    program = new Program(
+      //@ts-ignore
+      SolMintNftIdl,
+      SOL_MINT_NFT_PROGRAM_ID,
+      provider
+    );
+
+    const mintKey = new anchor.web3.PublicKey(key);
+    const [auctionAccount] = await anchor.web3.PublicKey.findProgramAddress(
+      [Buffer.from("auction"), mintKey.toBytes()],
+      program.programId
+    );
+
+    let auction = await program.account.auction.fetch(auctionAccount);
+
+    const auctionTokenAccount = await getAssociatedTokenAddress(
+      mintKey,
+      auctionAccount,
+      true
+    );
+
+    let creatorTokenAccount = await getAssociatedTokenAddress(
+      mintKey,
+      anWallet.publicKey
+    );
+
+    try {
+      const tx = new anchor.web3.Transaction().add(
+        createAssociatedTokenAccountInstruction(
+          anWallet.publicKey,
+          creatorTokenAccount,
+          anWallet.publicKey,
+          mintKey
+        )
+      );
+
+      const signature = await sendTransaction(tx, connection);
+      const latestBlockhash = await connection.getLatestBlockhash();
+
+      await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+
+    try {
+      const tx = program.transaction.cancelAuction({
+        accounts: {
+          auction: auctionAccount,
+          auctionTokenAccount: auctionTokenAccount,
+          mintKey: mintKey,
+          creator: anWallet.publicKey,
+          creatorTokenAccount: creatorTokenAccount,
+          refundReceiver: auction.refundReceiver,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        },
+      });
+
+      const signature = await sendTransaction(tx, connection);
+      const latestBlockhash = await connection.getLatestBlockhash();
+
+      await connection.confirmTransaction({
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        signature: signature,
+      });
+
+      console.log("cancel auction Success!");
+      return auction.mintKey;
     } catch (err) {
       console.log(err);
       return false;
@@ -422,12 +731,11 @@ const NftInfo = ({
         await sendStorageDeposit();
 
         return;
-      } else if (nft.chain == solonaChain){
-        const aucMintKey = await createSaleSol(nft.tokenId,startBid )
+      } else if (nft.chain == solonaChain) {
+        const aucMintKey = await createSaleSol(nft.tokenId, startBid);
         obj.auctionId = aucMintKey;
-        obj.auctionHash = aucMintKey
-      }
-        else {
+        obj.auctionHash = aucMintKey;
+      } else {
         const listContract = new web3.eth.Contract(
           //@ts-ignore
           getCreateNftABI(nft.chain),
@@ -474,7 +782,7 @@ const NftInfo = ({
       }
       await createSellApi(obj).then((res) => {
         toast.success("Sale created");
-        window.location.reload()
+        window.location.reload();
         console.log(res.data);
       });
     } catch (e) {
@@ -519,6 +827,17 @@ const NftInfo = ({
         await sendStorageDeposit();
 
         return;
+      } else if (nft.chain == solonaChain) {
+        const aucMintKey = await createAuctionSol(
+          nft.tokenId,
+          startBid,
+          Math.ceil(new Date().getTime() / 1000),
+          Math.ceil(
+            new Date().setSeconds(new Date().getSeconds() + obj.duration) / 1000
+          )
+        );
+        obj.auctionId = aucMintKey;
+        obj.auctionHash = aucMintKey;
       } else {
         await getCreateNftContract(nft.chain)
           .methods.approve(getAuctionContractAddress(nft.chain), nft.tokenId)
@@ -576,6 +895,9 @@ const NftInfo = ({
           Number(auction.startBid) / getDecimal(nft.chain)
         );
         return;
+      } else if (nft.chain == solonaChain) {
+        const aucMintKey = await sellOrderSol(auction.auctionId);
+        transactionHash = aucMintKey
       } else {
         const res = await getMarketPlace(
           auction.chain,
@@ -587,9 +909,9 @@ const NftInfo = ({
             value: auction.startBid,
           });
         console.log(res);
+        transactionHash = res.transactionHash;
       }
       toast("Buy Successful");
-
       if (transactionHash) {
         toast("Updating asset info...");
         await buyItemApi(
@@ -625,6 +947,15 @@ const NftInfo = ({
         localStorage.setItem("nearBid", bid.toString());
         offerBid(nft.tokenId, Number(bid));
         return;
+      } else if (nft.chain == solonaChain) {
+        const aucMintKey = await bidAuctionSol(auction.auctionId, bid);
+         await placeBidApi(
+           auction,
+           aucMintKey,
+           (Number(bid) * getDecimal(nft.chain)).toFixed(0),
+           creator.name,
+           creator.email
+         );
       } else {
         const res = await getAuctionContract(auction.chain, nft.contractType)
           .methods.placeBid(auction.auctionId)
@@ -671,6 +1002,8 @@ const NftInfo = ({
       if (nft.chain.toString() == nearChain) {
         removeSale(nft.tokenId);
         return;
+      } else if (nft.chain == solonaChain) {
+        const aucMintKey = await removeSaleSol(auction.auctionId);
       } else {
         const res = await getMarketPlace(
           auction.chain,
@@ -714,6 +1047,8 @@ const NftInfo = ({
 
       if (auction.chain == nearChain) {
         processPurchase(nft.tokenId);
+      } else if (nft.chain == solonaChain) {
+        const aucMintKey = await auctionResolveSol(auction.auctionId);
       } else {
         const res = await getAuctionContract(auction.chain, nft.contractType)
           .methods.endAuction(auction.auctionId)
@@ -727,7 +1062,7 @@ const NftInfo = ({
           );
           setNftLoading(false);
 
-                navigate("/profile/created");
+          navigate("/profile/created");
         }
       }
     } catch (e) {
@@ -752,6 +1087,8 @@ const NftInfo = ({
 
       if (auction.chain == nearChain) {
         removeAuction(nft.tokenId);
+      } else if (nft.chain == solonaChain) {
+        const aucMintKey = await cancelAuctionSol(auction.auctionId);
       } else {
         const res = await getAuctionContract(auction.chain, nft.contractType)
           .methods.cancelAuction(auction.auctionId)
@@ -768,7 +1105,7 @@ const NftInfo = ({
 
           setNftLoading(false);
 
-                navigate("/profile/created");
+          navigate("/profile/created");
         }
       }
     } catch (e) {
@@ -850,135 +1187,135 @@ const NftInfo = ({
   };
 
   useEffect(() => {
-    (async()=>{
-    const urlParams = new URLSearchParams(window.location.search);
-    const txhash = urlParams.get("transactionHashes");
-    const errorCode = urlParams.get("errorCode");
-    const errMsg = urlParams.get("errorMessage");
+    (async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const txhash = urlParams.get("transactionHashes");
+      const errorCode = urlParams.get("errorCode");
+      const errMsg = urlParams.get("errorMessage");
 
-    console.log("sear", txhash, errorCode, errMsg);
+      console.log("sear", txhash, errorCode, errMsg);
 
-    if (errorCode) {
-      toast.error(errorCode);
-    } else if (txhash != null) {
-      const address = await connectNear();
-      axios
-        .post("https://rpc.testnet.near.org", {
-          jsonrpc: "2.0",
-          id: "dontcare",
-          method: "tx",
-          params: [txhash, address],
-        })
-        .then((res: any) => {
-          console.log("sear 1", res);
+      if (errorCode) {
+        toast.error(errorCode);
+      } else if (txhash != null) {
+        const address = await connectNear();
+        axios
+          .post("https://rpc.testnet.near.org", {
+            jsonrpc: "2.0",
+            id: "dontcare",
+            method: "tx",
+            params: [txhash, address],
+          })
+          .then((res: any) => {
+            console.log("sear 1", res);
 
-          if (
-            res.data.result.transaction.actions[0].FunctionCall.method_name ==
-            "storage_deposit"
-          ) {
-            const action = localStorage.getItem("nearAction");
-            if (action == "Auction") {
-              const obj = JSON.parse(localStorage.getItem("nearAuctionObj"));
-              approveNFTForAuction(
-                nft.tokenId,
-                obj.startBid / getDecimal(obj.chain),
-                Math.ceil(new Date().getTime() / 1000),
-                Math.ceil(
-                  new Date().setSeconds(
-                    new Date().getSeconds() + obj.duration
-                  ) / 1000
-                )
-              );
-            } else if (action == "Sale") {
+            if (
+              res.data.result.transaction.actions[0].FunctionCall.method_name ==
+              "storage_deposit"
+            ) {
+              const action = localStorage.getItem("nearAction");
+              if (action == "Auction") {
+                const obj = JSON.parse(localStorage.getItem("nearAuctionObj"));
+                approveNFTForAuction(
+                  nft.tokenId,
+                  obj.startBid / getDecimal(obj.chain),
+                  Math.ceil(new Date().getTime() / 1000),
+                  Math.ceil(
+                    new Date().setSeconds(
+                      new Date().getSeconds() + obj.duration
+                    ) / 1000
+                  )
+                );
+              } else if (action == "Sale") {
+                const obj = JSON.parse(localStorage.getItem("nearSellObj"));
+
+                approveNFTForSale(
+                  nft.tokenId,
+                  obj.startBid / getDecimal(obj.chain)
+                );
+              }
+            } else if (
+              res.data.result.transaction.actions[0].FunctionCall.method_name ==
+              "nft_approve"
+            ) {
               const obj = JSON.parse(localStorage.getItem("nearSellObj"));
-
-              approveNFTForSale(
-                nft.tokenId,
-                obj.startBid / getDecimal(obj.chain)
+              obj.auctionHash = txhash;
+              createSellApi(obj).then((res) => {
+                toast.success("Sale created");
+                localStorage.removeItem("nearSellObj");
+                navigate("/explore");
+                console.log(res.data);
+              });
+            } else if (
+              res.data.result.transaction.actions[0].FunctionCall.method_name ==
+              "approve_nft_auction"
+            ) {
+              const obj = JSON.parse(localStorage.getItem("nearAuctionObj"));
+              obj.auctionHash = txhash;
+              createAuctionApi(obj).then((res) => {
+                toast.success("Auction created");
+                localStorage.removeItem("nearAuctionObj");
+                navigate("/explore");
+                console.log(res.data);
+              });
+            } else if (
+              res.data.result.transaction.actions[0].FunctionCall.method_name ==
+              "offer"
+            ) {
+              buyItemApi(auction, txhash, creator.name, creator.id).then(
+                (res) => {
+                  toast.success("Buy successful");
+                  navigate("/profile");
+                  console.log(res.data);
+                }
               );
-            }
-          } else if (
-            res.data.result.transaction.actions[0].FunctionCall.method_name ==
-            "nft_approve"
-          ) {
-            const obj = JSON.parse(localStorage.getItem("nearSellObj"));
-            obj.auctionHash = txhash;
-            createSellApi(obj).then((res) => {
-              toast.success("Sale created");
-              localStorage.removeItem("nearSellObj");
-              navigate("/explore");
-              console.log(res.data);
-            });
-          } else if (
-            res.data.result.transaction.actions[0].FunctionCall.method_name ==
-            "approve_nft_auction"
-          ) {
-            const obj = JSON.parse(localStorage.getItem("nearAuctionObj"));
-            obj.auctionHash = txhash;
-            createAuctionApi(obj).then((res) => {
-              toast.success("Auction created");
-              localStorage.removeItem("nearAuctionObj");
-              navigate("/explore");
-              console.log(res.data);
-            });
-          } else if (
-            res.data.result.transaction.actions[0].FunctionCall.method_name ==
-            "offer"
-          ) {
-            buyItemApi(auction, txhash, creator.name, creator.id).then(
-              (res) => {
+            } else if (
+              res.data.result.transaction.actions[0].FunctionCall.method_name ==
+              "remove_sale"
+            ) {
+              endSaleApi(auction, txhash, creator.name).then((res) => {
+                toast.success("Sale Ended");
+                navigate("/profile");
+                console.log(res.data);
+              });
+            } else if (
+              res.data.result.transaction.actions[0].FunctionCall.method_name ==
+              "offer_bid"
+            ) {
+              const obj = JSON.parse(localStorage.getItem("nearSellObj"));
+              placeBidApi(
+                auction,
+                txhash,
+                obj.bid * getDecimal(obj.chan),
+                creator.name,
+                creator.email
+              ).then((res) => {
                 toast.success("Buy successful");
                 navigate("/profile");
                 console.log(res.data);
-              }
-            );
-          } else if (
-            res.data.result.transaction.actions[0].FunctionCall.method_name ==
-            "remove_sale"
-          ) {
-            endSaleApi(auction, txhash, creator.name).then((res) => {
-              toast.success("Sale Ended");
-              navigate("/profile");
-              console.log(res.data);
-            });
-          } else if (
-            res.data.result.transaction.actions[0].FunctionCall.method_name ==
-            "offer_bid"
-          ) {
-            const obj = JSON.parse(localStorage.getItem("nearSellObj"));
-            placeBidApi(
-              auction,
-              txhash,
-              obj.bid * getDecimal(obj.chan),
-              creator.name,
-              creator.email
-            ).then((res) => {
-              toast.success("Buy successful");
-              navigate("/profile");
-              console.log(res.data);
-            });
-          } else if (
-            res.data.result.transaction.actions[0].FunctionCall.method_name ==
-            "remove_auction"
-          ) {
-            cancelAuctionApi(auction, txhash, creator.name).then((res) => {
-              toast.success("Auction Cancelled");
-              navigate("/profile");
-              console.log(res.data);
-            });
-          } else if (
-            res.data.result.transaction.actions[0].FunctionCall.method_name ==
-            "process_auction_purchase"
-          ) {
-            endSaleApi(auction, txhash, creator.name).then((res) => {
-              toast.success("Auction Ended");
-              navigate("/profile");
-              console.log(res.data);
-            });
-          }
-        });
-    }})()
-    
+              });
+            } else if (
+              res.data.result.transaction.actions[0].FunctionCall.method_name ==
+              "remove_auction"
+            ) {
+              cancelAuctionApi(auction, txhash, creator.name).then((res) => {
+                toast.success("Auction Cancelled");
+                navigate("/profile");
+                console.log(res.data);
+              });
+            } else if (
+              res.data.result.transaction.actions[0].FunctionCall.method_name ==
+              "process_auction_purchase"
+            ) {
+              endSaleApi(auction, txhash, creator.name).then((res) => {
+                toast.success("Auction Ended");
+                navigate("/profile");
+                console.log(res.data);
+              });
+            }
+          });
+      }
+    })();
   }, []);
 
   return (
