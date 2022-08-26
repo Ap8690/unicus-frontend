@@ -3,7 +3,7 @@ const TextInput = ({title, placeholder, multi, date, time, password, state, setS
       setState(e.target.value)
     }
     return <div className='flex flex-col w-full'>
-        <span className="font-semibold mb-1 text-[#353840]">{title}{required && <span className="text-[#dc4437]"> *</span>}</span>
+        <span className="font-semibold mb-1 text-[#a7a9fa]">{title}{required && <span className="text-[#dc4437]"> *</span>}</span>
         {time? <input type="time" onChange={handleChange} value={state} className='bg-white border-1 border-LightColor rounded-lg p-3 ring-0 focus:ring-0 focus:border-LightColor' /> :
           date ? <input type="date" onChange={handleChange} value={state} placeholder={placeholder} className='bg-white border-1 border-LightColor rounded-lg p-3 ring-0 focus:ring-0 focus:border-LightColor' /> : 
           multi ? <textarea rows='6' onChange={handleChange} value={state} placeholder={placeholder} className='bg-white border-1 border-LightColor rounded-lg p-3 ring-0 focus:ring-0 focus:border-LightColor' /> :

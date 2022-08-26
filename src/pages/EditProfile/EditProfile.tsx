@@ -3,16 +3,18 @@ import twitterImg from "../../assets/svgs/twitter.svg";
 import facebookImg from "../../assets/svgs/facebook.svg";
 import instagramImg from "../../assets/svgs/instagramFooter.svg";
 import { useEffect, useState } from "react";
-import TextInput from "../../components/TextInput/TextInput";
+// import Input from "../../components/Input/Input";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import WalletAdd from "../../components/Wallet/WalletAdd";
 import axios from "axios";
+import './editprofile.scss'
 
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../config";
 import { changePasswordApi, updateProfileSocial } from "../../services/api/supplier";
+import Input from "../../components/Input/Input";
 
 const EditProfile = (props) => {
   const [active, setActive] = useState("general");
@@ -41,8 +43,8 @@ const EditProfile = (props) => {
   }, []);
 
   return (
-    <div className="mt-[70px] px-24 pb-12 screen7:pt-0 screen18:px-12 screen3:px-8">
-      <div className="bg-white w-full pt-12">
+    <div className="mt-[70px] px-24 pb-12 screen7:pt-0 screen18:px-12 screen3:px-8 w-full">
+      <div className=" w-full pt-12">
         <div className="flex gap-8 screen11:flex-col">
           <div className="relative felx justify-center items-center screen11:flex-col screen11:ml-0">
             <div className="w-32 h-32 relative rounded-full overflow-hidden m-auto">
@@ -90,9 +92,9 @@ const EditProfile = (props) => {
               </div>
             </div>
             <div className="my-4 mr-16 screen11:mr-0 d-none">
-              <button className="bg-GreyButton p-2 text-sm font-semibold rounded-md mr-4">
+              {/* <button className="bg-GreyButton p-2 text-sm font-semibold rounded-md mr-4">
                 Edit Profile
-              </button>
+              </button> */}
               <button
                 onClick={handleClick}
                 className="bg-GreyButton p-2 text-sm font-semibold rounded-md d-none"
@@ -113,7 +115,7 @@ const EditProfile = (props) => {
                     onClick={() => setActive("general")}
                     className={`font-semibold cursor-pointer ${
                       active === "general"
-                        ? "text-black underline"
+                        ? "text-[#7460ed] underline"
                         : "text-DarkColor"
                     }`}
                   >
@@ -125,7 +127,7 @@ const EditProfile = (props) => {
                     onClick={() => setActive("editProfile")}
                     className={`font-semibold cursor-pointer ${
                       active === "editProfile"
-                        ? "text-black underline"
+                        ? "text-[#7460ed] underline"
                         : "text-DarkColor"
                     }`}
                   >
@@ -137,7 +139,7 @@ const EditProfile = (props) => {
                     onClick={() => setActive("password")}
                     className={`font-semibold cursor-pointer ${
                       active === "password"
-                        ? "text-black underline"
+                        ? "text-[#7460ed] underline"
                         : "text-DarkColor"
                     }`}
                   >
@@ -149,7 +151,7 @@ const EditProfile = (props) => {
                     onClick={() => setActive("social")}
                     className={`font-semibold cursor-pointer ${
                       active === "social"
-                        ? "text-black underline"
+                        ? "text-[#7460ed] underline"
                         : "text-DarkColor"
                     }`}
                   >
@@ -161,7 +163,7 @@ const EditProfile = (props) => {
                     onClick={() => setActive("walletAddress")}
                     className={`font-semibold cursor-pointer ${
                       active === "walletAddress"
-                        ? "text-black underline"
+                        ? "text-[#7460ed] underline"
                         : "text-DarkColor"
                     }`}
                   >
@@ -178,7 +180,7 @@ const EditProfile = (props) => {
           <span
             onClick={() => setActive("general")}
             className={`font-semibold cursor-pointer ${
-              active === "general" ? "text-black underline" : "text-DarkColor"
+              active === "general" ? "text-[#7460ed] underline" : "text-DarkColor"
             }`}
           >
             General
@@ -187,7 +189,7 @@ const EditProfile = (props) => {
             onClick={() => setActive("editProfile")}
             className={`font-semibold cursor-pointer ${
               active === "editProfile"
-                ? "text-black underline"
+                ? "text-[#7460ed] underline"
                 : "text-DarkColor"
             }`}
           >
@@ -196,7 +198,7 @@ const EditProfile = (props) => {
           <span
             onClick={() => setActive("password")}
             className={`font-semibold cursor-pointer ${
-              active === "password" ? "text-black underline" : "text-DarkColor"
+              active === "password" ? "text-[#7460ed] underline" : "text-DarkColor"
             }`}
           >
             Password
@@ -204,7 +206,7 @@ const EditProfile = (props) => {
           <span
             onClick={() => setActive("social")}
             className={`font-semibold cursor-pointer ${
-              active === "social" ? "text-black underline" : "text-DarkColor"
+              active === "social" ? "text-[#7460ed] underline" : "text-DarkColor"
             }`}
           >
             Add Social Links
@@ -213,7 +215,7 @@ const EditProfile = (props) => {
             onClick={() => setActive("walletAddress")}
             className={`font-semibold cursor-pointer ${
               active === "walletAddress"
-                ? "text-black underline"
+                ? "text-[#7460ed] underline"
                 : "text-DarkColor"
             }`}
           >
@@ -260,18 +262,18 @@ const GeneralSettings = (isLogin, resUser) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <TextInput
+      <Input
         title="Username"
         placeholder="Enter your name"
         state={username}
         setState={setUserName} multi={undefined} date={undefined} time={undefined} password={undefined} required={undefined} disabled={undefined}      />
-      <TextInput
+      <Input
         title="Email"
         placeholder="Enter your Email"
         state={email}
         setState={setEmail}
         disabled={true} multi={undefined} date={undefined} time={undefined} password={undefined} required={undefined}      />
-      <TextInput
+      <Input
         title="Bio"
         placeholder="Enter your Bio"
         multi
@@ -281,12 +283,12 @@ const GeneralSettings = (isLogin, resUser) => {
       <div className="flex justify-between">
         <button
           onClick={() => navigate("/dashboard")}
-          className="bg-GreyButton text-blue rounded-md px-3 py-2"
+          className="btn"
         >
           Cancel
         </button>
         <button
-          className="bg-BlueButton text-white rounded-md px-3 py-2"
+          className="btn"
           onClick={updateProfile}
         >
           Save Changes
@@ -314,27 +316,27 @@ const ChangePassword = (isLogin) => {
   };
   return (
     <div className="flex flex-col gap-4">
-      <TextInput
+      <Input
         title="Current Password"
         placeholder="Enter current password"
         state={oldPass}
         setState={setOldPass} multi={undefined} date={undefined} time={undefined} password={undefined} required={undefined} disabled={undefined}      />
-      <TextInput
+      <Input
         title="New Password"
         placeholder="Enter new password"
         state={newPass}
         setState={setNewPass} multi={undefined} date={undefined} time={undefined} password={undefined} required={undefined} disabled={undefined}      />
-      <TextInput
+      <Input
         title="Confirm Password"
         placeholder="Confirm new password"
         state={confirmPass}
         setState={setConfirmPass} multi={undefined} date={undefined} time={undefined} password={undefined} required={undefined} disabled={undefined}      />
       <div className="flex justify-between">
-        <button className="bg-GreyButton text-blue rounded-md px-3 py-2">
+        <button className="btn">
           Cancel
         </button>
         <button
-          className="bg-BlueButton text-white rounded-md px-3 py-2"
+          className="btn"
           onClick={changePass}
         >
           Save Changes
@@ -382,7 +384,7 @@ const AddSocials = (isLogin, resUser) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <TextInput
+      <Input
         title="Add Twitter"
         placeholder="Enter Twitter link"
         state={twitter}
@@ -394,7 +396,7 @@ const AddSocials = (isLogin, resUser) => {
         required={undefined}
         disabled={undefined}
       />
-      <TextInput
+      <Input
         title="Add Facebook"
         placeholder="Enter facebook link"
         state={facebook}
@@ -406,7 +408,7 @@ const AddSocials = (isLogin, resUser) => {
         required={undefined}
         disabled={undefined}
       />
-      <TextInput
+      <Input
         title="Add Instagram"
         placeholder="Enter Instagram link"
         state={instagram}
@@ -418,7 +420,7 @@ const AddSocials = (isLogin, resUser) => {
         required={undefined}
         disabled={undefined}
       />
-      <TextInput
+      <Input
         title="Add Discord"
         placeholder="Enter Discord link"
         state={discord}
@@ -430,7 +432,7 @@ const AddSocials = (isLogin, resUser) => {
         required={undefined}
         disabled={undefined}
       />
-      <TextInput
+      <Input
         title="Add LinkedIn"
         placeholder="Enter LinkedIn link"
         state={linkedIn}
@@ -443,11 +445,11 @@ const AddSocials = (isLogin, resUser) => {
         disabled={undefined}
       />
       <div className="flex justify-between">
-        <button className="bg-GreyButton text-blue rounded-md px-3 py-2">
+        <button className="btn">
           Cancel
         </button>
         <button
-          className="bg-BlueButton text-white rounded-md px-3 py-2"
+          className="btn"
           onClick={() => updateProfile()}
         >
           Save Changes

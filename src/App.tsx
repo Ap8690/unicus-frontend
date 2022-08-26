@@ -263,7 +263,8 @@ useEffect(() => {
               />
               <Route path="/auctions" element={<Auctions />} />
               <Route path="/edit-profile" element={<EditProfile />} />
-              <Route path="/profile/*" element={<Profile />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile/:profileState" element={<Profile />} />
               {/* <Route
                   path="/edit-profile"
                   element={<EditProfile />}

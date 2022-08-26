@@ -1,7 +1,7 @@
 // Lib
 import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate, useParams } from "react-router-dom";
 
 // Components
 import User from "./User/User";
@@ -131,6 +131,8 @@ const Profile = (): ReactJSXElement => {
   const [displayListing, setDisplayListing] = useState([]);
   const [displayCreated, setDisplayCreated] = useState([]);
   const navigate = useNavigate();
+  const {profileState} = useParams()
+  console.log(profileState)
 
   const getNfts = async () => {
     try {
@@ -185,12 +187,13 @@ const Profile = (): ReactJSXElement => {
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
       />
-      <Routes>
-        <Route path="/favourited" element={<Favourited items={items} />} />
-        <Route path="/activity" element={<Activity />} />
-        <Route
-          path="/listing"
-          element={
+        {profileState === 'activity' && 
+          <Activity />
+        }
+        {profileState === 'favourited' &&
+          <Favourited items={items} />
+        }
+        {profileState === 'listing' &&
             <Listing
               list={displayListing}
               search={search}
@@ -198,10 +201,7 @@ const Profile = (): ReactJSXElement => {
               columns={listingColumns}
             />
           }
-        />
-        <Route
-          path="/offers"
-          element={
+        {profileState === 'offers' &&
             <Listing
               list={displayListing}
               search={search}
@@ -209,10 +209,7 @@ const Profile = (): ReactJSXElement => {
               columns={offersColumns}
             />
           }
-        />
-        <Route
-          path="/created"
-          element={
+        {(profileState === 'created' || !profileState) &&
             <Listing
               list={displayCreated}
               search={search}
@@ -220,8 +217,7 @@ const Profile = (): ReactJSXElement => {
               columns={createdColumns}
             />
           }
-        />
-      </Routes>
+
     </div>
   );
 };

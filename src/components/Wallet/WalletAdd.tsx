@@ -66,18 +66,18 @@ const WalletAdd = (props) => {
 
             {/* <LoadingModal visibility={modalShow} title={modalTitle} /> */}
             {modalShow && <FullLoading />}
-            <div
+            {/* <div
                 className="wd-header-image d-none"
-            ></div>
+            ></div> */}
             <div className="wallet-address-confirm mt-0">
-                <h2>Your Wallet Address Details</h2>
+                {/* <h2>Your Wallet Address Details</h2> */}
                 <form
                     onSubmit={onUpdateWalletAddress}
                     className="wallet-address-items"
                 >
-                    <h3 className="!text-blue">Confirm your wallet address</h3>
-                    <div className="wallet-address-items-input">
-                        <label htmlFor="walletAdd">
+                    <h3 className="">Confirm your wallet address</h3>
+                    <div className="input-box">
+                        <label htmlFor="walletAdd" className="title">
                             Wallet Address
                             <span className="wallet-asterik">*</span>
                         </label>
@@ -114,7 +114,7 @@ const WalletAdd = (props) => {
                     )}
 
                     {metaWalletConnected && (
-                        <button className="bg-BlueButton rounded-lg text-white px-4 py-3 w-full">
+                        <button className="btn">
                             Add Wallet
                         </button>
                     )}

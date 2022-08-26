@@ -81,12 +81,12 @@ import {
 } from "@metaplex-foundation/js";
 
 const CreateNftSingle = () => {
-  const [name, setName] = useState("Item Name");
+  const [name, setName] = useState("");
   const [extLink, setExtlink] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("art");
   const [price, setPrice] = useState("0.00");
-  const [chain, setChain] = useState(nearChain);
+  const [chain, setChain] = useState(ethChain);
   const [contractType, setContractType] = useState("721");
   const [supply, setSupply] = useState(1);
   const [unlockContent, setUnlockContent] = useState("");
