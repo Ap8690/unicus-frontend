@@ -56,6 +56,9 @@ import { ACCESS_TOKEN, defaultPrivacyText } from "./utils/constants";
 import { isMainStore } from "./utils/utils";
 import PrivacyPolicy from "./pages/UsefulLinks/PrivacyPolicy";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 // import NFTById from "./components/NFTById/NFTById";
 
 require("@solana/wallet-adapter-react-ui/styles.css");

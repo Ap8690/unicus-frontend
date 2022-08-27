@@ -1,8 +1,11 @@
 // Custom Hook
 import useExplorer from "../useExplorer";
 import userImg from "../../../assets/images/Rectangle 8 (1).png";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getNftContractAddress } from "../../../utils/utils";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper';
+
 const Element = ({ element }) => {
   return (
     <div className="market-place-trending-element">
@@ -35,22 +38,38 @@ const Element = ({ element }) => {
   );
 };
 const MarketPlaceTrendingElements = ({ list, currentScroll }) => {
-  const holderRef = useExplorer(currentScroll);
+  // const holderRef = useExplorer(currentScroll);
+  const navigate = useNavigate()
   return (
-    <div className="market-place-trending-elements" ref={holderRef}>
+    <Swiper 
+      modules={[Navigation, Pagination]}  
+      className="market-place-trending-elements"
+      navigation={{
+        prevEl: '#trending-nav-left',
+        nextEl: '#trending-nav-right'
+      }}
+      breakpoints={{
+        320: {
+            slidesPerView: 1,
+        },
+        900: {
+            slidesPerView: 2,
+        },
+        1250: {
+            slidesPerView: 3,
+        },
+    }}
+      // pagination={{ clickable: true }}
+      >
       {list.map((element: any, i: number) => (
-        <Link
-          to={{
-            pathname: `/nft/${element.chain}/${getNftContractAddress(
-              element
-            )}/${element.tokenId}`,
-          }}
+        <SwiperSlide
+          onClick={()=>navigate(`/nft/${element.chain}/${getNftContractAddress(element)}/${element.tokenId}`)}
         >
-          {" "}
+
           <Element element={element} key={`mpte${i}`} />
-        </Link>
+        </SwiperSlide>
       ))}
-    </div>
+    </Swiper>
   );
 };
 

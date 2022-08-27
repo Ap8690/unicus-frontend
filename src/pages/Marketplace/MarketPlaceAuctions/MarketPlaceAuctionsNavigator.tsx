@@ -55,10 +55,10 @@ const MarketPlaceAuctionsNavigator = ({
           ))}
         </div>
         <div className="btn-holder">
-          <button className="left-btn" onClick={goLeft}>
+          <button className="left-btn" id="auction-nav-left" onClick={goLeft}>
             <img src={arrowLeft} alt="Left Arrow" />
           </button>
-          <button className="right-btn" onClick={goRight}>
+          <button className="right-btn" id="auction-nav-right" onClick={goRight}>
             <img src={arrowRight} alt="Right Arrow" />
           </button>
         </div>

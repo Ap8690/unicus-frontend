@@ -7,8 +7,10 @@ import getTime from "./getTime";
 // Images
 import verified from "../../../assets/svgs/verified.svg";
 import useExplorer from "../useExplorer";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getNftContractAddress } from "../../../utils/utils";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper';
 
 const getTimeString = (days, hours, minutes) => {
   return `${days}d ${hours}h ${minutes}m`;
@@ -48,25 +50,44 @@ const Element = ({ element, currentType }) => {
 };
 
 const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType }) => {
-  const holderRef = useExplorer(currentScroll);
+  // const holderRef = useExplorer(currentScroll);
+  const navigate = useNavigate()
   return (
-    <div className="market-place-auctions-elements" ref={holderRef}>
+    <Swiper 
+      modules={[Navigation, Pagination]}  
+      className="market-place-auctions-elements"
+      navigation={{
+        prevEl: '#auction-nav-left',
+        nextEl: '#auction-nav-right'
+      }}
+      breakpoints={{
+        320: {
+            slidesPerView: 1,
+        },
+        900: {
+            slidesPerView: 2,
+        },
+        1250: {
+            slidesPerView: 3,
+        },
+    }}
+      // pagination={{ clickable: true }}
+      >
       {list.map((element: any, i: number) => (
-        <Link
-          to={{
-            pathname: `/nft/${element.chain}/${getNftContractAddress(
+        <SwiperSlide
+          onClick={()=>navigate(`/nft/${element.chain}/${getNftContractAddress(
               element
             )}/${element.tokenId}`,
-          }}
+      )}
         >
           <Element
             element={element}
             key={`mpae${i}${element.tokenId}`}
             currentType={currentType}
           />
-        </Link>
+        </SwiperSlide>
       ))}
-    </div>
+    </Swiper>
   );
 };
 

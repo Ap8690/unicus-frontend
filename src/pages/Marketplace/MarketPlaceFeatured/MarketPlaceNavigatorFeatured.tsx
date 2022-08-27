@@ -29,10 +29,10 @@ const MarketPlaceNavigator = ({
       <div className="header">
         <h2 className="heading">{heading}</h2>
         <div className="btn-holder">
-          <button className="left-btn" onClick={goLeft}>
+          <button className="left-btn" id="featured-nav-left" onClick={goLeft}>
             <img src={arrowLeft} alt="Left Arrow" />
           </button>
-          <button className="right-btn" onClick={goRight}>
+          <button className="right-btn" id="featured-nav-right" onClick={goRight}>
             <img src={arrowRight} alt="Right Arrow" />
           </button>
         </div>

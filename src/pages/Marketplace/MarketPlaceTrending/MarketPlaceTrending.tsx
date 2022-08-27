@@ -53,7 +53,7 @@ const MarketPlaceTrending = ({ list }) => {
         list={trendingNfts}
         currentScroll={currentScroll}
       />: <div style={{textAlign:"center", marginTop:"35px"}}>No Nfts Found</div>}
-      <BottomNavigationMarker currentPage={currentScroll} length={length} />
+      {/* <BottomNavigationMarker currentPage={currentScroll} length={length} /> */}
     </div>
   );
 };

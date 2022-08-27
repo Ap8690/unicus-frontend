@@ -698,14 +698,14 @@ const CreateNftSingle = () => {
                   <Image
                     src={URL.createObjectURL(fileSrc)}
                     alt=""
-                    style={{ width: "90%" }}
+                    // style={{ width: "90%" }}
                   />
                 ) : (
                   fileSrc &&
                   supportedAud.includes(fileSrc.name.split(".").pop()) && (
                     <audio
                       src={URL.createObjectURL(fileSrc)}
-                      style={{ width: "90%" }}
+                      // style={{ width: "90%" }}
                     />
                   )
                 )}
@@ -952,8 +952,8 @@ const CreateNftSingle = () => {
                   <Image
                     src={URL.createObjectURL(fileSrc)}
                     alt=""
-                    style={{ width: "90%" }}
-                  />
+
+                    />
                 ) : (
                   fileSrc &&
                   supportedAud.includes(fileSrc.name.split(".").pop()) && (

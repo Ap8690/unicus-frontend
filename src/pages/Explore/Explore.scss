@@ -18,19 +18,35 @@
   }
   .explore-filters {
     @include fn.flex(center, flex-start);
+    gap: 2rem;
     width: 100%;
-    border-bottom: solid 4px rgba(255, 255, 255, 0.2);
+    // border-bottom: solid 4px rgba(255, 255, 255, 0.2);
     font-size: fonts.$font-size-2xl;
-    padding: 20px 0;
-
+    // padding: 20px 0;
+    overflow-x: scroll;
+    position: relative;
+    overflow-y: hidden;
+    &::after{
+      content: '';
+      // left: 0;
+      right: 0;
+      width: 100%;
+      min-width: 100%;
+      height: 4px;
+      position: sticky;
+      bottom: 0;
+      top: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
     .explore-filter {
       position: relative;
-      padding: 0 30px;
+      line-height: 3;
+      // padding: 0 30px;
     }
     .explore-filter::after {
       width: 100%;
       position: absolute;
-      bottom: -24px;
+      bottom: 0px;
       left: 0;
       content: "";
       height: 4px;
@@ -46,28 +62,31 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-content: center;
-    grid-column-gap: 40px;
-    grid-row-gap: 90px;
-    margin-top: 90px;
+    grid-column-gap: 2rem;
+    grid-row-gap: 4rem;
+    margin-top: 4rem;
     .explore-element {
       display: grid;
+      width: 100%;
       grid-template-columns: repeat(2, 1fr);
       grid-row-gap: 15px;
       align-items: center;
-      font-size: fonts.$font-size-2xl;
+      font-size: fonts.$font-size-xl;
       font-weight: 400;
 
       .explore-element-item-image {
         grid-column: 1/3;
-        padding-bottom: 36px;
+        // padding-bottom: 1rem;
         overflow: hidden;
-        border-radius: 40px;
-        width: 380px;
-        height: 415px;
+        aspect-ratio: 1/1.1;
+        width: 100%;
+        // height: 415px;
         img {
+          border-radius: 20px;
           display: block;
-          width: 380px;
-          height: 415px;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
       }
       .explore-element-price {
@@ -88,6 +107,30 @@
           border-radius: 50%;
         }
       }
+    }
+  }
+}
+
+
+@media screen and (max-width: 992px) {
+  .explore{
+    .explore-filters{
+      .explore-filter{
+        padding-left: 0;
+      }
+      .explore-filter:last-child{
+        padding-right: 0;
+      }
+    }
+    .explore-elements{
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .explore{
+    .explore-elements{
+      grid-template-columns: repeat(1, 1fr);
     }
   }
 }

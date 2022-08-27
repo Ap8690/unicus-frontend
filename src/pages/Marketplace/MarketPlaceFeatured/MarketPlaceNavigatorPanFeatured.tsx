@@ -1,7 +1,9 @@
 // Custom Hook
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getNftContractAddress } from "../../../utils/utils";
 import useExplorer from "../useExplorer";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper';
 
 const Element = ({ element }) => (
   <div className="market-place-featured-element">
@@ -13,21 +15,39 @@ const Element = ({ element }) => (
   </div> 
 );
 const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll }) => {
-  const holderRef = useExplorer(currentScroll);
+  // const holderRef = useExplorer(currentScroll);
+  const navigate = useNavigate()
   return (
-    <div className="market-place-featured-elements" ref={holderRef}>
+    <Swiper 
+      modules={[Navigation, Pagination]}  
+      className="market-place-featured-elements"
+      navigation={{
+        prevEl: '#featured-nav-left',
+        nextEl: '#featured-nav-right'
+      }}
+      breakpoints={{
+        320: {
+            slidesPerView: 1,
+        },
+        900: {
+            slidesPerView: 2,
+        },
+        1250: {
+            slidesPerView: 3,
+        },
+    }}
+    >
       {list.map((element: any, i: number) => (
-        <Link
-          to={{
-            pathname: `/nft/${element.chain}/${getNftContractAddress(
+        <SwiperSlide
+          onClick={()=>navigate(`/nft/${element.chain}/${getNftContractAddress(
               element
             )}/${element.tokenId}`,
-          }}
+      )}
         >
           <Element key={`mpfe${i}`} element={element} />
-        </Link>
+        </SwiperSlide>
       ))}
-    </div>
+    </Swiper>
   );
 };
 export default MarketPlaceNavigatorPanFeatured;

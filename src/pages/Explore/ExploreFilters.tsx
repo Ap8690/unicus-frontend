@@ -14,7 +14,7 @@ const Filter = ({ filter, currentFilter, setCurrentFilter }) => {
 
 const ExploreFilters = ({ filters, currentFilter, setCurrentFilter }) => {
   return (
-    <div className="explore-filters">
+    <div className="explore-filters noScrollbar">
       {filters.map((filter, i) => (
         <Filter
           filter={filter}

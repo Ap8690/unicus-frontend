@@ -6,7 +6,7 @@ const useExplorer = (currentScroll) => {
   useEffect(() => {
     if (holderRef.current) {
       holderRef.current.scrollLeft =
-        currentScroll * (holderRef.current.offsetWidth * 1.05);
+        currentScroll * (holderRef.current.offsetWidth * 1.1);
     }
   }, [holderRef, currentScroll]);
   return holderRef;

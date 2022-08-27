@@ -61,6 +61,7 @@ const MarketPlaceTrendingNavigator = ({
       <div className="header">
         <div className="heading">
           Trending in{" "}
+          <div>
           <div className="category-selector">
             <div
               className="category-list"
@@ -102,12 +103,13 @@ const MarketPlaceTrendingNavigator = ({
               }
             />
           </button>
+          </div>
         </div>
         <div className="btn-holder">
-          <button className="left-btn" onClick={goLeft}>
+          <button className="left-btn" id="trending-nav-left" onClick={goLeft}>
             <img src={arrowLeft} alt="Left Arrow" />
           </button>
-          <button className="right-btn" onClick={goRight}>
+          <button className="right-btn" id="trending-nav-right" onClick={goRight}>
             <img src={arrowRight} alt="Right Arrow" />
           </button>
         </div>
