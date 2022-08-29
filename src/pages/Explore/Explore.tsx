@@ -25,6 +25,7 @@ import { ACCESS_TOKEN } from "../../utils/constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getChainId } from "../../utils/utils";
 import { cookieDomain } from "../../config";
+import ExploreLoader from "./ExploreLoader";
 const Explore = () => {
   // HardCoded
   const [skiploading, setskiploading] = useState(true);
@@ -156,9 +157,9 @@ const Explore = () => {
         setCurrentFilter={setCurrentFilter}
         currentFilter={currentFilter}
       />
-      {displayElements.length > 0 && (
+      {displayElements.length > 0 ? (
         <ExploreElements elements={displayElements} />
-      )}
+      ) : <ExploreLoader />}
     </section>
   );
 };
