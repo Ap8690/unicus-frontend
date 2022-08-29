@@ -111,8 +111,9 @@ const FilterMenu = ({
           {filter.name}
         </AccordionSummary>
         <AccordionDetails className="accordion-menu">
-          {filter.filters.map((event) => (
+          {filter.filters.map((event:any,i:number) => (
             <FormControlLabel
+            key={`FORM ${i}`}
               control={
                 <Checkbox
                   checked={activeFilters.includes(event)}
@@ -134,8 +135,9 @@ const FilterMenu = ({
         </AccordionSummary>
         <AccordionDetails className="accordion-menu">
           <SearchBar search={search} setSearch={setSearch} />
-          {collections.map((collection) => (
+          {collections.map((collection:any,i:number) => (
             <FormControlLabel
+              key={`Collections ${i}`}
               control={<Checkbox />}
               label={
                 <div className="collection">

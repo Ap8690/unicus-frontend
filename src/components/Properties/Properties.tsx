@@ -36,9 +36,9 @@ const Properties = ({ state, setState }) => {
       <div className="adding-values">
         <div className="values">
           <span className="head">Type</span>
-          {state.map((singleProperty:any, index:any) => (
+          {state.map((singleProperty:any, index:number) => (
             <PropertyInput
-              key={index}
+              key={"StateAdding "+index}
               name={"property"}
               state={singleProperty.property}
               handleChange={handleChange}
@@ -52,7 +52,7 @@ const Properties = ({ state, setState }) => {
           {state.map((singleProperty:any, index:any) => (
             // @ts-ignore
             <PropertyInput
-              key={index}
+              key={index + "propertyInput"}
               name={"value"}
               state={singleProperty.value}
               handleChange={handleChange}
