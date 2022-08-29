@@ -105,7 +105,7 @@ export const getUserInfo = () => {
     : "";
   return userInfo;
 };
-export let nearWalletConnection;
+export let nearWalletConnection: any;
 
 export let web3 = new Web3(Web3.givenProvider);
 
@@ -114,32 +114,37 @@ export let tronWeb = window.tronWeb? window.tronWeb
   : new TronWeb({ fullNode, solidityNode, privateKey });
 
 export const connectWallet = async (
-  network: any,
-  publicKey,
-  wallet,
-  connect,
-  setVisible
+  network: any, 
+  publicKey: any,
+  wallet: any,
+  connect: any,
+  setVisible: any
 ) => {
   try {
-    let address;
+    let address: any;
+    console.log("Connect wallet network: ", network);
     if (network.toString() === nearChain) {
+      console.log("Connecting to Near...")
       if (nearWalletConnection && nearWalletConnection.account()) {
         address = nearWalletConnection.account().accountId;
       } else {
         address = await connectNear();
       }
     } else if (network.toString() === tronChain) {
+      console.log("Connecting to Tron...")
       address = tronWeb.defaultAddress.base58;
     } else if (network.toString() === solonaChain) {
+      console.log("Connecting to Solana...")
       address = await connToSol(publicKey, wallet, connect, setVisible);
     } else {
-      console.log(3);
+      console.log("Connecting to Metamask...")
       //@ts-ignore
+      await SwitchNetwork(network);
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
       address = accounts[0];
-      await SwitchNetwork(network);
+      
     }
     if (!getUserInfo()) {
       toast.error("New Address. Please Login");
@@ -147,9 +152,9 @@ export const connectWallet = async (
       return;
     }
     if (
-      userInfo.wallets.length === 0 ||
-      !userInfo.wallets.some((el) => {
-        return el.toLowerCase() == address.toLowerCase();
+      userInfo?.wallets.length === 0 ||
+      !userInfo?.wallets.some((el:any) => {
+        return el?.toLowerCase() == address?.toLowerCase();
       })
     ) {
       await addWalletAdd(address).then(async (res: any) => {
@@ -165,14 +170,16 @@ export const connectWallet = async (
     return address;
   } catch (e) {
     console.log(e);
-    toast.error(e.code);
+    toast.error(e?.message);
   }
 };
 
 export const SwitchNetwork = async (network: any) => {
   try {
+    console.log("switch network: ", network);
     const metaMaskProvider: any = await getMetamaskProvider();
-    await metaMaskProvider.request({
+    console.log("Web3.utils.toHex(network): ", Web3.utils.toHex(network));
+    return await metaMaskProvider.request({
       method: "wallet_switchEthereumChain",
       params: [
         {
@@ -185,17 +192,16 @@ export const SwitchNetwork = async (network: any) => {
 
     if (error?.code === 4902) {
       try {
-        // await metaMaskProvider.request({
-        //   method: "wallet_addEthereumChain",
-        //   params:
-        //     network === "ethereum"
-        //       ? ethereum
-        //       : network === "bnb"
-        //       ? bnb
-        //       : network === "polygon"
-        //       ? polygon
-        //       : null,
-        // });
+        const metaMaskProvider: any = await getMetamaskProvider();
+        await metaMaskProvider.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: Web3.utils.toHex(network),
+            },
+          ],
+        });
+        await SwitchNetwork(network)
       } catch (addError: any) {
         console.error(addError?.message);
       }
@@ -412,7 +418,7 @@ export const getChainId = (chain) => {
         ? nearChain
         : chain.toString() === "tron"
         ? tronChain
-        : chain.toString() === "solona"
+        : chain.toString() === "solana"
         ? solonaChain
         : 0;
     } else {

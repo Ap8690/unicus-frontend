@@ -87,7 +87,7 @@ const AdvancedSupported = (advance:IAdvance) => {
           disabled
         />
         <div className="terms">
-          <span className="large-text">Solona(Mainnet)</span>
+          <span className="large-text">Solana(Mainnet)</span>
           <span>This Network Cannot be disabled</span>
         </div>
       </div>

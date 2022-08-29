@@ -160,7 +160,7 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
                 Near
               </button>
               <button className="menu-link" name="solana" onClick={handleChain}>
-                Solona
+                Solana
               </button>
             </AccordionDetails>
           </Accordion>

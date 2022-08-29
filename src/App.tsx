@@ -48,6 +48,7 @@ import Auctions from "./pages/Auctions/Auctions";
 import Profile from "./pages/Profile/ProfileMain";
 import { IStore } from "./models/Store";
 import ViewNft from "./pages/ViewNft/ViewNft";
+import NotFound from "./components/404/NotFound";
 import StoreHomepage from "./pages/StoreHomepage/StoreHomepage";
 import StoreSettings from "./pages/StoreSettings/StoreSettings";
 import Cookies from "js-cookie";
@@ -191,7 +192,7 @@ useEffect(() => {
               {/* <Route path="/stats/ranking" element={<Ranking />} />
               <Route path="/stats/activity" element={<Activity />} /> */}
               <Route path="/explore" element={<Explore />} />
-              <Route path="/explore/:chain" element={<Explore />} />
+              <Route path="/explore/:chainNetwork" element={<Explore />} />
               <Route path="/login/:token/:email" element={<Explore />} />{" "}
               <Route
                 path="/reset-password/:token/:email"
@@ -268,6 +269,7 @@ useEffect(() => {
               <Route path="/edit-profile" element={<EditProfile />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/:profileState" element={<Profile />} />
+              <Route path="*" element={<NotFound />} />
               {/* <Route
                   path="/edit-profile"
                   element={<EditProfile />}

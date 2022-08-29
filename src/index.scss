@@ -1,5 +1,6 @@
 @use "src/styles/fonts";
 @use "src/styles/helper";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -50,8 +51,11 @@ button {
 .App {
   @include helper.flex-col(center, start);
 }
+.Toastify  {
+  z-index: 110000;
+}
 .Toastify__toast{
-  margin-top: 55px;
+  margin-top: 16px;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

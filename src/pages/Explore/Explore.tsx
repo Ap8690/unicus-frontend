@@ -1,5 +1,5 @@
 // Lib
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 // Images
 import elementImage from "../../assets/images/createselector1.png";
@@ -12,72 +12,29 @@ import "./Explore.scss";
 import ExploreFilters from "./ExploreFilters";
 import ExploreElements from "./ExploreElements";
 import BlueBackground from "../../components/BlueBackground/BlueBackground";
-
+import NotFound from "../../components/404/NotFound";
+import Loader from "../../components/Loading/Loader";
 //apis
 import {
   getMarketplaceNfts,
   verifyEmailApi,
 } from "../../services/api/supplier";
-import { metadata } from "0xsequence/dist/declarations/src/sequence";
-import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getChainId } from "../../utils/utils";
 import { cookieDomain } from "../../config";
 import ExploreLoader from "./ExploreLoader";
+import { ChainContext } from "../../context/ChainContext";
 const Explore = () => {
   // HardCoded
   const [skiploading, setskiploading] = useState(true);
+  const [loading,setLoading] = useState(true)
   const [metadata, setmetadata] = useState<any>([]);
-
+  const {chain,setChain} = useContext(ChainContext)
   const filters = ["All", "Art", "Photos", "Games", "Music"];
-  const elements = [
-    {
-      name: "Lorem Collection",
-      image: elementImage,
-      stock: 3,
-      price: "0.44",
-      creatorImage: creatorImage,
-    },
-    {
-      name: "Lorem Collection",
-      image: elementImage,
-      stock: 3,
-      price: "0.44",
-      creatorImage: creatorImage,
-    },
-    {
-      name: "Lorem Collection",
-      image: elementImage,
-      stock: 3,
-      price: "0.44",
-      creatorImage: creatorImage,
-    },
-    {
-      name: "Lorem Collection",
-      image: elementImage,
-      stock: 3,
-      price: "0.44",
-      creatorImage: creatorImage,
-    },
-    {
-      name: "Lorem Collection",
-      image: elementImage,
-      stock: 3,
-      price: "0.44",
-      creatorImage: creatorImage,
-    },
-    {
-      name: "Lorem Collection",
-      image: elementImage,
-      stock: 3,
-      price: "0.44",
-      creatorImage: creatorImage,
-    },
-  ];
 
-  const { chain } = useParams();
+  const { chainNetwork } = useParams();
 
   // States
   const [currentFilter, setCurrentFilter] = useState("All");
@@ -92,18 +49,19 @@ const Explore = () => {
 
   const fetchItems = async () => {
     if (skiploading) {
-    console.log("explore chian", chain, getChainId(chain));
-    
+      setLoading(true)
       getMarketplaceNfts(skip, getChainId(chain), sortBy)
         .then((res: any) => {
           console.log("auc", res.data.totalAuctions);
 
           setDisplayItems(res.data.data);
           console.log(res.data.data);
+          setLoading(false)
         })
         .catch((error) => {
           console.log(error);
           setskiploading(false);
+          setLoading(false)
         });
     }
   };
@@ -129,7 +87,6 @@ const Explore = () => {
   }, [currentFilter, chain]);
 
   useEffect(() => {
-    console.log("store", location.pathname.split("/"));
 
     if (
       location.pathname.includes("/login") &&
@@ -146,7 +103,18 @@ const Explore = () => {
     ) {
       setResetPasswordPopUpShow(true);
     }
+
+    if(chain!="") {
+      navigate(`/explore/${chain}`)
+    }
   }, []);
+
+  useEffect(() => {
+    if(chain!="") {
+      navigate(`/explore/${chain}`)
+    }
+    
+  },[chain]);
 
   return (
     <section className="explore">
@@ -157,9 +125,10 @@ const Explore = () => {
         setCurrentFilter={setCurrentFilter}
         currentFilter={currentFilter}
       />
-      {displayElements.length > 0 ? (
-        <ExploreElements elements={displayElements} />
-      ) : <ExploreLoader />}
+      {loading ? <ExploreLoader /> :
+      (displayElements.length > 0 ? <ExploreElements elements={displayElements} /> : <NotFound/>)
+    }
+
     </section>
   );
 };

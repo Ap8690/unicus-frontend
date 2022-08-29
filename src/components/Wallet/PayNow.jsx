@@ -47,7 +47,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
   const [showWalletAdded, setShowWalletAdded] = useState(false);
 
   const [isMetamaskConnected, setIsMetamaskConnected] = useState(
-    sessionStorage.getItem("isMetamaskConnected")
+    localStorage.getItem("isMetamaskConnected")
   );
 
   const [metamaskWallet, setMetamaskWallet] = useState("");
@@ -81,10 +81,10 @@ const PayNow = ({ isLogin, setSignIn }) => {
 
       // //console.log(accounts[0]);
       // setMetaWalletAddress(accounts[0])
-      sessionStorage.setItem("METAMASK_WALLET", accounts[0]);
+      localStorage.setItem("METAMASK_WALLET", accounts[0]);
 
       if (accounts[0]) {
-        sessionStorage.setItem("isMetamaskConnected", true);
+        localStorage.setItem("isMetamaskConnected", true);
         setIsMetamaskConnected(true);
         setMetamaskWallet(accounts[0]);
 
@@ -92,7 +92,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
         var walletMapped = true;
         var existWalletArr = [];
         existWalletArr.push(
-          JSON.parse(sessionStorage.getItem("user-data")).wallets
+          JSON.parse(localStorage.getItem("user-data")).wallets
         );
         for (let i = 0; i < existWalletArr.length; i++) {
           if (existWalletArr[i] !== accounts[0]) {
@@ -395,7 +395,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
       "Your special NFT Ticket & Airdrops is being minted on Blockchain"
     );
     setShowFullLoading(true);
-    // let phone = JSON.parse(sessionStorage.getItem("user-data")).phoneNumber;
+    // let phone = JSON.parse(localStorage.getItem("user-data")).phoneNumber;
     if (!userPhoneNumber && userPhoneNumber.length !== 10) {
       setMessageModal(true);
       setShowFullLoading(false);
@@ -403,8 +403,8 @@ const PayNow = ({ isLogin, setSignIn }) => {
       return;
     }
     const userInfo = {
-      email: JSON.parse(sessionStorage.getItem("user-data")).email,
-      userId: JSON.parse(sessionStorage.getItem("user-data")).userId,
+      email: JSON.parse(localStorage.getItem("user-data")).email,
+      userId: JSON.parse(localStorage.getItem("user-data")).userId,
       phone: userPhoneNumber,
     };
     const increaseCounter = await ticketLockedIncrement(
@@ -473,11 +473,11 @@ const PayNow = ({ isLogin, setSignIn }) => {
       setMaticPrice(res.data["matic-network"].usd);
     });
     if (
-      JSON.parse(sessionStorage.getItem("user-data")) &&
-      JSON.parse(sessionStorage.getItem("user-data")).phoneNumber
+      JSON.parse(localStorage.getItem("user-data")) &&
+      JSON.parse(localStorage.getItem("user-data")).phoneNumber
     ) {
       setUserPhoneNumber(
-        JSON.parse(sessionStorage.getItem("user-data")).phoneNumber
+        JSON.parse(localStorage.getItem("user-data")).phoneNumber
       );
     }
   }, []);
@@ -493,8 +493,8 @@ const PayNow = ({ isLogin, setSignIn }) => {
   }, [payTab]);
 
   useEffect(() => {
-    setIsMetamaskConnected(sessionStorage.getItem("isMetamaskConnected"));
-  }, [sessionStorage.getItem("isMetamaskConnected"), metamaskWallet]);
+    setIsMetamaskConnected(localStorage.getItem("isMetamaskConnected"));
+  }, [localStorage.getItem("isMetamaskConnected"), metamaskWallet]);
   let payRef = useRef();
   useEffect(() => {
     let handler = async (event) => {

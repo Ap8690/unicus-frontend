@@ -4,21 +4,25 @@
 
 .user {
   margin-bottom: 69px;
+
   .user-background-image {
     height: 360px;
     overflow: hidden;
     border-radius: 41px;
+
     img {
       display: block;
       width: auto;
       height: 100%;
     }
   }
+
   .user-details {
     @include fn.flex(center, flex-start);
     margin-left: auto;
     width: 80%;
     position: relative;
+
     .edit-profile {
       position: absolute;
       top: 20px;
@@ -29,42 +33,51 @@
       border-radius: 8px;
       transition: 0.2s ease-in-out;
     }
+
     .edit-profile:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
+
     .user-image {
       position: absolute;
       left: -190px;
       top: -75%;
       width: 174px;
+
       img {
         display: block;
         width: 100%;
         height: auto;
         border-radius: 50%;
       }
-@media screen and (max-width: 768px) {
+
+      @media screen and (max-width: 768px) {
         left: 0;
       }
     }
+
     .user-info {
       @include fn.flex-col(flex-start, flex-start);
       margin-top: 10px;
       gap: 15px;
       font-weight: 300;
       font-size: fonts.$font-size-xl;
+
       @media screen and (max-width: 768px) {
         margin-top: 50px;
       }
+
       .user-name {
         margin: 0;
         font-size: fonts.$font-size-3xl;
         font-weight: 700;
       }
+
       .user-links {
         @include fn.flex(center, space-between);
         gap: 24px;
         height: 24px;
+
         a {
           img {
             display: block;

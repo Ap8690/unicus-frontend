@@ -17,6 +17,7 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import { BASE_URL } from "../../../config";
 import { userInfo } from "../../../utils/utils";
+import {getCompleteDate} from "../../../utils/date";
 import { updateProfileBg, updateProfilePic } from "../../../services/api/supplier";
 import { useNavigate } from "react-router-dom";
 
@@ -153,7 +154,7 @@ const [backgroundImage, setBackgroundImage] = useState<any>(
         <div className="user-info">
           <h3 className="user-name">{user.username}</h3>
           <p className="user-id">{user.id}</p>
-          <p className="user-join-date">Joined: {user.createdAt}</p>
+          <p className="user-join-date">Joined: {getCompleteDate(user.createdAt)}</p>
           <div className="user-links">
             {user.twitter && <a href={user.twitter}>
               <img src={twitter} alt="twitter" />

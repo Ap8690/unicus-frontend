@@ -94,32 +94,6 @@ const Profile = (): ReactJSXElement => {
     },
   ];
 
-  // const listing = [
-  //   {
-  //     image: itemPic,
-  //     item: "Untitled Collection",
-  //     priceEth: "1.2",
-  //     priceDollar: "25120",
-  //     fd: "-",
-  //     exp: "July 25, 2022",
-  //   },
-  //   {
-  //     image: itemPic,
-  //     item: "Untitled Collection",
-  //     priceEth: "1.2",
-  //     priceDollar: "25120",
-  //     fd: "-",
-  //     exp: "July 25, 2022",
-  //   },
-  //   {
-  //     image: itemPic,
-  //     item: "Untitled Collection",
-  //     priceEth: "1.2",
-  //     priceDollar: "25120",
-  //     fd: "-",
-  //     exp: "July 25, 2022",
-  //   },
-  // ];
   const createdColumns = ["Item", "Chain", "Created"];
   const listingColumns = ["Item", "Unit Price", "Status", "Created"];
   const offersColumns = ["Item", "Lastest Bid", "Chain", "Created"];
@@ -132,7 +106,6 @@ const Profile = (): ReactJSXElement => {
   const [displayCreated, setDisplayCreated] = useState([]);
   const navigate = useNavigate();
   const {profileState} = useParams()
-  console.log(profileState)
 
   const getNfts = async () => {
     try {
