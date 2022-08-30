@@ -55,6 +55,7 @@ const Navbar = ({ store }) => {
             // navigate(`/explore/${chain}`);
             setChain(chain);
             toast.dismiss()
+            if(chain!=="all")
             toast.info(`You are on ${capitalize(chain)} network`);
         }
     };
@@ -210,6 +211,14 @@ const Navbar = ({ store }) => {
                                     "aria-labelledby": "basic-button",
                                 }}
                             >
+                                <MenuItem
+                                    onClick={() =>
+                                        handleCloseChains("all")
+                                    }
+                                    selected={chain === 'all'}
+                                >
+                                    All
+                                </MenuItem>
                                 <MenuItem
                                     onClick={() =>
                                         handleCloseChains("ethereum")

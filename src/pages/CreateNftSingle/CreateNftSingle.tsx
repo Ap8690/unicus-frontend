@@ -212,6 +212,7 @@ const CreateNftSingle = () => {
   useEffect(() => {
     if (!getAccessToken()) {
       navigate("/connect-wallet/create-nft");
+      toast.warn("Please Login!")
     }
   }, []);
 

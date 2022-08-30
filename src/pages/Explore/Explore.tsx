@@ -32,7 +32,7 @@ const Explore = () => {
   const [loading,setLoading] = useState(true)
   const [metadata, setmetadata] = useState<any>([]);
   const {chain,setChain} = useContext(ChainContext)
-  const filters = ["All", "Art", "Photos", "Games", "Music"];
+  const filters = ["All","funny","art","nature","animal","sports","photography","music","metaverse"]
 
   const { chainNetwork } = useParams();
 
@@ -50,10 +50,8 @@ const Explore = () => {
   const fetchItems = async () => {
     if (skiploading) {
       setLoading(true)
-      getMarketplaceNfts(skip, getChainId(chain), sortBy)
+      getMarketplaceNfts(skip, getChainId(chain), sortBy,currentFilter)
         .then((res: any) => {
-          console.log("auc", res.data.totalAuctions);
-
           setDisplayItems(res.data.data);
           console.log(res.data.data);
           setLoading(false)
@@ -66,7 +64,7 @@ const Explore = () => {
     }
   };
 
-  const verifyEmail = async (token, email) => {
+  const verifyEmail = async (token: string, email:string) => {
     const res = await verifyEmailApi(token, email);
     Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
       domain: cookieDomain,
@@ -80,6 +78,17 @@ const Explore = () => {
     navigate("/home", { replace: true });
   };
   const resetPassword = async () => {};
+  window.addEventListener("scroll", async function () {
+    var root: any;
+    root = document.querySelector(".market_place")?.getBoundingClientRect();
+    if (root?.top + root?.height - this.window.innerHeight - 4200 < 0) {
+        if (!skiploading) {
+            setskiploading(true);
+            setskip((prevState) => prevState + 30);
+        }
+    }
+  });
+
   // Effect
   useEffect(() => {
     // nothing for now
@@ -117,7 +126,7 @@ const Explore = () => {
   },[chain]);
 
   return (
-    <section className="explore">
+    <section className={!skiploading ? "market_place explore" : "explore"}>
       <BlueBackground />
       <h1 className="explore-heading">Explore Collections</h1>
       <ExploreFilters

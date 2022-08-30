@@ -1,5 +1,8 @@
+import { capitalize } from "../../utils/helpers";
+import uuid from 'react-uuid'
+
 const Filter = ({ filter, currentFilter, setCurrentFilter }) => {
-  const onClick = (filter) => setCurrentFilter(filter);
+  const onClick = (filter:any) => setCurrentFilter(filter);
   const className =
     filter.toLowerCase() === currentFilter.toLowerCase() ? " active" : "";
   return (
@@ -7,7 +10,7 @@ const Filter = ({ filter, currentFilter, setCurrentFilter }) => {
       className={"explore-filter" + className}
       onClick={() => onClick(filter)}
     >
-      {filter}
+      {capitalize(filter)}
     </button>
   );
 };
@@ -15,12 +18,12 @@ const Filter = ({ filter, currentFilter, setCurrentFilter }) => {
 const ExploreFilters = ({ filters, currentFilter, setCurrentFilter }) => {
   return (
     <div className="explore-filters noScrollbar">
-      {filters.map((filter, i) => (
+      {filters.map((filter:any, i:number) => (
         <Filter
           filter={filter}
           setCurrentFilter={setCurrentFilter}
           currentFilter={currentFilter}
-          key={`expf${i}`}
+          key={uuid()}
         />
       ))}
     </div>

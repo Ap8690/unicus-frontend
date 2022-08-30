@@ -36,12 +36,13 @@ export async function getAuctions(number: number, auctionType: string) {
 export async function getMarketplaceNfts(
   skip: any,
   networkID: any,
-  sortBy: string
+  sortBy: string,
+  currentFilter: string
 ) {
   return await axios.get(
     `${BASE_URL}/auction/getAllExplore/${skip}/${networkID}/${encodeURIComponent(
       JSON.stringify(sortBy)
-    )}`
+    )}/${currentFilter}`
   );
 }
 
