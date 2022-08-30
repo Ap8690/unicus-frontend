@@ -2,7 +2,7 @@ import "./singlenft.scss";
 import listImg from "../../assets/svgs/list.svg";
 import uploadImg from "../../assets/svgs/uploadImage.svg";
 import { Image } from "react-bootstrap";
-import { v4 as uuid } from "uuid";
+import uuid from "react-uuid";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Input from "../../components/Input/Input";
 import { useEffect, useRef, useState } from "react";
@@ -244,7 +244,9 @@ const CreateNftSingle = () => {
   
   const mintSolana = async (title: any, description: any, fileUrl: any) => {
     console.log("sol mint start", anWallet);
-
+    if(!anWallet) {
+      return toast.error("Solana wallet not detected!")
+    }
     const provider = new anchor.AnchorProvider(connection, anWallet, {
       commitment: "processed",
     });
@@ -387,7 +389,7 @@ const CreateNftSingle = () => {
     imageUrl: any
   ) => {
     console.log("mintint started");
-    console.log("near mint", nearWalletConnection);
+    console.log("near mint", tokenId,nearWalletConnection);
     console.log("Near Mint data ",{
       token_id: `${tokenId}`,
       metadata: {
@@ -449,7 +451,7 @@ const CreateNftSingle = () => {
             contractType
           );
 
-          setNftModalMessage("Uploading the NFT.");
+          setNftModalMessage("Uploading the metadata.");
           setNftLoading(true);
           let formData = new FormData();
           formData.append("name", name);
@@ -462,7 +464,7 @@ const CreateNftSingle = () => {
           formData.append("attributes", JSON.stringify(properties));
 
           try {
-            toast.info("Uploading the NFT...");
+            toast.info("Uploading the metadata...");
             const response: any = await uploadToPinata(formData);
             if (!response) {
               setdefaultErrorMessage("Network Error");
@@ -480,7 +482,7 @@ const CreateNftSingle = () => {
               imageUrl = val.data.image;
             });
             setNftLoading(false);
-            toast.success("NFT Uploaded...");
+            toast.success("Metadata Uploaded...");
             setNftModalMessage("An Awesome Asset is getting Minted");
             let user = userInfo;
             if (!user) {
@@ -506,10 +508,14 @@ const CreateNftSingle = () => {
             };
             if (chain == nearChain) {
               nftObj.tokenId = uuid();
+              console.log("nftObj: ", nftObj);
               
               localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
+              if(!nftObj.tokenId) {
+                return
+              }
               await mintAssetToNft(
-                tokenId,
+                nftObj.tokenId,
                 name,
                 description,
                 tokenUri,
@@ -614,9 +620,13 @@ const CreateNftSingle = () => {
     const txhash = urlParams.get("transactionHashes");
 
     const errorCode = urlParams.get("errorCode");
+    if (urlParams.has('errorCode'))  urlParams.delete('errorCode');
+    console.log("errorCode: ", errorCode);
     const errMsg = urlParams.get("errorMessage");
+    if (urlParams.has('errorMessage')) urlParams.delete('errorMessage');
+    console.log("errMsg: ", errMsg);
 
-    console.log("sear", txhash, errorCode, errMsg);
+    console.log("near txhash", txhash);
 
     if (errorCode) {
       toast.error(errorCode);

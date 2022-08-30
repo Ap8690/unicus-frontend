@@ -5,7 +5,7 @@
 // import { BASE_URL } from "../../../config";
 // import { IAppearance } from "../../../models/Appearance";
 // import { IOSSwitch } from "../GeneralSettings/GeneralBasic";
-// import { v4 as uuid } from "uuid";
+// import uuid from "react-uuid";
 // import uploadImg from "../../../assets/svgs/uploadImage.svg";
 
 

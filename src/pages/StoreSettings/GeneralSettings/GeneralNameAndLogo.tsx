@@ -6,7 +6,7 @@ import axios from "axios";
 import countryList from "react-select-country-list";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../../config";
-import { v4 as uuid } from "uuid";
+import uuid from "react-uuid";
 import { Form } from "react-bootstrap";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import { axiosConfig, saveGenerals } from "../../../services/api/supplier";

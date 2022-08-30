@@ -5,7 +5,7 @@ import { IAppearance } from "../../../models/Appearance";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../../config";
-import { v4 as uuid } from "uuid";
+import uuid from "react-uuid";
 import { CircularProgress } from "@mui/material";
 
 

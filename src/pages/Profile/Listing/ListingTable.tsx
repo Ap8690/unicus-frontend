@@ -6,7 +6,7 @@ import ethereum from "../../../assets/svgs/ethereum.svg";
 import DefaultModal from "../../../components/modals/DefaultModal/DefaultModal";
 import { bscChain, ethChain, tronChain } from "../../../config";
 import { getChainSymbol } from "../../../utils/utils";
-
+import {getCompleteDate} from "../../../utils/date"
 // Element of data of activity table
 const TableData = ({ activity }) => {
   const handleClick = () => {
@@ -37,12 +37,10 @@ const TableData = ({ activity }) => {
       ) : (
         <>
           <td className="table-data-exp">{getChainSymbol(activity.chain)}</td>
-          <td className="table-data-exp">{activity.createdAt}</td>
+          <td className="table-data-exp">{getCompleteDate(activity.createdAt)}</td>
         </>
       )}
-      {/* <button className="clear-listing" onClick={handleClick}>
-        X
-      </button> */}
+
     </tr>
   );
 };
@@ -58,7 +56,7 @@ const Table = ({ rows, columns }) => {
           </tr>
         </thead>
         <tbody>
-          {rows && rows.length> 0 ? rows.map((row, i) => (
+          {rows && rows.length> 0 ? rows.map((row:any, i:number) => (
             <Link to={`/nft/${row.chain}/${row.contractAddress? row.contractAddress: row.nftId && row.nftId.contractAddress}/${row.tokenId}`}>
               <TableData activity={row} key={`atd${i}`} />
             </Link>

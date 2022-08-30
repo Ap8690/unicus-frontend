@@ -16,7 +16,7 @@ import countryList from "react-select-country-list";
 import validator from "validator";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuid } from "uuid";
+import uuid from "react-uuid";
 import { userInfo } from "../../utils/utils";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";

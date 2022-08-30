@@ -1,6 +1,6 @@
 // Lib
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import { v4 as uuid } from "uuid";
+import uuid from "react-uuid";
 
 
 // Styles
