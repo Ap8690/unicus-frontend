@@ -6,7 +6,7 @@ import MarketPlaceNavigator from "./MarketPlaceNavigatorFeatured";
 import MarketPlaceNavigatorPanFeatured from "./MarketPlaceNavigatorPanFeatured"
 import {getFeaturedNft} from "../../../services/api/supplier"
 
-const MarketPlaceFeatured = ({ list, title }) => {
+const MarketPlaceFeatured = ({  title }) => {
   const [currentScroll, setCurrentScroll] = useState(0);
   const [featuredNft,setFeturedNft] = useState([]);
   const length = featuredNft?.length > 0 ? Math.ceil(featuredNft?.length / 3) : 0;

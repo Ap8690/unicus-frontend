@@ -26,18 +26,21 @@ import { getChainId } from "../../utils/utils";
 import { cookieDomain } from "../../config";
 import ExploreLoader from "./ExploreLoader";
 import { ChainContext } from "../../context/ChainContext";
+import {useQuery} from "../../Hooks/useQuery";
 const Explore = () => {
   // HardCoded
   const [skiploading, setskiploading] = useState(true);
   const [loading,setLoading] = useState(true)
   const [metadata, setmetadata] = useState<any>([]);
+  const query = useQuery()
+  const searchQuery = query.get("search")
   const {chain,setChain} = useContext(ChainContext)
-  const filters = ["All","funny","art","nature","animal","sports","photography","music","metaverse"]
+  const filters = ["all","funny","art","nature","animal","sports","photography","music","metaverse"]
 
   const { chainNetwork } = useParams();
 
   // States
-  const [currentFilter, setCurrentFilter] = useState("All");
+  const [currentFilter, setCurrentFilter] = useState(searchQuery || "all");
   const [displayElements, setDisplayItems] = useState([]);
   const [sortBy, setsortBy] = useState<any>([["createdAt", -1]]);
   const [sortBy2, setsortBy2] = useState<any>("createdAt");
@@ -46,7 +49,7 @@ const Explore = () => {
     useState<any>(false);
   const location = useLocation();
   const navigate = useNavigate();
-
+  
   const fetchItems = async () => {
     if (skiploading) {
       setLoading(true)
@@ -55,6 +58,8 @@ const Explore = () => {
           setDisplayItems(res.data.data);
           console.log(res.data.data);
           setLoading(false)
+          query.delete("search")
+          document.body.scrollTop = 0;
         })
         .catch((error) => {
           console.log(error);
@@ -93,6 +98,7 @@ const Explore = () => {
   useEffect(() => {
     // nothing for now
     fetchItems();
+    document.body.scrollTop = 0;
   }, [currentFilter, chain]);
 
   useEffect(() => {
@@ -113,16 +119,17 @@ const Explore = () => {
       setResetPasswordPopUpShow(true);
     }
 
-    if(chain!="") {
+    if(chain!="" && !searchQuery) {
       navigate(`/explore/${chain}`)
     }
+    document.body.scrollTop = 0;
   }, []);
 
   useEffect(() => {
-    if(chain!="") {
+    if(chain!="" && !searchQuery) {
       navigate(`/explore/${chain}`)
     }
-    
+    document.body.scrollTop = 0;
   },[chain]);
 
   return (

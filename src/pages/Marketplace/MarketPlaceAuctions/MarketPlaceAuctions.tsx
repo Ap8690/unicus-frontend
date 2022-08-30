@@ -7,12 +7,12 @@ import MarketPlaceAuctionsNavigator from "./MarketPlaceAuctionsNavigator"
 import BottomNavigationMarker from "../BottomNavigationMarker"
 import {getAuctions} from "../../../services/api/supplier"
 
-const MarketPlaceAuctions = ({ list }) => {
+const MarketPlaceAuctions = ({  }) => {
   // Take list and filter as per the requirement
   const [currentType, setCurrentType] = useState("live");
   const [currentScroll, setCurrentScroll] = useState(0);
   const [width, setWidth] = useState(window.innerWidth);
-  const [displayList, setDisplayList] = useState(list);
+  const [displayList, setDisplayList] = useState('');
 
   // Some hardcoded data
   const types = ["Live", "Ended"]; //"Live", "Upcoming", "Ended"

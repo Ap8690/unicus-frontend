@@ -6,7 +6,7 @@ import MarketPlaceTrendingElements from "./MarketPlaceTrendingElements";
 import BottomNavigationMarker from "../BottomNavigationMarker";
 import {getTrendingNft} from "../../../services/api/supplier"
 
-const MarketPlaceTrending = ({ list }) => {
+const MarketPlaceTrending = ({  }) => {
   // We can filter this list as per requirement
   const [category, setCategory] = useState("all");
   const [currentScroll, setCurrentScroll] = useState(0);
