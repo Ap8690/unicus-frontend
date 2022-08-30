@@ -37,16 +37,17 @@ const ViewNft = () => {
             setNftLoading(true);
             const res = await getNftById(chain, contractAddress, nftId);
             const resData = await res.data.nft;
-            console.log(res, "res");
+            console.log(resData, "res");
             
 
-            setNft(resData);
+            setNft(res.data.nft);
             setNftStates(res.data.nftStates);
             setAuction(res.data.auction);
             setNftImg(res.data.nft.cloudinaryUrl);
             setCreator(res.data.user);
-            if (resData.collectionName) {
-                const col = await getNftByCollection(resData.collectionName);
+            if (res.data.nft.collectionName && res.data.nft.collectionName !== "undefined") {
+                console.log("resData.collectionName: ", res.data.nft.collectionName);
+                const col = await getNftByCollection(res.data.nft.collectionName);
                 setNftByCollection(col.data.nft);
             }
             setNftLoading(false);
