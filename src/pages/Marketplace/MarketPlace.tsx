@@ -33,9 +33,9 @@ const MarketPlace = () => {
     <section className="market-place">
       <BlueBackground />
       <MarketPlaceMain saleStats={saleStats} noStats={false} storeTitle={'Create, Sell & Collect Your Own Creative NFT'} />
-      <MarketPlaceFeatured  title={"Featured Artworks"} />
-      <MarketPlaceTrending />
-      <MarketPlaceAuctions  />
+      <MarketPlaceFeatured chain={chain} title={"Featured Artworks"} />
+      <MarketPlaceTrending chain={chain}/>
+      <MarketPlaceAuctions chain={chain} />
       {/* <MarketPlaceTopCollections list={topCollectionsList} /> */}
       <MarketPlaceCreateAndSell />
       <MarketPlaceDiscover chain={chain} categories={categories} />

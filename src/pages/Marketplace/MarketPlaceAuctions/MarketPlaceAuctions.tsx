@@ -7,7 +7,7 @@ import MarketPlaceAuctionsNavigator from "./MarketPlaceAuctionsNavigator"
 import BottomNavigationMarker from "../BottomNavigationMarker"
 import {getAuctions} from "../../../services/api/supplier"
 
-const MarketPlaceAuctions = ({  }) => {
+const MarketPlaceAuctions = ({ chain }) => {
   // Take list and filter as per the requirement
   const [currentType, setCurrentType] = useState("live");
   const [currentScroll, setCurrentScroll] = useState(0);
@@ -20,15 +20,15 @@ const MarketPlaceAuctions = ({  }) => {
 
   // Filter out list on the basis of elements
   useEffect(() => {
-    getAuctions(10,currentType)
+    getAuctions(10,currentType,chain)
     .then(res => {
       console.log(res);
       setDisplayList(res?.data.nfts)
     })
-  }, [currentType]);
+  }, [currentType,chain]);
 
   useEffect(() => {
-    getAuctions(10,currentType)
+    getAuctions(10,currentType,chain)
   },[])
   return (
     <div className="market-place-auctions">

@@ -6,7 +6,7 @@ import MarketPlaceTrendingElements from "./MarketPlaceTrendingElements";
 import BottomNavigationMarker from "../BottomNavigationMarker";
 import {getTrendingNft} from "../../../services/api/supplier"
 
-const MarketPlaceTrending = ({  }) => {
+const MarketPlaceTrending = ({ chain }) => {
   // We can filter this list as per requirement
   const [category, setCategory] = useState("all");
   const [currentScroll, setCurrentScroll] = useState(0);
@@ -17,7 +17,7 @@ const MarketPlaceTrending = ({  }) => {
   const categories = ["all", "art", "funny", "nature", "animal", "sports", "photography", "music","metaverse"];
 
   useEffect(() => {
-    getTrendingNft(10,category)
+    getTrendingNft(10,category,chain)
     .then((res) => {
       console.log(res)
       setTrendingNfts(res?.data.nfts);
@@ -26,18 +26,9 @@ const MarketPlaceTrending = ({  }) => {
       console.log(err);
     });
     console.log(category);
-  }, [category]);
+  }, [category,chain]);
 
-  // useEffect(() => {
-  //   getTrendingNft(10,category)
-  //   .then((res) => {
-  //     console.log(res)
-  //     setTrendingNfts(res?.data.nfts);
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   });
-  // },[])
+
 
   return (
     <div className="market-place-trending">
