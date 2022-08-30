@@ -293,7 +293,7 @@ const Navbar = ({ store }) => {
                                 )
                             )}
 
-                            {!accessToken ? <button
+                            {!Cookies.get(ACCESS_TOKEN) ? <button
                                 onClick={() =>
                                     navigate(
                                         `/connect-wallet${location.pathname}`
@@ -302,7 +302,8 @@ const Navbar = ({ store }) => {
                                 className="btn nav-link"
                             >
                                 Connect Wallet
-                            </button> : <Link to={"/marketplace"} className="btn nav-link">
+                            </button> : 
+                            <Link to={"/marketplace"} className="btn nav-link">
                                 Marketplace
                             </Link>
                             }
