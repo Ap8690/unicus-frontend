@@ -57,6 +57,7 @@ import { ACCESS_TOKEN, defaultPrivacyText } from "./utils/constants";
 import { isMainStore } from "./utils/utils";
 import PrivacyPolicy from "./pages/UsefulLinks/PrivacyPolicy";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import GlobalSearch from "./pages/GlobalSearch/GlobalSearch"
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -193,6 +194,7 @@ useEffect(() => {
               <Route path="/stats/activity" element={<Activity />} /> */}
               <Route path="/explore" element={<Explore />} />
               <Route path="/explore/:chainNetwork" element={<Explore />} />
+              <Route path="/search/:search" element={<GlobalSearch/>} />
               <Route path="/login/:token/:email" element={<Explore />} />{" "}
               <Route
                 path="/reset-password/:token/:email"

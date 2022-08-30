@@ -134,7 +134,7 @@ const FilterMenu = ({
           Collections
         </AccordionSummary>
         <AccordionDetails className="accordion-menu">
-          <SearchBar search={search} setSearch={setSearch} />
+          <SearchBar handleGlobalSearch={null} search={search} setSearch={setSearch} />
           {collections.map((collection:any,i:number) => (
             <FormControlLabel
               key={`Collections ${i}`}

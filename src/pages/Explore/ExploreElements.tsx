@@ -3,7 +3,8 @@ import { getDecimal } from "../../utils/helpers";
 import { getChainSymbol, getNftContractAddress } from "../../utils/utils";
 import uuid from "react-uuid";
 
-const ExploreElement = ({ element }) => {
+export const ExploreElement = ({ element }) => {
+    console.log("element: ", element);
     return (
         <Link
             to={{
@@ -34,7 +35,7 @@ const ExploreElement = ({ element }) => {
     );
 };
 
-const ExploreElements = ({ elements }) => {
+export const ExploreElements = ({ elements }) => {
     return (
         <div className="explore-elements">
             {elements.map((element: any) => (

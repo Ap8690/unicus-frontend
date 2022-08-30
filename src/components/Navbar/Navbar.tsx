@@ -69,7 +69,10 @@ const Navbar = ({ store }) => {
         disConnectWallet();
         setAnchorProfile(null);
     };
-
+    const handleGlobalSearch = (e: any) => {
+        e.preventDefault()
+        navigate(`/search/${search}`)
+    }
     useEffect(() => {
       function new_bg() {
         if (window.scrollY === 0) return setSolidNav(false);
@@ -102,7 +105,7 @@ const Navbar = ({ store }) => {
                         />
                     </Link>
                     <div className="search-bar-box">
-                        <SearchBar search={search} setSearch={setSearch} />
+                        <SearchBar handleGlobalSearch={handleGlobalSearch} search={search} setSearch={setSearch} />
                     </div>
                     <div className="nav-menu-icons">
                         <ProfileButton

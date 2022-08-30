@@ -31,7 +31,7 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
       }}
     >
       <div className="search-close">
-        <SearchBar search={search} setSearch={setSearch} />
+        <SearchBar handleGlobalSearch={null} search={search} setSearch={setSearch} />
         <button onClick={toggleDrawer}>
           <CloseRoundedIcon />
         </button>
