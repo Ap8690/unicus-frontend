@@ -24,6 +24,7 @@ import { ACCESS_TOKEN } from "../../utils/constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getChainId } from "../../utils/utils";
 import { cookieDomain } from "../../config";
+import ExploreLoader from "./ExploreLoader";
 import { ChainContext } from "../../context/ChainContext";
 const Explore = () => {
   // HardCoded
@@ -124,7 +125,7 @@ const Explore = () => {
         setCurrentFilter={setCurrentFilter}
         currentFilter={currentFilter}
       />
-      {loading ? <Loader /> :
+      {loading ? <ExploreLoader /> :
       (displayElements.length > 0 ? <ExploreElements elements={displayElements} /> : <NotFound/>)
     }
 
