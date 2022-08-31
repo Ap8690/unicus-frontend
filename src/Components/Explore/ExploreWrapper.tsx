@@ -112,7 +112,7 @@ const ExploreWrapper = (props: any) => {
         } else {
             setskiploading(false)
         }
-    }, [skip, sortBy2])
+    }, [skip, sortBy2,networkID])
 
     window.addEventListener('scroll', async function () {
         var root: any

@@ -108,16 +108,13 @@ function App() {
       }
     } catch (err) {
       console.log("err", err);
-      
     }
   };
 
   useEffect(() => {
-
     getStore()
   },[accessToken])
-  
-
+  console.log("window.location.host ",window.location.host)
     return (
       <div>
         {window.location.host === UNICUS_STORE ? (

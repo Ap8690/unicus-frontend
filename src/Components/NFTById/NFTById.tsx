@@ -154,6 +154,7 @@ const NFTById = (props: any) => {
 
     async function fetchItem() {
         if (location.pathname.split("/")[1] === "sale") {
+            console.log("Sale")
             await axios
                 .get(
                     `${backendUrl}/auction/getAuctionById/${location.pathname
@@ -161,18 +162,13 @@ const NFTById = (props: any) => {
                         .pop()}/${location.pathname.split("/")[2]}`
                 )
                 .then(async (res: any) => {
+                    console.log("res: ", res);
                     setauctionInfo(res.data[0]);
                     await axios
                         .get(
-                            `${backendUrl}/nft/getNftById/${
+                            `${backendUrl}/nft/getNftById/${location.pathname.split("/")[2]}/${res.data[0].nftId.contractAddress}/${
                                 res.data[0].tokenId
-                            }/${
-                                JSON.parse(localStorage.getItem("userInfo"))
-                                    ? JSON.parse(
-                                          localStorage.getItem("userInfo")
-                                      )._id
-                                    : "none"
-                            }/${location.pathname.split("/")[2]}`
+                            }`
                         )
                         .then(async (res: any) => {
                             setnftInfo(res.data.nft);
@@ -198,15 +194,12 @@ const NFTById = (props: any) => {
                         });
                 });
         } else if (location.pathname.split("/")[1] === "nft") {
+            console.log("NFT",location.pathname)
             await axios
                 .get(
-                    `${backendUrl}/nft/getNftById/${location.pathname
+                    `${backendUrl}/nft/getNftById/${location.pathname.split("/")[2]}/${location.pathname.split("/")[3]}/${location.pathname
                         .split("/")
-                        .pop()}/${
-                        JSON.parse(localStorage.getItem("userInfo"))
-                            ? JSON.parse(localStorage.getItem("userInfo"))._id
-                            : "none"
-                    }/${location.pathname.split("/")[2]}`
+                        .pop()}`
                 )
                 .then(async (res: any) => {
                     setnftInfo(res.data.nft);
@@ -252,6 +245,7 @@ const NFTById = (props: any) => {
                     sessionStorage.setItem(res.data.nft._id, "true");
                 });
         } else {
+            console.log("Else,",location.pathname.split("/"))
             await axios
                 .get(
                     `${backendUrl}/auction/getAuctionById/${location.pathname
@@ -286,15 +280,9 @@ const NFTById = (props: any) => {
                     setdateZone(timeZone);
                     await axios
                         .get(
-                            `${backendUrl}/nft/getNftById/${
+                            `${backendUrl}/nft/getNftById/${location.pathname.split("/")[2]}/${location.pathname.split("/")[3]}/${
                                 res.data[0].tokenId
-                            }/${
-                                JSON.parse(localStorage.getItem("userInfo"))
-                                    ? JSON.parse(
-                                          localStorage.getItem("userInfo")
-                                      )._id
-                                    : "none"
-                            }/${location.pathname.split("/")[2]}`
+                            }`
                         )
                         .then(async (res: any) => {
                             setnftInfo(res.data.nft);
