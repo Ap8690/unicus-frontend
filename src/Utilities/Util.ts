@@ -223,7 +223,7 @@ export const defaultPrivacyText = `<p>Welcome to the User Privacy Policy of 1 (t
 
 export const UNICUS_STORE = 
   process.env.REACT_APP_ENV === "local"
-    ? "http://localhost:3000"
+    ? "localhost:3000"
     : process.env.REACT_APP_ENV === "development"
     ? "marketplace.test.unicus.one"
     : process.env.REACT_APP_ENV === "staging"

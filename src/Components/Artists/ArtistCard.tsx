@@ -27,7 +27,7 @@ const ArtistCard = ({item}: any) => {
         <div className='nft_card_image_wrapper'>
         <Link to={item.sellerInfo ? `/nft/${item.chain}/${contractAddress}/${item.tokenId}` : `/nft/${item.chain}/${contractAddress}/${item.tokenId}`}>
         {(!projectLoaded && item.cloudinaryUrl.split('.').pop() !== "mp4") && (
-            <div className='nft_card_image skeleton'></div>
+            <div className='nft_card_image' style={{"height":"260px"}}></div>
             )}
         {(<div className='nft_card_image' style={(projectLoaded && item.cloudinaryUrl.split('.').pop() !== "mp4") ? {} : {display: 'none'}}>
           <img src={item.cloudinaryUrl} onLoad={() => setprojectLoaded(true)} alt={item.name} />
