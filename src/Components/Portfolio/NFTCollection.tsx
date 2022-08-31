@@ -960,7 +960,7 @@ const NFTCollection = ({ item, transID }: any) => {
         >
           <div className="nft_card_image_wrapper">
             {!projectLoaded &&
-              item.cloudinaryUrl.split(".").pop() !== "mp4" && (
+              item && item?.cloudinaryUrl.split(".").pop() !== "mp4" && (
                 <div className="nft_card_image skeleton"></div>
               )}
             {
