@@ -245,6 +245,8 @@ export const AddNetworks = (network: any) => async (dispatch: any) => {
               ? bnb[0]?.chainId
               : network === 'polygon'
               ? polygon[0]?.chainId
+              :network === 'avalanche'
+              ?avalanche[0]?.chainId
               : null,
         },
       ],
@@ -261,6 +263,8 @@ export const AddNetworks = (network: any) => async (dispatch: any) => {
               ? bnb
               : network === 'polygon'
               ? polygon
+              :network === 'avalanche'
+              ?avalanche
               : null,
         })
       } catch (addError: any) {

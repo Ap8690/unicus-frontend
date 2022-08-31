@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {Container, Row, Col, Form as FormInputField} from 'react-bootstrap'
 import ContactSuccess from '../Modals/ContactSuccess/ContactSuccess'
 import {useState} from 'react'
