@@ -50,5 +50,5 @@ export const cookieDomain =
     process.env.REACT_APP_ENV === "local"
         ? "localhost"
         : process.env.REACT_APP_ENV === "demo"
-        ? "herokuapp.com"
+        ? ".herokuapp.com"
         : "unicus.one";
