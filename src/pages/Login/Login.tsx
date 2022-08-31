@@ -32,7 +32,7 @@ const Login = ({}) => {
             emailLogin(email, password)
                 .then(async (res: any) => {
                     console.log("res: ", res);
-                    console.log("in")
+                    console.log("in",cookieDomain)
                     
                     Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
                       domain: cookieDomain,
