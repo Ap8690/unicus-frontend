@@ -31,6 +31,7 @@ const Login = ({}) => {
         } else {
             emailLogin(email, password)
                 .then(async (res: any) => {
+                    console.log("res: ", res);
                     console.log("in")
                     
                     Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
@@ -51,7 +52,7 @@ const Login = ({}) => {
                     // Cookies.set("userInfo", JSON.stringify(res.data.user), {
                     //     domain: "unicus.one",
                     // })
-                    toast("Login successful")
+                    toast.success("Login successful")
                     navigate("/home", {replace:true})
                 })
                 .catch((err) => {
@@ -65,7 +66,7 @@ const Login = ({}) => {
             <div className="login-page">
                 <div className="login-wrapper">
                     <div className="blue-head">LOGIN</div>
-                    <form>
+                    <form onSubmit={handleLogin}>
                         <Input
                             title={"Email"}
                             state={email}
@@ -83,7 +84,7 @@ const Login = ({}) => {
                             forgetPass
                             required
                         />
-                        <button type="submit" className="btn large-btn login-btn" onClick={handleLogin}>
+                        <button type="submit" className="btn large-btn login-btn">
                             LOGIN
                         </button>
                         <div className="terms">

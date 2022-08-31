@@ -44,7 +44,7 @@ export const UNICUS_STORE =
     ? "marketplace.demo.unicus.one"
     : "marketplace.unicus.one";
 
-export const cookieDomain = process.env.REACT_APP_ENV === "local"? "localhost" : "unicus.one"
+export const cookieDomain = process.env.REACT_APP_ENV === "local" ? "localhost" : "unicus.one"
 
     
 

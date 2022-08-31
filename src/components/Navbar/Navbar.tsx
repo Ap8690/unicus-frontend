@@ -37,6 +37,7 @@ const Navbar = ({ store }) => {
     const openProfile = Boolean(anchorProfile);
 
     const accessToken = Cookies.get(ACCESS_TOKEN);
+    console.log("accessToken: ", accessToken);
 
     const handleClickStats = (event: React.MouseEvent<HTMLButtonElement>) => {
         console.log(event.currentTarget);
