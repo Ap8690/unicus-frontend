@@ -152,6 +152,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
       walletLogin(nearAccountId).then((res) => {
         toast.success("Login successful");
         Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
+          domain: cookieDomain,
           expires: 30,
         });
         Cookies.set("userInfo", JSON.stringify(res.data.user), {
