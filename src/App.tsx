@@ -82,6 +82,7 @@ useEffect(() => {
   } else {
     init();
     setLogin();
+
   }
 
   // document.documentElement.setAttribute("data-theme", "green");
@@ -109,16 +110,20 @@ const init = async () => {
 };
 const setLogin = () => {
   const cookieUser = Cookies.get("userInfo");
+  console.log("cookieUser: ", cookieUser);
 
-  let userInfo;
+  let userInfo: any;
   if (cookieUser) {
     userInfo = JSON.parse(cookieUser);
     localStorage.setItem("userInfo", JSON.stringify(userInfo));
+    console.log("Setting localstorage")
   }
   else{
     localStorage.removeItem("userInfo")
+    console.log("UnSetting localstorage")
   }
   const token = Cookies.get(ACCESS_TOKEN);
+  console.log("token: ", token);
   if (token) {
     setAccessToken(token)
   }
