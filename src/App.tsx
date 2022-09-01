@@ -84,8 +84,6 @@ useEffect(() => {
     setLogin();
 
   }
-
-  // document.documentElement.setAttribute("data-theme", "green");
 }, [accessToken]);
 
 useEffect(() => {
@@ -273,7 +271,7 @@ useEffect(() => {
                 element={<ViewNft />}
               />
               <Route path="/auctions" element={<Auctions />} />
-              <Route path="/edit-profile" element={<EditProfile />} />
+              <Route path="/edit-profile" element={<EditProfile isLogin={accessToken}/>} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/:profileState" element={<Profile />} />
               <Route path="*" element={<NotFound />} />

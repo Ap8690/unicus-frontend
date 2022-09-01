@@ -76,6 +76,7 @@ const ViewNft = () => {
                             likes={7}
                             shares={22}
                             views={nft && nft.views ? nft.views : 0}
+                            nftType={nft && nft.nftType}
                         />
                         {nft && (
                             <NftInfo

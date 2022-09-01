@@ -13,30 +13,34 @@ import './editprofile.scss'
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../config";
-import { changePasswordApi, updateProfileSocial } from "../../services/api/supplier";
+import { changePasswordApi, updateProfileSocial,updateProfile, getAccessToken } from "../../services/api/supplier";
 import Input from "../../components/Input/Input";
 
-const EditProfile = (props) => {
+const EditProfile = (props:any) => {
   const [active, setActive] = useState("general");
   const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState<any>();
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
   const getUserProfile = async () => {
-    const res = await axios.get(`${BASE_URL}/users/getMyProfile`, {
-      headers: {
-        Authorization: "Bearer " + `${props.isLogin}`,
-        "Content-Type":
-          "multipart/form-data;boundary=<calculated when request is sent>",
-      },
-    });
-    setUser(res.data.data.user);
-    console.log(res.data.data.user);
+    try {
+      console.log("props.isLogin: ", getAccessToken());
+      const res = await axios.get(`${BASE_URL}/users/getUserProfile`, {
+        headers: {
+          Authorization: "Bearer " + `${getAccessToken()}`,
+        },
+      });
+      console.log("User Data: ",res.data);
+      setUser(res.data.data.user);
+    }
+    catch(err) {
+      console.log(err)
+    }
   };
   useEffect(() => {
     getUserProfile();
@@ -235,19 +239,21 @@ const EditProfile = (props) => {
   );
 };
 
-const GeneralSettings = (isLogin, resUser) => {
-  const [username, setUserName] = useState("");
+const GeneralSettings = ({isLogin, resUser}) => {
+  console.log("resUser: ", resUser);
+  const [username, setUserName] = useState<string>();
   const [email, setEmail] = useState("");
-  const [bio, setBio] = useState("");
+  const [bio, setBio] = useState<string>();
   let navigate = useNavigate();
   const getUserProfile = async () => {
     setUserName(resUser.username);
     setEmail(resUser.email);
     setBio(resUser.bio);
   };
-  const updateProfile = async () => {
+  const updateUserProfile = async () => {
     try {
-      const res = await updateProfile();
+      if(!(username?.length>0) && !(bio?.length>0)) return toast.error("Please enter either username or bio")
+      const res = await updateProfile(username,bio);
       toast.success("Profile updated Successfully", {
         position: "bottom-center",
       });
@@ -268,12 +274,6 @@ const GeneralSettings = (isLogin, resUser) => {
         state={username}
         setState={setUserName} multi={undefined} date={undefined} time={undefined} password={undefined} required={undefined} disabled={undefined}      />
       <Input
-        title="Email"
-        placeholder="Enter your Email"
-        state={email}
-        setState={setEmail}
-        disabled={true} multi={undefined} date={undefined} time={undefined} password={undefined} required={undefined}      />
-      <Input
         title="Bio"
         placeholder="Enter your Bio"
         multi
@@ -289,7 +289,7 @@ const GeneralSettings = (isLogin, resUser) => {
         </button>
         <button
           className="btn"
-          onClick={updateProfile}
+          onClick={updateUserProfile}
         >
           Save Changes
         </button>

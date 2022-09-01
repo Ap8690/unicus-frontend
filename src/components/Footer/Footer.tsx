@@ -29,27 +29,27 @@ const Footer = () => {
   const socials = [
     {
       name: "Twitter",
-      link: "https://twitter.com/BlokMinersHQ?t=BQDQxvJOpKMevjyBpR_I9g&s=09",
+      link: "https://twitter.com/unicus_one?s=21&t=2Izg6oEpBtUcLUpetcvcRA",
       logo: TwitterLogo,
     },
     {
       name: "Medium",
-      link: "#",
+      link: "https://unicus.medium.com/",
       logo: MediumLogo,
     },
     {
       name: "Instagram",
-      link: "https://www.instagram.com/blokminers/?igshid=YmMyMTA2M2Y=",
+      link: "https://instagram.com/unicus_one?igshid=NmNmNjAwNzg=",
       logo: InstagramLogo,
     },
     {
       name: "Telegram",
-      link: "#",
+      link: "https://instagram.com/unicus_one?igshid=NmNmNjAwNzg=",
       logo: TelegramLogo,
     },
     {
       name: "Mail",
-      link: "info@blokminers.io",
+      link: "mailto:info@unicus.one",
       logo: GmailLogo,
     },
   ];

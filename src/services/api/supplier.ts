@@ -14,7 +14,7 @@ export const axiosConfig: any = {
   },
 };
 
-export const getAccessToken=()=>{
+export const getAccessToken =()=>{
   return Cookies.get(ACCESS_TOKEN);
 }
 export async function getFeaturedNft(number: number,chain: any) {
@@ -236,7 +236,7 @@ export async function addWalletAdd(userWallet: string) {
   );
 }
 
-export async function updateProfile(username, bio) {
+export async function updateProfile(username: string, bio: string) {
   return await axios.post(
     `${BASE_URL}/users/update/updateUser`,
     {

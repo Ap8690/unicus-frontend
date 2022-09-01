@@ -726,7 +726,7 @@ const CreateNftSingle = () => {
                 setState={setExtlink}
               />
               <Input
-                title="Description"
+                title="Description (Word limit 240)"
                 multi
                 placeholder={"Provide a detailed description of your item."}
                 state={description}
@@ -832,23 +832,13 @@ const CreateNftSingle = () => {
               </div>
 
               <div className="select-collection">
-                <FormControl
-                  variant="standard"
-                  sx={{ m: 0, minWidth: 120, width: "100%" }}
-                >
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Select Collection
-                  </InputLabel>
-                  <Select
-                    labelId="chain-select-label"
-                    id="chain-select"
-                    value={collection}
-                    onChange={setCollection}
-                    label="Chain"
-                  >
-                    <MenuItem value={"ethereum"}>Ethereum</MenuItem>
-                  </Select>
-                </FormControl>
+                  <Input
+                    title={"Collection Name (optional)"}
+                    placeholder="Collection#1"
+                    state={collection}
+                    setState={setCollection}
+                    text
+                  />
               </div>
               <div className="set-attributes">
                 <button className="btn-outline" onClick={handleClickOpen}>

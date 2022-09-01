@@ -35,5 +35,5 @@ export const getYear = (newDate:any) => {
 };
 
 export const getCompleteDate = (newDate: any) => {
-  return moment(new Date(newDate.substr(0, 16))).format('llll');
+  return moment(new Date(newDate?.substr(0, 16))).format('llll');
 };

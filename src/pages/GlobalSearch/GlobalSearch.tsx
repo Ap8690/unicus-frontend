@@ -7,7 +7,7 @@ import { BASE_URL } from "../../config";
 import {useParams} from "react-router-dom"
 import NotFound from "../../components/404/NotFound";
 import NftSkeletonLoader from "../../components/Loading/SkeletonLoading/NftSkeletonLoader";
-
+import { Helmet } from "react-helmet";
 
 const GlobalSearch = (props: any) => {
   const [artists, setartists] = useState<any>([])
@@ -33,6 +33,11 @@ const GlobalSearch = (props: any) => {
     
   return (
     <section className="explore">
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - search</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
       <h1 className="explore-heading">NFT Results</h1>
         {loading ? <NftSkeletonLoader /> : nfts.length !== 0 ? (<ExploreElements elements={nfts} />) : <NotFound/>}
     </section>
