@@ -5,7 +5,7 @@ import "./AllNFTs.scss";
 import BlueBackground from "../../components/BlueBackground/BlueBackground";
 import AllNFTsHeader from "./AllNFTsHeader";
 import AllNFTsBody from "./AllNFTsBody/AllNFTsBody";
-
+import { Helmet } from "react-helmet";
 // Generics
 type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 
@@ -71,6 +71,11 @@ const AllNFTs = () => {
 
   return (
     <div className="all-nfts">
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - All Nft</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
       <BlueBackground />
       <AllNFTsHeader
         list={displayList}

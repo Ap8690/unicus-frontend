@@ -1,6 +1,6 @@
 import { Skeleton } from "@mui/material"
 
-const ExploreLoader = () => {
+export const NftSkeletonLoader = () => {
     return (
         <div className="explore-elements">
             <LoaderCard />
@@ -47,4 +47,4 @@ const LoaderCard = () => {
     )
 }
 
-export default ExploreLoader
+export default NftSkeletonLoader

@@ -5,7 +5,7 @@ import Input from '../../components/Input/Input'
 import { Link, useNavigate } from 'react-router-dom'
 import { emailRegister } from '../../services/api/supplier'
 import { toast } from 'react-toastify'
-
+import { Helmet } from "react-helmet";
 
 const Register = () => {
   const [email, setEmail] = useState('')
@@ -43,6 +43,11 @@ const Register = () => {
   }
   return (
       <div className="register-page">
+        <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Register</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
         <div className="register-wrapper">
         <div className="blue-head">REGISTER</div>
         <form>

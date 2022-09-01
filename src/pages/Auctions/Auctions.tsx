@@ -9,7 +9,7 @@ import creatorImage from "../../assets/images/token.png";
 import BlueBackground from "../../components/BlueBackground/BlueBackground";
 import AuctionsFilters from "./AuctionsFilters";
 import AuctionsElements from "./AuctionsElements";
-
+import { Helmet } from "react-helmet";
 // Styles
 import "./Auctions.scss";
 
@@ -67,6 +67,11 @@ const Auctions = () => {
 
   return (
     <section className="auctions">
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Auction</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
       <BlueBackground />
       <h1 className="auctions-heading">Auctions</h1>
       <AuctionsFilters

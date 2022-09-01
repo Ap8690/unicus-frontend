@@ -277,10 +277,6 @@ useEffect(() => {
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/:profileState" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
-              {/* <Route
-                  path="/edit-profile"
-                  element={<EditProfile />}
-                /> */}
             </Routes>
             <Footer />
           </div>

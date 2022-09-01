@@ -31,10 +31,16 @@ import circlesImg from "../../assets/svgs/circles.svg";
 
 // Components
 import HomepageBackground from "./HomepageBackground";
+import { Helmet } from "react-helmet";
 
 const Homepage = () => {
   return (
     <div className="homepage">
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Marketplace</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
       <HomepageBackground />
       <Circles />
       <TopBanner />

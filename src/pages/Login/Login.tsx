@@ -4,9 +4,7 @@ import { useState } from "react"
 import { Link, Navigate, useNavigate } from "react-router-dom"
 import Input from "../../components/Input/Input"
 
-import googleLogo from "../../assets/svgs/google.svg"
-import facebookLogo from "../../assets/svgs/facebook.svg"
-import twitterLogo from "../../assets/svgs/twitter.svg"
+import { Helmet } from "react-helmet";
 import { emailLogin } from "../../services/api/supplier"
 import { getaccessToken, getUserInfo } from "../../Redux/Profile/actions"
 import { useDispatch } from "react-redux"
@@ -63,6 +61,11 @@ const Login = ({}) => {
     }
     return (
         <>
+        <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Login</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
             <div className="login-page">
                 <div className="login-wrapper">
                     <div className="blue-head">LOGIN</div>

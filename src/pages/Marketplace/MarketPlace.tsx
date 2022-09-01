@@ -17,6 +17,7 @@ import MarketPlaceTopCollections from "./MarketPlaceTopCollections/MarketPlaceTo
 import MarketPlaceCreateAndSell from "./MarketPlaceCreateAndSell/MarketPlaceCreateAndSell";
 import MarketPlaceDiscover from "./MarketPlaceDiscover/MarketPlaceDiscover";
 import StayInLoop from "../../components/StayInLoop/StayInLoop";
+import { Helmet } from "react-helmet";
 
 const MarketPlace = () => {
   const {chain} = useContext(ChainContext)
@@ -31,6 +32,11 @@ const MarketPlace = () => {
   const categories = ["Funny","Art","Nature","Animal","Sports","Photography","Music","Metaverse"];
   return (
     <section className="market-place">
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Marketplace</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
       <BlueBackground />
       <MarketPlaceMain saleStats={saleStats} noStats={false} storeTitle={'Create, Sell & Collect Your Own Creative NFT'} />
       <MarketPlaceFeatured chain={chain} title={"Featured Artworks"} />
