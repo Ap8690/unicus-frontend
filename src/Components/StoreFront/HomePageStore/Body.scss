@@ -1,0 +1,259 @@
+.homepage{
+    margin-top: 95px!important;
+}
+.Paragraph1
+{
+font-family: Urbanist;
+font-style: normal;
+font-weight: 700;
+font-size: 48px;
+line-height: 64px;
+color: var(--text_default_pure);
+width:450px;
+@include mQ($sm){
+    width: 100%;
+}
+
+}
+.DottedImage{
+    @include mQ($sm){
+        margin-top:25px ;
+    }
+}
+#NFTs
+{
+    font-family: Urbanist;
+font-style: normal;
+font-weight: 900;
+font-size: 48px;
+line-height: 64px;
+// color: var(--text_default_dark);
+    color:#0d6efd;
+}
+#NoTechKnowledge
+{
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 30px;
+color: var(--text_default_pure);
+margin-top: 25px;
+}
+
+.ExploreandCreateBtns
+{
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px;
+    gap:10px;
+    position: absolute;
+    
+}
+
+#Create,#Explore
+{
+width:150px;
+height:50px;
+border-radius: 10px;
+background-color: var(--button-bg);
+border-color: var(--button-bg);
+
+}
+
+
+.BrowseCategory,.RecentlyCreated
+{
+    font-family: Urbanist;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 64px;
+color: var(--text_default_pure);
+}
+
+
+.LongButton
+{
+    background: #A7A7A7;
+    height: 2px;
+    width:90%;
+    margin: auto;
+    @include mQ($sm){
+        width: 100%;
+    }
+}
+
+
+
+.ParentDiv
+{
+   
+   height:300px;
+   display:flex;
+   gap:40px; 
+   justify-content: center;
+}
+.Category{
+    overflow-x: scroll;
+    padding: 20px 0 10px 10px;
+    margin: 0 0 50px 0;
+    justify-content: space-between;
+     
+}
+.CategoryDiv
+{
+padding: 100px 60px;
+background: rgba(196, 196, 196, 0.3);
+border-radius: 10px;
+text-align: center;
+padding-top:118px;
+margin-right: 15px;
+cursor: pointer;
+}
+
+.NoCollectionToShow
+{
+font-family: Roboto;
+font-style: normal;
+font-weight: 500;
+font-size: 20px;
+line-height: 30px;
+
+
+display: flex;
+margin-top:100px;
+letter-spacing: 0.15px;
+
+color: var(--text_default_pure);
+}
+
+
+
+
+.FifthPartRow{
+    height: 50%;
+    overflow: scroll!important;
+    width: auto!important;
+    max-width: none!important;
+    @include mQ($sm){
+       width: 100%!important;
+    }
+}
+
+
+.NewsLetter
+{
+    background: var(--primary_theme);
+    border-radius: 15px;
+    padding-top:45px;
+    padding-bottom:5px;
+    margin-inline:40px ;
+    @include mQ($sm){
+        margin-inline:15px;
+    }
+}
+
+.NewsLetterPara
+{
+    border-radius: 15px;
+    text-align: center;
+    font-family: Urbanist;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 50px;
+    line-height: 75px;
+    color: #FFFFFF;
+    @include mQ($sm){
+        font-size: 24px;
+        line-height: 36px;
+    }
+}
+.emailRow{
+    margin-top: 65px!important;
+    margin-bottom: 45px!important;
+}
+
+.emailInput
+{
+    border: none;
+    border-radius: 12px;
+    width: 100%;
+    padding: 14px 30px;
+    color: white;
+}
+
+
+.Subscribe
+{
+padding: 14px 30px!important;
+border-radius: 15px!important;
+width: 100%;
+@include mQ($sm){
+    margin-top: 15px;
+}
+}
+
+
+.FooterCol
+{
+ background: #182951;
+ padding: 50px 130px 0;
+ @include mQ($sm){
+     padding: 25px;
+ }
+}
+
+#Unicus
+{
+    font-family: Poppins;
+font-style: normal;
+font-weight: bold;
+font-size: 20px;
+line-height: 30px;
+/* identical to box height */
+
+
+color: #FFFFFF;
+}
+
+
+#TheBestPara
+{
+    font-family: Poppins;
+font-style: normal;
+font-weight: 500;
+font-size: 15px;
+line-height: 22px;
+
+color: rgba(255, 255, 255, 0.5);
+}
+
+.discordimg
+{
+    margin-left:30px;
+}
+
+.instagramimg
+{
+    margin-left:30px;
+}
+
+.CopyRight
+{
+    text-align:center;
+    font-family: Poppins;
+font-style: normal;
+font-weight: 500;
+font-size: 20px;
+line-height: 30px;
+
+color: rgba(255, 255, 255, 0.5);
+
+
+}
+::-webkit-scrollbar {
+    display: none;
+}

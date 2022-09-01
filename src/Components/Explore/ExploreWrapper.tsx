@@ -15,6 +15,8 @@ import { backendUrl } from '../../config'
 import ResetPasswordPopUp from '../Modals/Auth/ResetPassword'
 import { getaccessToken, getUserInfo } from '../../Redux/Profile/actions'
 import Cookies from 'js-cookie'
+import { IStore } from '../../Models/Store'
+import { getStoreName } from '../../Utilities/Util'
 
 const ExploreWrapper = (props: any) => {
     // redux state
@@ -34,7 +36,6 @@ const ExploreWrapper = (props: any) => {
     const [verifiedMessage, setverifiedMessage] = useState<any>('')
 
     useEffect(() => {
-        console.log("store", props.location.pathname.split("/")[4]=="true");
         
         if (
             props.location.pathname.includes('/login') &&
@@ -65,7 +66,6 @@ const ExploreWrapper = (props: any) => {
                     history.push("/create-store")
                 }
                 else{
-                    console.log("store 1");
                     
                     history.push("/");
                 }
@@ -80,22 +80,19 @@ const ExploreWrapper = (props: any) => {
         ) {
             setResetPasswordPopUpShow(true)
         }
-    }, [])
+    }, [])   
 
     async function fetchItems() {
         if (skiploading) {
-            console.log(sortBy)
             await axios
                 .get(
                     `${backendUrl}/auction/getAllExplore/${skip}/${networkID}/${encodeURIComponent(JSON.stringify(sortBy))}`
                 )
                 .then((res: any) => {
-                    console.log(sortBy)
                     settotalAuctions(res.data.totalAuctions)
                     const newData = metadata
                     newData.push(...res.data.data)
                     setmetadata(newData)
-                    console.log(newData)
                     if (res.data.msg) {
                         setNFTSLoaded(true)
                     } else {
@@ -103,7 +100,6 @@ const ExploreWrapper = (props: any) => {
                     }
                 })
                 .catch((error) => {
-                    console.log(sortBy)
                     console.log(error)
                     setskiploading(false)
                 })
@@ -111,13 +107,12 @@ const ExploreWrapper = (props: any) => {
     }
 
     useEffect(() => {
-        console.log(sortBy)
         if (networkID === localStorage.getItem('networkID') || networkID === bscChain) {
             fetchItems()
         } else {
             setskiploading(false)
         }
-    }, [skip, sortBy2])
+    }, [skip, sortBy2,networkID])
 
     window.addEventListener('scroll', async function () {
         var root: any
@@ -135,7 +130,7 @@ const ExploreWrapper = (props: any) => {
             <div className='section_info'>
                 <h1 className='section_heading'>Explore</h1>
                 <h1 className='section_heading' style={{ fontSize: '20px' }}>
-                    Unicus has exclusive assets and vast variety of NFT
+                    ${getStoreName} has exclusive assets and vast variety of NFT
                 </h1>
             </div>
             <Container>

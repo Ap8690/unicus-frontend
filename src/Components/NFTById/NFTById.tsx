@@ -1,15 +1,14 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Container, Row, Image, Col, Form } from "react-bootstrap";
+import { Container, Row, Col, Form } from "react-bootstrap";
 import { ReactComponent as BiWalletAlt } from "../../Assets/react-icons/BiWalletAlt.svg";
 import { ReactComponent as HiMenuAlt2 } from "../../Assets/react-icons/HiMenuAlt2.svg";
 import { ReactComponent as RsAuctionFill } from "../../Assets/react-icons/RsAuctionFill.svg";
 import { ReactComponent as BsTag } from "../../Assets/react-icons/BsTag.svg";
 import { ReactComponent as Share } from "../../Assets/react-icons/Share.svg";
 import DefaultErrorModal from "../Modals/DefaultErrorModal";
-import MetaMaskNotFound from "../Modals/MetaMaskNotFound/MetaMaskNotFound";
-import { backendUrl } from "../../config";
+import { avalancheChain, backendUrl, tronChain } from "../../config";
 import ShareProfile from "../Modals/Share/Share";
 import { NavLink, withRouter } from "react-router-dom";
 import { Modal } from "react-bootstrap";
@@ -18,17 +17,13 @@ import { ReactComponent as AiOutlineMenuUnfold } from "../../Assets/react-icons/
 import { ReactComponent as AiOutlineShoppingCart } from "../../Assets/react-icons/AiOutlineShoppingCart.svg";
 import { ReactComponent as RiPriceTag2Fill } from "../../Assets/react-icons/RiPriceTag2Fill.svg";
 import { ReactComponent as BiFoodMenu } from "../../Assets/react-icons/BiFoodMenu.svg";
-import { ReactComponent as BsGrid1X2Fill } from "../../Assets/react-icons/BsGrid1X2Fill.svg";
 import { ReactComponent as CgArrowsExchangeV } from "../../Assets/react-icons/CgArrowsExchangeV.svg";
 import { ReactComponent as SiBinance } from "../../Assets/react-icons/SiBinance.svg";
 import { ReactComponent as BsCartPlus } from "../../Assets/react-icons/BsCartPlus.svg";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import DefaultModal from "../Modals/DefaultModal/DefaultModal";
 import { useLocation } from "react-router-dom";
 import {
-    mintNFTB,
-    mintNFTP,
-    mintNFTE,
     bscChain,
     ethChain,
     polygonChain,
@@ -45,7 +40,6 @@ import DisConnect from "../Modals/DisConnect/DisConnect";
 // import { createNFTAddress } from '../../Redux/Blockchain/Abi/createNFT''
 
 // Accordion Material UI
-import web3 from "../../web3";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -59,12 +53,12 @@ import Select from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Chip from "@mui/material/Chip";
-import { Cloudinary } from "@cloudinary/url-gen";
 // import { createNFTAddress } from '../../Redux/Blockchain/Abi/createNFT'
 import { getUserInfo } from "../../Redux/Profile/actions";
 import { useDispatch } from "react-redux";
 
 import { connectWallet, getUserWallet } from "../../Utilities/Util";
+import WalletNotFound from "../Modals/MetaMaskNotFound/WalletNotFound";
 
 const NFTById = (props: any) => {
     const dispatch = useDispatch();
@@ -160,6 +154,7 @@ const NFTById = (props: any) => {
 
     async function fetchItem() {
         if (location.pathname.split("/")[1] === "sale") {
+            console.log("Sale")
             await axios
                 .get(
                     `${backendUrl}/auction/getAuctionById/${location.pathname
@@ -167,18 +162,13 @@ const NFTById = (props: any) => {
                         .pop()}/${location.pathname.split("/")[2]}`
                 )
                 .then(async (res: any) => {
+                    console.log("res: ", res);
                     setauctionInfo(res.data[0]);
                     await axios
                         .get(
-                            `${backendUrl}/nft/getNftById/${
+                            `${backendUrl}/nft/getNftById/${location.pathname.split("/")[2]}/${res.data[0].nftId.contractAddress}/${
                                 res.data[0].tokenId
-                            }/${
-                                JSON.parse(localStorage.getItem("userInfo"))
-                                    ? JSON.parse(
-                                          localStorage.getItem("userInfo")
-                                      )._id
-                                    : "none"
-                            }/${location.pathname.split("/")[2]}`
+                            }`
                         )
                         .then(async (res: any) => {
                             setnftInfo(res.data.nft);
@@ -204,15 +194,12 @@ const NFTById = (props: any) => {
                         });
                 });
         } else if (location.pathname.split("/")[1] === "nft") {
+            console.log("NFT",location.pathname)
             await axios
                 .get(
-                    `${backendUrl}/nft/getNftById/${location.pathname
+                    `${backendUrl}/nft/getNftById/${location.pathname.split("/")[2]}/${location.pathname.split("/")[3]}/${location.pathname
                         .split("/")
-                        .pop()}/${
-                        JSON.parse(localStorage.getItem("userInfo"))
-                            ? JSON.parse(localStorage.getItem("userInfo"))._id
-                            : "none"
-                    }/${location.pathname.split("/")[2]}`
+                        .pop()}`
                 )
                 .then(async (res: any) => {
                     setnftInfo(res.data.nft);
@@ -249,15 +236,22 @@ const NFTById = (props: any) => {
                         setprice("Eth");
                     } else if (res.data.nft.chain === Number(polygonChain)) {
                         setprice("Matic");
-                    } else {
+                    }
+                    else if (res.data.nft.chain === Number(tronChain)) {
+                        setprice("TRX");
+                    } 
+                    else if (res.data.nft.chain === Number(avalancheChain)) {
+                        setprice("AVAX");
+                    }  else {
                         setprice("BNB");
                     }
-                    setnftStates(res.data.nftStates);
-                    setnftBids(res.data.bids);
-                    setmintedBy(res.data.mintedUser.username);
-                    sessionStorage.setItem(res.data.nft._id, "true");
+                    setnftStates(res?.data?.nftStates);
+                    setnftBids(res?.data?.bids);
+                    setmintedBy(res?.data?.mintedUser?.username);
+                    sessionStorage.setItem(res?.data?.nft?._id, "true");
                 });
         } else {
+            console.log("Else,",location.pathname.split("/"))
             await axios
                 .get(
                     `${backendUrl}/auction/getAuctionById/${location.pathname
@@ -266,7 +260,7 @@ const NFTById = (props: any) => {
                 )
                 .then(async (res: any) => {
                     setauctionInfo(res.data[0]);
-                    setendDate(new Date(res.data[0].auctionTimer));
+                    setendDate(new Date(res.data[0]?.auctionTimer));
                     setnowDate(new Date());
                     setdateArray(
                         new Date(res.data[0].auctionTimer).toString().split(" ")
@@ -292,15 +286,9 @@ const NFTById = (props: any) => {
                     setdateZone(timeZone);
                     await axios
                         .get(
-                            `${backendUrl}/nft/getNftById/${
+                            `${backendUrl}/nft/getNftById/${location.pathname.split("/")[2]}/${location.pathname.split("/")[3]}/${
                                 res.data[0].tokenId
-                            }/${
-                                JSON.parse(localStorage.getItem("userInfo"))
-                                    ? JSON.parse(
-                                          localStorage.getItem("userInfo")
-                                      )._id
-                                    : "none"
-                            }/${location.pathname.split("/")[2]}`
+                            }`
                         )
                         .then(async (res: any) => {
                             setnftInfo(res.data.nft);
@@ -310,10 +298,12 @@ const NFTById = (props: any) => {
                             );
                             if (res.data.nft.chain === Number(ethChain)) {
                                 setprice("Eth");
-                            } else if (
-                                res.data.nft.chain === Number(polygonChain)
-                            ) {
+                            } else if (res.data.nft.chain === Number(polygonChain)) {
                                 setprice("Matic");
+                            } else if (res.data.nft.chain === Number(tronChain)) {
+                                setprice("TRX");
+                            } else if (res.data.nft.chain === Number(avalancheChain)) {
+                                setprice("AVAX");
                             } else {
                                 setprice("BNB");
                             }
@@ -355,6 +345,10 @@ const NFTById = (props: any) => {
                         token = "ETH";
                     } else if (networkID === polygonChain) {
                         token = "Matic";
+                    }else if (networkID === avalancheChain) {
+                        token = "AVAX";
+                    } else if (networkID === tronChain) {
+                        token = "TRX";
                     }
 
                     var data = {
@@ -454,9 +448,17 @@ const NFTById = (props: any) => {
                         setMetamaskNotFound(true);
                         return null;
                     }
+                    //@ts-expect-error
+                    if(networkID === tronChain && !window.tronWeb){
+                        setNftLoading(false);
+                        setdisableButton(false);
+                        setpaymentMode("");
+                        setMetamaskNotFound(true);
+                        return null;
+                    }
                     // await getAccount();
-                    connectWallet().then(async () => {
-                        const accounts = await getUserWallet();
+                    connectWallet(networkID).then(async () => {
+                        const accounts = await getUserWallet(networkID);
                         if (
                             userInfo.wallets.length === 0 ||
                             !userInfo.wallets.includes(accounts[0])
@@ -676,9 +678,17 @@ const NFTById = (props: any) => {
                         setMetamaskNotFound(true);
                         return null;
                     }
+                    //@ts-expect-error
+                    if (networkID === tronChain && !window.tronWeb) {
+                      setNftLoading(false);
+                      setdisableButton(false);
+                      setpaymentMode("");
+                      setMetamaskNotFound(true);
+                      return null;
+                    }
                     // await getAccount();
-                    connectWallet().then(async () => {
-                        const accounts = await getUserWallet();
+                    connectWallet(networkID).then(async () => {
+                        const accounts = await getUserWallet(networkID);
                         if (
                             userInfo.wallets.length === 0 ||
                             !userInfo.wallets.includes(accounts[0])
@@ -786,6 +796,10 @@ const NFTById = (props: any) => {
                 token = "ETH";
             } else if (networkID === polygonChain) {
                 token = "Matic";
+            }else if (networkID === avalancheChain) {
+                token = "AVAX";
+            } else if (networkID === tronChain) {
+                token = "TRX";
             }
 
             var data = {
@@ -865,81 +879,90 @@ const NFTById = (props: any) => {
                     }
                 });
             } else {
-                if (!window.ethereum) {
-                    setdisableButton(false);
-                    setNftLoading(false);
-                    setMetamaskNotFound(true);
-                    return null;
-                }
-
-                connectWallet().then(async () => {
-                    const accounts = await getUserWallet();
-                    if (
-                        userInfo.wallets.length === 0 ||
-                        !userInfo.wallets.includes(accounts[0])
-                    ) {
-                        console.log(accounts[0]);
-                        const axiosConfig: any = {
-                            headers: {
-                                Authorization: "Bearer " + accessToken,
-                            },
-                        };
-                        await axios
-                            .get(
-                                `${backendUrl}/users/addWallet/${accounts[0]}`,
-                                axiosConfig
-                            )
-                            .then(async (res: any) => {
-                                console.log(res);
-                                dispatch(getUserInfo(res.data.user));
-                                localStorage.setItem(
-                                    "userInfo",
-                                    JSON.stringify(res.data.user)
-                                );
-                            })
-                            .catch((err) => {
-                                setNftLoading(false);
-                                setdisableButton(false);
-                                setdefaultErrorMessage(
-                                    "Current Metamask account is not linked with this user"
-                                );
-                                setdefaultErrorModal(true);
-                                throw "Wallet already in use";
-                            });
-                    }
-                    const res = await marketPlace.methods
-                        .EndSale(auctionInfo.auctionId)
-                        .send({ from: accounts[0] });
-                    if (res?.transactionHash) {
-                        axios
-                            .post(
-                                `${backendUrl}/auction/end`,
-                                {
-                                    nftId: auctionInfo.nftId,
-                                    auctionId: auctionInfo._id,
-                                    userInfo: userInfo.username,
-                                    endAuctionHash: res.transactionHash,
-                                },
-                                axiosConfig
-                            )
-                            .then((res) => {
-                                console.log(res.data);
-                            });
-                        setNftLoading(false);
-                        setNftSuccess(true);
-                        setHash(res?.transactionHash);
-                        setSuccessTitle("NFT Sale Ended");
-                        setdisableButton(false);
-                        props.history.push("/portfolio");
-                        window.location.reload();
-                    }
-                }).catch((walletError) => {
+              if (!window.ethereum) {
+                setdisableButton(false);
+                setNftLoading(false);
+                setMetamaskNotFound(true);
+                return null;
+              }
+              //@ts-expect-error
+              if (networkID === tronChain && !window.tronWeb) {
+                setNftLoading(false);
+                setdisableButton(false);
+                setpaymentMode("");
+                setMetamaskNotFound(true);
+                return null;
+              }
+              connectWallet(networkID)
+                .then(async () => {
+                  const accounts = await getUserWallet(networkID);
+                  if (
+                    userInfo.wallets.length === 0 ||
+                    !userInfo.wallets.includes(accounts[0])
+                  ) {
+                    console.log(accounts[0]);
+                    const axiosConfig: any = {
+                      headers: {
+                        Authorization: "Bearer " + accessToken,
+                      },
+                    };
+                    await axios
+                      .get(
+                        `${backendUrl}/users/addWallet/${accounts[0]}`,
+                        axiosConfig
+                      )
+                      .then(async (res: any) => {
+                        console.log(res);
+                        dispatch(getUserInfo(res.data.user));
+                        localStorage.setItem(
+                          "userInfo",
+                          JSON.stringify(res.data.user)
+                        );
+                      })
+                      .catch((err) => {
                         setNftLoading(false);
                         setdisableButton(false);
-                        setdefaultErrorMessage(walletError.message);
+                        setdefaultErrorMessage(
+                          "Current Metamask account is not linked with this user"
+                        );
                         setdefaultErrorModal(true);
-                        throw walletError;
-                    });
+                        throw "Wallet already in use";
+                      });
+                  }
+                  const res = await marketPlace.methods
+                    .EndSale(auctionInfo.auctionId)
+                    .send({ from: accounts[0] });
+                  if (res?.transactionHash) {
+                    axios
+                      .post(
+                        `${backendUrl}/auction/end`,
+                        {
+                          nftId: auctionInfo.nftId,
+                          auctionId: auctionInfo._id,
+                          userInfo: userInfo.username,
+                          endAuctionHash: res.transactionHash,
+                        },
+                        axiosConfig
+                      )
+                      .then((res) => {
+                        console.log(res.data);
+                      });
+                    setNftLoading(false);
+                    setNftSuccess(true);
+                    setHash(res?.transactionHash);
+                    setSuccessTitle("NFT Sale Ended");
+                    setdisableButton(false);
+                    props.history.push("/portfolio");
+                    window.location.reload();
+                  }
+                })
+                .catch((walletError) => {
+                  setNftLoading(false);
+                  setdisableButton(false);
+                  setdefaultErrorMessage(walletError.message);
+                  setdefaultErrorModal(true);
+                  throw walletError;
+                });
             }
         } catch (error) {
             console.log(error);
@@ -1051,84 +1074,92 @@ const NFTById = (props: any) => {
                 });
             } 
             else {
-                if (!window.ethereum) {
-                    setdisableButton(false);
-                    setNftLoading(false);
-                    setMetamaskNotFound(true);
-                    return null;
-                }
+              if (!window.ethereum) {
+                setdisableButton(false);
+                setNftLoading(false);
+                setMetamaskNotFound(true);
+                return null;
+              }
+              //@ts-expect-error
+              if (networkID === tronChain && !window.tronWeb) {
+                setNftLoading(false);
+                setdisableButton(false);
+                setpaymentMode("");
+                setMetamaskNotFound(true);
+                return null;
+              }
 
-                connectWallet()
-                    .then(async () => {
-                        const accounts = await getUserWallet();
-                        if (
-                            userInfo.wallets.length === 0 ||
-                            !userInfo.wallets.includes(accounts[0])
-                        ) {
-                            console.log(accounts[0]);
-                            const axiosConfig: any = {
-                                headers: {
-                                    Authorization: "Bearer " + accessToken,
-                                },
-                            };
-                            await axios
-                                .get(
-                                    `${backendUrl}/users/addWallet/${accounts[0]}`,
-                                    axiosConfig
-                                )
-                                .then(async (res: any) => {
-                                    console.log(res);
-                                    dispatch(getUserInfo(res.data.user));
-                                    localStorage.setItem(
-                                        "userInfo",
-                                        JSON.stringify(res.data.user)
-                                    );
-                                })
-                                .catch((err) => {
-                                    setNftLoading(false);
-                                    setdisableButton(false);
-                                    setdefaultErrorMessage(
-                                        "Current Metamask account is not linked with this user"
-                                    );
-                                    setdefaultErrorModal(true);
-                                    throw "Wallet already in use";
-                                });
-                        }
-                        const res = await auction.methods
-                            .endAuction(auctionInfo.auctionId)
-                            .send({ from: accounts[0] });
-                        if (res?.transactionHash) {
-                            axios
-                                .post(
-                                    `${backendUrl}/auction/end`,
-                                    {
-                                        nftId: auctionInfo.nftId,
-                                        name: auctionInfo.name,
-                                        auctionId: auctionInfo._id,
-                                        userInfo: userInfo.username,
-                                        endAuctionHash: res.transactionHash,
-                                    },
-                                    axiosConfig
-                                )
-                                .then((res) => {
-                                    console.log(res.data);
-                                });
-                            setNftLoading(false);
-                            setdisableButton(false);
-                            setNftSuccess(true);
-                            setHash(res?.transactionHash);
-                            setSuccessTitle("NFT Auction Ended");
-                            props.history.push("/portfolio");
-                            window.location.reload();
-                        }
-                    })
-                    .catch((walletError) => {
+              connectWallet(networkID)
+                .then(async () => {
+                  const accounts = await getUserWallet(networkID);
+                  if (
+                    userInfo.wallets.length === 0 ||
+                    !userInfo.wallets.includes(accounts[0])
+                  ) {
+                    console.log(accounts[0]);
+                    const axiosConfig: any = {
+                      headers: {
+                        Authorization: "Bearer " + accessToken,
+                      },
+                    };
+                    await axios
+                      .get(
+                        `${backendUrl}/users/addWallet/${accounts[0]}`,
+                        axiosConfig
+                      )
+                      .then(async (res: any) => {
+                        console.log(res);
+                        dispatch(getUserInfo(res.data.user));
+                        localStorage.setItem(
+                          "userInfo",
+                          JSON.stringify(res.data.user)
+                        );
+                      })
+                      .catch((err) => {
                         setNftLoading(false);
                         setdisableButton(false);
-                        setdefaultErrorMessage(walletError.message);
+                        setdefaultErrorMessage(
+                          "Current Metamask account is not linked with this user"
+                        );
                         setdefaultErrorModal(true);
-                        throw walletError;
-                    });
+                        throw "Wallet already in use";
+                      });
+                  }
+                  const res = await auction.methods
+                    .endAuction(auctionInfo.auctionId)
+                    .send({ from: accounts[0] });
+                  if (res?.transactionHash) {
+                    axios
+                      .post(
+                        `${backendUrl}/auction/end`,
+                        {
+                          nftId: auctionInfo.nftId,
+                          name: auctionInfo.name,
+                          auctionId: auctionInfo._id,
+                          userInfo: userInfo.username,
+                          endAuctionHash: res.transactionHash,
+                        },
+                        axiosConfig
+                      )
+                      .then((res) => {
+                        console.log(res.data);
+                      });
+                    setNftLoading(false);
+                    setdisableButton(false);
+                    setNftSuccess(true);
+                    setHash(res?.transactionHash);
+                    setSuccessTitle("NFT Auction Ended");
+                    props.history.push("/portfolio");
+                    window.location.reload();
+                  }
+                })
+                .catch((walletError) => {
+                  setNftLoading(false);
+                  setdisableButton(false);
+                  setdefaultErrorMessage(walletError.message);
+                  setdefaultErrorModal(true);
+                  throw walletError;
+                });
             }
         } catch (error) {
             console.log(error);
@@ -1151,6 +1182,10 @@ const NFTById = (props: any) => {
                 token = "ETH";
             } else if (networkID === polygonChain) {
                 token = "Matic";
+            }else if (networkID === avalancheChain) {
+                token = "AVAX";
+            } else if (networkID === tronChain) {
+                token = "TRX";
             }
 
             var data = {
@@ -1234,83 +1269,91 @@ const NFTById = (props: any) => {
                 });
             } 
             else {
-                if (!window.ethereum) {
-                    setdisableButton(false);
-                    setNftLoading(false);
-                    setMetamaskNotFound(true);
-                    return null;
-                }
+              if (!window.ethereum) {
+                setdisableButton(false);
+                setNftLoading(false);
+                setMetamaskNotFound(true);
+                return null;
+              }
+              //@ts-expect-error
+              if (networkID === tronChain && !window.tronWeb) {
+                setNftLoading(false);
+                setdisableButton(false);
+                setpaymentMode("");
+                setMetamaskNotFound(true);
+                return null;
+              }
 
-                connectWallet()
-                  .then(async () => {
-                    const accounts = await getUserWallet();
-                    if (
-                      userInfo.wallets.length === 0 ||
-                      !userInfo.wallets.includes(accounts[0])
-                    ) {
-                      console.log(accounts[0]);
-                      const axiosConfig: any = {
-                        headers: {
-                          Authorization: "Bearer " + accessToken,
+              connectWallet(networkID)
+                .then(async () => {
+                  const accounts = await getUserWallet(networkID);
+                  if (
+                    userInfo.wallets.length === 0 ||
+                    !userInfo.wallets.includes(accounts[0])
+                  ) {
+                    console.log(accounts[0]);
+                    const axiosConfig: any = {
+                      headers: {
+                        Authorization: "Bearer " + accessToken,
+                      },
+                    };
+                    await axios
+                      .get(
+                        `${backendUrl}/users/addWallet/${accounts[0]}`,
+                        axiosConfig
+                      )
+                      .then(async (res: any) => {
+                        console.log(res);
+                        dispatch(getUserInfo(res.data.user));
+                        localStorage.setItem(
+                          "userInfo",
+                          JSON.stringify(res.data.user)
+                        );
+                      })
+                      .catch((err) => {
+                        setNftLoading(false);
+                        setdisableButton(false);
+                        setdefaultErrorMessage(
+                          "Current Metamask account is not linked with this user"
+                        );
+                        setdefaultErrorModal(true);
+                        throw "Wallet already in use";
+                      });
+                  }
+                  const res = await auction.methods
+                    .cancelAuction(auctionInfo.auctionId)
+                    .send({ from: accounts[0] });
+                  if (res?.transactionHash) {
+                    axios
+                      .post(
+                        `${backendUrl}/auction/cancel`,
+                        {
+                          nftId: auctionInfo.nftId,
+                          auctionId: auctionInfo._id,
+                          userInfo: userInfo.username,
+                          transactionHash: res.transactionHash,
                         },
-                      };
-                      await axios
-                        .get(
-                          `${backendUrl}/users/addWallet/${accounts[0]}`,
-                          axiosConfig
-                        )
-                        .then(async (res: any) => {
-                          console.log(res);
-                          dispatch(getUserInfo(res.data.user));
-                          localStorage.setItem(
-                            "userInfo",
-                            JSON.stringify(res.data.user)
-                          );
-                        })
-                        .catch((err) => {
-                          setNftLoading(false);
-                          setdisableButton(false);
-                          setdefaultErrorMessage(
-                            "Current Metamask account is not linked with this user"
-                          );
-                          setdefaultErrorModal(true);
-                          throw "Wallet already in use";
-                        });
-                    }
-                    const res = await auction.methods
-                      .cancelAuction(auctionInfo.auctionId)
-                      .send({ from: accounts[0] });
-                    if (res?.transactionHash) {
-                      axios
-                        .post(
-                          `${backendUrl}/auction/cancel`,
-                          {
-                            nftId: auctionInfo.nftId,
-                            auctionId: auctionInfo._id,
-                            userInfo: userInfo.username,
-                            transactionHash: res.transactionHash,
-                          },
-                          axiosConfig
-                        )
-                        .then((res) => {
-                          console.log(res.data);
-                        });
-                      setNftLoading(false);
-                      setNftSuccess(true);
-                      setdisableButton(false);
-                      setHash(res?.transactionHash);
-                      setSuccessTitle("NFT Auction Cancelled");
-                      props.history.push("/portfolio");
-                      window.location.reload();
-                    }
-                  })
-                  .catch((walletError) => {
+                        axiosConfig
+                      )
+                      .then((res) => {
+                        console.log(res.data);
+                      });
                     setNftLoading(false);
+                    setNftSuccess(true);
                     setdisableButton(false);
-                    setdefaultErrorMessage(walletError.message);
-                    setdefaultErrorModal(true);
-                    throw walletError;
-                  });;
+                    setHash(res?.transactionHash);
+                    setSuccessTitle("NFT Auction Cancelled");
+                    props.history.push("/portfolio");
+                    window.location.reload();
+                  }
+                })
+                .catch((walletError) => {
+                  setNftLoading(false);
+                  setdisableButton(false);
+                  setdefaultErrorMessage(walletError.message);
+                  setdefaultErrorModal(true);
+                  throw walletError;
+                });
             }
         } catch (error) {
             console.log(error);
@@ -1362,6 +1405,10 @@ const NFTById = (props: any) => {
                 token = "ETH";
             } else if (networkID === polygonChain) {
                 token = "Matic";
+            }else if (networkID === avalancheChain) {
+                token = "AVAX";
+            } else if (networkID === tronChain) {
+                token = "TRX";
             }
 
             var data = {
@@ -1437,61 +1484,69 @@ const NFTById = (props: any) => {
                     }
                 });
             } else {
-                if (!window.ethereum) {
-                    setdisableButton(false);
-                    setNftLoading(false);
-                    setMetamaskNotFound(true);
-                    return null;
-                }
+              if (!window.ethereum) {
+                setdisableButton(false);
+                setNftLoading(false);
+                setMetamaskNotFound(true);
+                return null;
+              }
+              //@ts-expect-error
+              if (networkID === tronChain && !window.tronWeb) {
+                setNftLoading(false);
+                setdisableButton(false);
+                setpaymentMode("");
+                setMetamaskNotFound(true);
+                return null;
+              }
 
-                connectWallet().then(async () => {
-                    const accounts = await getUserWallet();
-                    if (
-                        userInfo.wallets.length === 0 ||
-                        !userInfo.wallets.includes(accounts[0])
-                    ) {
-                        console.log(accounts[0]);
-                        const axiosConfig: any = {
-                            headers: {
-                                Authorization: "Bearer " + accessToken,
-                            },
-                        };
-                        await axios
-                            .get(
-                                `${backendUrl}/users/addWallet/${accounts[0]}`,
-                                axiosConfig
-                            )
-                            .then(async (res: any) => {
-                                console.log(res);
-                                dispatch(getUserInfo(res.data.user));
-                                localStorage.setItem(
-                                    "userInfo",
-                                    JSON.stringify(res.data.user)
-                                );
-                            })
-                            .catch((err) => {
-                                setNftLoading(false);
-                                setdisableButton(false);
-                                setdefaultErrorMessage(
-                                    "Current Metamask account is not linked with this user"
-                                );
-                                setdefaultErrorModal(true);
-                                throw "Wallet already in use";
-                            });
-                    }
-                    const res = await auction.methods.claimNft(id).send({
-                        from: accounts[0],
+              connectWallet(networkID).then(async () => {
+                const accounts = await getUserWallet(networkID);
+                if (
+                  userInfo.wallets.length === 0 ||
+                  !userInfo.wallets.includes(accounts[0])
+                ) {
+                  console.log(accounts[0]);
+                  const axiosConfig: any = {
+                    headers: {
+                      Authorization: "Bearer " + accessToken,
+                    },
+                  };
+                  await axios
+                    .get(
+                      `${backendUrl}/users/addWallet/${accounts[0]}`,
+                      axiosConfig
+                    )
+                    .then(async (res: any) => {
+                      console.log(res);
+                      dispatch(getUserInfo(res.data.user));
+                      localStorage.setItem(
+                        "userInfo",
+                        JSON.stringify(res.data.user)
+                      );
+                    })
+                    .catch((err) => {
+                      setNftLoading(false);
+                      setdisableButton(false);
+                      setdefaultErrorMessage(
+                        "Current Metamask account is not linked with this user"
+                      );
+                      setdefaultErrorModal(true);
+                      throw "Wallet already in use";
                     });
-                    if (res?.transactionHash) {
-                        setNftLoading(false);
-                        setdisableButton(false);
-                        setNftSuccess(true);
-                        setHash(res?.transactionHash);
-                        setSuccessTitle("NFT Claimed Succesfully");
-                        props.history.push("/portfolio");
-                        window.location.reload();
-                    }
+                }
+                const res = await auction.methods.claimNft(id).send({
+                  from: accounts[0],
                 });
+                if (res?.transactionHash) {
+                  setNftLoading(false);
+                  setdisableButton(false);
+                  setNftSuccess(true);
+                  setHash(res?.transactionHash);
+                  setSuccessTitle("NFT Claimed Succesfully");
+                  props.history.push("/portfolio");
+                  window.location.reload();
+                }
+              });
             }
         } catch (error) {
             console.log(error);
@@ -1665,6 +1720,10 @@ const NFTById = (props: any) => {
                                                         ? "Binance"
                                                         : price === "Eth"
                                                         ? "Ethereum"
+                                                        : price === "TRX"
+                                                        ? "Tron"
+                                                        : price === "AVAX"
+                                                        ? "Avalache"
                                                         : price === "Matic" &&
                                                           "Polygon")}
                                             </h6>
@@ -2604,8 +2663,7 @@ const NFTById = (props: any) => {
             <WalletsPopup show={open} handleClose={() => setOpen(false)} />
             <DisConnect
                 show={openDisconnectModal}
-                handleClose={() => setOpenDisconnectModal(false)}
-            />
+                handleClose={() => setOpenDisconnectModal(false)}         />
             <Modal
                 className="buy__token__modal successModal wallets nftmodal-dialog"
                 show={AddNFTModalOpen}
@@ -2687,7 +2745,7 @@ const NFTById = (props: any) => {
                 DefaultErrorModalClose={() => setdefaultErrorModal(false)}
                 DefaultErrorMessage={defaultErrorMessage}
             />
-            <MetaMaskNotFound
+            <WalletNotFound
                 show={MetamaskNotFound}
                 handleClose={() => setMetamaskNotFound(false)}
             />

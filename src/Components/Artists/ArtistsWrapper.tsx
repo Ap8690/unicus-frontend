@@ -31,7 +31,6 @@ const ArtistsWrapper = (props: any) => {
                     `${backendUrl}/users/${skip}`
                 )
                 .then((res: any) => {
-                  console.log(res.data.users)
                     const newData = metadata
                     newData.push(...res.data.users)
                     setmetadata(newData)
@@ -176,7 +175,7 @@ const ArtistsWrapper = (props: any) => {
                                     >
                                         <div className='nft_card loading'>
                                             <div className='nft_card_image_wrapper'>
-                                                <div className='nft_card_image skeleton'></div>
+                                                <div style={{"height":"260px"}} className='nft_card_image skeleton'></div>
                                                 <div className='user_image skeleton'></div>
                                             </div>
                                             <h4 className='skeleton'></h4>

@@ -40,7 +40,7 @@ const ArtistCard = ({ item }: any) => {
                 <div className={projectLoaded ? 'nft_card' : 'nft_card loading'}>
                     <div className='nft_card_image_wrapper'>
                     {!projectLoaded && (
-                        <div className='nft_card_image skeleton'></div>
+                        <div style={{"height":"260px"}}  className='nft_card_image skeleton'></div>
                     )}
                     {(<div className='nft_card_image' style={projectLoaded ? {height: '250px'} : {display: 'none', height: '250px'}}>
                     <img

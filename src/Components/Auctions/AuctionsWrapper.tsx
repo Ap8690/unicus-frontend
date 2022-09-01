@@ -9,6 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { bscChain } from "../../config";
 import { backendUrl } from "../../config";
+import { getStoreName } from "../../Utilities/Util";
 
 const AuctionsWrapper = () => {
     // redux state
@@ -25,7 +26,6 @@ const AuctionsWrapper = () => {
 
     async function fetchItems() {
         if (skiploading) {
-            console.log(sortBy);
             await axios
                 .get(
                     `${backendUrl}/auction/getAllAuction/${skip}/${networkID}/${encodeURIComponent(
@@ -33,14 +33,12 @@ const AuctionsWrapper = () => {
                     )}`
                 )
                 .then((res: any) => {
-                    console.log(sortBy);
 
                     settotalAuctions(res.data.totalAuctions);
                     const newData = metadata;
                     newData.push(...res.data.data);
                     setmetadata(newData);
                     setMetadataSorted(newData);
-                    console.log(newData);
                     if (res.data.msg) {
                         setNFTSLoaded(true);
                     } else {
@@ -85,7 +83,6 @@ const AuctionsWrapper = () => {
                 }
             });
             setMetadataSorted(metadataSorted);
-            console.log(metadataSorted.length);
         }
     }, [category, metadata]);
     return (
@@ -96,7 +93,7 @@ const AuctionsWrapper = () => {
                     className="section_heading"
                     style={{ color: "", fontSize: "20px" }}
                 >
-                    Unicus has exclusive assets and vast variety of NFT
+                    ${getStoreName} has exclusive assets and vast variety of NFT
                 </h1>
             </div>
             <Container>

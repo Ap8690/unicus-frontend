@@ -1,7 +1,6 @@
-import { Image, Modal } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import { ReactComponent as CgClose } from '../../../Assets/react-icons/CgClose.svg'
 import { ReactComponent as FiCopy } from '../../../Assets/react-icons/FiCopy.svg'
-import { WalletsPopupProps } from '../WalletsPopup/WalletsPopup.d'
 import useClipboard from 'react-use-clipboard'
 import { useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
@@ -12,15 +11,12 @@ import { useDispatch } from 'react-redux'
 import { disConnectWallet } from '../../../Redux/Profile/actions'
 
 // Svgs
-import MetaMask from '../../../Assets/MetaMask.svg'
-import Coinbase from '../../../Assets/coinbase_Wallet.svg'
-import walletConnect_wallet from '../../../Assets/LandingPage/WalletConnectCircle.svg'
-import mew_wallet from '../../../Assets/mew.svg'
+import { WalletsPopupProps } from '../../../Utilities/Util'
 
 const DisConnect = ({ show, handleClose }: WalletsPopupProps) => {
     // redux State
     const dispatch = useDispatch()
-    const { userAddress, walletType, userInfo } = useSelector(
+    const { userAddress, userInfo } = useSelector(
         (state: any) => state.profile
     )
 

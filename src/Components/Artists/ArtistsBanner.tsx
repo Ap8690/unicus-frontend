@@ -31,7 +31,6 @@ const ArtistsBanner = (props: any) => {
     const [openShareProfile, setopenShareProfile] = useState(false)
 
     useEffect(() => {
-        console.log(props.location.pathname.split('/')[2])
         if (props.location.pathname.split('/')[2]) {
             setAddress(props.location.pathname.split('/')[2])
             axios
@@ -39,7 +38,6 @@ const ArtistsBanner = (props: any) => {
                     username: props.location.pathname.split('/')[2],
                 })
                 .then((res: any) => {
-                    console.log(res.data)
                     setownedByNFTS(res.data.nftsOwned)
                     setmintedByNFTS(res.data.nftsMinted)
                     setauctions(res.data.auctions)

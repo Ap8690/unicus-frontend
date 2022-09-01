@@ -1,0 +1,41 @@
+.settingsList{
+   border: 1px solid gray;
+   border-radius: 10px;
+   height: 100%;
+   ul{
+     padding-left: 0!important;
+   }
+  li{
+    list-style: none;
+    a {
+      display: block;
+      padding: 18px 0 18px 10px;
+      font-style: normal;
+      color: var(--ownby-font-color);
+      border-top: solid 1px var(--header-bottom-border-color);
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 20px;
+      border-left: 6px solid transparent;
+      position: relative;
+      &.active{
+        background: var(--settings-menu-item);
+
+      }
+      &:hover{
+        background: var(--settings-menu-item);
+      }
+      span{
+        padding-left: 35px;
+        display: inline-block;
+        font-size: 16px;
+        color: var(--text_default_pure);
+      }
+    }
+  }
+  
+}
+.userName{
+  font-size: 20px;
+  color:#AFBDD1;
+}

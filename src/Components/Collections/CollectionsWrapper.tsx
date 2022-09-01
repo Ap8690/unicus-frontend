@@ -14,6 +14,7 @@ import { bscChain } from '../../config'
 import { backendUrl } from '../../config'
 import ResetPasswordPopUp from '../Modals/Auth/ResetPassword'
 import CollectionCard from './CollectionCard'
+import { getStoreName } from '../../Utilities/Util'
 
 const CollectionsWrapper = (props: any) => {
     // redux state
@@ -56,18 +57,15 @@ const CollectionsWrapper = (props: any) => {
 
     async function fetchItems() {
         if (skiploading) {
-            console.log(sortBy)
             await axios
                 .get(
                     `${backendUrl}/nft/getAllCollections/${skip}`
                 )
                 .then((res: any) => {
-                    console.log(sortBy)
                     settotalAuctions(res.data.totalAuctions)
                     const newData = metadata
                     newData.push(...res.data.data)
                     setmetadata(newData)
-                    console.log(newData)
                     if (res.data.msg) {
                         setNFTSLoaded(true)
                     } else {
@@ -75,8 +73,6 @@ const CollectionsWrapper = (props: any) => {
                     }
                 })
                 .catch((error) => {
-                    console.log(sortBy)
-                    console.log(error)
                     setskiploading(false)
                 })
         }
@@ -107,7 +103,7 @@ const CollectionsWrapper = (props: any) => {
             <div className='section_info'>
                 <h1 className='section_heading'>Explore</h1>
                 <h1 className='section_heading' style={{ fontSize: '20px' }}>
-                    Unicus has exclusive assets and vast variety of NFT
+                    ${getStoreName} has exclusive assets and vast variety of NFT
                 </h1>
             </div>
             <Container>

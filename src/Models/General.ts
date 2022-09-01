@@ -21,4 +21,5 @@ export interface IGeneral {
   storeFees: string;
   secondaryStoreFees: string;
   storeWallet: string;
+  user:string
 }

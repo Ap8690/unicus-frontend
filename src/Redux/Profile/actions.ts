@@ -17,6 +17,7 @@ import getContracts, {
   walletLink,
   metaMaskProvider,
   walletConnectorProvider,
+  sequenceProvider,
 } from '../Blockchain/contracts'
 import {MEWethereum} from '../Blockchain/mewConfig'
 import Web3 from 'web3'
@@ -25,7 +26,11 @@ import { withRouter } from 'react-router-dom'
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { createBrowserHistory } from 'history';
-import { avalancheChainHex, bscChain, bscChainHex, ethChain, ethChainHex, polygonChainHex } from '../../config'
+import { avalancheChainHex,backendUrl, bscChain, bscChainHex, ethChain, ethChainHex, polygonChainHex } from '../../config'
+import web3 from '../../web3'
+import Cookies from "js-cookie";
+
+let connecting = false;
 
 export const getNftType = (id: number) => async (dispatch: any) => {
   dispatch({
@@ -234,16 +239,21 @@ const avalanche = [
 // actions
 export const AddNetworks = (network: any) => async (dispatch: any) => {
   try {
+    console.log(network,'networks')
+    if(network === "TRX"){
+      connToTronlink()
+      return
+    }
     await metaMaskProvider.request({
       method: 'wallet_switchEthereumChain',
       params: [
         {
           chainId:
-            network === 'ethereum'
+            network === 'ETH'
               ? ethereum[0]?.chainId
-              : network === 'bnb'
+              : network === 'Binance'
               ? bnb[0]?.chainId
-              : network === 'polygon'
+              : network === 'Matic'
               ? polygon[0]?.chainId
               :network === 'avalanche'
               ?avalanche[0]?.chainId
@@ -257,11 +267,11 @@ export const AddNetworks = (network: any) => async (dispatch: any) => {
         await metaMaskProvider.request({
           method: 'wallet_addEthereumChain',
           params:
-            network === 'ethereum'
+            network === 'ETH'
               ? ethereum
-              : network === 'bnb'
+              : network === 'Binance'
               ? bnb
-              : network === 'polygon'
+              : network === 'Matic'
               ? polygon
               :network === 'avalanche'
               ?avalanche
@@ -298,6 +308,7 @@ export const checkAndAddNetwork = (data: any) => async (dispatch: any) => {
 export const connToMetaMask = () => async (dispatch: any, getState: any) => {
   try {
     const get = localStorage.getItem('networkID')
+    console.log(get,"gettttttt")
     const web3 = new Web3(Web3.givenProvider)
     const id = web3.eth.net.getId()
     const networkID = await Promise.all([id])
@@ -313,6 +324,7 @@ export const connToMetaMask = () => async (dispatch: any, getState: any) => {
     const accounts = await metaMaskProvider.request({
       method: 'eth_requestAccounts',
     })
+
 
     localStorage.setItem('walletType', 'Metamask')
     dispatch({
@@ -344,8 +356,10 @@ export const connToCoinbase = () => async (dispatch: any) => {
 export const connToWalletConnector =
   () => async (dispatch: any, getState: any) => {
     try {
+      console.log("IN");
       const accounts = await walletConnectorProvider.enable()
       localStorage.setItem('walletType', 'WalletConnect')
+      console.log("ACCOUNT ",accounts);
       dispatch({
         type: CONNECT_WALLET,
         payload: accounts[0],
@@ -380,14 +394,56 @@ export const connToMEW = () => async (dispatch: any) => {
   }
 }
 
+export const connToSequence = ()=>async(dispatch:any)=>{
+  try{
+    const accounts = await sequenceProvider.connect() 
+    console.log("sequqnce acc", accounts);
+    console.log("web3 seq", await web3.eth.getAccounts());
+
+    localStorage.setItem("walletType", "Sequence");
+    dispatch({
+      type: CONNECT_WALLET,
+      payload: accounts.session.accountAddress,
+      walletType: "Sequence",
+    });
+
+  }
+  catch(err){
+    console.log(err);
+    
+  }
+}
+
+export const connToTronlink = () => async (dispatch: any) => {
+    if (connecting) return;
+    let tries = 0;
+    connecting = true;
+    setTimeout(async function initTimer() {
+      //@ts-ignore
+      if (!window.tronWeb || !window?.tronWeb?.defaultAddress?.base58)
+        {return ++tries < 50 ? setTimeout(initTimer, 100) : (connecting = false);}
+      //@ts-ignore
+      const address = window.tronWeb.defaultAddress.base58;
+      console.log("tronadd", address);
+      
+    }, 100);
+};
+
 export const disConnectWallet = () => async () => {
   localStorage.removeItem('walletType')
   localStorage.removeItem('userInfo')
   localStorage.removeItem('accessToken')
   localStorage.removeItem('userAddress')
+  Cookies.remove("userInfo", {
+    domain: "unicus.one",
+  });
+  Cookies.remove("accessToken", {
+    domain: "unicus.one",
+  });
   // web3.currentProvider._handleDisconnect()
   walletConnectorProvider.disconnect()
   walletLink.disconnect()
+  sequenceProvider.disconnect()
 }
 
 export const getProfileInformation =
