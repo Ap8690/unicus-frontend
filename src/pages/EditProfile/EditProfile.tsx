@@ -29,7 +29,6 @@ const EditProfile = (props:any) => {
   };
   const getUserProfile = async () => {
     try {
-      console.log("props.isLogin: ", getAccessToken());
       const res = await axios.get(`${BASE_URL}/users/getUserProfile`, {
         headers: {
           Authorization: "Bearer " + `${getAccessToken()}`,

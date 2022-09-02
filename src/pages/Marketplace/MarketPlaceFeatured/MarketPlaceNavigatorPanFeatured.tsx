@@ -4,6 +4,7 @@ import { getNftContractAddress } from "../../../utils/utils";
 import useExplorer from "../useExplorer";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
+import uuid from 'react-uuid'
 
 const Element = ({ element }) => (
   <div className="market-place-featured-element">
@@ -39,6 +40,7 @@ const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll }) => {
     >
       {list.map((element: any, i: number) => (
         <SwiperSlide
+        key={uuid()}
           onClick={()=>navigate(`/nft/${element.chain}/${getNftContractAddress(
               element
             )}/${element.tokenId}`,

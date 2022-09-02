@@ -1,19 +1,17 @@
-// Images
-import { type } from "@testing-library/user-event/dist/type";
-import { Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import ethereum from "../../../assets/svgs/ethereum.svg";
 import DefaultModal from "../../../components/modals/DefaultModal/DefaultModal";
 import { bscChain, ethChain, tronChain } from "../../../config";
 import { getChainSymbol } from "../../../utils/utils";
 import { getCompleteDate } from "../../../utils/date";
 // Element of data of activity table
-const TableData = ({ activity }) => {
-    const handleClick = () => {
-        // logic for clearing activity here
-    };
+const TableData = ({ activity, link }) => {
+    let navigate = useNavigate();
     return (
-        <tr className="table-data">
+        <tr
+            className="table-data cursor-pointer"
+            onClick={() => navigate(link)}
+        >
             <td className="table-data-item-name">
                 {activity?.nftType?.includes("image") ? (
                     <img
@@ -76,18 +74,20 @@ const Table = ({ rows, columns }) => {
                 <tbody>
                     {rows && rows.length > 0 ? (
                         rows.map((row: any, i: number) => (
-                            <Link
-                                to={`/nft/${row.chain}/${
+                            <TableData
+                                link={`/nft/${row.chain}/${
                                     row.contractAddress
                                         ? row.contractAddress
                                         : row.nftId && row.nftId.contractAddress
                                 }/${row.tokenId}`}
-                            >
-                                <TableData activity={row} key={`atd${i}`} />
-                            </Link>
+                                activity={row}
+                                key={`atd${i}`}
+                            />
                         ))
                     ) : (
-                        <div>No NFTs Found</div>
+                        <tr>
+                            <td>No NFTs Found</td>
+                        </tr>
                     )}
                 </tbody>
             </table>
