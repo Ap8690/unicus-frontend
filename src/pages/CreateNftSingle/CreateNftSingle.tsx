@@ -68,6 +68,7 @@ import {
   keypairIdentity,
   bundlrStorage,
 } from "@metaplex-foundation/js";
+import validator from 'validator';
 
 const CreateNftSingle = () => {
   const [name, setName] = useState("");
@@ -189,7 +190,12 @@ const CreateNftSingle = () => {
         ("jpg" || "png" || "gif" || "svg")
     );
   };
-
+  const validateUrl = (url:string) => {
+    if(!validator.isURL(url)) {
+      return false
+    }
+    return true
+  }
   const supportedImg = ["jpg", "jpeg", "png", "svg", "gif"];
   const supportedVid = ["mp4", "webm"];
   const supportedAud = ["mp3", "wav", "ogg"];
@@ -433,6 +439,9 @@ const CreateNftSingle = () => {
         setNftLoading(false);
         setMetamaskNotFound(true);
         return null;
+      }
+      if(extLink && !validateUrl(extLink)) {
+        return toast.error("Please enter a valid external link")
       }
       //@ts-expect-error
       if (chain === tronChain && !window.tronWeb) {

@@ -7,7 +7,7 @@ import { IGeneral } from "../../models/General";
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { getChainSymbol, userInfo ,getChainId} from "../../utils/utils";
 
-const accessToken = Cookies.get(ACCESS_TOKEN);
+export const accessToken = Cookies.get(ACCESS_TOKEN);
 export const axiosConfig: any = {
   headers: {
     Authorization: `Bearer ${accessToken}`,

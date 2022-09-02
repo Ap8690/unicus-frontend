@@ -13,7 +13,7 @@ import userImg from "../../../assets/images/userImage.png";
 import backgroundImg from "../../../assets/images/userBackground.png";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BASE_URL } from "../../../config";
 import { userInfo } from "../../../utils/utils";
 import { getCompleteDate } from "../../../utils/date";
@@ -25,9 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { cookieDomain } from "../../../config";
 import { toast } from "react-toastify";
 
-const User = (): ReactJSXElement => {
-    const user = userInfo;
-    console.log("user: ", user);
+const User = ({ user }): ReactJSXElement => {
     const navigate = useNavigate();
 
     const [userImage, setUserImage] = useState<any>(
@@ -117,6 +115,7 @@ const User = (): ReactJSXElement => {
     const handleClick = () => {
         navigate("/edit-profile");
     };
+
     return (
         <div className="user">
             <div

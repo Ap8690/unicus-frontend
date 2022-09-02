@@ -32,7 +32,6 @@ import profileOffers from "../../assets/svgs/list.svg";
 // Styles
 import "./ProfileMain.scss";
 import axios from "axios";
-import { userInfo } from "os";
 import { tronChain, BASE_URL } from "../../config";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import {
@@ -42,13 +41,10 @@ import {
     getMarketPlaceContractAddress,
 } from "../../utils/utils";
 import web3 from "../../web3";
-import {
-    createSellApi,
-    getAccessToken,
-    getNftByUserId,
-} from "../../services/api/supplier";
+import { getAccessToken, getNftByUserId } from "../../services/api/supplier";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
+import { userInfo } from "../../utils/utils";
 // Generics
 type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 
@@ -63,7 +59,7 @@ const Profile = (): ReactJSXElement => {
     ];
     // Index of current element
     const location = useLocation();
-
+    const accessToken = getAccessToken();
     // Name of the current tab
     const tabName = location.pathname.slice(
         location.pathname.lastIndexOf("/") + 1
@@ -103,7 +99,8 @@ const Profile = (): ReactJSXElement => {
     const createdColumns = ["Item", "Chain", "Created"];
     const listingColumns = ["Item", "Unit Price", "Status", "Created"];
     const offersColumns = ["Item", "Lastest Bid", "Chain", "Created"];
-
+    const [user, setUser] = useState();
+    const [loading, setLoading] = useState(true);
     const [ordisplayListing, setorDisplayListing] = useState([]);
     const [ordisplayCreated, setorDisplayCreated] = useState([]);
     const [displayListing, setDisplayListing] = useState([]);
@@ -122,6 +119,22 @@ const Profile = (): ReactJSXElement => {
         } catch (e) {
             console.log(e);
             toast.error(e);
+        }
+    };
+    const getUserProfile = async () => {
+        try {
+            setLoading(true);
+            console.log("BASE_URL: ", BASE_URL);
+            const res = await axios.get(`${BASE_URL}/users/getUserProfile`, {
+                headers: {
+                    Authorization: "Bearer " + `${accessToken}`,
+                },
+            });
+            setUser(res.data.user);
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            console.log(err);
         }
     };
     useEffect(() => {
@@ -150,51 +163,58 @@ const Profile = (): ReactJSXElement => {
 
     useEffect(() => {
         getNfts();
+        getUserProfile();
         if (!getAccessToken()) {
             navigate("/connect-wallet/profile");
         }
     }, []);
 
     return (
-        <div className="profile">
-            <Helmet>
-                <meta charSet="utf-8" />
-                <title>UnicusOne - Dashboard</title>
-                <link rel="canonical" href={window.location.href} />
-            </Helmet>
-            <User />
-            <ProfileNavigation
-                tabs={tabs}
-                currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
-            />
-            {profileState === "activity" && <Activity />}
-            {profileState === "favourited" && <Favourited items={items} />}
-            {profileState === "listing" && (
-                <Listing
-                    list={displayListing}
-                    search={search}
-                    setSearch={setSearch}
-                    columns={listingColumns}
-                />
+        <>
+            {!loading && (
+                <div className="profile">
+                    <Helmet>
+                        <meta charSet="utf-8" />
+                        <title>UnicusOne - Dashboard</title>
+                        <link rel="canonical" href={window.location.href} />
+                    </Helmet>
+                    <User user={user} />
+                    <ProfileNavigation
+                        tabs={tabs}
+                        currentTab={currentTab}
+                        setCurrentTab={setCurrentTab}
+                    />
+                    {profileState === "activity" && <Activity />}
+                    {profileState === "favourited" && (
+                        <Favourited items={items} />
+                    )}
+                    {profileState === "listing" && (
+                        <Listing
+                            list={displayListing}
+                            search={search}
+                            setSearch={setSearch}
+                            columns={listingColumns}
+                        />
+                    )}
+                    {profileState === "offers" && (
+                        <Listing
+                            list={displayListing}
+                            search={search}
+                            setSearch={setSearch}
+                            columns={offersColumns}
+                        />
+                    )}
+                    {(profileState === "created" || !profileState) && (
+                        <Listing
+                            list={displayCreated}
+                            search={search}
+                            setSearch={setSearch}
+                            columns={createdColumns}
+                        />
+                    )}
+                </div>
             )}
-            {profileState === "offers" && (
-                <Listing
-                    list={displayListing}
-                    search={search}
-                    setSearch={setSearch}
-                    columns={offersColumns}
-                />
-            )}
-            {(profileState === "created" || !profileState) && (
-                <Listing
-                    list={displayCreated}
-                    search={search}
-                    setSearch={setSearch}
-                    columns={createdColumns}
-                />
-            )}
-        </div>
+        </>
     );
 };
 
