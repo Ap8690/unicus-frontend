@@ -171,6 +171,7 @@
         @include mixins.flex(center, space-between);
         padding: 2rem 0 0;
         position: relative;
+        gap: 1rem;
         color: rgba($color: #fff, $alpha: 0.6);
 
         &::after {

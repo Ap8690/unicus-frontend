@@ -13,6 +13,7 @@ const MarketPlaceAuctions = ({ chain }) => {
   const [currentScroll, setCurrentScroll] = useState(0);
   const [width, setWidth] = useState(window.innerWidth);
   const [displayList, setDisplayList] = useState('');
+  const [loading, setLoading] = useState(true)
 
   // Some hardcoded data
   const types = ["Live", "Ended"]; //"Live", "Upcoming", "Ended"
@@ -24,6 +25,10 @@ const MarketPlaceAuctions = ({ chain }) => {
     .then(res => {
       console.log(res);
       setDisplayList(res?.data.nfts)
+      setLoading(false)
+    })
+    .catch(err=>{
+      setLoading(false)
     })
   }, [currentType,chain]);
 
@@ -40,7 +45,7 @@ const MarketPlaceAuctions = ({ chain }) => {
         currentType={currentType}
         setCurrentType={setCurrentType}
       />
-      {displayList && <MarketPlaceAuctionsElements list={displayList} currentScroll={currentScroll} currentType={currentType} />}
+      {displayList && <MarketPlaceAuctionsElements loading={loading} list={displayList} currentScroll={currentScroll} currentType={currentType} />}
       {/* <BottomNavigationMarker currentPage={currentScroll} length={length} /> */}
     </div>
   );

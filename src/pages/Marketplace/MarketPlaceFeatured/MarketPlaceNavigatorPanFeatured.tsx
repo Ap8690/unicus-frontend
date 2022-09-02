@@ -4,6 +4,8 @@ import { getNftContractAddress } from "../../../utils/utils";
 import useExplorer from "../useExplorer";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
+import { useState } from "react";
+import NftSkeletonLoader from "../../../components/Loading/SkeletonLoading/NftSkeletonLoader";
 
 const Element = ({ element }) => (
   <div className="market-place-featured-element">
@@ -14,10 +16,13 @@ const Element = ({ element }) => (
     <p className="text text-center">{element.name}</p>
   </div> 
 );
-const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll }) => {
+const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll, loading }) => {
   // const holderRef = useExplorer(currentScroll);
   const navigate = useNavigate()
   return (
+    loading ? (
+      <NftSkeletonLoader singleRow className='loader-margin'/>
+    ) :
     <Swiper 
       modules={[Navigation, Pagination]}  
       className="market-place-featured-elements"
@@ -29,10 +34,10 @@ const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll }) => {
         320: {
             slidesPerView: 1,
         },
-        900: {
+        768: {
             slidesPerView: 2,
         },
-        1250: {
+        992: {
             slidesPerView: 3,
         },
     }}

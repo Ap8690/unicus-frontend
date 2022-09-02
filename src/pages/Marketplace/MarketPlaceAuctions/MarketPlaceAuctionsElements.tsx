@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { getNftContractAddress } from "../../../utils/utils";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
+import NftSkeletonLoader from "../../../components/Loading/SkeletonLoading/NftSkeletonLoader";
 
 const getTimeString = (days, hours, minutes) => {
   return `${days}d ${hours}h ${minutes}m`;
@@ -49,10 +50,13 @@ const Element = ({ element, currentType }) => {
   );
 };
 
-const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType }) => {
+const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType, loading }) => {
   // const holderRef = useExplorer(currentScroll);
   const navigate = useNavigate()
   return (
+    loading ? (
+      <NftSkeletonLoader singleRow className='loader-margin'/>
+    ) : (
     <Swiper 
       modules={[Navigation, Pagination]}  
       className="market-place-auctions-elements"
@@ -64,10 +68,10 @@ const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType }) => {
         320: {
             slidesPerView: 1,
         },
-        900: {
+        768: {
             slidesPerView: 2,
         },
-        1250: {
+        992: {
             slidesPerView: 3,
         },
     }}
@@ -88,7 +92,7 @@ const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType }) => {
         </SwiperSlide>
       ))}
     </Swiper>
-  );
+  ))
 };
 
 export default MarketPlaceAuctionsElements;
