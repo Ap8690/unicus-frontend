@@ -10,27 +10,33 @@ const MarketPlaceFeatured = ({ chain, title }) => {
   const [currentScroll, setCurrentScroll] = useState(0);
   const [featuredNft,setFeturedNft] = useState([]);
   const length = featuredNft?.length > 0 ? Math.ceil(featuredNft?.length / 3) : 0;
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     getFeaturedNft(10,chain)
     .then((res) => {
       console.log(res)
       setFeturedNft(res?.data.nfts);
+      setLoading(false)
     })
     .catch((err) => {
       console.log(err);
+      setLoading(false)
     });
   },[])
 
 
   useEffect(() => {
+    setLoading(true)
     getFeaturedNft(10,chain)
     .then((res) => {
       console.log(res)
       setFeturedNft(res?.data.nfts);
+      setLoading(false)
     })
     .catch((err) => {
       console.log(err);
+      setLoading(false)
     });
   },[chain])
   return (
@@ -41,7 +47,7 @@ const MarketPlaceFeatured = ({ chain, title }) => {
         length={length}
         heading={title}
       />
-      <MarketPlaceNavigatorPanFeatured list={featuredNft} currentScroll={currentScroll} />
+      <MarketPlaceNavigatorPanFeatured loading={loading} list={featuredNft} currentScroll={currentScroll} />
     </div>
   );
 };

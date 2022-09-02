@@ -11,6 +11,7 @@ const MarketPlaceTrending = ({ chain }) => {
   const [category, setCategory] = useState("all");
   const [currentScroll, setCurrentScroll] = useState(0);
   const [trendingNfts, setTrendingNfts]  = useState([]);
+  const [loading, setLoading] = useState(true)
 
   // Hardcoded
   const length = trendingNfts?.length > 0 ? Math.ceil(trendingNfts?.length / 3) : 0;
@@ -21,8 +22,10 @@ const MarketPlaceTrending = ({ chain }) => {
     .then((res) => {
       console.log(res)
       setTrendingNfts(res?.data.nfts);
+      setLoading(false)
     })
     .catch(err => {
+      setLoading(false)
       console.log(err);
     });
     console.log(category);
@@ -43,6 +46,7 @@ const MarketPlaceTrending = ({ chain }) => {
       <MarketPlaceTrendingElements
         list={trendingNfts}
         currentScroll={currentScroll}
+        loading={loading}
       />: <div style={{textAlign:"center", marginTop:"35px"}}>No Nfts Found</div>}
       {/* <BottomNavigationMarker currentPage={currentScroll} length={length} /> */}
     </div>

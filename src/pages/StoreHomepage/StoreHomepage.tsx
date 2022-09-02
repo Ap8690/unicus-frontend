@@ -16,6 +16,9 @@ const StoreHomepage = () => {
     const [recentCreated, setRecentCreated] = useState([]);
     const [availableSale, setAvailableSale] = useState([]);
     const [recentPurchased, setRecentPurchased] = useState([]);
+    const [loadingRecent, setLoadingRecent] = useState(true)
+    const [loadingPurchased, setLoadingPurchased] = useState(true)
+    const [loadingAvailableSale, setLoadingAvailableSale] = useState(true)
     const saleStats = {
         artworks: "37k",
         artists: "27k",
@@ -44,8 +47,11 @@ const StoreHomepage = () => {
             .then((res) => {
                 console.log("recent", res.data.nfts);
                 setRecentCreated(res.data.nfts);
+                setLoadingRecent(false)
             })
-            .catch((err) => {});
+            .catch((err) => {
+                setLoadingRecent(false)
+            });
         await axios
             .get(
                 `${BASE_URL}/auction/getAllExplore/0/0/${encodeURIComponent(
@@ -55,18 +61,22 @@ const StoreHomepage = () => {
             .then((res: any) => {
                 console.log("available", res.data.data);
                 setAvailableSale(res.data.data);
+                setLoadingAvailableSale(false)
             })
             .catch((err) => {
                 toast.error(err.messaage);
+                setLoadingAvailableSale(false)
             });
         await axios
             .get(`${BASE_URL}/auction/getRecentPurchased/0`)
             .then((res: any) => {
                 console.log("recent purchased", res.data.data);
                 setRecentPurchased(res.data.data);
+                setLoadingPurchased(false)
             })
             .catch((err) => {
                 toast.error(err.messaage);
+                setLoadingPurchased(false)
             });
     };
 
@@ -79,9 +89,9 @@ const StoreHomepage = () => {
                 storeTitle={"Create, Collect & Sell extraordinary NFTs"}
                 noBanner
             />
-            <StoreSwiper list={recentCreated} title={"Recently created"} />
-            <StoreSwiper list={recentPurchased} title={"Recently purchased"} />
-            <StoreSwiper list={availableSale} title={"Availbale for sale"} />
+            <StoreSwiper list={recentCreated} title={"Recently created"} loading={loadingRecent} />
+            <StoreSwiper list={recentPurchased} title={"Recently purchased"} loading={loadingPurchased} />
+            <StoreSwiper list={availableSale} title={"Availbale for sale"} loading={loadingAvailableSale} />
             <MarketPlaceDiscover chain={chain} categories={categories} />
             <StayInLoop />
         </section>
