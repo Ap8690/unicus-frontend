@@ -149,7 +149,7 @@ const User = ({ user }): ReactJSXElement => {
                 </div>
                 <div className="user-info">
                     <h3 className="user-name custom-border-bottom">
-                        {user.username}
+                        {user.username.length>30 ? user.username.slice(0,8) + '...' + user.username.slice(-6) : user.username}
                     </h3>
                     <h5 className="text-[16px] custom-border-bottom">
                         {user?.bio}

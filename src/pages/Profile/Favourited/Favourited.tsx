@@ -1,5 +1,6 @@
 // Libs
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+import uuid from "react-uuid";
 import BlueBackground from "../../../components/BlueBackground/BlueBackground";
 
 // Styles
@@ -33,8 +34,8 @@ const Favourited = ({ items }): ReactJSXElement => {
   return (
     <div className="favourited">
       <BlueBackground />
-      {items.map((item: itemType, index: number) => (
-        <Item item={item} key={`fi${index}`} />
+      {items.map((item: itemType) => (
+        <Item item={item} key={uuid()} />
       ))}
     </div>
   );

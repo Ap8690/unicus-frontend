@@ -129,7 +129,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
               onChange={(e) => handleCountry(e.target.value)}
             >
               {options.map((item) => (
-                <MenuItem key={item.value} value={item.value}>
+                <MenuItem key={uuid()} value={item.value}>
                   {item.label}
                 </MenuItem>
               ))}

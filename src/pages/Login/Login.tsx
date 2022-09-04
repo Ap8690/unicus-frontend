@@ -66,7 +66,7 @@ const Login = ({}) => {
                 <title>UnicusOne - Login</title>
                 <link rel="canonical" href={window.location.href} />
             </Helmet>
-            <div className="login-page">
+            <div className="login-page mt-[40px]">
                 <div className="login-wrapper">
                     <div className="blue-head">LOGIN</div>
                     <form onSubmit={handleLogin}>

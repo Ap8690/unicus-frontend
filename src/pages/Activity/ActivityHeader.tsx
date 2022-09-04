@@ -1,6 +1,7 @@
 // Images
 import filter from "../../assets/svgs/filter.svg";
 import cross from "../../assets/svgs/cross.svg";
+import uuid from "react-uuid";
 
 const ActiveFilterComponent = ({ acFilter, removeFilter }) => {
   return (
@@ -31,7 +32,7 @@ const ActivityHeader = ({ activeFilters, setActiveFilters }) => {
         {activeFilters.map((acFilter:string, i: number) => (
           <ActiveFilterComponent
             acFilter={acFilter}
-            key={`${i}ac`}
+            key={uuid()}
             removeFilter={removeFilter}
           />
         ))}

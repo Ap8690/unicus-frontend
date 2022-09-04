@@ -1,6 +1,6 @@
 // Libs
 import { Link } from "react-router-dom";
-
+import uuid from 'react-uuid'
 // Images
 import mpWallet from "../../../assets/svgs/mpWallet.svg";
 import mpCreate from "../../../assets/svgs/mpCreate.svg";
@@ -52,8 +52,8 @@ const MarketPlaceCreateAndSell = () => {
         <Link to="/create-nft" className="btn nav-link">Create</Link>
       </div>
       <div className="right">
-        {elements.map((element, i) => (
-          <Element element={element} key={`mpcs${i}`} />
+        {elements.map((element:any) => (
+          <Element key={uuid()} element={element} />
         ))}
       </div>
     </div>

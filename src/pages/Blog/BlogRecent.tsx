@@ -7,6 +7,7 @@ import blogImg from "../../assets/images/Rectangle 8.png";
 // Library
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import uuid from "react-uuid";
 
 // Filter for Recent Blogs
 const BlogRecentFilter = ({ setBlogFilter }) => {
@@ -67,12 +68,12 @@ const BlogRecentSwitcher = ({ currentPage, length, setCurrentPage }) => {
       >
         <img src={chevronLeft} alt="Left Arrow" />
       </button>
-      {pagesList.map((page) => (
+      {pagesList.map((page:any) => (
         <BlogRecentSwitcherElement
           page={page}
           updatePage={updatePage}
           currentPage={currentPage}
-          key={page}
+          key={uuid()}
         />
       ))}
       <button
@@ -213,8 +214,8 @@ const BlogRecent = () => {
         <BlogRecentFilter setBlogFilter={setBlogFilter} />
       </div>
       <div className="blog-recent-element-holder">
-        {blogDisplayList.map((blog, i) => (
-          <BlogRecentElement blog={blog} key={blog.id} />
+        {blogDisplayList.map((blog:any) => (
+          <BlogRecentElement blog={blog} key={uuid()} />
         ))}
       </div>
       <BlogRecentSwitcher

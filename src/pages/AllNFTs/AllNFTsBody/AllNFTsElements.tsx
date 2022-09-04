@@ -1,4 +1,5 @@
 // Images
+import uuid from "react-uuid";
 import image from "../../../assets/images/allNFTImage.png";
 import likes from "../../../assets/svgs/likes.svg";
 
@@ -46,8 +47,8 @@ const AllNFTsElements = ({ list, arrangement, updateLoaded, ifShowButton }) => {
   return (
     <div className="all-nfts-elements">
       <div className="elements" style={style}>
-        {list.map((element, index) => (
-          <AllNFTsElement element={element} key={`anfte${index}`} />
+        {list.map((element:any, index:any) => (
+          <AllNFTsElement element={element} key={uuid()} />
         ))}
       </div>
       <button

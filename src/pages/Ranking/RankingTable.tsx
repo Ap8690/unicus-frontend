@@ -1,6 +1,6 @@
 // Images
 import ethereum from "../../assets/svgs/ethereum.svg";
-
+import uuid from 'react-uuid'
 // Ranking Table Data
 const RankingTableData = ({ item, i }) => {
   return (
@@ -82,7 +82,7 @@ const RankingTable = ({ items, currRangeStart }) => {
           {items.map((item, i) => (
             <RankingTableData
               item={item}
-              key={`rtd${i}`}
+              key={uuid()}
               i={currRangeStart + i}
             />
           ))}

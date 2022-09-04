@@ -1,6 +1,7 @@
 // Libs
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import uuid from "react-uuid";
 
 // Dummy Image
 import discoverImage from "../../../assets/images/Rectangle 8 (2).png";
@@ -17,7 +18,7 @@ const MarketPlaceDiscover = ({ categories, chain }) => {
       <div className="holder">
         <div className="left-list">
           {categories.slice(0, 4).map((element: any, i: number) => (
-            <ListElement chain={chain} element={element} key={`lle${i}`} />
+            <ListElement chain={chain} element={element} key={uuid()} />
           ))}
         </div>
         <img
@@ -27,7 +28,7 @@ const MarketPlaceDiscover = ({ categories, chain }) => {
         />
         <div className="right-list">
           {categories.slice(4, 8).map((element: any, i: number) => (
-            <ListElement chain={chain} element={element} key={`lle${i + 4}`} />
+            <ListElement chain={chain} element={element} key={uuid()} />
           ))}
         </div>
       </div>

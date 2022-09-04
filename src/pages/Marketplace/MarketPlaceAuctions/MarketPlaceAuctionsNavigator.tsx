@@ -1,4 +1,5 @@
 // Images
+import uuid from "react-uuid";
 import arrowLeft from "../../../assets/svgs/arrowLeft.svg";
 import arrowRight from "../../../assets/svgs/arrowRight.svg";
 
@@ -39,17 +40,17 @@ const MarketPlaceAuctionsNavigator = ({
   };
 
   // Always convert to lowercase
-  const updateType = (tp) => setCurrentType(tp.toLowerCase());
+  const updateType = (tp:any) => setCurrentType(tp.toLowerCase());
   return (
     <div className="market-place-auctions-navigator">
       <div className="header">
         <div className="heading">Auctions</div>
         <div className="types">
-          {types.map((type, i) => (
+          {types.map((type:any) => (
             <TypeButton
               type={type}
               currentType={currentType}
-              key={`tpb${i}`}
+              key={uuid()}
               updateType={updateType}
             />
           ))}

@@ -1,6 +1,7 @@
 import './stats.scss'
 
 import CloseIcon from "@mui/icons-material/Close"
+import uuid from 'react-uuid'
 
 const Stats = ({ state, setState }) => {
     const addProperty = () => {
@@ -37,9 +38,9 @@ const Stats = ({ state, setState }) => {
         <div className="adding-values">
             <div className="values">
                 <span className="head">Name</span>
-                {state.map((singleProperty, index) => (
+                {state.map((singleProperty:any, index:number) => (
                     <PropertyInput
-                        key={index}
+                        key={uuid()}
                         name={"property"}
                         state={singleProperty.property}
                         handleChange={handleChange}
@@ -52,7 +53,7 @@ const Stats = ({ state, setState }) => {
                 <span className="head">Value</span>
                 {state.map((singleProperty:any, index:any) => (
                     <StatsInput
-                        key={index}
+                        key={uuid()}
                         state={singleProperty.value}
                         handleChange={handleChange}
                         index={index}

@@ -1,5 +1,6 @@
 // Images
 import { Link } from "react-router-dom";
+import uuid from "react-uuid";
 import blogImg from "../../assets/images/Rectangle 8.png";
 
 const RelatedBlog = ({ blog }) => {
@@ -61,7 +62,7 @@ const ReadBlogRelated = ({ category }) => {
       <h3 className="read-blog-related-heading">Related Blogs</h3>
       <div className="read-blog-related-blogs">
         {blogs.map((blog) => (
-          <RelatedBlog blog={blog} key={blog.id} />
+          <RelatedBlog blog={blog} key={uuid()} />
         ))}
       </div>
     </div>
