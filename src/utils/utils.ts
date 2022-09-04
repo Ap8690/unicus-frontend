@@ -499,7 +499,7 @@ export const getAuctionContractAddress = (chain: { toString: () => any; }, contr
   }
 };
 
-export const getCreateNftContract = (chain: string, contractType = "721") => {
+export const getCreateNftContract = (chain, contractType = "721") => {
   if (chain.toString() === tronChain) {
     return tronWeb.contract(createNFTAbiT, createNFTAddressT);
   } else {

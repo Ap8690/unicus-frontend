@@ -137,14 +137,14 @@ const Profile = (): ReactJSXElement => {
         }
     };
     useEffect(() => {
-        if (currentTab == 0) {
+        if (currentTab === 0) {
             const q = search.toLowerCase();
             const temp = ordisplayCreated.filter((item) =>
                 item.name.toLowerCase().includes(q)
             );
 
             setDisplayCreated(temp);
-            if (search == "") {
+            if (search === "") {
                 setDisplayCreated(ordisplayCreated);
             }
         } else {
@@ -154,7 +154,7 @@ const Profile = (): ReactJSXElement => {
             );
             setDisplayListing(temp);
 
-            if (search == "") {
+            if (search === "") {
                 setDisplayListing(ordisplayListing);
             }
         }

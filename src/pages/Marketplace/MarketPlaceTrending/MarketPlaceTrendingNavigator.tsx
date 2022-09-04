@@ -37,7 +37,7 @@ const MarketPlaceTrendingNavigator = ({
   // States
   const [ifOpen, setIfOpen] = useState(false);
   const goLeft = () => {
-    if (currentScroll == 0) {
+    if (currentScroll === 0) {
       return;
       // do nothing
     }

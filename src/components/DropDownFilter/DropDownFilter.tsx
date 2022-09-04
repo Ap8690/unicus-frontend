@@ -34,7 +34,7 @@ const DropDownFilter = ({
     setActiveFilters(temp);
   };
   const onClickRemove = (rmFilter: string) => {
-    const temp = activeFilters.filter((filter: string) => filter != rmFilter);
+    const temp = activeFilters.filter((filter: string) => filter !== rmFilter);
     setActiveFilters(temp);
   };
 

@@ -132,7 +132,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
         navigate(`/${redirect["*"]}`, { replace: true });
         window.location.reload();
       } else {
-        if (wallet != "near") {
+        if (wallet !== "near") {
           toast.error("Wallet connection failed");
         }
       }
@@ -147,7 +147,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const nearAccountId = urlParams.get("account_id");
     const nearPublicKey = urlParams.get("public_key");
-    if (nearAccountId != null && nearPublicKey != null) {
+    if (nearAccountId !== null && nearPublicKey !== null) {
       toast("Connection successful...")
       walletLogin(nearAccountId).then((res) => {
         toast.success("Login successful");
