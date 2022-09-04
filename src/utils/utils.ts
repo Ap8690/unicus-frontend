@@ -15,15 +15,12 @@ import {
 } from "../config";
 import { IStore } from "../models/Store";
 import {
-  auctionAbiB,
   auctionAddressB,
 } from "../Redux/Blockchain/Binance/auction";
 import {
-  createNFTAbiB,
   createNFTAddressB,
 } from "../Redux/Blockchain/Binance/createNFT";
 import {
-  marketPlaceAbiB,
   marketPlaceAddressB,
 } from "../Redux/Blockchain/Binance/marketPlace";
 import {
@@ -39,7 +36,6 @@ import {
 } from "../Redux/Blockchain/Ethereum/auction";
 import {
   createNFTAbiE,
-  createNFTAbiE1155,
   createNFTAddressE,
   createNFTAddressE1155,
 } from "../Redux/Blockchain/Ethereum/createNFT";
@@ -50,15 +46,12 @@ import {
 } from "../Redux/Blockchain/Ethereum/marketPlace";
 import { MEWethereum } from "../Redux/Blockchain/mewConfig";
 import {
-  auctionAbiP,
   auctionAddressP,
 } from "../Redux/Blockchain/Polygon/auction";
 import {
-  createNFTAbiP,
   createNFTAddressP,
 } from "../Redux/Blockchain/Polygon/createNFT";
 import {
-  marketPlaceAbiP,
   marketPlaceAddressP,
 } from "../Redux/Blockchain/Polygon/marketPlace";
 import { addWalletAdd } from "../services/api/supplier";

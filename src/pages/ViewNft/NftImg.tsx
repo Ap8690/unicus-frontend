@@ -124,9 +124,9 @@ const NftImg = ({ img, likes, views, shares, nftType }) => {
                 </video>
             )}
             <div className="nft-interactions">
-                <button>
+                {/* <button>
                     {views} <img src={viewImg} alt="views" />
-                </button>
+                </button> */}
                 <button onClick={() => setopenShareProfile(true)}>
                     <img src={shareImg} alt="shares" />
                 </button>

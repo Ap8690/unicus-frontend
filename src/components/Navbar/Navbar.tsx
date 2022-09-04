@@ -239,6 +239,12 @@ const Navbar = ({ store }) => {
                                     Binance
                                 </MenuItem>
                                 <MenuItem
+                                    onClick={() => handleCloseChains("avalanche")}
+                                    selected={chain === 'avalanche'}
+                                >
+                                    Avalanche
+                                </MenuItem>
+                                <MenuItem
                                     onClick={() => handleCloseChains("tron")}
                                     selected={chain === 'tron'}
                                 >

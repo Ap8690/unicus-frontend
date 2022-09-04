@@ -29,10 +29,10 @@ const User = ({ user }): ReactJSXElement => {
     const navigate = useNavigate();
 
     const [userImage, setUserImage] = useState<any>(
-        user.profileUrl ? user.profileUrl : userImg
+        user?.profileUrl ? user?.profileUrl : userImg
     );
     const [backgroundImage, setBackgroundImage] = useState<any>(
-        user.backgroundUrl ? user.backgroundUrl : backgroundImg
+        user?.backgroundUrl ? user?.backgroundUrl : backgroundImg
     );
     const [uploadLoading, setUploadLoading] = useState(false);
     const profilePicFile = useRef(null);
@@ -137,7 +137,7 @@ const User = ({ user }): ReactJSXElement => {
                     className="user-image custom-border-right"
                     onClick={() => uploadImage(profilePicFile)}
                 >
-                    <img src={userImage} alt={user.username} />
+                    <img src={userImage} alt={user?.username} />
                     <input
                         type="file"
                         id="file"
@@ -149,31 +149,31 @@ const User = ({ user }): ReactJSXElement => {
                 </div>
                 <div className="user-info">
                     <h3 className="user-name custom-border-bottom">
-                        {user.username}
+                        {user?.username}
                     </h3>
                     <h5 className="text-[16px] custom-border-bottom">
                         {user?.bio}
                     </h5>
-                    <p className="user-id">{user.id}</p>
+                    <p className="user-id">{user?.id}</p>
                     <p className="user-join-date custom-border-bottom">
                         Joined:{" "}
                         <span>
-                            {user?.createdAt && getCompleteDate(user.createdAt)}
+                            {user?.createdAt && getCompleteDate(user?.createdAt)}
                         </span>
                     </p>
                     <div className="user-links">
-                        {user.twitter && (
-                            <a href={user.twitter}>
+                        {user?.twitter && (
+                            <a href={user?.twitter}>
                                 <img src={twitter} alt="twitter" />
                             </a>
                         )}
-                        {user.instagram && (
-                            <a href={user.instagram}>
+                        {user?.instagram && (
+                            <a href={user?.instagram}>
                                 <img src={instagram} alt="instagram" />
                             </a>
                         )}
-                        {user.facebook && (
-                            <a href={user.facebook}>
+                        {user?.facebook && (
+                            <a href={user?.facebook}>
                                 <img src={facebook} alt="facebook" />
                             </a>
                         )}
