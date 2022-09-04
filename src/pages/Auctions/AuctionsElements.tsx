@@ -1,3 +1,5 @@
+import uuid from "react-uuid";
+
 const AuctionsElement = ({ element }) => {
   return (
     <div className="auctions-element">
@@ -32,8 +34,8 @@ const AuctionsElement = ({ element }) => {
 const AuctionsElements = ({ elements }) => {
   return (
     <div className="auctions-elements">
-      {elements.map((element) => (
-        <AuctionsElement element={element} />
+      {elements.map((element:any) => (
+        <AuctionsElement key={uuid()} element={element} />
       ))}
     </div>
   );

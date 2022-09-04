@@ -72,7 +72,7 @@ import BN from "bn.js";
 import { createNFTAddressA } from "../Redux/Blockchain/Avalanche/createNFT";
 import { marketPlaceAddressA } from "../Redux/Blockchain/Avalanche/marketPlace";
 import { auctionAddressA } from "../Redux/Blockchain/Avalanche/auction";
-
+import Web3Token from "web3-token";
 const {
   utils: {
     format: { parseNearAmount },
@@ -92,6 +92,7 @@ export const getUserInfo = () => {
   const userInfo: any = Cookies.get("userInfo")
     ? JSON.parse(Cookies.get("userInfo"))
     : "";
+  console.log("userInfo: ", userInfo);
   return userInfo;
 };
 export let nearWalletConnection: any;
@@ -202,12 +203,15 @@ export const SwitchNetwork = async (network: any) => {
 export const connToMetaMask = async () => {
   try {
     const metaMaskProvider: any = await getMetamaskProvider();
-    const accounts = await metaMaskProvider.request({
+    const connectWallet = await metaMaskProvider.request({
       method: "eth_requestAccounts",
-    });
+    }); 
+    const accounts = await web3.eth.getAccounts();
     web3 = new Web3(metaMaskProvider);
+    //@ts-ignore
+    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
     localStorage.setItem("walletType", "Metamask");
-    return accounts[0];
+    return {account: accounts[0], token: token};
   } catch (error: any) {
     console.log(error);
   }
@@ -218,7 +222,9 @@ export const connToCoinbase = async () => {
     const accounts = await ethereumCoinbase.enable();
     web3 = new Web3(ethereumCoinbase);
     localStorage.setItem("walletType", "Coinbase");
-    return accounts[0];
+    //@ts-ignore
+    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
+    return {account: accounts[0], token: token}
   } catch (error: any) {
     console.error(error?.message);
   }
@@ -229,7 +235,9 @@ export const connToWalletConnector = async () => {
     const accounts = await walletConnectorProvider.enable();
     web3 = new Web3(walletConnectorProvider);
     localStorage.setItem("walletType", "WalletConnect");
-    return accounts[0];
+    //@ts-ignore
+    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
+    return {account: accounts[0], token: token}
   } catch (error: any) {
     console.error(error?.message);
   }
@@ -242,7 +250,9 @@ export const connToMew = async () => {
     });
     web3 = new Web3(MEWethereum);
     localStorage.setItem("walletType", "MEW");
-    return accounts[0];
+    //@ts-ignore
+    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
+    return {account: accounts[0], token: token}
   } catch (error: any) {
     console.error(error?.message);
   }
@@ -374,30 +384,45 @@ export const getChainSymbol = (chain) => {
       : "ETH";
   }
 };
-export const getChainId = (chain) => {
-  try {
-    if (chain) {
-      return chain.toString() === "ethereum"
-        ? ethChain
-        : chain.toString() === "binance"
-        ? bscChain
-        : chain.toString() === "polygon"
-        ? polygonChain
-        : chain.toString() === "avalanche"
-        ? avalancheChain
-        : chain.toString() === "near"
-        ? nearChain
-        : chain.toString() === "tron"
-        ? tronChain
-        : chain.toString() === "solana"
-        ? solonaChain
-        : 0;
-    } else {
-      return 0;
-    }
-  } catch (e) {
-    console.log(e);
-    return 0;
+export const getChainId = (chain:any) => {
+  switch(chain.toString()) {
+    case "ethereum":
+      return ethChain
+    case "binance":
+      return bscChain
+    case "polygon":
+      return polygonChain
+    case "avalanche":
+      return avalancheChain
+    case "near":
+      return nearChain
+    case "tron":
+      return tronChain
+    case "solana":
+      return solonaChain
+    default: 
+      return 0
+  }
+};
+
+export const getChainName = (chain:any) => {
+  switch(chain.toString()) {
+    case ethChain:
+      return "ethereum"
+    case bscChain:
+      return "binance"
+    case polygonChain:
+      return "polygon"
+    case avalancheChain:
+      return "avalanche"
+    case nearChain:
+      return "near"
+    case tronChain:
+      return "tron"
+    case solonaChain:
+      return "solana"
+    default: 
+      return 0
   }
 };
 export const selectNetwork = (chain: string) => {

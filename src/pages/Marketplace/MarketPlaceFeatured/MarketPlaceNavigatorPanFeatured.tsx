@@ -50,7 +50,7 @@ const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll, loading }) => {
             )}/${element.tokenId}`,
       )}
         >
-          <Element key={`mpfe${i}`} element={element} />
+          <Element key={uuid()} element={element} />
         </SwiperSlide>
       ))}
     </Swiper>

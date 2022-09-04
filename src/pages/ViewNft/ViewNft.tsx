@@ -9,6 +9,7 @@ import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import { AllNFTsElement } from "../AllNFTs/AllNFTsBody/AllNFTsElements";
 import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
+import uuid from "react-uuid";
 
 const filters = ["History", "Properties"];
 
@@ -90,6 +91,7 @@ const ViewNft = () => {
                                 auction={auction}
                                 setNftLoading={setNftLoading}
                                 fetchItem={fetchItem}
+                                pageChain={chain}
                             />
                         )}
                     </div>
@@ -99,6 +101,7 @@ const ViewNft = () => {
                             <div>
                                 {nftByCollection && nftByCollection.map((item: any) => (
                                     <Link
+                                        key={uuid()}
                                         to={`/nft/${item.chain}/${item.contractAddress}/${item._id}`}
                                     >
                                         <AllNFTsElement element={item} />s

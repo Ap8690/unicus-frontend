@@ -31,7 +31,7 @@ import {
     endSaleApi,
     placeBidApi,
 } from "../../services/api/supplier";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import web3 from "../../web3";
 import { toast } from "react-toastify";
 import {
@@ -76,6 +76,9 @@ import * as anchor from "@project-serum/anchor";
 import SolMintNftIdl from "../../utils/sol_mint_nft.json";
 import uuid from "react-uuid";
 import { getCompleteDate } from "../../utils/date";
+import WalletsModal from "../../components/modals/WalletsModal/WalletsModal";
+import {isChainConnected} from "../../utils/helpers"
+import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 
 const NftInfo = ({
     filters,
@@ -87,11 +90,15 @@ const NftInfo = ({
     nft,
     auction,
     setNftLoading,
-    fetchItem
+    fetchItem,
+    pageChain
 }) => {
+    const {fullLoading,chainConnected,setChainConnected} = useContext(ConnectWalletContext)
     const [startBid, setStartBid] = useState<any>(
         auction ? auction.startBid : 0.0
     );
+    const [connectWalletModal, setConnectWalletModal] =
+        useState<Boolean>(false);
     const [duration, setDuration] = useState("1");
     const [bid, setBid] = useState("");
     const [type, setType] = useState(0);
@@ -102,8 +109,8 @@ const NftInfo = ({
     const { wallet, connect, publicKey, sendTransaction } = useWallet();
     const anWallet = useAnchorWallet();
     const { setVisible } = useWalletModal();
-    let provider;
-    let program;
+    let provider: any;
+    let program: any;
     const getSolWallet = () => {
         return wallet;
     };
@@ -127,10 +134,9 @@ const NftInfo = ({
         }
     }, [anWallet]);
 
-    const [button, setButton] = useState("Buy Now");
     const navigate = useNavigate();
 
-    const createSaleSol = async (key, assetPrice) => {
+    const createSaleSol = async (key: any, assetPrice: any) => {
         //use metadata to feth the mintkey like this...
         //const mintKey = new anchor.web3.PublicKey(metatdata.mint.toArray("le"));
         provider = new anchor.AnchorProvider(connection, anWallet, {
@@ -203,7 +209,12 @@ const NftInfo = ({
         }
     };
 
-    const createAuctionSol = async (key, assetPrice, startTime, endTime) => {
+    const createAuctionSol = async (
+        key: any,
+        assetPrice: any,
+        startTime: any,
+        endTime: any
+    ) => {
         //use metadata to feth the mintkey like this...
         //const mintKey = new anchor.web3.PublicKey(metatdata.mint.toArray("le"));
 
@@ -278,7 +289,7 @@ const NftInfo = ({
         }
     };
 
-    const sellOrderSol = async (key) => {
+    const sellOrderSol = async (key: any) => {
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -366,7 +377,7 @@ const NftInfo = ({
         }
     };
 
-    const removeSaleSol = async (key) => {
+    const removeSaleSol = async (key: any) => {
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -431,7 +442,7 @@ const NftInfo = ({
         }
     };
 
-    const bidAuctionSol = async (key, assetPrice) => {
+    const bidAuctionSol = async (key: any, assetPrice: any) => {
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -517,7 +528,7 @@ const NftInfo = ({
 
     //auction resolve
 
-    const auctionResolveSol = async (key) => {
+    const auctionResolveSol = async (key: any) => {
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -605,7 +616,7 @@ const NftInfo = ({
         }
     };
 
-    const cancelAuctionSol = async (key) => {
+    const cancelAuctionSol = async (key: any) => {
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -969,7 +980,7 @@ const NftInfo = ({
             );
             console.log("buy item", address, auction);
 
-            let transactionHash;
+            let transactionHash:any;
             if (nft.chain === nearChain) {
                 await offerPrice(
                     nft.tokenId,
@@ -1371,7 +1382,13 @@ const NftInfo = ({
         }
     };
 
+    const checkChain = () => {
+        if(isChainConnected(pageChain))
+        setChainConnected(pageChain)
+    }
+
     useEffect(() => {
+        
         (async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const txhash = urlParams.get("transactionHashes");
@@ -1518,10 +1535,17 @@ const NftInfo = ({
                     });
             }
         })();
+
+        checkChain()
     }, []);
     
     console.log(auction,"auction")
 
+    useEffect(() => {
+        if(localStorage.getItem('walletConnected')) {
+            checkChain()
+        }
+    },[fullLoading])
     return (
         <>
             <PlaceBid
@@ -1532,7 +1556,7 @@ const NftInfo = ({
             >
                 <div className="success__body">
                     <>
-                        <div className="mt-5 input_price">
+                        <div className="input_price">
                             <Input
                                 title="Asset Price"
                                 placeholder="Enter Asset Price"
@@ -1692,7 +1716,9 @@ const NftInfo = ({
                     {activeFilter === "History" && (
                         <History data={historyData} />
                     )}
-                    {activeFilter === "Properties" && <Properties tags={nft.tags} />}
+                    {activeFilter === "Properties" && (
+                        <Properties tags={nft.tags} />
+                    )}
                 </div>
                 <div className="bid-buy-box">
                     <div className="user-info">
@@ -1711,44 +1737,56 @@ const NftInfo = ({
                         </div>
                     </div>
                     <div className="btn-box">
-                        {/* <button className="btn" onClick={() => placeBid()}>
-            Place a bid
-          </button> */}
-                        {userInfo &&
-                        userInfo._id === nft.uploadedBy &&
-                        nft.nftStatus === 1 ? (
-                            <div style={{ width: "100%", display: "flex" }}>
-                                <button
-                                    className="btn mr-2"
-                                    onClick={() => {
-                                        setType(0);
-                                        setPopUpShow(true);
-                                    }}
-                                >
-                                    Create Sale
-                                </button>
+                        {chainConnected ? (
+                            userInfo &&
+                            userInfo._id === nft.uploadedBy &&
+                            nft.nftStatus === 1 ? (
+                                <div style={{ width: "100%", display: "flex" }}>
+                                    <button
+                                        className="btn mr-2"
+                                        onClick={() => {
+                                            setType(0);
+                                            setPopUpShow(true);
+                                        }}
+                                    >
+                                        Create Sale
+                                    </button>
+                                    <button
+                                        className="btn"
+                                        onClick={() => {
+                                            setType(1);
+                                            setPopUpShow(true);
+                                        }}
+                                    >
+                                        Start Auction
+                                    </button>
+                                </div>
+                            ) : (
                                 <button
                                     className="btn"
-                                    onClick={() => {
-                                        setType(1);
-                                        setPopUpShow(true);
-                                    }}
+                                    onClick={() => handleButtonClick()}
                                 >
-                                    Start Auction
+                                    {getButtonName()}
                                 </button>
-                            </div>
+                            )
                         ) : (
                             <button
                                 className="btn"
-                                onClick={() => handleButtonClick()}
+                                onClick={() => setConnectWalletModal(true)}
                             >
-                                {getButtonName()}
+                                Connect Wallet
                             </button>
                         )}
                     </div>
                     <span className="service-fee">Service fees 2%</span>
                 </div>
             </div>
+
+            <WalletsModal
+                open={connectWalletModal}
+                setOpen={setConnectWalletModal}
+                chainName={pageChain}
+            />
         </>
     );
 };

@@ -4,6 +4,7 @@
 
 .place-bid-dialog {
     color: #fff !important;
+    max-height: 410px;
     .dialog-title {
         padding: 1.5rem;
         @include mixins.flex-center;

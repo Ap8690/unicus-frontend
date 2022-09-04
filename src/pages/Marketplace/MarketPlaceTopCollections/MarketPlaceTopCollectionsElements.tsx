@@ -1,6 +1,7 @@
 // Images
 import { Link } from "react-router-dom";
 import ethereum from "../../../assets/svgs/ethereum.svg";
+import uuid from 'react-uuid'
 
 const Element = ({ element }) => {
   const sign = element.change >= 0 ? "+" : "-";
@@ -32,7 +33,7 @@ const MarketPlaceTopCollectionsElements = ({ list }) => {
     <>
       <div className="market-place-top-collections-elements">
         {list.map((element, i) => (
-          <Element element={element} key={`mptce${i}`} />
+          <Element element={element} key={uuid()} />
           ))}
       </div>
       <div className="goto-ranking hid">

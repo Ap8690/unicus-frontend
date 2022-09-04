@@ -2,7 +2,6 @@ import "./singlenft.scss";
 import listImg from "../../assets/svgs/list.svg";
 import uploadImg from "../../assets/svgs/uploadImage.svg";
 import { Image } from "react-bootstrap";
-import uuid from "react-uuid";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Input from "../../components/Input/Input";
 import { useEffect, useRef, useState } from "react";
@@ -17,13 +16,13 @@ import AddProperties from "../../components/modals/Add Properties/AddProperties"
 import axios from "axios";
 import { toast } from "react-toastify";
 import {
-  tronChain,
-  bscChain,
-  ethChain,
-  polygonChain,
-  nearChain,
-  solonaChain,
-  avalancheChain,
+    tronChain,
+    bscChain,
+    ethChain,
+    polygonChain,
+    nearChain,
+    solonaChain,
+    avalancheChain,
 } from "../../config";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import {
@@ -74,6 +73,8 @@ import {
     bundlrStorage,
 } from "@metaplex-foundation/js";
 import validator from "validator";
+import { getBase64, blobUrlToFile } from "../../utils/imageConvert";
+import uuid from 'react-uuid'
 
 const CreateNftSingle = () => {
     const [name, setName] = useState("");
@@ -183,10 +184,14 @@ const CreateNftSingle = () => {
         setRoyalty(e);
     };
 
-    const uploadFile = (e: any) => {
-        console.log("upload", e.target.files[0]);
-
+    const uploadFile = async (e: any) => {
         setFileSrc(e.target.files[0]);
+        try {
+            const im = await getBase64(e.target.files[0]);
+            localStorage.setItem("fileSrc", JSON.stringify(im));
+        } catch (err) {
+            console.log(err);
+        }
     };
     const validateUrl = (url: string) => {
         if (!validator.isURL(url)) {
@@ -248,7 +253,6 @@ const CreateNftSingle = () => {
     ];
 
     const mintSolana = async (title: any, description: any, fileUrl: any) => {
-        console.log("sol mint start", anWallet);
         if (!anWallet) {
             return toast.error("Solana wallet not detected!");
         }
@@ -263,15 +267,13 @@ const CreateNftSingle = () => {
             SOL_MINT_NFT_PROGRAM_ID,
             provider
         );
-        console.log("Program Id: ", program.programId.toBase58());
-        console.log("Mint Size: ", MINT_SIZE);
+
         const lamports =
             await program.provider.connection.getMinimumBalanceForRentExemption(
                 MINT_SIZE
             );
-        console.log("Mint Account Lamports: ", lamports);
 
-        const getMetadata = async (mint) => {
+        const getMetadata = async (mint: any) => {
             return (
                 await anchor.web3.PublicKey.findProgramAddress(
                     [
@@ -290,7 +292,6 @@ const CreateNftSingle = () => {
             mintKey.publicKey,
             provider.wallet.publicKey
         );
-        console.log("NFT Account: ", nftTokenAccount.toBase58());
 
         const mint_tx = new anchor.web3.Transaction().add(
             anchor.web3.SystemProgram.createAccount({
@@ -314,7 +315,6 @@ const CreateNftSingle = () => {
             )
         );
         let blockhashObj = await connection.getLatestBlockhash();
-        console.log("blockhashObj", blockhashObj);
         mint_tx.recentBlockhash = blockhashObj.blockhash;
 
         try {
@@ -330,13 +330,7 @@ const CreateNftSingle = () => {
         } catch {
             return false;
         }
-
-        console.log("Mint key: ", mintKey.publicKey.toString());
-        console.log("User: ", provider.wallet.publicKey.toString());
-
         const metadataAddress = await getMetadata(mintKey.publicKey);
-        console.log("Metadata address: ", metadataAddress.toBase58());
-
         try {
             const tx = program.transaction.mintNft(
                 mintKey.publicKey,
@@ -647,64 +641,80 @@ const CreateNftSingle = () => {
         }
         setNftLoading(false);
     };
-
+    const convertToFile = async () => {
+        try {
+            const file = await blobUrlToFile(JSON.parse(localStorage.getItem("fileSrc")),"newUpload")
+            setFileSrc(file)
+        }
+        catch(err) {
+            console.log(err)
+        }
+    }
     useEffect(() => {
-        if (sessionStorage.getItem("properties")) {
-            setProperties(JSON.parse(sessionStorage.getItem("properties")));
+        if (localStorage.getItem("properties")) {
+            setProperties(JSON.parse(localStorage.getItem("properties")));
         }
-        if (sessionStorage.getItem("name")) {
-            setName(JSON.parse(sessionStorage.getItem("name")));
+        if (localStorage.getItem("name")) {
+            setName(JSON.parse(localStorage.getItem("name")));
         }
-        if (sessionStorage.getItem("extLink")) {
-            setExtlink(JSON.parse(sessionStorage.getItem("extLink")));
+        if (localStorage.getItem("extLink")) {
+            setExtlink(JSON.parse(localStorage.getItem("extLink")));
         }
-        if (sessionStorage.getItem("description")) {
-            setDescription(JSON.parse(sessionStorage.getItem("description")));
+        if (localStorage.getItem("description")) {
+            setDescription(JSON.parse(localStorage.getItem("description")));
         }
-        if (sessionStorage.getItem("category")) {
-            setCategory(JSON.parse(sessionStorage.getItem("category")));
+        if (localStorage.getItem("category")) {
+            setCategory(JSON.parse(localStorage.getItem("category")));
         }
-        if (sessionStorage.getItem("chain")) {
-            setChain(JSON.parse(sessionStorage.getItem("chain")));
+        if (localStorage.getItem("chain")) {
+            setChain(JSON.parse(localStorage.getItem("chain")));
         }
-        if (sessionStorage.getItem("price")) {
-            setPrice(JSON.parse(sessionStorage.getItem("price")));
+        if (localStorage.getItem("price")) {
+            setPrice(JSON.parse(localStorage.getItem("price")));
         }
-        if (sessionStorage.getItem("collection")) {
-            setCollection(JSON.parse(sessionStorage.getItem("collection")));
+        if (localStorage.getItem("collection")) {
+            setCollection(JSON.parse(localStorage.getItem("collection")));
         }
-        if (sessionStorage.getItem("royalty")) {
-            setRoyalty(JSON.parse(sessionStorage.getItem("royalty")));
+        if (localStorage.getItem("royalty")) {
+            setRoyalty(JSON.parse(localStorage.getItem("royalty")));
+        }
+        if (
+            localStorage.getItem("fileSrc") &&
+            Object.keys(JSON.parse(localStorage.getItem("fileSrc"))).length !==
+                0
+        ) {
+            convertToFile()
         }
     }, []);
 
     useEffect(() => {
-        sessionStorage.setItem("properties", JSON.stringify(properties));
+        localStorage.setItem("properties", JSON.stringify(properties));
     }, [properties]);
     useEffect(() => {
-        sessionStorage.setItem("name", JSON.stringify(name));
+        localStorage.setItem("name", JSON.stringify(name));
     }, [name]);
     useEffect(() => {
-        sessionStorage.setItem("extLink", JSON.stringify(extLink));
+        localStorage.setItem("extLink", JSON.stringify(extLink));
     }, [extLink]);
     useEffect(() => {
-        sessionStorage.setItem("description", JSON.stringify(description));
+        localStorage.setItem("description", JSON.stringify(description));
     }, [description]);
     useEffect(() => {
-        sessionStorage.setItem("category", JSON.stringify(category));
+        localStorage.setItem("category", JSON.stringify(category));
     }, [category]);
     useEffect(() => {
-        sessionStorage.setItem("chain", JSON.stringify(chain));
+        localStorage.setItem("chain", JSON.stringify(chain));
     }, [chain]);
     useEffect(() => {
-        sessionStorage.setItem("price", JSON.stringify(price));
+        localStorage.setItem("price", JSON.stringify(price));
     }, [price]);
     useEffect(() => {
-        sessionStorage.setItem("collection", JSON.stringify(collection));
+        localStorage.setItem("collection", JSON.stringify(collection));
     }, [collection]);
     useEffect(() => {
-        sessionStorage.setItem("royalty", JSON.stringify(royalty));
+        localStorage.setItem("royalty", JSON.stringify(royalty));
     }, [royalty]);
+
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const txhash = urlParams.get("transactionHashes");
@@ -741,8 +751,9 @@ const CreateNftSingle = () => {
 
     return (
         <>
-            {modals.map((e) => (
+            {modals.map((e:any) => (
                 <AddProperties
+                    key={uuid()}
                     description={e.description}
                     open={e.open}
                     onClose={e.onClose}
@@ -769,9 +780,10 @@ const CreateNftSingle = () => {
                                 <div className="field-title">Upload File</div>
                                 <button
                                     className="field"
-                                    onClick={() => inputFile.current.click()}
+                                    onClick={() => inputFile?.current.click()}
                                 >
                                     {fileSrc &&
+                                    fileSrc !== "undefined" &&
                                     supportedVid.includes(
                                         fileSrc.name.split(".").pop()
                                     ) ? (

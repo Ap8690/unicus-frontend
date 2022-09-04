@@ -12,6 +12,7 @@ import { getNftContractAddress } from "../../../utils/utils";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
 import NftSkeletonLoader from "../../../components/Loading/SkeletonLoading/NftSkeletonLoader";
+import uuid from "react-uuid";
 
 const getTimeString = (days, hours, minutes) => {
   return `${days}d ${hours}h ${minutes}m`;
@@ -79,6 +80,7 @@ const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType, loading 
       >
       {list.map((element: any, i: number) => (
         <SwiperSlide
+          key={uuid()}
           onClick={()=>navigate(`/nft/${element.chain}/${getNftContractAddress(
               element
             )}/${element.tokenId}`,
@@ -86,7 +88,7 @@ const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType, loading 
         >
           <Element
             element={element}
-            key={`mpae${i}${element.tokenId}`}
+            key={uuid()}
             currentType={currentType}
           />
         </SwiperSlide>

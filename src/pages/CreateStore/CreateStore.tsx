@@ -110,7 +110,7 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
       if (!validator.isEmail(generals.email)) {
         throw "Invalid Email";
       }
-      let res;
+      let res:any;
       await createStore(generals).then((val)=> {
         console.log(val,"isval");
         
@@ -233,7 +233,7 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
                 onChange={(e) => handleCountry(e.target.value)}
               >
                 {options.map((item) => (
-                  <MenuItem key={item.value} value={item.value}>
+                  <MenuItem key={uuid()} value={item.value}>
                     {item.label}
                   </MenuItem>
                 ))}

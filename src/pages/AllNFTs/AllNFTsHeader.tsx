@@ -2,6 +2,7 @@
 import { useState, Dispatch, SetStateAction, ReactPropTypes } from "react";
 import filter from "../../assets/svgs/filter.svg";
 import chevronDown from "../../assets/svgs/chevronDown.svg";
+import uuid from "react-uuid";
 
 // Types
 type SortingType = {
@@ -117,7 +118,7 @@ const AllNFTsHeader = ({
           >
             {countFilters.map((ct: string, index: number) => (
               <ListButton
-                key={`cfb${index}`}
+                key={uuid()}
                 filter={ct}
                 onClick={onClickCounting}
                 type="counting"

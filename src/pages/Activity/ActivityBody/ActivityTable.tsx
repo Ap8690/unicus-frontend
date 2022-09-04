@@ -4,6 +4,7 @@ import transfer from "../../../assets/svgs/transfer.svg";
 import list from "../../../assets/svgs/list.svg";
 import ethereum from "../../../assets/svgs/ethereum.svg";
 import { useEffect, useState } from "react";
+import uuid from "react-uuid";
 
 // Util Function
 const getImage = (type) => {
@@ -60,8 +61,8 @@ const ActivityTable = ({ activities, search }) => {
           </tr>
         </thead>
         <tbody>
-          {activities.map((activity, i) => (
-            <ActivityTableData activity={activity} key={`atd${i}`} />
+          {activities.map((activity:any, i:number) => (
+            <ActivityTableData activity={activity} key={uuid()} />
           ))}
         </tbody>
       </table>

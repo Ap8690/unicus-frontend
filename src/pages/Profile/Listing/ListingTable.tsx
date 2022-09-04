@@ -4,6 +4,7 @@ import DefaultModal from "../../../components/modals/DefaultModal/DefaultModal";
 import { bscChain, ethChain, tronChain } from "../../../config";
 import { getChainSymbol } from "../../../utils/utils";
 import { getCompleteDate } from "../../../utils/date";
+import uuid from "react-uuid";
 // Element of data of activity table
 const TableData = ({ activity, link }) => {
     let navigate = useNavigate();
@@ -67,7 +68,7 @@ const Table = ({ rows, columns }) => {
                 <thead>
                     <tr>
                         {columns.map((column: String, index: Number) => (
-                            <th key={`tch${index}`}>{column}</th>
+                            <th key={uuid()}>{column}</th>
                         ))}
                     </tr>
                 </thead>
@@ -81,7 +82,7 @@ const Table = ({ rows, columns }) => {
                                         : row.nftId && row.nftId.contractAddress
                                 }/${row.tokenId}`}
                                 activity={row}
-                                key={`atd${i}`}
+                                key={uuid()}
                             />
                         ))
                     ) : (

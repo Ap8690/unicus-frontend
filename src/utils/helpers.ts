@@ -1,7 +1,8 @@
-import * as nearAPI from "near-api-js";
-import BN from "bn.js";
-import { nearChain, solonaChain } from "../config";
+import * as nearAPI from "near-api-js"
+import BN from "bn.js"
+import { nearChain, solonaChain } from "../config"
 import {ethers} from 'ethers'
+import {getChainId} from "../utils/utils"
 
 
 const { keyStores, connect, transactions, WalletConnection } = nearAPI;
@@ -96,4 +97,15 @@ export async function decodeParams(types:any, output:any, ignoreMethodHash:any) 
         obj.push(arg);
         return obj;
     }, []);
+}
+
+// check on nft page is wallet connected with the desired chain
+export const isChainConnected = (pageChain:any) => {
+  // pageChain will be Chain Id
+  // Below will give chain name 
+  let connectedChain: any = localStorage.getItem("walletChain") || 0
+  if(connectedChain) {
+    connectedChain = getChainId(connectedChain)
+  }
+  return connectedChain.toString() === pageChain.toString()
 }

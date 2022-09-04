@@ -199,11 +199,19 @@ export async function emailLogin(email: string, password: string) {
   });
 }
 
-export async function walletLogin(walletAddress: string) {
-  return await axios.post(`${BASE_URL}/auth/login`, {
+// export async function walletLogin(walletAddress: string) {
+//   return await axios.post(`${BASE_URL}/auth/login`, {
+//     walletAddress,
+//   });
+// }
+
+export async function walletLogin(walletAddress: string,token: string) {
+  return await axios.post(`${BASE_URL}/auth/wallet-connect`, {
     walletAddress,
+    token
   });
 }
+
 export async function verifyEmailApi(token: string, email: string) {
   return await axios.get(
     `${BASE_URL}/auth/verify-email?token=${

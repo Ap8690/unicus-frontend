@@ -13,6 +13,6 @@ const composeWithDevTools = (middleware: any) => {
   return applyMiddleware(...middleware)
 }
 
-const store = createStore(rootReducer, composeWithDevTools(thunkMiddleware))
+const rstore = createStore(rootReducer, composeWithDevTools(thunkMiddleware))
 
-export {store}
+export {rstore}

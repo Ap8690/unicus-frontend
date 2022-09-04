@@ -62,7 +62,14 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 // import NFTById from "./components/NFTById/NFTById";
+import { UserProvider } from "./context/UserContext";
+import { TransactionProvider } from "./context/Web3Context";
+import { ChainProvider } from "./context/ChainContext";
+import { WalletConnectionProvider } from "./context/ConnectWalletContext";
 
+// redux integration
+import { Provider } from "react-redux";
+import { rstore } from "./Redux/Store";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 const App = () => {
@@ -144,6 +151,7 @@ useEffect(() => {
   if (location.pathname === "/") {
     navigate("/home", {replace:true});
   }
+  console.log(" dsf ",Cookies.get("userInfo"))
 }, []);
 
 // useEffect(() => {
@@ -170,6 +178,11 @@ useEffect(() => {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets}>
         <WalletModalProvider>
+        <UserProvider>
+            <ChainProvider>
+                <WalletConnectionProvider>
+                    <Provider store={rstore}>
+                        <TransactionProvider>
           <div className="App">
             <Navbar store={isMainStore() ? userStore : store} />
             <ToastContainer limit={3} />
@@ -276,6 +289,11 @@ useEffect(() => {
             </Routes>
             <Footer />
           </div>
+          </TransactionProvider>
+                    </Provider>
+                </WalletConnectionProvider>
+            </ChainProvider>
+        </UserProvider>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
