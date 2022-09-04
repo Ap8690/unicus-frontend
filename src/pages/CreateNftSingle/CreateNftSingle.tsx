@@ -23,6 +23,7 @@ import {
   polygonChain,
   nearChain,
   solonaChain,
+  avalancheChain,
 } from "../../config";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import {
@@ -451,6 +452,8 @@ const CreateNftSingle = () => {
             contractType
           );
 
+          console.log(contractAddress,"contract Address")
+
           setNftModalMessage("Uploading the metadata.");
           setNftLoading(true);
           let formData = new FormData();
@@ -749,6 +752,7 @@ const CreateNftSingle = () => {
                     <MenuItem value={ethChain}>Ethereum</MenuItem>
                     <MenuItem value={polygonChain}>Polygon</MenuItem>
                     <MenuItem value={bscChain}>Binance</MenuItem>
+                    <MenuItem value={avalancheChain}>Avalanche</MenuItem>
                     <MenuItem value={tronChain}>Tron</MenuItem>
                     <MenuItem value={nearChain}>Near</MenuItem>
                     <MenuItem value={solonaChain}>Solana</MenuItem>

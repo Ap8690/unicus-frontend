@@ -124,8 +124,6 @@ const setLogin = () => {
 };
 const getStoreForUser = async () => {
   try {
-    console.log("main store access", Cookies.get(ACCESS_TOKEN));
-    
     if (Cookies.get(ACCESS_TOKEN)) {
       const res = await getStoreByUser();
       if (res.data.store) {

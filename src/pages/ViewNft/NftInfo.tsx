@@ -12,11 +12,9 @@ import {
     getCreateNftContract,
     getCreateNftContractAddress,
     getMarketPlace,
-    getMarketplaceABI,
     getMarketPlaceContractAddress,
     getNftContractAddress,
     getUserInfo,
-    nearWalletConnection,
     offerBid,
     offerPrice,
     processPurchase,
@@ -740,7 +738,7 @@ const NftInfo = ({
             } else {
                 const listContract = new web3.eth.Contract(
                     //@ts-ignore
-                    getCreateNftABI(nft.chain),
+                    getCreateNftABI(),
                     getNftContractAddress(nft)
                 );
 

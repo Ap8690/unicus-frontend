@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-// import { cashfreeSandbox } from "cashfree-dropjs";
 import { cashfreeSandbox } from "cashfree-dropjs";
 // API CALL
 import {
@@ -74,12 +73,10 @@ const PayNow = ({ isLogin, setSignIn }) => {
     setShowFullLoading(true);
     // setModalShow(true);
     try {
-      // const accounts = await web3.eth.getAccounts()
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
 
-      // //console.log(accounts[0]);
       // setMetaWalletAddress(accounts[0])
       localStorage.setItem("METAMASK_WALLET", accounts[0]);
 
@@ -114,12 +111,10 @@ const PayNow = ({ isLogin, setSignIn }) => {
               }
             )
             .then((res) => {
-              // //console.log(res);
               setShowFullLoading(false);
               setShowWalletAdded(true);
             })
             .catch((err) => {
-              // //console.log(err.response);
               setShowFullLoading(false);
             });
         } else {
@@ -127,7 +122,6 @@ const PayNow = ({ isLogin, setSignIn }) => {
         }
       }
     } catch (err) {
-      // //console.log(err.response);
       setShowFullLoading(false);
     }
     // setModalShow(false)
@@ -230,7 +224,6 @@ const PayNow = ({ isLogin, setSignIn }) => {
             dropName: getDropName(ticketInfo._id, j),
             dropUrl: getDropUrl(ticketInfo._id, j),
           };
-          console.log("drop", nftDrop);
           const res = await axios.post(
             `${process.env.REACT_APP_BACKEND_URL}/nftDrop/create`,
             nftDrop,
@@ -241,7 +234,6 @@ const PayNow = ({ isLogin, setSignIn }) => {
               },
             }
           );
-          console.log("drop res", res);
           j++;
         }
       }
@@ -259,8 +251,6 @@ const PayNow = ({ isLogin, setSignIn }) => {
       //order is paid
       //verify order status by making an API call to your server
       // using data.order.orderId
-      // console.log("orderId ", data.order.orderId);
-      console.log("Success");
       setShowFullLoading(true);
       setPayMessage(
         "Your transaction is successful. Please wait while we book your ticket"

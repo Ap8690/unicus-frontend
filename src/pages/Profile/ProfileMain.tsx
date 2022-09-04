@@ -31,7 +31,6 @@ import { tronChain, BASE_URL } from "../../config";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import {
   connectWallet,
-  getCreateNftABI,
   getMarketPlace,
   getMarketPlaceContractAddress,
 } from "../../utils/utils";

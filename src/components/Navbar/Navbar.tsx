@@ -39,14 +39,12 @@ const Navbar = ({ store }) => {
     const accessToken = Cookies.get(ACCESS_TOKEN);
 
     const handleClickStats = (event: React.MouseEvent<HTMLButtonElement>) => {
-        console.log(event.currentTarget);
         setAnchorStats(event.currentTarget);
     };
     const handleCloseStats = () => {
         setAnchorStats(null);
     };
     const handleClickChains = (event: React.MouseEvent<HTMLButtonElement>) => {
-        console.log(event.currentTarget);
         setAnchorChains(event.currentTarget);
     };
     const handleCloseChains = (chain: any) => {
