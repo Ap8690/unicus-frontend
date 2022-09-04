@@ -5,43 +5,44 @@ import { IAdvance } from "../../models/Advance";
 import { IAppearance } from "../../models/Appearance";
 import { IGeneral } from "../../models/General";
 import { ACCESS_TOKEN } from "../../utils/constants";
-import { getChainSymbol, userInfo } from "../../utils/utils";
+import { getChainSymbol, userInfo ,getChainId} from "../../utils/utils";
 
-const accessToken = Cookies.get(ACCESS_TOKEN);
+export const accessToken = Cookies.get(ACCESS_TOKEN);
 export const axiosConfig: any = {
   headers: {
     Authorization: `Bearer ${accessToken}`,
   },
 };
 
-export const getAccessToken=()=>{
+export const getAccessToken =()=>{
   return Cookies.get(ACCESS_TOKEN);
 }
-export async function getFeaturedNft(number: number) {
-  return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}`);
+export async function getFeaturedNft(number: number,chain: any) {
+  return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}/${getChainId(chain)}`);
 }
 
-export async function getTrendingNft(number: number, category: string) {
+export async function getTrendingNft(number: number, category: string,chain: any) {
   return await axios.get(
-    `${BASE_URL}/nft/getTrendingNfts/${number}/${category}`
+    `${BASE_URL}/nft/getTrendingNfts/${number}/${category}/${getChainId(chain)}`
   );
 }
 
-export async function getAuctions(number: number, auctionType: string) {
+export async function getAuctions(number: number, auctionType: string,chain: any) {
   return await axios.get(
-    `${BASE_URL}/auction/getAuctions/${number}/${auctionType}`
+    `${BASE_URL}/auction/getAuctions/${number}/${auctionType}/${getChainId(chain)}`
   );
 }
 
 export async function getMarketplaceNfts(
   skip: any,
   networkID: any,
-  sortBy: string
+  sortBy: string,
+  currentFilter: string
 ) {
   return await axios.get(
     `${BASE_URL}/auction/getAllExplore/${skip}/${networkID}/${encodeURIComponent(
       JSON.stringify(sortBy)
-    )}`
+    )}/${currentFilter}`
   );
 }
 
@@ -235,7 +236,7 @@ export async function addWalletAdd(userWallet: string) {
   );
 }
 
-export async function updateProfile(username, bio) {
+export async function updateProfile(username: string, bio: string) {
   return await axios.post(
     `${BASE_URL}/users/update/updateUser`,
     {

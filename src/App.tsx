@@ -57,6 +57,7 @@ import { ACCESS_TOKEN, defaultPrivacyText } from "./utils/constants";
 import { isMainStore } from "./utils/utils";
 import PrivacyPolicy from "./pages/UsefulLinks/PrivacyPolicy";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import GlobalSearch from "./pages/GlobalSearch/GlobalSearch"
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -81,9 +82,8 @@ useEffect(() => {
   } else {
     init();
     setLogin();
-  }
 
-  // document.documentElement.setAttribute("data-theme", "green");
+  }
 }, [accessToken]);
 
 useEffect(() => {
@@ -108,16 +108,20 @@ const init = async () => {
 };
 const setLogin = () => {
   const cookieUser = Cookies.get("userInfo");
+  console.log("cookieUser: ", cookieUser);
 
-  let userInfo;
+  let userInfo: any;
   if (cookieUser) {
     userInfo = JSON.parse(cookieUser);
     localStorage.setItem("userInfo", JSON.stringify(userInfo));
+    console.log("Setting localstorage")
   }
   else{
     localStorage.removeItem("userInfo")
+    console.log("UnSetting localstorage")
   }
   const token = Cookies.get(ACCESS_TOKEN);
+  console.log("token: ", token);
   if (token) {
     setAccessToken(token)
   }
@@ -191,6 +195,7 @@ useEffect(() => {
               <Route path="/stats/activity" element={<Activity />} /> */}
               <Route path="/explore" element={<Explore />} />
               <Route path="/explore/:chainNetwork" element={<Explore />} />
+              <Route path="/search/:search" element={<GlobalSearch/>} />
               <Route path="/login/:token/:email" element={<Explore />} />{" "}
               <Route
                 path="/reset-password/:token/:email"
@@ -264,14 +269,10 @@ useEffect(() => {
                 element={<ViewNft />}
               />
               <Route path="/auctions" element={<Auctions />} />
-              <Route path="/edit-profile" element={<EditProfile />} />
+              <Route path="/edit-profile" element={<EditProfile isLogin={accessToken}/>} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/:profileState" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
-              {/* <Route
-                  path="/edit-profile"
-                  element={<EditProfile />}
-                /> */}
             </Routes>
             <Footer />
           </div>

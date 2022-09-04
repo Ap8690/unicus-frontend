@@ -7,7 +7,7 @@ export type ChainContextType = {
 export const ChainContext = createContext<ChainContextType | null>(null)
 
 export const ChainProvider = ({children}) => {
-  const [chain, setChain] = useState('ethereum')
+  const [chain, setChain] = useState('all')
   
   return(
       <ChainContext.Provider value={{ chain, setChain }}>

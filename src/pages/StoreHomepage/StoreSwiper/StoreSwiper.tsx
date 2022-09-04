@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import MarketPlaceNavigator from "../../Marketplace/MarketPlaceFeatured/MarketPlaceNavigatorFeatured";
 import MarketPlaceNavigatorPanFeatured from "../../Marketplace/MarketPlaceFeatured/MarketPlaceNavigatorPanFeatured"
 
-const StoreSwiper = ({ list, title }) => {
+const StoreSwiper = ({ list, title, loading }) => {
     const [currentScroll, setCurrentScroll] = useState(0);
     // const [featuredNft, setFeturedNft] = useState([]);
     const length = list?.length > 0 ? Math.ceil(list?.length / 3) : 0;
@@ -18,7 +18,7 @@ const StoreSwiper = ({ list, title }) => {
                 length={length}
                 heading={title}
             />
-            {list && list.length >0 ?<MarketPlaceNavigatorPanFeatured list={list} currentScroll={currentScroll} />:<div>No NFTs found</div>}
+            {list && list.length >0 ?<MarketPlaceNavigatorPanFeatured loading={loading} list={list} currentScroll={currentScroll} />:<div>No NFTs found</div>}
         </div>
     );
 };

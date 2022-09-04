@@ -69,6 +69,7 @@ import {
   keypairIdentity,
   bundlrStorage,
 } from "@metaplex-foundation/js";
+import validator from 'validator';
 
 const CreateNftSingle = () => {
   const [name, setName] = useState("");
@@ -190,7 +191,12 @@ const CreateNftSingle = () => {
         ("jpg" || "png" || "gif" || "svg")
     );
   };
-
+  const validateUrl = (url:string) => {
+    if(!validator.isURL(url)) {
+      return false
+    }
+    return true
+  }
   const supportedImg = ["jpg", "jpeg", "png", "svg", "gif"];
   const supportedVid = ["mp4", "webm"];
   const supportedAud = ["mp3", "wav", "ogg"];
@@ -213,6 +219,7 @@ const CreateNftSingle = () => {
   useEffect(() => {
     if (!getAccessToken()) {
       navigate("/connect-wallet/create-nft");
+      toast.warn("Please Login!")
     }
   }, []);
 
@@ -433,6 +440,9 @@ const CreateNftSingle = () => {
         setNftLoading(false);
         setMetamaskNotFound(true);
         return null;
+      }
+      if(extLink && !validateUrl(extLink)) {
+        return toast.error("Please enter a valid external link")
       }
       //@ts-expect-error
       if (chain === tronChain && !window.tronWeb) {
@@ -728,7 +738,7 @@ const CreateNftSingle = () => {
                 setState={setExtlink}
               />
               <Input
-                title="Description"
+                title="Description (Word limit 240)"
                 multi
                 placeholder={"Provide a detailed description of your item."}
                 state={description}
@@ -835,23 +845,13 @@ const CreateNftSingle = () => {
               </div>
 
               <div className="select-collection">
-                <FormControl
-                  variant="standard"
-                  sx={{ m: 0, minWidth: 120, width: "100%" }}
-                >
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Select Collection
-                  </InputLabel>
-                  <Select
-                    labelId="chain-select-label"
-                    id="chain-select"
-                    value={collection}
-                    onChange={setCollection}
-                    label="Chain"
-                  >
-                    <MenuItem value={"ethereum"}>Ethereum</MenuItem>
-                  </Select>
-                </FormControl>
+                  <Input
+                    title={"Collection Name (optional)"}
+                    placeholder="Collection#1"
+                    state={collection}
+                    setState={setCollection}
+                    text
+                  />
               </div>
               <div className="set-attributes">
                 <button className="btn-outline" onClick={handleClickOpen}>

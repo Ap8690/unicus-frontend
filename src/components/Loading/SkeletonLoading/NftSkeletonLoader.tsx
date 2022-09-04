@@ -1,14 +1,17 @@
 import { Skeleton } from "@mui/material"
+import './nftskeleton.scss'
 
-const ExploreLoader = () => {
+export const NftSkeletonLoader = ({singleRow, className}:{singleRow?: boolean; className?: String}) => {
     return (
-        <div className="explore-elements">
+        <div className={`explore-elements nft-skeleton ${className} ${singleRow && 'singleRow'}`}>
             <LoaderCard />
             <LoaderCard />
             <LoaderCard />
+            {!singleRow &&<>
             <LoaderCard />
             <LoaderCard />
             <LoaderCard />
+            </>}
         </div>
     )
 }
@@ -47,4 +50,4 @@ const LoaderCard = () => {
     )
 }
 
-export default ExploreLoader
+export default NftSkeletonLoader

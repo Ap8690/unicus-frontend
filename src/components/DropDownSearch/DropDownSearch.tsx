@@ -61,7 +61,7 @@ const DropDownSearch = ({ searchList, heading, search, setSearch, list }) => {
               }
         }
       >
-        <SearchBar search={search} setSearch={setSearch} />
+        <SearchBar search={search} setSearch={setSearch} handleGlobalSearch={null}/>
         {/* <CollectionList list={displayList} setSearch={setSearch} /> */}
       </div>
     </div>

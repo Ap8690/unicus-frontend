@@ -1532,15 +1532,12 @@ const NftInfo = ({
                     {activeFilter === "History" && (
                         <History data={historyData} />
                     )}
-                    {activeFilter === "Properties" && <Properties nft={nft} />}
+                    {activeFilter === "Properties" && <Properties tags={nft.tags} />}
                 </div>
                 <div className="bid-buy-box">
                     <div className="user-info">
-                        {/* <img src={topBid.img} alt="top-bid" className="user-img" /> */}
                         <div>
-                            {/* <span>
-              Highest bid by <span className="blue-text">{topBid.name}</span>
-            </span> */}
+                           
                             {auction && (
                                 <div className="price-info">
                                     <span className="blue-head">
@@ -1615,15 +1612,15 @@ const History = ({ data }) => {
     );
 };
 
-const Properties = ({ nft }) => {
+const Properties = ({ tags }) => {
     return (
         <div className="nft-history-box">
-            {nft && nft.tags && nft.tags.length > 1 ? (
-                nft.tags.map((tag: any) => {
+            {tags && tags.length > 0 ? (
+                tags.map((tag: any) => {
                     return (
-                        <div key={uuid()} className="gridBbox">
-                            <h6>{tag.propertyType}</h6>
-                            <h6>{tag.propertyName}</h6>
+                        <div key={uuid()} className="flex ">
+                            <span className="mr-2">{tag.property} :</span>
+                            <span className="font-bold">{tag.value}</span>
                         </div>
                     );
                 })

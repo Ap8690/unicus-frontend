@@ -1,3 +1,5 @@
+import {useContext} from "react"
+import { ChainContext } from "../../context/ChainContext";
 // Sass
 import "./MarketPlace.scss";
 
@@ -15,182 +17,34 @@ import MarketPlaceTopCollections from "./MarketPlaceTopCollections/MarketPlaceTo
 import MarketPlaceCreateAndSell from "./MarketPlaceCreateAndSell/MarketPlaceCreateAndSell";
 import MarketPlaceDiscover from "./MarketPlaceDiscover/MarketPlaceDiscover";
 import StayInLoop from "../../components/StayInLoop/StayInLoop";
+import { Helmet } from "react-helmet";
 
 const MarketPlace = () => {
+  const {chain} = useContext(ChainContext)
   const saleStats = {
     artworks: "37k",
     artists: "27k",
     auctions: "99k",
   };
-  const featuredList = [
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem Text",
-      category: "Art",
-    },
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem Text",
-      category: "Coins",
-    },
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem Text",
-      category: "Game",
-    },
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem Text",
-      category: "Art",
-    },
-  ];
 
-  const trendingList = [
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. A, quis mi elit magna blandit ac.",
-      category: "Art",
-      creatorImage: userImg,
-      creatorName: "Pablo",
-    },
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. A, quis mi elit magna blandit ac.",
-      category: "Coins",
-      creatorImage: userImg,
-      creatorName: "Monty",
-    },
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. A, quis mi elit magna blandit ac.",
-      category: "Game",
-      creatorImage: userImg,
-      creatorName: "Python",
-    },
-    {
-      image: featuredImg,
-      heading: "Lorem Heading",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. A, quis mi elit magna blandit ac.",
-      category: "Art",
-      creatorImage: userImg,
-      creatorName: "Sorachi",
-    },
-  ];
-
-  const auctionsList = [
-    {
-      image: featuredImg,
-      name: "Lorem ipsum dolor sit",
-      sellerName: "Crybaby",
-      ifVerified: true,
-      type: "Live",
-      date: new Date(2022, 6, 6).getTime(),
-    },
-    {
-      image: featuredImg,
-      name: "Lorem ipsum dolor sit",
-      sellerName: "Crybaby",
-      ifVerified: false,
-      type: "Upcoming",
-      days: 1,
-      hours: 14,
-      date: new Date(2022, 6, 10).getTime(),
-    },
-    {
-      image: featuredImg,
-      name: "Lorem ipsum dolor sit",
-      sellerName: "Crybaby",
-      ifVerified: true,
-      type: "Ended",
-      date: new Date(2022, 5, 27).getTime(),
-    },
-  ];
-
-  const topCollectionsList = [
-    {
-      image: featuredImg,
-      name: "Lorem Dollar",
-      price: "14777,24",
-      change: 321.62,
-    },
-    {
-      image: featuredImg,
-      name: "Lorem Dollar",
-      price: "14777,24",
-      change: 321.62,
-    },
-    {
-      image: featuredImg,
-      name: "Lorem Dollar",
-      price: "14777,24",
-      change: 321.62,
-    },
-    {
-      image: featuredImg,
-      name: "Lorem Dollar",
-      price: "14777,24",
-      change: 321.62,
-    },
-    {
-      image: featuredImg,
-      name: "Lorem Dollar",
-      price: "14777,24",
-      change: 321.62,
-    },
-    {
-      image: featuredImg,
-      name: "Lorem Dollar",
-      price: "14777,24",
-      change: 321.62,
-    },
-    {
-      image: featuredImg,
-      name: "Lorem Dollar",
-      price: "14777,24",
-      change: 321.62,
-    },
-    {
-      image: featuredImg,
-      name: "Lorem Dollar",
-      price: "14777,24",
-      change: 321.62,
-    },
-    {
-      image: featuredImg,
-      name: "Lorem Dollar",
-      price: "14777,24",
-      change: 321.62,
-    },
-  ];
 
   // Categories
-  const categories = [
-    "Art",
-    "Music",
-    "Sport",
-    "Virtual Worlds",
-    "Utility",
-    "Trading Cards",
-    "Domain Names",
-    "Collectibles",
-  ];
+  const categories = ["Funny","Art","Nature","Animal","Sports","Photography","Music","Metaverse"];
   return (
     <section className="market-place">
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Marketplace</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
       <BlueBackground />
       <MarketPlaceMain saleStats={saleStats} noStats={false} storeTitle={'Create, Sell & Collect Your Own Creative NFT'} />
-      <MarketPlaceFeatured list={featuredList} title={"Featured Artworks"} />
-      <MarketPlaceTrending list={trendingList} />
-      <MarketPlaceAuctions list={auctionsList} />
+      <MarketPlaceFeatured chain={chain} title={"Featured Artworks"} />
+      <MarketPlaceTrending chain={chain}/>
+      <MarketPlaceAuctions chain={chain} />
       {/* <MarketPlaceTopCollections list={topCollectionsList} /> */}
       <MarketPlaceCreateAndSell />
-      <MarketPlaceDiscover categories={categories} />
+      <MarketPlaceDiscover chain={chain} categories={categories} />
       <StayInLoop />
     </section>
   );

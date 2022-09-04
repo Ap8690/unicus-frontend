@@ -2,6 +2,10 @@ import "./Input.scss";
 
 const Input = (props:any) => {
   const handleChange = (e:any) => {
+    if(props.title?.includes('Description') && e.target.value?.length >240) {
+      props.setState((e.target.value.slice(0,240)))
+      return 
+    }
     props.setState(e.target.value);
   };
   

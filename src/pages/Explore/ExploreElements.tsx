@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import { getDecimal } from "../../utils/helpers";
 import { getChainSymbol, getNftContractAddress } from "../../utils/utils";
 import uuid from "react-uuid";
+import ImageVideo from "../../components/Image-Video/Image-Video"
 
-const ExploreElement = ({ element }) => {
+export const ExploreElement = ({ element }) => {
+    console.log("element: ", element);
     return (
         <Link
             to={{
@@ -13,10 +15,7 @@ const ExploreElement = ({ element }) => {
             }}
         >
             <div className="explore-element">
-                <div className="explore-element-item-image">
-                    <img src={element.cloudinaryUrl} alt={element.name} />
-                </div>
-
+                <ImageVideo img={element.cloudinaryUrl} nftType={element.nftType} />
                 <div className="explore-element-name">{element.name}</div>
                 <div className="explore-element-price">
                     {element && element.lastBid > 0
@@ -34,7 +33,7 @@ const ExploreElement = ({ element }) => {
     );
 };
 
-const ExploreElements = ({ elements }) => {
+export const ExploreElements = ({ elements }) => {
     return (
         <div className="explore-elements">
             {elements.map((element: any) => (

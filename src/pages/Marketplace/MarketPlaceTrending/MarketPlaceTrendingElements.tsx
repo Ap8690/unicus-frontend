@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getNftContractAddress } from "../../../utils/utils";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
+import NftSkeletonLoader from "../../../components/Loading/SkeletonLoading/NftSkeletonLoader";
 
 const Element = ({ element }) => {
   return (
@@ -37,10 +38,13 @@ const Element = ({ element }) => {
     </div>
   );
 };
-const MarketPlaceTrendingElements = ({ list, currentScroll }) => {
+const MarketPlaceTrendingElements = ({ list, currentScroll, loading }:{ list: any[]; currentScroll: number; loading: boolean; }) => {
   // const holderRef = useExplorer(currentScroll);
   const navigate = useNavigate()
   return (
+    loading ? (
+      <NftSkeletonLoader singleRow className='loader-margin'/>
+    ) : (
     <Swiper 
       modules={[Navigation, Pagination]}  
       className="market-place-trending-elements"
@@ -52,10 +56,10 @@ const MarketPlaceTrendingElements = ({ list, currentScroll }) => {
         320: {
             slidesPerView: 1,
         },
-        900: {
+        768: {
             slidesPerView: 2,
         },
-        1250: {
+        992: {
             slidesPerView: 3,
         },
     }}
@@ -70,7 +74,7 @@ const MarketPlaceTrendingElements = ({ list, currentScroll }) => {
         </SwiperSlide>
       ))}
     </Swiper>
-  );
+  ))
 };
 
 export default MarketPlaceTrendingElements;

@@ -4,9 +4,7 @@ import { useState } from "react"
 import { Link, Navigate, useNavigate } from "react-router-dom"
 import Input from "../../components/Input/Input"
 
-import googleLogo from "../../assets/svgs/google.svg"
-import facebookLogo from "../../assets/svgs/facebook.svg"
-import twitterLogo from "../../assets/svgs/twitter.svg"
+import { Helmet } from "react-helmet";
 import { emailLogin } from "../../services/api/supplier"
 import { getaccessToken, getUserInfo } from "../../Redux/Profile/actions"
 import { useDispatch } from "react-redux"
@@ -31,7 +29,8 @@ const Login = ({}) => {
         } else {
             emailLogin(email, password)
                 .then(async (res: any) => {
-                    console.log("in")
+                    console.log("res: ", res);
+                    console.log("in",cookieDomain)
                     
                     Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
                       domain: cookieDomain,
@@ -51,7 +50,7 @@ const Login = ({}) => {
                     // Cookies.set("userInfo", JSON.stringify(res.data.user), {
                     //     domain: "unicus.one",
                     // })
-                    toast("Login successful")
+                    toast.success("Login successful")
                     navigate("/home", {replace:true})
                 })
                 .catch((err) => {
@@ -62,10 +61,15 @@ const Login = ({}) => {
     }
     return (
         <>
+        <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Login</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
             <div className="login-page">
                 <div className="login-wrapper">
                     <div className="blue-head">LOGIN</div>
-                    <form>
+                    <form onSubmit={handleLogin}>
                         <Input
                             title={"Email"}
                             state={email}
@@ -83,7 +87,7 @@ const Login = ({}) => {
                             forgetPass
                             required
                         />
-                        <button type="submit" className="btn large-btn login-btn" onClick={handleLogin}>
+                        <button type="submit" className="btn large-btn login-btn">
                             LOGIN
                         </button>
                         <div className="terms">

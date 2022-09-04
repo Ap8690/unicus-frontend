@@ -37,6 +37,7 @@ const Navbar = ({ store }) => {
     const openProfile = Boolean(anchorProfile);
 
     const accessToken = Cookies.get(ACCESS_TOKEN);
+    console.log("accessToken: ", accessToken);
 
     const handleClickStats = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorStats(event.currentTarget);
@@ -53,6 +54,7 @@ const Navbar = ({ store }) => {
             // navigate(`/explore/${chain}`);
             setChain(chain);
             toast.dismiss()
+            if(chain!=="all")
             toast.info(`You are on ${capitalize(chain)} network`);
         }
     };
@@ -67,7 +69,10 @@ const Navbar = ({ store }) => {
         disConnectWallet();
         setAnchorProfile(null);
     };
-
+    const handleGlobalSearch = (e: any) => {
+        e.preventDefault()
+        navigate(`/search/${search}`)
+    }
     useEffect(() => {
       function new_bg() {
         if (window.scrollY === 0) return setSolidNav(false);
@@ -100,7 +105,7 @@ const Navbar = ({ store }) => {
                         />
                     </Link>
                     <div className="search-bar-box">
-                        <SearchBar search={search} setSearch={setSearch} />
+                        <SearchBar handleGlobalSearch={handleGlobalSearch} search={search} setSearch={setSearch} />
                     </div>
                     <div className="nav-menu-icons">
                         <ProfileButton
@@ -207,6 +212,14 @@ const Navbar = ({ store }) => {
                             >
                                 <MenuItem
                                     onClick={() =>
+                                        handleCloseChains("all")
+                                    }
+                                    selected={chain === 'all'}
+                                >
+                                    All
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() =>
                                         handleCloseChains("ethereum")
                                     }
                                     selected={chain === 'ethereum'}
@@ -279,7 +292,7 @@ const Navbar = ({ store }) => {
                                 )
                             )}
 
-                            {!accessToken ? <button
+                            {!Cookies.get(ACCESS_TOKEN) ? <button
                                 onClick={() =>
                                     navigate(
                                         `/connect-wallet${location.pathname}`
@@ -288,7 +301,8 @@ const Navbar = ({ store }) => {
                                 className="btn nav-link"
                             >
                                 Connect Wallet
-                            </button> : <Link to={"/marketplace"} className="btn nav-link">
+                            </button> : 
+                            <Link to={"/marketplace"} className="btn nav-link">
                                 Marketplace
                             </Link>
                             }
