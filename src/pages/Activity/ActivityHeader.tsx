@@ -15,7 +15,7 @@ const ActiveFilterComponent = ({ acFilter, removeFilter }) => {
 
 const ActivityHeader = ({ activeFilters, setActiveFilters }) => {
   const removeFilter = (rmFilter: string) => {
-    const temp = activeFilters.filter((filter: string) => filter != rmFilter);
+    const temp = activeFilters.filter((filter: string) => filter !== rmFilter);
     setActiveFilters(temp);
   };
   const clearAllFilter = () => {
@@ -35,7 +35,7 @@ const ActivityHeader = ({ activeFilters, setActiveFilters }) => {
             removeFilter={removeFilter}
           />
         ))}
-        {activeFilters.length != 0 ? (
+        {activeFilters.length !== 0 ? (
           <button className="clear-all-button" onClick={clearAllFilter}>
             Clear All
           </button>

@@ -129,14 +129,14 @@ const Explore = () => {
             setResetPasswordPopUpShow(true);
         }
 
-        if (chain != "" && !searchQuery) {
+        if (chain !== "" && !searchQuery) {
             navigate(`/explore/${chain}`);
         }
         document.body.scrollTop = 0;
     }, []);
 
     useEffect(() => {
-        if (chain != "" && !searchQuery) {
+        if (chain !== "" && !searchQuery) {
             navigate(`/explore/${chain}`);
         }
         document.body.scrollTop = 0;

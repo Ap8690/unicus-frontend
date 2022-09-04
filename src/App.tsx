@@ -143,7 +143,7 @@ const getStoreForUser = async () => {
   }
 };
 useEffect(() => {
-  if (location.pathname == "/") {
+  if (location.pathname === "/") {
     navigate("/home", {replace:true});
   }
 }, []);
@@ -213,7 +213,7 @@ useEffect(() => {
                         title={"Privacy Policy"}
                         text={
                           store.advance.privacyPolicy &&
-                          store.advance.privacyPolicy != ""
+                          store.advance.privacyPolicy !== ""
                             ? store.advance.privacyPolicy
                             : defaultPrivacyText
                         }
@@ -226,7 +226,7 @@ useEffect(() => {
                       <PrivacyPolicy
                         title={"Terms and Conditions"}
                         text={
-                          store.advance.terms && store.advance.terms != ""
+                          store.advance.terms && store.advance.terms !== ""
                             ? store.advance.terms
                             : defaultPrivacyText
                         }
@@ -252,7 +252,7 @@ useEffect(() => {
                       <PrivacyPolicy
                         title={"Creators"}
                         text={
-                          store.advance.creators && store.advance.creators != ""
+                          store.advance.creators && store.advance.creators !== ""
                             ? store.advance.creators
                             : defaultPrivacyText
                         }

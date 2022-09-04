@@ -21,15 +21,15 @@ export const BASE_URL =
         ? "https://unicus-storefront-backend-demo.herokuapp.com"
         : "https://unicus-storefront-backend.herokuapp.com";
 // testnet
-export const bscChain = process.env.REACT_APP_ENV == "prod" ? "56" : "97";
-export const ethChain = process.env.REACT_APP_ENV == "prod" ? "1" : "4";
-export const ethChain1155 = process.env.REACT_APP_ENV == "prod" ? "1" : "4";
+export const bscChain = process.env.REACT_APP_ENV === "prod" ? "56" : "97";
+export const ethChain = process.env.REACT_APP_ENV === "prod" ? "1" : "4";
+export const ethChain1155 = process.env.REACT_APP_ENV === "prod" ? "1" : "4";
 export const polygonChain =
-    process.env.REACT_APP_ENV == "prod" ? "137" : "80001";
-export const tronChain = process.env.REACT_APP_ENV == "prod" ? "8700" : "8766";
+    process.env.REACT_APP_ENV === "prod" ? "137" : "80001";
+export const tronChain = process.env.REACT_APP_ENV === "prod" ? "8700" : "8766";
 export const solonaChain =
-    process.env.REACT_APP_ENV == "prod" ? "6700" : "6766";
-export const nearChain = process.env.REACT_APP_ENV == "prod" ? "7700" : "7766";
+    process.env.REACT_APP_ENV === "prod" ? "6700" : "6766";
+export const nearChain = process.env.REACT_APP_ENV === "prod" ? "7700" : "7766";
 
 export const bscChainHex = "0x61";
 export const ethChainHex = "0x4";

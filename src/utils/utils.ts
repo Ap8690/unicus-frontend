@@ -153,7 +153,7 @@ export const connectWallet = async (
     if (
       userInfo?.wallets.length === 0 ||
       !userInfo?.wallets.some((el:any) => {
-        return el?.toLowerCase() == address?.toLowerCase();
+        return el?.toLowerCase() === address?.toLowerCase();
       })
     ) {
       await addWalletAdd(address).then(async (res: any) => {
@@ -382,7 +382,7 @@ export const getUserWallet = async (network) => {
 
 export const getNftContractAddress = (nft) => {
   if (nft) {
-    if (nft.contractAddress != undefined) {
+    if (nft.contractAddress !== undefined) {
       return nft.contractAddress;
     } else {
       return getCreateNftContractAddress(nft.chain, "721");
@@ -446,7 +446,7 @@ export const selectNetwork = (chain: string) => {
 export const getCreateNftABI = (chain, contractType) => {
   switch (chain.toString()) {
     case ethChain:
-      return contractType == "1155" ? createNFTAbiE1155 : createNFTAbiE;
+      return contractType === "1155" ? createNFTAbiE1155 : createNFTAbiE;
     case bscChain:
       return createNFTAbiB;
 
@@ -493,7 +493,7 @@ export const getCreateNftContractAddress = (chain, contractType) => {
   if (chain) {
     switch (chain.toString()) {
       case ethChain:
-        return contractType == "1155"
+        return contractType === "1155"
           ? createNFTAddressE1155
           : createNFTAddressE;
       case bscChain:
@@ -517,7 +517,7 @@ export const getCreateNftContractAddress = (chain, contractType) => {
 export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
   switch (chain.toString()) {
     case ethChain:
-      return contractType == "1155"
+      return contractType === "1155"
         ? marketPlaceAddressE1155
         : marketPlaceAddressE;
     case bscChain:
@@ -528,7 +528,7 @@ export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
       return marketPlaceAddressT;
 
     default:
-      return contractType == "721"
+      return contractType === "721"
         ? "0x424bb7731c056a52b45cbd613ef08c69c628735f"
         : "0x424bb7731c056a52b45CBD613Ef08c69c628735f";
   }
@@ -536,7 +536,7 @@ export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
 export const getAuctionContractAddress = (chain, contractType = "721") => {
   switch (chain.toString()) {
     case ethChain:
-      return contractType == "1155" ? auctionAddressE1155 : auctionAddressE;
+      return contractType === "1155" ? auctionAddressE1155 : auctionAddressE;
     case bscChain:
       return auctionAddressB;
     case polygonChain:
@@ -545,12 +545,12 @@ export const getAuctionContractAddress = (chain, contractType = "721") => {
       return auctionAddressT;
 
     default:
-      return contractType == "1155" ? auctionAddressE1155 : auctionAddressE;
+      return contractType === "1155" ? auctionAddressE1155 : auctionAddressE;
   }
 };
 
 export const getCreateNftContract = (chain, contractType = "721") => {
-  if (chain.toString() == tronChain) {
+  if (chain.toString() === tronChain) {
     return tronWeb.contract(createNFTAbiT, createNFTAddressT);
   } else {
     return new web3.eth.Contract(
@@ -562,7 +562,7 @@ export const getCreateNftContract = (chain, contractType = "721") => {
 };
 
 export const getMarketPlace = (chain, contractType = "721") => {
-  if (chain.toString() == tronChain) {
+  if (chain.toString() === tronChain) {
     return tronWeb.contract(marketPlaceAbiT, marketPlaceAddressT);
   } else {
     return new web3.eth.Contract(
@@ -574,7 +574,7 @@ export const getMarketPlace = (chain, contractType = "721") => {
 };
 
 export const getAuctionContract = (chain, contractType = "721") => {
-  if (chain.toString() == tronChain) {
+  if (chain.toString() === tronChain) {
     return tronWeb.contract(auctionAbiT, auctionAddressT);
   } else {
     console.log("auc contract", getAuctionContractAddress(chain, contractType));
@@ -725,7 +725,7 @@ export const sendStorageDeposit = async () => {
 
 export const getStoreName = () => {
   const store = JSON.parse(localStorage.getItem("store")) as IStore;
-  if (store && store.general.storeName != "") {
+  if (store && store.general.storeName !== "") {
     return store.general.storeName;
   } else {
     return "Unicus";

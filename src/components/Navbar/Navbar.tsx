@@ -52,7 +52,7 @@ const Navbar = ({ store }) => {
     };
     const handleCloseChains = (chain: any) => {
         setAnchorChains(null);
-        if (chain != "") {
+        if (chain !== "") {
             // navigate(`/explore/${chain}`);
             setChain(chain);
             toast.dismiss()
@@ -297,8 +297,11 @@ const Navbar = ({ store }) => {
                             {!Cookies.get(ACCESS_TOKEN) ? <button
                                 onClick={() =>
                                     navigate(
-                                        `/connect-wallet${location.pathname}`
+                                        `/connect-wallet`
                                     )
+                                    // navigate(
+                                    //     `/connect-wallet${location.pathname}`
+                                    // )
                                 }
                                 className="btn nav-link"
                             >
@@ -363,7 +366,7 @@ const ProfileButton = ({ accessToken, store }) => {
                 </MenuItem>
                 {!isMainStore() &&
                     store.general &&
-                    store.general.user == userInfo._id && (
+                    store.general.user === userInfo._id && (
                         <MenuItem onClick={handleCloseProfile}>
                             <Link to={"/store/settings"} className="menu-link">
                                 My Store

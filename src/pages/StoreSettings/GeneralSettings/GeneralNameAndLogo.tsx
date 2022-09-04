@@ -143,7 +143,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
       <div className="file-upload-container">
         <div className="title">Logo</div>
         <label className="file-upload-box">
-          {generals.logoUrl == "" ? (
+          {generals.logoUrl === "" ? (
             <img src={uploadImg} alt="" onClick={uploadImage} />)
           :(
             <img

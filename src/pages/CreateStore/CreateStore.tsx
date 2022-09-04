@@ -142,7 +142,7 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
       console.log("err", err.message, err.response);
       setLoading(false);
       if (err.response) {
-        if (err.response.status == 401) {
+        if (err.response.status === 401) {
           toast.error("Login expired. Please Login again.");
         } else {
           toast.error(err.response.data.msg);
@@ -165,7 +165,7 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
           <h3 className="form-heading">Upload File</h3>
           <div className="create-store-image-holder">
             <button className="upload-image-button" onClick={uploadImage}>
-              {generals.logoUrl == "" && (
+              {generals.logoUrl === "" && (
                 <img src={placeHolder} alt="Upload Image" />
               )}
               {generals.logoUrl !== "" && (
