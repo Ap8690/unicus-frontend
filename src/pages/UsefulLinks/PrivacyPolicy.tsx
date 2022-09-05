@@ -1,7 +1,7 @@
-import ReactHtmlParser from "react-html-parser";
+import parse from 'html-react-parser';
 import "./style.scss"
 
-const PrivacyPolicy = (props) => {
+const PrivacyPolicy = (props:any) => {
   
   return (
     <div>
@@ -16,7 +16,7 @@ const PrivacyPolicy = (props) => {
           </div>
           <div className="mt-5 px-4">
             <div className="paracontent">
-              {ReactHtmlParser(props.text)}
+              {parse(props.text)}
             </div>
           </div>
         </div>

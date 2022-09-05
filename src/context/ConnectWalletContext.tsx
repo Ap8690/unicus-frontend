@@ -74,6 +74,7 @@ export const WalletConnectionProvider = ({ children }) => {
                 }
                 case "tron": {
                     address = await connToTron();
+                    console.log("address: ", address);
                     break;
                 }
                 case "sol": {
@@ -87,7 +88,6 @@ export const WalletConnectionProvider = ({ children }) => {
                 }
                 case "near": {
                     address = await connectNear();
-                    console.log(address,"address")
                     break;
                 }
             }
