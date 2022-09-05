@@ -93,12 +93,11 @@ const NftInfo = ({
     fetchItem,
     pageChain
 }) => {
-    const {fullLoading,chainConnected,setChainConnected} = useContext(ConnectWalletContext)
+    const {fullLoading,chainConnected,setChainConnected,setWalletModal,walletModal} = useContext(ConnectWalletContext)
     const [startBid, setStartBid] = useState<any>(
         auction ? auction.startBid : 0.0
     );
-    const [connectWalletModal, setConnectWalletModal] =
-        useState<Boolean>(false);
+
     const [duration, setDuration] = useState("1");
     const [bid, setBid] = useState("");
     const [type, setType] = useState(0);
@@ -1345,7 +1344,7 @@ const NftInfo = ({
                 }
             }
         } else {
-            return "Connect Wallet";
+            setChainConnected(false)
         }
     };
 
@@ -1540,7 +1539,6 @@ const NftInfo = ({
         checkChain()
     }, []);
     
-    console.log(auction,"auction")
 
     useEffect(() => {
         if(localStorage.getItem('walletConnected')) {
@@ -1678,12 +1676,9 @@ const NftInfo = ({
                             {getChainSymbol(nft.chain)}
                         </span>
                     )}
-                    {/* <span>$ 5768.6</span>
-        <span>12 in stock</span> */}
                 </div>
                 <div className="nft-description">
                     <p>{nft.description}</p>
-                    {/* <button>Read More</button> */}
                 </div>
                 <div className="nft-creator">
                     <span>Creator</span>
@@ -1773,7 +1768,7 @@ const NftInfo = ({
                         ) : (
                             <button
                                 className="btn"
-                                onClick={() => setConnectWalletModal(true)}
+                                onClick={() => setWalletModal(true)}
                             >
                                 Connect Wallet
                             </button>
@@ -1784,8 +1779,8 @@ const NftInfo = ({
             </div>
 
             <WalletsModal
-                open={connectWalletModal}
-                setOpen={setConnectWalletModal}
+                open={walletModal}
+                setOpen={setWalletModal}
                 chainName={pageChain}
             />
         </>
