@@ -13,7 +13,9 @@ export const axiosConfig: any = {
     Authorization: `Bearer ${accessToken}`,
   },
 };
-
+export const getUserId = () => {
+  return JSON.parse(Cookies.get('userInfo'))._id
+}
 export const getAccessToken =()=>{
   return Cookies.get(ACCESS_TOKEN);
 }
@@ -54,7 +56,7 @@ export async function getNftById(chain: any, contractAddress: any, nftId: any) {
 
 export async function getNftByUserId() {
   return await axios.get(
-    `${BASE_URL}/nft/getNFTByUserId/${userInfo && userInfo._id}`
+    `${BASE_URL}/nft/getNFTByUserId/${getUserId()}`
   );
 }
 

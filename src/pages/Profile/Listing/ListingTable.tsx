@@ -14,7 +14,25 @@ const TableData = ({ activity, link }) => {
             onClick={() => navigate(link)}
         >
             <td className="table-data-item-name">
-                {activity?.nftType?.includes("image") ? (
+                {activity.hasOwnProperty('nftId') && activity?.nftId.nftType?.includes("image") ? (
+                    <img
+                        src={activity.cloudinaryUrl}
+                        alt={activity.name}
+                        style={{ width: "80px", marginRight: "15px" }}
+                    />
+                ) : (
+                    <video
+                        autoPlay
+                        loop
+                        style={{ width: "80px", marginRight: "15px" }}
+                    >
+                        <source
+                            src={activity.cloudinaryUrl}
+                            type={activity?.nftType}
+                        />
+                    </video>
+                )}
+                {activity.hasOwnProperty('nftType') && activity?.nftType?.includes("image") ? (
                     <img
                         src={activity.cloudinaryUrl}
                         alt={activity.name}

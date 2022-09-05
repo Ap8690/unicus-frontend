@@ -150,7 +150,8 @@
               text-align: right;
 
               .eth-price {
-                display: block;
+                display: flex;
+                justify-content: center;
                 font-weight: 600;
 
                 img {

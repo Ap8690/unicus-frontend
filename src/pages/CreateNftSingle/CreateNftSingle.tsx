@@ -437,6 +437,7 @@ const CreateNftSingle = () => {
             if (extLink && !validateUrl(extLink)) {
                 return toast.error("Please enter a valid external link");
             }
+            console.log("chain: ", chain);
             //@ts-expect-error
             if (chain === tronChain && !window.tronWeb) {
                 toast.error("Tron wallet not detected!");
@@ -586,8 +587,7 @@ const CreateNftSingle = () => {
                                 return;
                             }
 
-                            setNftLoading(false);
-                            toast.success("Asset Minted");
+                            
 
                             if (chain === tronChain) {
                                 setNftModalMessage(
@@ -618,6 +618,8 @@ const CreateNftSingle = () => {
                                 );
                                 setdefaultErrorModal(true);
                             }
+                            setNftLoading(false);
+                            toast.success("Asset Minted");
                         }
                     } catch (error) {
                         toast.error("Minting Failed");

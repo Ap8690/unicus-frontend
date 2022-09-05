@@ -1151,6 +1151,7 @@ const NftInfo = ({
 
     const getButtonName = () => {
         const userInfo = getUserInfo();
+        console.log("userInfo: ", userInfo);
 
         if (userInfo) {
             if (userInfo._id === nft.uploadedBy) {
