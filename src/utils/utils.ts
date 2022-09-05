@@ -703,13 +703,14 @@ const getMinimumStorage = async () => {
 
 export const sendStorageDeposit = async () => {
   const minimum = await getMinimumStorage();
-  await nearWalletConnection.account().functionCall({
+  const res = await nearWalletConnection.account().functionCall({
     contractId: "market_auct.subauction.testnet",
     methodName: "storage_deposit",
     args: {},
 
     attachedDeposit: minimum,
   });
+  return res
 };
 
 export const getStoreName = () => {

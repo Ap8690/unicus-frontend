@@ -206,6 +206,7 @@ const NftInfo = ({
         } catch (err) {
             console.log(err);
             return null;
+            
         }
     };
 
@@ -217,7 +218,9 @@ const NftInfo = ({
     ) => {
         //use metadata to feth the mintkey like this...
         //const mintKey = new anchor.web3.PublicKey(metatdata.mint.toArray("le"));
-
+        
+        
+        
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -739,7 +742,8 @@ const NftInfo = ({
                 obj.auctionId = nft.tokenId;
                 localStorage.setItem("nearAction", "Sale");
                 localStorage.setItem("nearSellObj", JSON.stringify(obj));
-                await sendStorageDeposit();
+                const res = await sendStorageDeposit();
+                console.log(res,"near res")
 
                 return;
             } else if (nft.chain.toString() === solonaChain) {
