@@ -153,6 +153,13 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
               >
                 Binance
               </button>
+              <button
+                className="menu-link"
+                name="binance"
+                onClick={handleChain}
+              >
+                Avalanche
+              </button>
               <button className="menu-link" name="tron" onClick={handleChain}>
                 Tron
               </button>

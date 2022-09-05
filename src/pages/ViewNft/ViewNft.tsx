@@ -38,7 +38,7 @@ const ViewNft = () => {
             setNftLoading(true);
             const res = await getNftById(chain, contractAddress, nftId);
             const resData = await res.data.nft;
-            console.log(resData, "res");
+            console.log(resData,res.data, "res");
             
 
             setNft(res.data.nft);
@@ -90,6 +90,7 @@ const ViewNft = () => {
                                 nft={nft}
                                 auction={auction}
                                 setNftLoading={setNftLoading}
+                                fetchItem={fetchItem}
                                 pageChain={chain}
                             />
                         )}
