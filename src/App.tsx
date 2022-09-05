@@ -115,8 +115,6 @@ const init = async () => {
 };
 const setLogin = () => {
   const cookieUser = Cookies.get("userInfo");
-  console.log("cookieUser: ", cookieUser);
-
   let userInfo: any;
   if (cookieUser) {
     userInfo = JSON.parse(cookieUser);
@@ -128,7 +126,6 @@ const setLogin = () => {
     console.log("UnSetting localstorage")
   }
   const token = Cookies.get(ACCESS_TOKEN);
-  console.log("token: ", token);
   if (token) {
     setAccessToken(token)
   }

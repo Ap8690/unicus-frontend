@@ -1,19 +1,19 @@
-import "./addprops.scss";
-
-import PropTypes from "prop-types";
-import Dialog from "@mui/material/Dialog";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import Properties from "../../Properties/Properties";
-import Stats from "../../Stats/Stats";
+import "./addprops.scss"
+import PropTypes from "prop-types"
+import Dialog from "@mui/material/Dialog"
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded"
+import Properties from "../../Properties/Properties"
+import Stats from "../../Stats/Stats"
 
 const AddProperties = ({ onClose, open, type, inputs, setInputs, description }) => {
   const handleClose = () => {
-    onClose();
-  };
-  const handleSave = () => {
-    onClose();
+    console.log("CLOSE ")
+    onClose()
   }
-
+  const handleSave = () => {
+    console.log("CLOSE ")
+    onClose()
+  }
   return (
     <Dialog
       onClose={handleClose}
@@ -48,12 +48,12 @@ const AddProperties = ({ onClose, open, type, inputs, setInputs, description }) 
         </div>
       </div>
     </Dialog>
-  );
-};
+  )
+}
 
 AddProperties.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-};
+}
 
-export default AddProperties;
+export default AddProperties
