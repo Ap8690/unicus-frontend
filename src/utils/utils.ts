@@ -329,11 +329,14 @@ export const connectNear = async () => {
     );
   } else {
     nearWalletConnection = walletConnection;
+    localStorage.setItem("walletChain","Near");
+
     return walletConnection.account().accountId;
   }
 
   sendMeta(walletConnection, config);
   nearWalletConnection = walletConnection;
+  localStorage.setItem("walletChain","Near");
   return walletConnection.account().accountId;
 };
 

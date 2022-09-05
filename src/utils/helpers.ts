@@ -26,8 +26,6 @@ export async function initContract() {
   const near =  await nearAPI.connect({keyStore, ...nearConfig})
   const walletConnection = new nearAPI.WalletConnection(near)*/
 
-  let currentUser;
-
   return { config, walletConnection };
 }
 

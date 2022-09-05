@@ -34,7 +34,7 @@ import {
     nearWalletConnection,
     tronWeb,
     userInfo,
-    getWalletChain
+    getWalletChain,
 } from "../../utils/utils";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import {
@@ -78,7 +78,7 @@ import {
 } from "@metaplex-foundation/js";
 import validator from "validator";
 import { getBase64, blobUrlToFile } from "../../utils/imageConvert";
-import uuid from 'react-uuid'
+import uuid from "react-uuid";
 import { decodeParams } from "../../utils/helpers";
 import Cookies from "js-cookie";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
@@ -98,7 +98,7 @@ const CreateNftSingle = () => {
     const [royalty, setRoyalty] = useState<any>(5);
     const [royaltyError, setRoyaltyError] = useState<boolean>(false);
     const [explicit, setExplicit] = useState(false);
-    const [displayImage,setDisplayImage] = useState('')
+    const [displayImage, setDisplayImage] = useState("");
     const [openProp, setOpenProp] = useState(false);
     const [openStats, setOpenStats] = useState(false);
     const [openLevels, setOpenLevels] = useState(false);
@@ -112,7 +112,7 @@ const CreateNftSingle = () => {
     const inputFile = useRef(null);
     const navigate = useNavigate();
 
-    const {loginWallet,fullLoading} = useContext(ConnectWalletContext);
+    const { loginWallet, fullLoading } = useContext(ConnectWalletContext);
 
     const { connection } = useConnection();
 
@@ -440,7 +440,7 @@ const CreateNftSingle = () => {
                 publicKey,
                 getSolWallet,
                 connect,
-                setVisible,
+                setVisible
             )
                 .then(async (address) => {
                     if (!address) {
@@ -490,7 +490,7 @@ const CreateNftSingle = () => {
                         if (!user) {
                             user = JSON.parse(localStorage.getItem("userInfo"));
                         }
-                        console.log(user,"user")
+                        console.log(user, "user");
                         const nftObj = {
                             name,
                             royalty,
@@ -577,8 +577,12 @@ const CreateNftSingle = () => {
                                 "Waiting for transaction confirmation.(It can take upto a min to confirm)"
                             );
                             const success = await setNotification(res);
-                            let tokenId = await decodeParams(['uint256'],"0x"+success?.log[0]?.topics[3],false)
-                            tokenId = tronWeb.toDecimal(tokenId[0]._hex)
+                            let tokenId = await decodeParams(
+                                ["uint256"],
+                                "0x" + success?.log[0]?.topics[3],
+                                false
+                            );
+                            tokenId = tronWeb.toDecimal(tokenId[0]._hex);
                             if (!success) {
                                 tranIsSuccess = false;
                                 throw Error("Tron Transaction Failed");
@@ -588,13 +592,13 @@ const CreateNftSingle = () => {
                             }
                             setNftLoading(false);
                             toast.success("Asset Minted");
-                            console.log(nftObj,"nftObj")
+                            console.log(nftObj, "nftObj");
                             await createNft(nftObj);
                             navigate("/profile/created");
                         } else {
                             setNftLoading(true);
                             toast.info("Minting The Asset");
-                            const gasPrice = await web3.eth.getGasPrice()
+                            const gasPrice = await web3.eth.getGasPrice();
                             const createNFT = getCreateNftContract(
                                 chain,
                                 contractType
@@ -611,7 +615,9 @@ const CreateNftSingle = () => {
                                 res = await createNFT.methods
                                     .batchMint([tokenUri], [royalty])
                                     .send({
-                                        from: address ,gas:estimated, gasPrice:gasPrice
+                                        from: address,
+                                        gas: estimated,
+                                        gasPrice: gasPrice,
                                     });
                                 if (res?.transactionHash) {
                                     nftObj.tokenId =
@@ -626,7 +632,7 @@ const CreateNftSingle = () => {
                                         parseInt(royalty)
                                     )
                                     .estimateGas({
-                                        from: address 
+                                        from: address,
                                     });
                                 res = await createNFT.methods
                                     .mintNFT(
@@ -636,14 +642,18 @@ const CreateNftSingle = () => {
                                         parseInt(royalty)
                                     )
                                     .send({
-                                        from: address ,gas:estimated, gasPrice:gasPrice
+                                        from: address,
+                                        gas: estimated,
+                                        gasPrice: gasPrice,
                                     });
                                 if (res?.transactionHash) {
                                     nftObj.tokenId =
                                         res.events.Minted.returnValues._id; //returnValues NFTId
                                 }
                             } else {
-                                toast.error("Contract type is not ERC721 or ERC1155!");
+                                toast.error(
+                                    "Contract type is not ERC721 or ERC1155!"
+                                );
                                 return;
                             }
 
@@ -676,14 +686,16 @@ const CreateNftSingle = () => {
     };
     const convertToFile = async () => {
         try {
-            const file: any = await blobUrlToFile(JSON.parse(localStorage.getItem("fileSrc")),"newUpload")
-            console.log("URL Create Object Url: ",URL.createObjectURL(file))
-            setFileSrc(file)
+            const file: any = await blobUrlToFile(
+                JSON.parse(localStorage.getItem("fileSrc")),
+                "newUpload"
+            );
+            console.log("URL Create Object Url: ", URL.createObjectURL(file));
+            setFileSrc(file);
+        } catch (err) {
+            console.log(err);
         }
-        catch(err) {
-            console.log(err)
-        }
-    }
+    };
     useEffect(() => {
         if (localStorage.getItem("properties")) {
             setProperties(JSON.parse(localStorage.getItem("properties")));
@@ -717,7 +729,7 @@ const CreateNftSingle = () => {
             Object.keys(JSON.parse(localStorage.getItem("fileSrc"))).length !==
                 0
         ) {
-            convertToFile()
+            convertToFile();
         }
     }, []);
 
@@ -780,7 +792,7 @@ const CreateNftSingle = () => {
 
     return (
         <>
-            {modals.map((e:any) => (
+            {modals.map((e: any) => (
                 <AddProperties
                     key={uuid()}
                     description={e.description}
@@ -1061,18 +1073,30 @@ const CreateNftSingle = () => {
                                     </button>
                                 </div>
                             </div>
-                            {getWalletChain() == "Near" && chain === nearChain ? <button
-                                className="btn create-btn"
-                                onClick={() => cryptoPayment()}
-                            >
-                                Create
-                            </button> :
-                            <button
-                            className="btn create-btn"
-                            onClick={() => loginWallet("near")}
-                        >
-                            Connect Wallet
-                        </button>}
+                            {chain === nearChain &&
+                                (getWalletChain() == "Near" ? (
+                                    <button
+                                        className="btn create-btn"
+                                        onClick={() => cryptoPayment()}
+                                    >
+                                        Create
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="btn create-btn"
+                                        onClick={() => loginWallet("near")}
+                                    >
+                                        Connect Wallet
+                                    </button>
+                                ))}
+                            {chain !== nearChain && (
+                                <button
+                                    className="btn create-btn"
+                                    onClick={() => cryptoPayment()}
+                                >
+                                    Create
+                                </button>
+                            )}
                         </div>
                         <div className="preview-field">
                             <div className="field-title">Preview</div>

@@ -118,6 +118,7 @@ export const WalletConnectionProvider = ({ children }) => {
                 else if(walletAddress === "sol") {
                     walletChain = "Solana"
                 }
+                console.log("walletChain: ", walletChain);
                 localStorage.setItem("walletChain",walletChain);
                 setChainConnected(walletAddress)
                 setFullLoading(false)
