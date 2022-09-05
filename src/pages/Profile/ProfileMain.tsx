@@ -34,11 +34,6 @@ import "./ProfileMain.scss";
 import axios from "axios";
 import { tronChain, BASE_URL } from "../../config";
 import { setNotification } from "../../Redux/Blockchain/contracts";
-import {
-  connectWallet,
-  getMarketPlace,
-  getMarketPlaceContractAddress,
-} from "../../utils/utils";
 import web3 from "../../web3";
 import { getAccessToken, getNftByUserId } from "../../services/api/supplier";
 import { toast } from "react-toastify";

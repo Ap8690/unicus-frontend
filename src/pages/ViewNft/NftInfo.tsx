@@ -21,6 +21,7 @@ import {
     removeAuction,
     removeSale,
     sendStorageDeposit,
+    tronWeb,
     userInfo,
 } from "../../utils/utils";
 import {
@@ -44,7 +45,7 @@ import {
 } from "../../config";
 import axios from "axios";
 import { setNotification } from "../../Redux/Blockchain/contracts";
-import { getDecimal } from "../../utils/helpers";
+import { decodeParams, getDecimal } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import Input from "../../components/Input/Input";
@@ -705,9 +706,9 @@ const NftInfo = ({
 
     async function createSell() {
         try {
-            console.log("bid", startBid);
-
             setPopUpShow(false);
+            setNftLoading(true)
+            console.log(nft.chain,typeof nft.chain,"chains")
             const address = await connectWallet(
                 nft.chain,
                 publicKey,
@@ -715,7 +716,6 @@ const NftInfo = ({
                 connect,
                 setVisible
             );
-            console.log("create sell", address, nft);
             let obj = {
                 nftId: nft._id,
                 sellerInfo: userInfo.username,
@@ -748,10 +748,10 @@ const NftInfo = ({
                 obj.auctionId = aucMintKey;
                 obj.auctionHash = aucMintKey;
             } 
-            else if (nft.chain === tronChain) {
-                const listContract = new web3.eth.Contract(
-                    //@ts-ignore
-                    getCreateNftABI(),
+            else if (Number(nft.chain) === Number(tronChain)) {
+                console.log("else if")
+                const listContract = getCreateNftContract(
+                    nft.chain,
                     getNftContractAddress(nft)
                 );
 
@@ -769,25 +769,28 @@ const NftInfo = ({
                           )
                           .send({ from: address });
                 //else fr 1155 apprval fr all , params marketAdrress1155 , true
+                console.log("APPROVED!")
                 const res = await getMarketPlace(nft.chain)
                     .methods.createSale(
                         nft.contractAddress,
                         nft.tokenId,
                         web3.utils.toWei(startBid, "ether")
                     )
+                    .send({ from: address});
                 setNftLoading(true);
-                setLoadingMessage(
-                    "Waiting for transaction confirmation.(It can take upto a min to confirm)"
-                );
+                // setLoadingMessage(
+                //     "Waiting for transaction confirmation.(It can take upto a min to confirm)"
+                // );
                 const success = await setNotification(res);
                 if (success) {
-                    obj.auctionId = res;
+                    obj.auctionId = tronWeb.toDecimal(await decodeParams(['uint256'],"0x"+success?.log[2]?.topics[1],false));
                     obj.auctionHash = res;
                 } else {
                     throw Error("Transaction Failed");
                 }
             } 
             else {
+                console.log("else")
                 const listContract = new web3.eth.Contract(
                     //@ts-ignore
                     getCreateNftABI(),
@@ -823,7 +826,7 @@ const NftInfo = ({
                           )
                           .send({ from: address ,gas:estimated, gasPrice:gasPrice});
                 //else fr 1155 apprval fr all , params marketAdrress1155 , true
-                estimated = await getMarketPlace(nft.chain)
+                estimated = await getMarketPlace(nft.chain,auction.nftId.contractType)
                     .methods.createSale(
                         nft.contractAddress,
                         nft.tokenId,
@@ -831,7 +834,7 @@ const NftInfo = ({
                     )
                     .estimateGas({ from: address });
 
-                const res = await getMarketPlace(nft.chain)
+                const res = await getMarketPlace(nft.chain,auction.nftId.contractType)
                     .methods.createSale(
                         nft.contractAddress,
                         nft.tokenId,
@@ -843,6 +846,7 @@ const NftInfo = ({
                 obj.auctionHash = res.transactionHash;
             }
             await createSellApi(obj)
+            setNftLoading(false)
             toast.success("Sale created");
             await fetchItem()
         } catch (e) {
@@ -854,6 +858,7 @@ const NftInfo = ({
     async function createAuction() {
         try {
             setPopUpShow(false);
+            setNftLoading(true)
             const address = await connectWallet(
                 nft.chain,
                 publicKey,
@@ -960,6 +965,7 @@ const NftInfo = ({
                     res.events.AuctionCreated.returnValues.auctionId;
                 obj.auctionHash = res.transactionHash;
                 await createAuctionApi(obj)
+                setNftLoading(false)
                 toast.success("Auction created");
             }
             await fetchItem()
@@ -1134,12 +1140,13 @@ const NftInfo = ({
                 setVisible
             );
 
+            console.log(typeof nft.chain,typeof tronChain,"jdskfhdsjkfhhd")
             if (nft.chain.toString() === nearChain) {
                 removeSale(nft.tokenId);
                 return;
-            } else if (nft.chain === solonaChain) {
+            } else if (Number(nft.chain) === Number(solonaChain)) {
                 const aucMintKey = await removeSaleSol(auction.auctionId);
-            } else if (nft.chain === tronChain) {
+            } else if (Number(nft.chain) === Number(tronChain)) {
                 const res = await getMarketPlace(
                     auction.chain,
                     auction.nftId.contractType
@@ -1324,6 +1331,7 @@ const NftInfo = ({
     const getButtonName = () => {
         const userInfo = getUserInfo();
         if (userInfo) {
+            console.log(userInfo._id, nft.uploadedBy, "addresses")
             if (userInfo._id === nft.uploadedBy) {
                 if (nft.nftStatus === 2) {
                     return "End Sale";
@@ -1740,7 +1748,7 @@ const NftInfo = ({
                         {chainConnected ? (
                             userInfo &&
                             userInfo._id === nft.uploadedBy &&
-                            nft.nftStatus === 1 ? (
+                            Number(nft.nftStatus) === 1 ? (
                                 <div style={{ width: "100%", display: "flex" }}>
                                     <button
                                         className="btn mr-2"

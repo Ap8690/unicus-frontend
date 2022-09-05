@@ -7,29 +7,33 @@ import { IGeneral } from "../../models/General";
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { getChainSymbol, userInfo ,getChainId} from "../../utils/utils";
 
-export const accessToken = Cookies.get(ACCESS_TOKEN);
-export const axiosConfig: any = {
-  headers: {
-    Authorization: `Bearer ${accessToken}`,
-  },
-};
-
 export const getAccessToken =()=>{
   return Cookies.get(ACCESS_TOKEN);
 }
+
+export const axiosConfig: any = {
+  headers: {
+    Authorization: `Bearer ${getAccessToken()}`,
+  },
+};
+
+
 export async function getFeaturedNft(number: number,chain: any) {
-  return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}/${getChainId(chain)}`);
+  return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}/${getChainId(chain)}`,
+  axiosConfig);
 }
 
 export async function getTrendingNft(number: number, category: string,chain: any) {
   return await axios.get(
-    `${BASE_URL}/nft/getTrendingNfts/${number}/${category}/${getChainId(chain)}`
+    `${BASE_URL}/nft/getTrendingNfts/${number}/${category}/${getChainId(chain)}`,
+    axiosConfig
   );
 }
 
 export async function getAuctions(number: number, auctionType: string,chain: any) {
   return await axios.get(
-    `${BASE_URL}/auction/getAuctions/${number}/${auctionType}/${getChainId(chain)}`
+    `${BASE_URL}/auction/getAuctions/${number}/${auctionType}/${getChainId(chain)}`,
+    axiosConfig
   );
 }
 
@@ -42,19 +46,22 @@ export async function getMarketplaceNfts(
   return await axios.get(
     `${BASE_URL}/auction/getAllExplore/${skip}/${networkID}/${encodeURIComponent(
       JSON.stringify(sortBy)
-    )}/${currentFilter}`
+    )}/${currentFilter}`,
+    axiosConfig
   );
 }
 
 export async function getNftById(chain: any, contractAddress: any, nftId: any) {
   return await axios.get(
-    `${BASE_URL}/nft/getNftById/${chain}/${contractAddress}/${nftId}`
+    `${BASE_URL}/nft/getNftById/${chain}/${contractAddress}/${nftId}`,
+    axiosConfig
   );
 }
 
 export async function getNftByUserId() {
   return await axios.get(
-    `${BASE_URL}/nft/getNFTByUserId/${userInfo && userInfo._id}`
+    `${BASE_URL}/nft/getNFTByUserId/${userInfo && userInfo._id}`,
+    axiosConfig
   );
 }
 
@@ -189,14 +196,14 @@ export async function emailRegister(email: string, password: string, username:st
     email: email,
     password: password,
     username
-  });
+  },axiosConfig);
 }
 
 export async function emailLogin(email: string, password: string) {
   return await axios.post(`${BASE_URL}/auth/login`, {
     email: email,
     password: password,
-  });
+  },axiosConfig);
 }
 
 // export async function walletLogin(walletAddress: string) {
@@ -224,7 +231,7 @@ export async function resetPasswordApi(email: string, password: string, token:st
     token,
     email: email,
     password: password,
-  });
+  },axiosConfig);
 }
 
 export async function changePasswordApi(
@@ -234,7 +241,7 @@ export async function changePasswordApi(
   return await axios.post(`${BASE_URL}/auth/change-password`, {
     email: email,
     password: password,
-  });
+  },axiosConfig);
 }
 
 export async function addWalletAdd(userWallet: string) {
