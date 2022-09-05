@@ -18,7 +18,6 @@ import { cookieDomain } from "../../config";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 import PageLoader from "../../components/Loading/PageLoader";
 
-
 type AuthType = Readonly<{
     wallet?: WalletConnection;
 }>;
@@ -32,7 +31,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
         const nearAccountId = urlParams.get("account_id");
         const nearPublicKey = urlParams.get("public_key");
         if (nearAccountId !== null && nearPublicKey !== null) {
-            toast("Connection successful...");
+            // toast("Connection successful...");
             let token: string;
             walletLogin(nearAccountId, token).then((res) => {
                 toast.success("Login successful");
@@ -92,10 +91,7 @@ export const Wallets = ({ loginWallet, chainName }) => {
                         Connect with one of our available wallet providers or
                         create a new one{" "}
                     </div>
-                    <AllWallets
-                        scase={chainName}
-                        loginWallet={loginWallet}
-                    />
+                    <AllWallets scase={chainName} loginWallet={loginWallet} />
                     <div className="wallets"></div>
                 </div>
             </div>

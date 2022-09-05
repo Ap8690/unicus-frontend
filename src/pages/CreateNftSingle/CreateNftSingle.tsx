@@ -59,7 +59,7 @@ import {
     createAssociatedTokenAccountInstruction,
     TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
-import Loader from "../../components/Loading/Loader";
+import PageLoader from "../../components/Loading/PageLoader";
 import * as anchor from "@project-serum/anchor";
 import { Program, getProvider, Provider, Wallet } from "@project-serum/anchor";
 import web3 from "../../web3";
@@ -804,7 +804,7 @@ const CreateNftSingle = () => {
                 />
             ))}
             {nftLoading || fullLoading ? (
-                <Loader />
+                <PageLoader />
             ) : (
                 <div className="create-nft-single-page">
                     <div className="head">

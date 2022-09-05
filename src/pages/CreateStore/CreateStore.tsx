@@ -110,19 +110,8 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
       if (!validator.isEmail(generals.email)) {
         throw "Invalid Email";
       }
-      let res:any;
-      await createStore(generals).then((val)=> {
-        console.log(val,"isval");
-        
-        res= val}).catch((e)=>{
-        console.log("eeee", e);
-        
-        toast.error(e.response.data.err)
-        return;
-      });
+      let res = await createStore(generals)
       setLoading(false);
-      console.log("isres",res);
-      
       if (res) {
         toast.success("Store Created");
         setTimeout(function () {
@@ -145,7 +134,7 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
         if (err.response.status === 401) {
           toast.error("Login expired. Please Login again.");
         } else {
-          toast.error(err.response.data.msg);
+          toast.error(err.response.data.msg || e.response.data.err);
         }
         return;
       }
