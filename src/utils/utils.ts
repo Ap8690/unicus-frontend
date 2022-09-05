@@ -148,20 +148,20 @@ export const connectWallet = async (
       window.location.href = "/login";
       return;
     }
-    if (
-      userInfo?.wallets?.length === 0 ||
-      !userInfo?.wallets?.some((el:any) => {
-        return el?.toLowerCase() === address?.toLowerCase();
-      })
-    ) {
-      await addWalletAdd(address).then(async (res: any) => {
-        Cookies.set("userInfo", JSON.stringify(res.data.user), {
-          domain: cookieDomain,
-          expires: 30,
-        });
-        localStorage.setItem("userInfo", JSON.stringify(res?.data?.user));
-      });
-    }
+    // if (
+    //   userInfo?.wallets?.length === 0 ||
+    //   !userInfo?.wallets?.some((el:any) => {
+    //     return el?.toLowerCase() === address?.toLowerCase();
+    //   })
+    // ) {
+    //   await addWalletAdd(address).then(async (res: any) => {
+    //     Cookies.set("userInfo", JSON.stringify(res.data.user), {
+    //       domain: cookieDomain,
+    //       expires: 30,
+    //     });
+    //     localStorage.setItem("userInfo", JSON.stringify(res?.data?.user));
+    //   });
+    // }
 
     return address;
   } catch (e) {

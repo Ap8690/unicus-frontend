@@ -78,6 +78,7 @@ import validator from "validator";
 import { getBase64, blobUrlToFile } from "../../utils/imageConvert";
 import uuid from 'react-uuid'
 import { decodeParams } from "../../utils/helpers";
+import Cookies from "js-cookie";
 
 const CreateNftSingle = () => {
     const [name, setName] = useState("");
@@ -432,6 +433,7 @@ const CreateNftSingle = () => {
         try {
             setAddNFTModalOpen(false);
             //@ts-ignore
+            console.log(Cookies.get("ACCESS_TOKEN"));
             if (!window.ethereum) {
                 setNftLoading(false);
                 setMetamaskNotFound(true);
@@ -503,8 +505,9 @@ const CreateNftSingle = () => {
                         );
                         let user = userInfo;
                         if (!user) {
-                            user = localStorage.getItem("userInfo");
+                            user = JSON.parse(localStorage.getItem("userInfo"));
                         }
+                        console.log(user,"user")
                         const nftObj = {
                             name,
                             royalty,
@@ -606,6 +609,7 @@ const CreateNftSingle = () => {
                             }
                             setNftLoading(false);
                             toast.success("Asset Minted");
+                            console.log(nftObj,"nftObj")
                             await createNft(nftObj);
                             navigate("/profile/created");
                         } else {

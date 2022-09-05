@@ -132,7 +132,7 @@ const GeneralSocial = () => {
     try {
       const res = await axios.post(
         `${BASE_URL}/general/socialLinks`,
-        socialLinks, axiosConfig
+        socialLinks, axiosConfig()
       );
       if (res) {
         toast.success("Saved Changes");
