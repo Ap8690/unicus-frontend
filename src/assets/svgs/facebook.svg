@@ -1,14 +1,38 @@
-<svg width="15" height="29" viewBox="0 0 15 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3.45696 28.5H9.22852V16.6959H14.4288L15 10.8302H9.22852V7.86842C9.22852 7.05453 9.87449 6.39474 10.6714 6.39474H15V0.5H10.6714C6.6869 0.5 3.45696 3.79896 3.45696 7.86842V10.8302H0.571218L0 16.6959H3.45696V28.5Z" fill="url(#paint0_linear_257_3893)" />
-    <defs>
-        <linearGradient id="paint0_linear_257_3893" x1="7.5" y1="0.5" x2="7.5" y2="28.5" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#A7A9FA" />
-            <stop offset="0.255208" stop-color="#9A96F6" />
-            <stop offset="0.5" stop-color="#8E84F3" />
-            <stop offset="0.520833" stop-color="#8C83F3" />
-            <stop offset="0.692708" stop-color="#8376F1" />
-            <stop offset="1" stop-color="#7460ED" />
-        </linearGradient>
-    </defs>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 455.73 455.73" style="enable-background:new 0 0 455.73 455.73;" xml:space="preserve">
+<path style="fill:#3A559F;" d="M0,0v455.73h242.704V279.691h-59.33v-71.864h59.33v-60.353c0-43.893,35.582-79.475,79.475-79.475
+	h62.025v64.622h-44.382c-13.947,0-25.254,11.307-25.254,25.254v49.953h68.521l-9.47,71.864h-59.051V455.73H455.73V0H0z"/>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
 </svg>
-    

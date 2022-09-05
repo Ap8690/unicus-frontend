@@ -1,7 +1,10 @@
 import userImg from "../../assets/images/userImage.png";
-import twitterImg from "../../assets/svgs/twitter.svg";
-import facebookImg from "../../assets/svgs/facebook.svg";
-import instagramImg from "../../assets/svgs/instagramFooter.svg";
+
+import twitterImg from "../../assets/svgs/profileTwitter.svg";
+import instagramImg from "../../assets/svgs/profileInstagram.svg";
+import facebookImg from "../../assets/svgs/profileFacebook.svg";
+import discord from "../../assets/svgs/discord-icon.svg";
+import linkedin from "../../assets/svgs/link.svg";
 import { useEffect, useState } from "react";
 // import Input from "../../components/Input/Input";
 import Menu from "@mui/material/Menu";
@@ -22,7 +25,7 @@ import {
 import Input from "../../components/Input/Input";
 import Cookies from "js-cookie";
 import { cookieDomain } from "../../config";
-import validator from 'validator';
+import validator from "validator";
 
 const EditProfile = (props: any) => {
     const [active, setActive] = useState("general");
@@ -35,7 +38,7 @@ const EditProfile = (props: any) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    let navigate = useNavigate()
+    let navigate = useNavigate();
     const accessToken = getAccessToken();
     const getUserProfile = async () => {
         try {
@@ -45,15 +48,15 @@ const EditProfile = (props: any) => {
                     Authorization: "Bearer " + `${accessToken}`,
                 },
             });
-            console.log("User Data: ", res.data);
+            console.log("User Data: ", res?.data.user?.email);
             setUser(res.data.user);
         } catch (err) {
             console.log(err);
         }
     };
     const handleCancel = () => {
-      navigate("/profile")
-    }
+        navigate("/profile");
+    };
     useEffect(() => {
         getUserProfile();
     }, []);
@@ -79,9 +82,9 @@ const EditProfile = (props: any) => {
                         <div className="flex flex-col items-start gap-2 relative mt-4">
                             <span className="text-lg w-full screen11:text-center font-semibold">
                                 {user
-                                    ? user.username
+                                    ? user?.username
                                         ? user.username
-                                        : user.email
+                                        : user?.email || ""
                                     : "Loading..."}
                             </span>
                             <span className="text-DarkColor w-full screen11:text-center">
@@ -94,16 +97,32 @@ const EditProfile = (props: any) => {
                                     src={twitterImg}
                                     alt="socials"
                                     className="h-6 left-0 screen11:left-auto screen11:m-auto cursor-pointer"
-                                />
-                                <img
-                                    src={facebookImg}
-                                    alt="socials"
-                                    className="h-8 left-0 screen11:left-auto screen11:m-auto cursor-pointer"
+                                    onClick={() => setActive("social")}
                                 />
                                 <img
                                     src={instagramImg}
                                     alt="socials"
                                     className="h-8 left-0 screen11:left-auto screen11:m-auto cursor-pointer"
+                                    onClick={() => setActive("social")}
+                                />
+                                <img
+                                    src={facebookImg}
+                                    alt="socials"
+                                    className="h-8 left-0 screen11:left-auto screen11:m-auto cursor-pointer"
+                                    onClick={() => setActive("social")}
+                                />
+
+                                <img
+                                    src={discord}
+                                    alt="socials"
+                                    className="h-8 left-0 screen11:left-auto screen11:m-auto cursor-pointer"
+                                    onClick={() => setActive("social")}
+                                />
+                                <img
+                                    src={linkedin}
+                                    alt="socials"
+                                    className="h-8 left-0 screen11:left-auto screen11:m-auto cursor-pointer"
+                                    onClick={() => setActive("social")}
                                 />
                             </div>
                         </div>
@@ -135,18 +154,22 @@ const EditProfile = (props: any) => {
                                         General
                                     </span>
                                 </MenuItem>
-                                <MenuItem onClick={handleClose}>
-                                    <span
-                                        onClick={() => setActive("password")}
-                                        className={`font-semibold cursor-pointer ${
-                                            active === "password"
-                                                ? "text-[#7460ed] underline"
-                                                : "text-DarkColor"
-                                        }`}
-                                    >
-                                        Password
-                                    </span>
-                                </MenuItem>
+                                {user?.email && (
+                                    <MenuItem onClick={handleClose}>
+                                        <span
+                                            onClick={() =>
+                                                setActive("password")
+                                            }
+                                            className={`font-semibold cursor-pointer ${
+                                                active === "password"
+                                                    ? "text-[#7460ed] underline"
+                                                    : "text-DarkColor"
+                                            }`}
+                                        >
+                                            Password
+                                        </span>
+                                    </MenuItem>
+                                )}
                                 <MenuItem onClick={handleClose}>
                                     <span
                                         onClick={() => setActive("social")}
@@ -190,16 +213,18 @@ const EditProfile = (props: any) => {
                     >
                         General
                     </span>
-                    <span
-                        onClick={() => setActive("password")}
-                        className={`font-semibold cursor-pointer ${
-                            active === "password"
-                                ? "text-[#7460ed] underline"
-                                : "text-DarkColor"
-                        }`}
-                    >
-                        Password
-                    </span>
+                    {user?.email && (
+                        <span
+                            onClick={() => setActive("password")}
+                            className={`font-semibold cursor-pointer ${
+                                active === "password"
+                                    ? "text-[#7460ed] underline"
+                                    : "text-DarkColor"
+                            }`}
+                        >
+                            Password
+                        </span>
+                    )}
                     <span
                         onClick={() => setActive("social")}
                         className={`font-semibold cursor-pointer ${
@@ -222,16 +247,17 @@ const EditProfile = (props: any) => {
                     </span>
                 </div>
                 <div className="w-full">
-                    {active === "general" && (
-                        <GeneralSettings resUser={user} />
-                    )}
+                    {active === "general" && <GeneralSettings resUser={user} />}
                     {active === "password" && (
                         <ChangePassword handleCancel={handleCancel} />
                     )}
-                    {active === "social" && <AddSocials handleCancel={handleCancel} resUser={user} />}
-                    {active === "walletAddress" && (
-                        <WalletAdd isLogin={accessToken} />
+                    {active === "social" && (
+                        <AddSocials
+                            handleCancel={handleCancel}
+                            resUser={user}
+                        />
                     )}
+                    {active === "walletAddress" && <WalletAdd />}
                 </div>
             </div>
         </div>
@@ -305,7 +331,7 @@ const GeneralSettings = ({ resUser }) => {
     );
 };
 
-const ChangePassword = ({handleCancel}) => {
+const ChangePassword = ({ handleCancel }) => {
     const [oldPass, setOldPass] = useState("");
     const [newPass, setNewPass] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
@@ -360,7 +386,9 @@ const ChangePassword = ({handleCancel}) => {
                 disabled={undefined}
             />
             <div className="flex justify-between">
-                <button className="btn" onClick={handleCancel}>Cancel</button>
+                <button className="btn" onClick={handleCancel}>
+                    Cancel
+                </button>
                 <button className="btn" onClick={changePass}>
                     Save Changes
                 </button>
@@ -369,7 +397,7 @@ const ChangePassword = ({handleCancel}) => {
     );
 };
 
-const AddSocials = ({ resUser,handleCancel }) => {
+const AddSocials = ({ resUser, handleCancel }) => {
     const [twitter, setTwitter] = useState("");
     const [facebook, setFacebook] = useState("");
     const [instagram, setInstagram] = useState("");
@@ -385,21 +413,43 @@ const AddSocials = ({ resUser,handleCancel }) => {
     };
     const updateProfile = async () => {
         try {
-          if(!validator.isURL(twitter)) {
-            return toast.error("Please enter a valid url link to twitter")
-          }
-          if(!validator.isURL(facebook)){
-            return toast.error("Please enter a valid url link to facebook")
-          }
-          if(!validator.isURL(instagram)){
-            return toast.error("Please enter a valid url link to instagram")
-          }
-          if(!validator.isURL(discord)){
-            return toast.error("Please enter a valid url link to discord")
-          }
-          if(!validator.isURL(linkedIn)){
-            return toast.error("Please enter a valid url link to linkedIn")
-          }
+            if (
+                !validator.isURL(twitter) &&
+                twitter.length > 0 &&
+                !twitter.includes("twitter")
+            ) {
+                return toast.error("Please enter a valid url link to twitter");
+            }
+            if (
+                !validator.isURL(facebook) &&
+                facebook.length > 0 &&
+                !facebook.includes("facebook")
+            ) {
+                return toast.error("Please enter a valid url link to facebook");
+            }
+            if (
+                !validator.isURL(instagram) &&
+                instagram.length > 0 &&
+                !instagram.includes("instagram")
+            ) {
+                return toast.error(
+                    "Please enter a valid url link to instagram"
+                );
+            }
+            if (
+                !validator.isURL(discord) &&
+                discord.length > 0 &&
+                !discord.includes("discord")
+            ) {
+                return toast.error("Please enter a valid url link to discord");
+            }
+            if (
+                !validator.isURL(linkedIn) &&
+                linkedIn.length > 0 &&
+                !linkedIn.includes("linkedIn")
+            ) {
+                return toast.error("Please enter a valid url link to linkedIn");
+            }
             const res = await updateProfileSocial(
                 instagram,
                 facebook,
@@ -493,7 +543,9 @@ const AddSocials = ({ resUser,handleCancel }) => {
                 disabled={undefined}
             />
             <div className="flex justify-between">
-                <button className="btn" onClick={handleCancel}>Cancel</button>
+                <button className="btn" onClick={handleCancel}>
+                    Cancel
+                </button>
                 <button className="btn" onClick={() => updateProfile()}>
                     Save Changes
                 </button>

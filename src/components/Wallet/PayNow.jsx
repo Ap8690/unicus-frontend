@@ -357,7 +357,6 @@ const PayNow = ({ isLogin, setSignIn }) => {
     let cashfree = new cashfreeSandbox.Cashfree();
 
     console.log("before Initialisation");
-    // console.log(resultOrderToken);
     cashfree.initialiseDropin(parent, {
       orderToken: resultOrderToken,
       onSuccess: newcbs,
@@ -415,12 +414,10 @@ const PayNow = ({ isLogin, setSignIn }) => {
             )
             .then((response) => {
               const { status } = response;
-              // console.log("RES", response);
               setShowFullLoading(false);
               return response.data;
             })
             .then((result) => {
-              // console.log("result ", result);
               setOrderToken(result.orderToken);
               renderDropin(result.orderToken);
             })

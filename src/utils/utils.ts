@@ -95,6 +95,11 @@ export const getUserInfo = () => {
   console.log("userInfo: ", userInfo);
   return userInfo;
 };
+
+// returns chain name
+export const getWalletChain = () => {
+  return localStorage.getItem("walletChain")
+}
 export let nearWalletConnection: any;
 
 export let web3 = new Web3(Web3.givenProvider);
@@ -107,17 +112,21 @@ interface requestAccountsResponse{
   code: Number, // 200：ok 4000：in queue, no need to repeat commit， 4001：user rejected
   message: String
 }
+
 export const connectWallet = async (
   network: any, 
   publicKey: any,
   wallet: any,
   connect: any,
-  setVisible: any
+  setVisible: any,
 ) => {
   try {
     let address: any;
     console.log(network,"network")
     if (network.toString() === nearChain) {
+      if(getWalletChain() !== "Near") {
+        return toast.error("Please login with NEAR Wallet!")
+      }
       if (nearWalletConnection && nearWalletConnection.account()) {
         address = nearWalletConnection.account().accountId;
       } else {
@@ -324,9 +333,7 @@ export const connectNear = async () => {
   }
 
   sendMeta(walletConnection, config);
-
   nearWalletConnection = walletConnection;
-
   return walletConnection.account().accountId;
 };
 
@@ -351,8 +358,7 @@ export const connToSol = async (publicKey, getSolWallet, connect, setVisible) =>
 };
 
 export const disConnectWallet = () => {
-  localStorage.removeItem("walletType");
-  localStorage.removeItem("userAddress");
+  localStorage.clear()
 
   Cookies.remove(ACCESS_TOKEN, { domain:cookieDomain,
     expires: 30,

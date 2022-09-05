@@ -14,7 +14,7 @@ const Properties = ({ state, setState }) => {
   }
   const handleChange = (e:any, index:any) => {
     const { name, value } = e.target
-    const list = [...state]
+    let list = [...state]
     list[index][name] = value
     setState(list)
   }
@@ -27,7 +27,7 @@ const Properties = ({ state, setState }) => {
         },
       ])
     }
-    const list = [...state]
+    let list = [...state]
     list.splice(index, 1)
     setState(list)
   }

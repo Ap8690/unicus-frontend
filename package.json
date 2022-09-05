@@ -41,7 +41,7 @@
     "react-bootstrap": "^2.4.0",
     "react-dom": "^18.1.0",
     "react-helmet": "^6.1.0",
-    "react-html-parser": "^2.0.2",
+    "html-react-parser": "^3.0.4",
     "react-icons": "^4.4.0",
     "react-redux": "^8.0.2",
     "react-router-dom": "^6.3.0",
@@ -70,6 +70,7 @@
   "resolutions": {
     "@metaplex-foundation/mpl-candy-machine": "4.3.0"
   },
+
   "scripts": {
     "start": "serve -s build",
     "dev": "set REACT_APP_ENV=local&& react-app-rewired start",

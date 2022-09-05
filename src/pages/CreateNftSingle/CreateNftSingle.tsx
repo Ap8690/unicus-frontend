@@ -4,7 +4,7 @@ import uploadImg from "../../assets/svgs/uploadImage.svg";
 import { Image } from "react-bootstrap";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Input from "../../components/Input/Input";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -27,12 +27,14 @@ import {
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import {
     connectWallet,
+    getChainName,
     getChainSymbol,
     getCreateNftContract,
     getCreateNftContractAddress,
     nearWalletConnection,
     tronWeb,
     userInfo,
+    getWalletChain
 } from "../../utils/utils";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import {
@@ -79,6 +81,7 @@ import { getBase64, blobUrlToFile } from "../../utils/imageConvert";
 import uuid from 'react-uuid'
 import { decodeParams } from "../../utils/helpers";
 import Cookies from "js-cookie";
+import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 
 const CreateNftSingle = () => {
     const [name, setName] = useState("");
@@ -93,9 +96,9 @@ const CreateNftSingle = () => {
     const [unlockable, setUnlockable] = useState(false);
     const [collection, setCollection] = useState<any>("");
     const [royalty, setRoyalty] = useState<any>(5);
-
     const [royaltyError, setRoyaltyError] = useState<boolean>(false);
     const [explicit, setExplicit] = useState(false);
+    const [displayImage,setDisplayImage] = useState('')
     const [openProp, setOpenProp] = useState(false);
     const [openStats, setOpenStats] = useState(false);
     const [openLevels, setOpenLevels] = useState(false);
@@ -108,6 +111,8 @@ const CreateNftSingle = () => {
     const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
     const inputFile = useRef(null);
     const navigate = useNavigate();
+
+    const {loginWallet,fullLoading} = useContext(ConnectWalletContext);
 
     const { connection } = useConnection();
 
@@ -364,19 +369,13 @@ const CreateNftSingle = () => {
                 lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
                 signature: signature,
             });
-            console.log("Mint Success!", tx, signature);
-
             const metaplex = new Metaplex(connection);
-
             //Fetch all nfts of by owner
             //the returned NFTs may be Metadatas
             const myNfts = await metaplex
                 .nfts()
                 .findByMint(mintKey.publicKey)
                 .run();
-
-            console.log("metaplex", myNfts);
-
             return mintKey.publicKey.toBase58();
         } catch {
             return false;
@@ -390,19 +389,6 @@ const CreateNftSingle = () => {
         tokenUri: any,
         imageUrl: any
     ) => {
-        console.log("mintint started");
-        console.log("near mint", tokenId, nearWalletConnection);
-        console.log("Near Mint data ", {
-            token_id: `${tokenId}`,
-            metadata: {
-                title: `${name}`,
-                description: `${description}`,
-                media: `${imageUrl}`,
-                reference: `${tokenUri}`,
-                //extra: `${extLink}`,
-            },
-        });
-
         let functionCallResult = await nearWalletConnection
             .account()
             .functionCall({
@@ -442,7 +428,6 @@ const CreateNftSingle = () => {
             if (extLink && !validateUrl(extLink)) {
                 return toast.error("Please enter a valid external link");
             }
-            console.log("chain: ", chain);
             //@ts-expect-error
             if (chain === tronChain && !window.tronWeb) {
                 toast.error("Tron wallet not detected!");
@@ -455,7 +440,7 @@ const CreateNftSingle = () => {
                 publicKey,
                 getSolWallet,
                 connect,
-                setVisible
+                setVisible,
             )
                 .then(async (address) => {
                     if (!address) {
@@ -492,8 +477,6 @@ const CreateNftSingle = () => {
                         let imageUrl: any;
                         let tokenId: any;
                         let tranIsSuccess = false;
-                        console.log("Chain ", chain);
-                        console.log("tokenuri", tokenUri);
 
                         await axios.get(tokenUri).then((val) => {
                             imageUrl = val.data.image;
@@ -528,8 +511,6 @@ const CreateNftSingle = () => {
                         };
                         if (chain === nearChain) {
                             nftObj.tokenId = uuid();
-                            console.log("nftObj: ", nftObj);
-
                             localStorage.setItem(
                                 "nearNftObj",
                                 JSON.stringify(nftObj)
@@ -597,9 +578,7 @@ const CreateNftSingle = () => {
                             );
                             const success = await setNotification(res);
                             let tokenId = await decodeParams(['uint256'],"0x"+success?.log[0]?.topics[3],false)
-                            console.log(tokenId,"tokenId")
                             tokenId = tronWeb.toDecimal(tokenId[0]._hex)
-                            console.log(tokenId,"tomfkdshfehfd")
                             if (!success) {
                                 tranIsSuccess = false;
                                 throw Error("Tron Transaction Failed");
@@ -697,7 +676,8 @@ const CreateNftSingle = () => {
     };
     const convertToFile = async () => {
         try {
-            const file = await blobUrlToFile(JSON.parse(localStorage.getItem("fileSrc")),"newUpload")
+            const file: any = await blobUrlToFile(JSON.parse(localStorage.getItem("fileSrc")),"newUpload")
+            console.log("URL Create Object Url: ",URL.createObjectURL(file))
             setFileSrc(file)
         }
         catch(err) {
@@ -775,13 +755,8 @@ const CreateNftSingle = () => {
 
         const errorCode = urlParams.get("errorCode");
         if (urlParams.has("errorCode")) urlParams.delete("errorCode");
-        console.log("errorCode: ", errorCode);
         const errMsg = urlParams.get("errorMessage");
         if (urlParams.has("errorMessage")) urlParams.delete("errorMessage");
-        console.log("errMsg: ", errMsg);
-
-        console.log("near txhash", txhash);
-
         if (errorCode) {
             toast.error(errorCode);
         } else if (txhash !== null) {
@@ -816,7 +791,7 @@ const CreateNftSingle = () => {
                     setInputs={e.setState}
                 />
             ))}
-            {nftLoading ? (
+            {nftLoading || fullLoading ? (
                 <Loader />
             ) : (
                 <div className="create-nft-single-page">
@@ -1086,12 +1061,18 @@ const CreateNftSingle = () => {
                                     </button>
                                 </div>
                             </div>
-                            <button
+                            {getWalletChain() == "Near" && chain === nearChain ? <button
                                 className="btn create-btn"
                                 onClick={() => cryptoPayment()}
                             >
                                 Create
-                            </button>
+                            </button> :
+                            <button
+                            className="btn create-btn"
+                            onClick={() => loginWallet("near")}
+                        >
+                            Connect Wallet
+                        </button>}
                         </div>
                         <div className="preview-field">
                             <div className="field-title">Preview</div>
