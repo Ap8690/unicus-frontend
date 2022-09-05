@@ -122,9 +122,10 @@ export const WalletConnectionProvider = ({ children }) => {
                 setChainConnected(walletAddress)
                 setFullLoading(false)
                 setWalletModal(false)
+                console.log("redirect: ", redirect['*']);
                 // if(redirect)
                 //     navigate(`/${redirect["*"]}`, { replace: true });
-                if (window.location.pathname === '/connect-wallet/marketplace' || window.location.pathname === '/connect-wallet')
+                if (window.location.pathname.includes('connect-wallet'))
                     navigate(`/marketplace`)
                 // window.location.reload();
             } else {
