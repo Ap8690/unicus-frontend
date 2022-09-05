@@ -4,7 +4,6 @@ import likesImg from "../../assets/svgs/likes.svg";
 import flagImg from "../../assets/svgs/flag.svg";
 import nftImg from "../../assets/images/marketPlaceMain.png";
 import { ReactComponent as FiCopy } from "../../assets/react-icons/FiCopy.svg";
-
 import "./viewnft.scss";
 import { useState } from "react";
 import ShareProfile from "../../components/modals/Share/Share";

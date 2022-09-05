@@ -1,11 +1,6 @@
 import "./connectwallet.scss";
 
 import React, { useState, useContext, useEffect } from "react";
-import { Web3Context } from "../../context/Web3Context";
-import useConnect from "./useConnect";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { getChainId } from "../../utils/utils";
 import metamaskLogo from "../../assets/svgs/metamask.svg";
 import tronLinkLogo from "../../assets/svgs/tron-link.svg";
 import phantomLogo from "../../assets/svgs/phantomLogo.svg";
@@ -14,9 +9,7 @@ import coinbaseLogo from "../../assets/svgs/coinbase.svg";
 import mewLogo from "../../assets/svgs/myetherwallet.svg";
 import walletconnectLogo from "../../assets/svgs/walletconnect.svg";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { WalletConnection } from "near-api-js";
-
 import { walletLogin } from "../../services/api/supplier";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
@@ -25,13 +18,6 @@ import { cookieDomain } from "../../config";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 import PageLoader from "../../components/Loading/PageLoader";
 
-/*type Event = "connect" | "disconnect";
-
-interface Phantom {
-  on: (event: Event, callback: () => void) => void;
-  connect: () => Promise<void>;
-  disconnect: () => Promise<void>;
-}*/
 
 type AuthType = Readonly<{
     wallet?: WalletConnection;

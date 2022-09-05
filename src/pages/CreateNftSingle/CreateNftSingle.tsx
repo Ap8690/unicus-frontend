@@ -440,6 +440,7 @@ const CreateNftSingle = () => {
             if (extLink && !validateUrl(extLink)) {
                 return toast.error("Please enter a valid external link");
             }
+            console.log("chain: ", chain);
             //@ts-expect-error
             if (chain === tronChain && !window.tronWeb) {
                 toast.error("Tron wallet not detected!");

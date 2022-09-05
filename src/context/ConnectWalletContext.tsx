@@ -24,6 +24,8 @@ export type ConnectWalletContextType = {
     setFullLoading: (value: boolean) => void;
     chainConnected?: any;
     setChainConnected: (value: any) => void;
+    walletModal?:boolean;
+    setWalletModal?: (value: boolean) => void;
 };
 export const ConnectWalletContext =
     createContext<ConnectWalletContextType | null>(null);
@@ -35,6 +37,7 @@ export const WalletConnectionProvider = ({ children }) => {
     const { setVisible } = useWalletModal();
     const [fullLoading,setFullLoading] = useState(false)
     const [chainConnected,setChainConnected] = useState('')
+    const [walletModal,setWalletModal] = useState<boolean>(false)
     const getSolWallet = () => {
         return wallet;
     };
@@ -102,8 +105,23 @@ export const WalletConnectionProvider = ({ children }) => {
 
                 localStorage.setItem("userInfo", JSON.stringify(res.data.user));
                 localStorage.setItem("walletConnected",address)
-                localStorage.setItem("walletChain",walletAddress);
+                let walletChain = null;
+                if(walletAddress === "meta" || walletAddress === "cb" || walletAddress === 'wc' || walletAddress === 'mew') {
+                    walletChain = "Metamask"
+                }
+                else if(walletAddress === "tron") {
+                    walletChain = "Tron"
+                }
+                else if(walletAddress === "near") {
+                    walletChain = "Near"
+                }
+                else if(walletAddress === "sol") {
+                    walletChain = "Solana"
+                }
+                localStorage.setItem("walletChain",walletChain);
                 setChainConnected(walletAddress)
+                setFullLoading(false)
+                setWalletModal(false)
                 // if(redirect)
                 //     navigate(`/${redirect["*"]}`, { replace: true });
                 if (window.location.pathname === '/connect-wallet/marketplace' || window.location.pathname === '/connect-wallet')
@@ -114,7 +132,7 @@ export const WalletConnectionProvider = ({ children }) => {
                     toast.error("Wallet connection failed");
                 }
             }
-            setFullLoading(false)
+            
         } catch (e) {
             toast.error(e.message);
             console.log(e);
@@ -123,7 +141,7 @@ export const WalletConnectionProvider = ({ children }) => {
     };
 
     return (
-        <ConnectWalletContext.Provider value={{ loginWallet,fullLoading,setFullLoading, chainConnected,setChainConnected }}>
+        <ConnectWalletContext.Provider value={{ loginWallet,fullLoading,setFullLoading, chainConnected,setChainConnected,walletModal,setWalletModal }}>
             {children}
         </ConnectWalletContext.Provider>
     );

@@ -151,7 +151,7 @@ useEffect(() => {
   if (location.pathname === "/") {
     navigate("/home", {replace:true});
   }
-  console.log(" dsf ",Cookies.get("userInfo"))
+  console.log("Aeiossdfi: ",Cookies.get("userInfo"))
 }, []);
 
 // useEffect(() => {

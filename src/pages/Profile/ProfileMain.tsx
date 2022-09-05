@@ -91,7 +91,7 @@ const Profile = (): ReactJSXElement => {
     ];
 
     const createdColumns = ["Item", "Chain", "Created"];
-    const listingColumns = ["Item", "Unit Price", "Status", "Created"];
+    const listingColumns = ["Image","Item", "Unit Price", "Status", "Created"];
     const offersColumns = ["Item", "Lastest Bid", "Chain", "Created"];
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
@@ -125,6 +125,7 @@ const Profile = (): ReactJSXElement => {
                 },
             });
             setUser(res.data.user);
+            await getNfts();
             setLoading(false);
         } catch (err) {
             setLoading(false);

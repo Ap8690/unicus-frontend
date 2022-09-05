@@ -169,7 +169,24 @@ export const connectWallet = async (
     toast.error(e?.message);
   }
 };
-
+const getChainData = (network:any) => {
+  switch(network) {
+    case bscChain:
+      return  {
+        chainId: Web3.utils.toHex(network),
+        rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+        chainName: "BSC Testnet",
+        nativeCurrency: {
+          name: "TBNB",
+          symbol: "TBNB", // 2-6 characters long
+          decimals: 18,
+        },
+        blockExplorerUrls: ["https://testnet.bscscan.com/"],
+      }
+    default: 
+      return ''
+  }
+}
 export const SwitchNetwork = async (network: any) => {
   try {
     const metaMaskProvider: any = await getMetamaskProvider();
@@ -182,17 +199,16 @@ export const SwitchNetwork = async (network: any) => {
       ],
     });
   } catch (error: any) {
-    console.log("err", error);
+    console.log("err",typeof error?.code);
 
-    if (error?.code === 4902) {
+    if (error?.code.toString() === '4902') {
+      console.log("ERROR IN ")
       try {
         const metaMaskProvider: any = await getMetamaskProvider();
         await metaMaskProvider.request({
           method: "wallet_addEthereumChain",
           params: [
-            {
-              chainId: Web3.utils.toHex(network),
-            },
+            getChainData(network)
           ],
         });
         await SwitchNetwork(network)
@@ -202,6 +218,7 @@ export const SwitchNetwork = async (network: any) => {
     }
   }
 };
+
 
 export const connToMetaMask = async () => {
   try {
