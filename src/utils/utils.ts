@@ -116,6 +116,7 @@ export const connectWallet = async (
 ) => {
   try {
     let address: any;
+    console.log(network,"network")
     if (network.toString() === nearChain) {
       if (nearWalletConnection && nearWalletConnection.account()) {
         address = nearWalletConnection.account().accountId;
@@ -128,6 +129,8 @@ export const connectWallet = async (
       if(res?.code === 4001){
         toast.error("Rejected the authorization!");
       }
+      tronWeb.trx.sign("This has to be signed!")
+      console.log("this one has to be signed")
       address = tronWeb.defaultAddress.base58;
     } else if (network.toString() === solonaChain) {
       address = await connToSol(publicKey, wallet, connect, setVisible);
@@ -145,10 +148,9 @@ export const connectWallet = async (
       window.location.href = "/login";
       return;
     }
-    console.log(address)
-    if ((userInfo && 
-      userInfo?.wallets.length === 0) ||
-      !userInfo?.wallets.some((el:any) => {
+    if (
+      userInfo?.wallets?.length === 0 ||
+      !userInfo?.wallets?.some((el:any) => {
         return el?.toLowerCase() === address?.toLowerCase();
       })
     ) {
@@ -157,7 +159,7 @@ export const connectWallet = async (
           domain: cookieDomain,
           expires: 30,
         });
-        localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+        localStorage.setItem("userInfo", JSON.stringify(res?.data?.user));
       });
     }
 
@@ -293,6 +295,8 @@ export const connToTron = async () => {
           clearInterval(obj);
           //@ts-ignore
           tronWeb = window.tronWeb;
+          const hex = tronWeb.toHex("this has to be singed!")
+          tronWeb.trx.sign(hex)
           resolve(tronWeb.defaultAddress.base58);
         }
         i++

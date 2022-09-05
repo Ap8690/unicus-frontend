@@ -87,6 +87,7 @@ export const WalletConnectionProvider = ({ children }) => {
                 }
                 case "near": {
                     address = await connectNear();
+                    console.log(address,"address")
                     break;
                 }
             }

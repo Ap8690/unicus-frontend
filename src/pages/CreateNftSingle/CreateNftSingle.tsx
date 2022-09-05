@@ -31,6 +31,7 @@ import {
     getCreateNftContract,
     getCreateNftContractAddress,
     nearWalletConnection,
+    tronWeb,
     userInfo,
 } from "../../utils/utils";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
@@ -59,6 +60,7 @@ import {
 import Loader from "../../components/Loading/Loader";
 import * as anchor from "@project-serum/anchor";
 import { Program, getProvider, Provider, Wallet } from "@project-serum/anchor";
+import web3 from "../../web3";
 
 import {
     clusterApiUrl,
@@ -75,6 +77,7 @@ import {
 import validator from "validator";
 import { getBase64, blobUrlToFile } from "../../utils/imageConvert";
 import uuid from 'react-uuid'
+import { decodeParams } from "../../utils/helpers";
 
 const CreateNftSingle = () => {
     const [name, setName] = useState("");
@@ -548,7 +551,7 @@ const CreateNftSingle = () => {
                             nftObj.tokenId = mintKey;
                             await createNft(nftObj);
                             navigate("/profile/created");
-                        } else {
+                        } else if (chain === tronChain) {
                             setNftLoading(true);
                             toast.info("Minting The Asset");
                             const createNFT = getCreateNftContract(
@@ -586,40 +589,85 @@ const CreateNftSingle = () => {
                                 toast.error("Contract not found");
                                 return;
                             }
-
-                            
-
-                            if (chain === tronChain) {
-                                setNftModalMessage(
-                                    "Waiting for transaction confirmation.(It can take upto a min to confirm)"
-                                );
-                                const success = await setNotification(res);
-                                if (!success) {
-                                    tranIsSuccess = false;
-                                    throw Error("Tron Transaction Failed");
-                                } else {
-                                    tranIsSuccess = true;
-                                    const result = axios.get(
-                                        `https://api.shasta.trongrid.io/events/transaction/${res}`
-                                    );
-                                    nftObj.tokenId = result[1].result._NftId;
-                                }
-                            } else if (res?.transactionHash) {
-                                tranIsSuccess = true;
-                            }
-                            // toast("Storing Details");
-                            if (tranIsSuccess) {
-                                await createNft(nftObj);
-                                navigate("/profile/created");
+                            setNftModalMessage(
+                                "Waiting for transaction confirmation.(It can take upto a min to confirm)"
+                            );
+                            const success = await setNotification(res);
+                            let tokenId = await decodeParams(['uint256'],"0x"+success?.log[0]?.topics[3],false)
+                            console.log(tokenId,"tokenId")
+                            tokenId = tronWeb.toDecimal(tokenId[0]._hex)
+                            console.log(tokenId,"tomfkdshfehfd")
+                            if (!success) {
+                                tranIsSuccess = false;
+                                throw Error("Tron Transaction Failed");
                             } else {
-                                setNftLoading(false);
-                                setdefaultErrorMessage(
-                                    "Couldn't add NFT to the site. You can manually add it in my profile section."
-                                );
-                                setdefaultErrorModal(true);
+                                tranIsSuccess = true;
+                                nftObj.tokenId = tokenId;
                             }
                             setNftLoading(false);
                             toast.success("Asset Minted");
+                            await createNft(nftObj);
+                            navigate("/profile/created");
+                        } else {
+                            setNftLoading(true);
+                            toast.info("Minting The Asset");
+                            const gasPrice = await web3.eth.getGasPrice()
+                            const createNFT = getCreateNftContract(
+                                chain,
+                                contractType
+                            );
+
+                            let res: any;
+                            let estimated: any;
+                            if (contractType === "721") {
+                                estimated = await createNFT.methods
+                                    .batchMint([tokenUri], [royalty])
+                                    .estimateGas({
+                                        from: address,
+                                    });
+                                res = await createNFT.methods
+                                    .batchMint([tokenUri], [royalty])
+                                    .send({
+                                        from: address ,gas:estimated, gasPrice:gasPrice
+                                    });
+                                if (res?.transactionHash) {
+                                    nftObj.tokenId =
+                                        res.events.Minted.returnValues._NftId; //returnValues NFTId
+                                }
+                            } else if (contractType === "1155") {
+                                estimated = await createNFT.methods
+                                    .mintNFT(
+                                        tokenUri,
+                                        supply,
+                                        address,
+                                        parseInt(royalty)
+                                    )
+                                    .estimateGas({
+                                        from: address 
+                                    });
+                                res = await createNFT.methods
+                                    .mintNFT(
+                                        tokenUri,
+                                        supply,
+                                        address,
+                                        parseInt(royalty)
+                                    )
+                                    .send({
+                                        from: address ,gas:estimated, gasPrice:gasPrice
+                                    });
+                                if (res?.transactionHash) {
+                                    nftObj.tokenId =
+                                        res.events.Minted.returnValues._id; //returnValues NFTId
+                                }
+                            } else {
+                                toast.error("Contract type is not ERC721 or ERC1155!");
+                                return;
+                            }
+
+                            setNftLoading(false);
+                            toast.success("Asset Minted");
+                            await createNft(nftObj);
+                            navigate("/profile/created");
                         }
                     } catch (error) {
                         toast.error("Minting Failed");
