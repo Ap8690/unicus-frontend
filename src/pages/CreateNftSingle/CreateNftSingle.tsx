@@ -68,6 +68,7 @@ import {
   keypairIdentity,
   bundlrStorage,
 } from "@metaplex-foundation/js";
+import ButtonLoader from "../../components/Loading/ButtonLoader";
 
 const CreateNftSingle = () => {
   const [name, setName] = useState("");
@@ -94,6 +95,7 @@ const CreateNftSingle = () => {
   const [MetamaskNotFound, setMetamaskNotFound] = useState(false);
   const [defaultErrorModal, setdefaultErrorModal] = useState<any>(false);
   const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
+  const [loading, setLoading] = useState(false)
   const inputFile = useRef(null);
   const navigate = useNavigate();
 
@@ -851,9 +853,11 @@ const CreateNftSingle = () => {
               
               </div>
             </div>
-            <button className="btn create-btn" onClick={() => cryptoPayment()}>
+            {loading? <ButtonLoader />
+            : <button className="btn create-btn" onClick={() => cryptoPayment()}>
               Create
             </button>
+            }
           </div>
           <div className="preview-field">
             <div className="field-title">Preview</div>
@@ -897,7 +901,7 @@ const CreateNftSingle = () => {
                   </span>
                 </div>
               </div>
-              <div
+              {/* <div
                 className="btn-box hidden
               "
               >
@@ -906,7 +910,7 @@ const CreateNftSingle = () => {
                   <FavoriteBorderIcon />
                   27
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

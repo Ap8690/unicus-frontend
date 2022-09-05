@@ -57,7 +57,7 @@
                 @include mixins.flex-col(start, flex-start);
                 gap: 0.5rem;
                 padding-bottom: 1rem;
-                border-bottom: 1px solid rgba($color: #666, $alpha: 0.4);
+                // border-bottom: 1px solid rgba($color: #666, $alpha: 0.4);
                 .titles{
                     @include mixins.flex(center, space-between);
                     width: 100%;
