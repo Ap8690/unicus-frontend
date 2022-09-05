@@ -1,21 +1,18 @@
 // Lib
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import uuid from "react-uuid";
-
 // Styles
 import "./User.scss";
-
 // Icons
 import twitter from "../../../assets/svgs/profileTwitter.svg";
 import instagram from "../../../assets/svgs/profileInstagram.svg";
 import facebook from "../../../assets/svgs/profileFacebook.svg";
+import discord from "../../../assets/svgs/discord-icon.svg";
+import linkedin from "../../../assets/svgs/link.svg";
 import userImg from "../../../assets/images/userImage.png";
 import backgroundImg from "../../../assets/images/userBackground.png";
 import Cookies from "js-cookie";
-import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import { BASE_URL } from "../../../config";
-import { userInfo } from "../../../utils/utils";
+import { useRef, useState } from "react";
 import { getCompleteDate } from "../../../utils/date";
 import {
     updateProfileBg,
@@ -26,6 +23,7 @@ import { cookieDomain } from "../../../config";
 import { toast } from "react-toastify";
 
 const User = ({ user }): ReactJSXElement => {
+    console.log("user: ", user);
     const navigate = useNavigate();
 
     const [userImage, setUserImage] = useState<any>(
@@ -161,7 +159,7 @@ const User = ({ user }): ReactJSXElement => {
                             {user?.createdAt && getCompleteDate(user?.createdAt)}
                         </span>
                     </p>
-                    <div className="user-links">
+                    <div className="user-links mt-2">
                         {user?.twitter && (
                             <a href={user?.twitter}>
                                 <img src={twitter} alt="twitter" />
@@ -175,6 +173,16 @@ const User = ({ user }): ReactJSXElement => {
                         {user?.facebook && (
                             <a href={user?.facebook}>
                                 <img src={facebook} alt="facebook" />
+                            </a>
+                        )}
+                        {user?.discord && (
+                            <a href={user?.discord} className="h-[24px]">
+                                <img src={discord} alt="discord" className="h-[24px]" />
+                            </a>
+                        )}
+                        {user?.linkedIn && (
+                            <a href={user?.linkedIn} className="h-[24px]">
+                                <img src={linkedin} alt="linkedin"  className="h-[24px]" />
                             </a>
                         )}
                     </div>

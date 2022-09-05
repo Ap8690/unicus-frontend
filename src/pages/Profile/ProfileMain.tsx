@@ -2,48 +2,30 @@
 import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import {
-    Routes,
-    Route,
     useLocation,
     useNavigate,
     useParams,
 } from "react-router-dom";
-
 // Components
 import User from "./User/User";
 import Activity from "../Activity/Activity";
 import ProfileNavigation from "./Navigation/ProfileNavigation";
 import Favourited from "./Favourited/Favourited";
 import Listing from "./Listing/Listing";
-
 // Images
-
 import favouritedImg from "../../assets/images/favouritedImage.png";
-import itemPic from "../../assets/images/itemPic.png";
-
 // Icons
-import profileCollected from "../../assets/svgs/profileCollected.svg";
 import profileCreated from "../../assets/svgs/profileCreated.svg";
-import profileFavourited from "../../assets/svgs/profileFavourited.svg";
-import profileActivity from "../../assets/svgs/profileActivity.svg";
 import profileListing from "../../assets/svgs/listing.svg";
-import profileOffers from "../../assets/svgs/list.svg";
-
+import profileOffers from "../../assets/svgs/list.svg"; 
 // Styles
 import "./ProfileMain.scss";
 import axios from "axios";
-import { tronChain, BASE_URL } from "../../config";
-import { setNotification } from "../../Redux/Blockchain/contracts";
-import {
-  connectWallet,
-  getMarketPlace,
-  getMarketPlaceContractAddress,
-} from "../../utils/utils";
-import web3 from "../../web3";
+import { BASE_URL } from "../../config";
 import { getAccessToken, getNftByUserId } from "../../services/api/supplier";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
-import { userInfo } from "../../utils/utils";
+import PageLoader from "../../components/Loading/PageLoader"
 // Generics
 type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 
@@ -171,7 +153,7 @@ const Profile = (): ReactJSXElement => {
 
     return (
         <>
-            {!loading && (
+            {loading ? <PageLoader /> : (
                 <div className="profile">
                     <Helmet>
                         <meta charSet="utf-8" />
