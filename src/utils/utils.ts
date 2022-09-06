@@ -737,8 +737,8 @@ export const getStoreName = () => {
 };
 
 export const isMainStore = () => {
-  // return window.location.host === UNICUS_STORE;
-  return false
+  return window.location.host === UNICUS_STORE;
+  // return false
 };
 export interface WalletsPopupProps {
   show: boolean;
