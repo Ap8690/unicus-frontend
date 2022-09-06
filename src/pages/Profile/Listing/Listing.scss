@@ -72,9 +72,9 @@
           border-collapse: collapse;
 
           tbody{
-            display: block;
-            height: 100vh;
-            overflow: scroll;
+            // display: block;
+            // height: 100vh;
+            // overflow: scroll;
           }
           tbody::before {
             content: "-";
@@ -84,7 +84,7 @@
           }
 
           tr {
-            display: grid;
+            // display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
             grid-column-gap: 20px;
             align-items: center;
@@ -123,6 +123,7 @@
             td {
               text-align: center;
               font-size: fonts.$font-size-base;
+              height: fit-content
             }
 
             .table-data-icon {

@@ -5,16 +5,20 @@ import { bscChain, ethChain, tronChain } from "../../../config";
 import { getChainSymbol } from "../../../utils/utils";
 import { getCompleteDate } from "../../../utils/date";
 import uuid from "react-uuid";
+import { useEffect } from "react";
 // Element of data of activity table
 const TableData = ({ activity, link }) => {
     let navigate = useNavigate();
+    useEffect(()=>{
+        console.log(activity)
+    },[activity])
     return (
         <tr
             className="table-data cursor-pointer"
             onClick={() => navigate(link)}
         >
             <td className="table-data-item-name">
-                {activity.hasOwnProperty('nftId') && activity?.nftId.nftType?.includes("image") ? (
+                {activity.hasOwnProperty('nftId') ? ( activity?.nftId.nftType?.match(/image/) ? (
                     <img
                         src={activity.cloudinaryUrl}
                         alt={activity.name}
@@ -31,8 +35,8 @@ const TableData = ({ activity, link }) => {
                             type={activity?.nftType}
                         />
                     </video>
-                )}
-                {activity.hasOwnProperty('nftType') && activity?.nftType?.includes("image") ? (
+                ))
+                : activity.hasOwnProperty('nftType') && activity?.nftType?.match(/image/) ? (
                     <img
                         src={activity.cloudinaryUrl}
                         alt={activity.name}
