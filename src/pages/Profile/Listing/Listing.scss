@@ -2,6 +2,28 @@
 @use "/src/styles/mixins"as fn;
 @use "/src/styles/fonts";
 
+.tableHeadBorder{
+  position: relative;
+  &::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+  }
+  &::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 1px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+  }
+}
+
 .profile {
   .listing {
     .header {
@@ -62,26 +84,29 @@
 
       .table {
         width: 100%;
-        width: 100%;
-
+        overflow-x: auto;
+        
         table {
           table-layout: fixed;
           border: none;
           width: 100%;
+          min-width: 650px;
           
-          border-collapse: collapse;
+          // border-collapse: collapse;
+          border-collapse: separate;
+          border-spacing: 1rem;
 
           tbody{
             // display: block;
             // height: 100vh;
             // overflow: scroll;
           }
-          tbody::before {
-            content: "-";
-            height: 42px;
-            display: block;
-            color: transparent;
-          }
+          // tbody::before {
+          //   content: "-";
+          //   height: 42px;
+          //   display: block;
+          //   color: transparent;
+          // }
 
           tr {
             // display: grid;
@@ -89,11 +114,12 @@
             grid-column-gap: 20px;
             align-items: center;
             white-space: nowrap;
+            width: 100%;
 
             th {
               font-weight: 600;
               font-size: fonts.$font-size-lg;
-              padding: 13px 0;
+              padding: 0;
             }
 
             .clear-listing {

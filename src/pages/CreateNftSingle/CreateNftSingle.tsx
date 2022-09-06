@@ -792,9 +792,9 @@ const CreateNftSingle = () => {
 
     return (
         <>
-            {modals.map((e: any) => (
+            {modals.map((e: any, i) => (
                 <AddProperties
-                    key={uuid()}
+                    key={i+'property'}
                     description={e.description}
                     open={e.open}
                     onClose={e.onClose}

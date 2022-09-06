@@ -95,6 +95,7 @@ const StatsInput = (props:any) => {
                 onChange={(e) => props.handleChange(e, props.index)}
                 placeholder={'3'}
                 min={0}
+                className='noLeftBorder'
             />
             <div className='center-of'>
                 Of
