@@ -873,12 +873,14 @@ const CreateNftSingle = () => {
                                 />{" "}
                             </div>
                             <div className="basic-info">
+                                <div className="mt-2"></div>
                                 <Input
                                     title="Name"
                                     placeholder={"Item Name"}
                                     state={name}
                                     setState={setName}
                                 />
+                                <div className="mt-8"></div>
                                 <Input
                                     title="External Link"
                                     placeholder={
@@ -887,6 +889,7 @@ const CreateNftSingle = () => {
                                     state={extLink}
                                     setState={setExtlink}
                                 />
+                                <div className="mt-8"></div>
                                 <Input
                                     title="Description (Word limit 240)"
                                     multi
