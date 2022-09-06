@@ -80,9 +80,10 @@ const {
 } = nearAPI;
 //testnet
 const HttpProvider = TronWeb.providers.HttpProvider;
-const fullNode = new HttpProvider("https://shasta.api.trongrid.io");
-const solidityNode = new HttpProvider("https://shasta.api.trongrid.io");
-const privateKey = "01";
+const fullNode = 'https://api.shasta.trongrid.io';
+const solidityNode = 'https://api.shasta.trongrid.io';
+const eventServer = 'https://api.shasta.trongrid.io';
+const privateKey = "";
 
 export const userInfo: any = Cookies.get("userInfo") && Cookies.get("userInfo") !== undefined
   ? JSON.parse(Cookies.get("userInfo"))
@@ -106,7 +107,7 @@ export let web3 = new Web3(Web3.givenProvider);
 
 //@ts-ignore
 export let tronWeb = window.tronWeb? window.tronWeb
-  : new TronWeb({ fullNode, solidityNode, privateKey });
+  : new TronWeb({ fullNode,solidityNode,eventServer,privateKey });
 
 interface requestAccountsResponse{
   code: Number, // 200：ok 4000：in queue, no need to repeat commit， 4001：user rejected

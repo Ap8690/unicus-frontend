@@ -54,6 +54,9 @@ export const getDecimal=(chain: any)=>{
   }else if(chain.toString() == solonaChain){
     return 1000000000
   }
+  else if(chain.toString() == tronChain){
+    return 1000000
+  }
     else{
     return 10**18
   }
