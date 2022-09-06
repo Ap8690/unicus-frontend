@@ -207,7 +207,7 @@ export async function setNotification(tx: string) {
         toast("Transaction confirmed successfully", {
           type: "success",
         });
-        return true;
+        return res;
       } else {
         toast.dismiss(tx);
         toast("Error sending transaction " + (res.receipt.result || ""), {

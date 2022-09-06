@@ -1,21 +1,18 @@
 // Lib
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import uuid from "react-uuid";
-
 // Styles
 import "./User.scss";
-
 // Icons
 import twitter from "../../../assets/svgs/profileTwitter.svg";
 import instagram from "../../../assets/svgs/profileInstagram.svg";
 import facebook from "../../../assets/svgs/profileFacebook.svg";
+import discord from "../../../assets/svgs/discord-icon.svg";
+import linkedin from "../../../assets/svgs/link.svg";
 import userImg from "../../../assets/images/userImage.png";
 import backgroundImg from "../../../assets/images/userBackground.png";
 import Cookies from "js-cookie";
-import axios from "axios";
 import { useRef, useState } from "react";
-import { BASE_URL } from "../../../config";
-import { userInfo } from "../../../utils/utils";
 import { getCompleteDate } from "../../../utils/date";
 import {
     updateProfileBg,
@@ -25,16 +22,15 @@ import { useNavigate } from "react-router-dom";
 import { cookieDomain } from "../../../config";
 import { toast } from "react-toastify";
 
-const User = (): ReactJSXElement => {
-    const user = userInfo;
+const User = ({ user }): ReactJSXElement => {
     console.log("user: ", user);
     const navigate = useNavigate();
 
     const [userImage, setUserImage] = useState<any>(
-        user.profileUrl ? user.profileUrl : userImg
+        user?.profileUrl ? user?.profileUrl : userImg
     );
     const [backgroundImage, setBackgroundImage] = useState<any>(
-        user.backgroundUrl ? user.backgroundUrl : backgroundImg
+        user?.backgroundUrl ? user?.backgroundUrl : backgroundImg
     );
     const [uploadLoading, setUploadLoading] = useState(false);
     const profilePicFile = useRef(null);
@@ -117,6 +113,7 @@ const User = (): ReactJSXElement => {
     const handleClick = () => {
         navigate("/edit-profile");
     };
+
     return (
         <div className="user">
             <div
@@ -138,7 +135,7 @@ const User = (): ReactJSXElement => {
                     className="user-image custom-border-right"
                     onClick={() => uploadImage(profilePicFile)}
                 >
-                    <img src={userImage} alt={user.username} />
+                    <img src={userImage} alt={user?.username} />
                     <input
                         type="file"
                         id="file"
@@ -150,32 +147,42 @@ const User = (): ReactJSXElement => {
                 </div>
                 <div className="user-info">
                     <h3 className="user-name custom-border-bottom">
-                        {user.username}
+                        {user?.username.length>30 ? user?.username.slice(0,8) + '...' + user?.username.slice(-6) : user?.username}
                     </h3>
                     <h5 className="text-[16px] custom-border-bottom">
                         {user?.bio}
                     </h5>
-                    <p className="user-id">{user.id}</p>
+                    <p className="user-id">{user?.id}</p>
                     <p className="user-join-date custom-border-bottom">
                         Joined:{" "}
                         <span>
-                            {user?.createdAt && getCompleteDate(user.createdAt)}
+                            {user?.createdAt && getCompleteDate(user?.createdAt)}
                         </span>
                     </p>
-                    <div className="user-links">
-                        {user.twitter && (
-                            <a href={user.twitter}>
+                    <div className="user-links mt-2">
+                        {user?.twitter && (
+                            <a href={user?.twitter}>
                                 <img src={twitter} alt="twitter" />
                             </a>
                         )}
-                        {user.instagram && (
-                            <a href={user.instagram}>
+                        {user?.instagram && (
+                            <a href={user?.instagram}>
                                 <img src={instagram} alt="instagram" />
                             </a>
                         )}
-                        {user.facebook && (
-                            <a href={user.facebook}>
+                        {user?.facebook && (
+                            <a href={user?.facebook}>
                                 <img src={facebook} alt="facebook" />
+                            </a>
+                        )}
+                        {user?.discord && (
+                            <a href={user?.discord} className="h-[24px]">
+                                <img src={discord} alt="discord" className="h-[24px]" />
+                            </a>
+                        )}
+                        {user?.linkedIn && (
+                            <a href={user?.linkedIn} className="h-[24px]">
+                                <img src={linkedin} alt="linkedin"  className="h-[24px]" />
                             </a>
                         )}
                     </div>

@@ -1,5 +1,6 @@
 // Library
 import { useState } from "react";
+import uuid from "react-uuid";
 
 // Images
 import arrowLeft from "../../../assets/svgs/arrowLeft.svg";
@@ -37,7 +38,7 @@ const MarketPlaceTrendingNavigator = ({
   // States
   const [ifOpen, setIfOpen] = useState(false);
   const goLeft = () => {
-    if (currentScroll == 0) {
+    if (currentScroll === 0) {
       return;
       // do nothing
     }
@@ -79,12 +80,12 @@ const MarketPlaceTrendingNavigator = ({
                     }
               }
             >
-              {categories.map((ct, i) => (
+              {categories.map((ct:any) => (
                 <Category
                   category={ct}
                   currentCategory={category}
                   onClick={updateCategory}
-                  key={ct}
+                  key={uuid()}
                 />
               ))}
             </div>

@@ -12,17 +12,16 @@ import {
     getCreateNftContract,
     getCreateNftContractAddress,
     getMarketPlace,
-    getMarketplaceABI,
     getMarketPlaceContractAddress,
     getNftContractAddress,
     getUserInfo,
-    nearWalletConnection,
     offerBid,
     offerPrice,
     processPurchase,
     removeAuction,
     removeSale,
     sendStorageDeposit,
+    tronWeb,
     userInfo,
 } from "../../utils/utils";
 import {
@@ -33,7 +32,7 @@ import {
     endSaleApi,
     placeBidApi,
 } from "../../services/api/supplier";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import web3 from "../../web3";
 import { toast } from "react-toastify";
 import {
@@ -46,7 +45,7 @@ import {
 } from "../../config";
 import axios from "axios";
 import { setNotification } from "../../Redux/Blockchain/contracts";
-import { getDecimal } from "../../utils/helpers";
+import { decodeParams, getDecimal } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import Input from "../../components/Input/Input";
@@ -78,6 +77,9 @@ import * as anchor from "@project-serum/anchor";
 import SolMintNftIdl from "../../utils/sol_mint_nft.json";
 import uuid from "react-uuid";
 import { getCompleteDate } from "../../utils/date";
+import WalletsModal from "../../components/modals/WalletsModal/WalletsModal";
+import {isChainConnected} from "../../utils/helpers"
+import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 
 const NftInfo = ({
     filters,
@@ -89,10 +91,14 @@ const NftInfo = ({
     nft,
     auction,
     setNftLoading,
+    fetchItem,
+    pageChain
 }) => {
+    const {fullLoading,chainConnected,setChainConnected,setWalletModal,walletModal} = useContext(ConnectWalletContext)
     const [startBid, setStartBid] = useState<any>(
         auction ? auction.startBid : 0.0
     );
+
     const [duration, setDuration] = useState("1");
     const [bid, setBid] = useState("");
     const [type, setType] = useState(0);
@@ -103,8 +109,8 @@ const NftInfo = ({
     const { wallet, connect, publicKey, sendTransaction } = useWallet();
     const anWallet = useAnchorWallet();
     const { setVisible } = useWalletModal();
-    let provider;
-    let program;
+    let provider: any;
+    let program: any;
     const getSolWallet = () => {
         return wallet;
     };
@@ -128,10 +134,9 @@ const NftInfo = ({
         }
     }, [anWallet]);
 
-    const [button, setButton] = useState("Buy Now");
     const navigate = useNavigate();
 
-    const createSaleSol = async (key, assetPrice) => {
+    const createSaleSol = async (key: any, assetPrice: any) => {
         //use metadata to feth the mintkey like this...
         //const mintKey = new anchor.web3.PublicKey(metatdata.mint.toArray("le"));
         provider = new anchor.AnchorProvider(connection, anWallet, {
@@ -204,7 +209,12 @@ const NftInfo = ({
         }
     };
 
-    const createAuctionSol = async (key, assetPrice, startTime, endTime) => {
+    const createAuctionSol = async (
+        key: any,
+        assetPrice: any,
+        startTime: any,
+        endTime: any
+    ) => {
         //use metadata to feth the mintkey like this...
         //const mintKey = new anchor.web3.PublicKey(metatdata.mint.toArray("le"));
 
@@ -279,7 +289,7 @@ const NftInfo = ({
         }
     };
 
-    const sellOrderSol = async (key) => {
+    const sellOrderSol = async (key: any) => {
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -367,7 +377,7 @@ const NftInfo = ({
         }
     };
 
-    const removeSaleSol = async (key) => {
+    const removeSaleSol = async (key: any) => {
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -432,7 +442,7 @@ const NftInfo = ({
         }
     };
 
-    const bidAuctionSol = async (key, assetPrice) => {
+    const bidAuctionSol = async (key: any, assetPrice: any) => {
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -518,7 +528,7 @@ const NftInfo = ({
 
     //auction resolve
 
-    const auctionResolveSol = async (key) => {
+    const auctionResolveSol = async (key: any) => {
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -606,7 +616,7 @@ const NftInfo = ({
         }
     };
 
-    const cancelAuctionSol = async (key) => {
+    const cancelAuctionSol = async (key: any) => {
         provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
         });
@@ -695,9 +705,9 @@ const NftInfo = ({
 
     async function createSell() {
         try {
-            console.log("bid", startBid);
-
             setPopUpShow(false);
+            setNftLoading(true)
+            console.log(nft.chain,typeof nft.chain,"chains")
             const address = await connectWallet(
                 nft.chain,
                 publicKey,
@@ -705,7 +715,6 @@ const NftInfo = ({
                 connect,
                 setVisible
             );
-            console.log("create sell", address, nft);
             let obj = {
                 nftId: nft._id,
                 sellerInfo: userInfo.username,
@@ -722,31 +731,30 @@ const NftInfo = ({
                 sellerWallet: address,
                 sellerId: userInfo && userInfo._id,
             };
-            if (startBid == 0.0) {
+            if (startBid === 0.0) {
                 toast.error("Asset Price cannot be zero");
                 return;
             }
-            if (nft.chain == nearChain) {
+            if (nft.chain.toString() === nearChain) {
                 obj.auctionId = nft.tokenId;
                 localStorage.setItem("nearAction", "Sale");
                 localStorage.setItem("nearSellObj", JSON.stringify(obj));
                 await sendStorageDeposit();
 
                 return;
-            } else if (nft.chain == solonaChain) {
+            } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await createSaleSol(nft.tokenId, startBid);
                 obj.auctionId = aucMintKey;
                 obj.auctionHash = aucMintKey;
-            } else {
-                const listContract = new web3.eth.Contract(
-                    //@ts-ignore
-                    getCreateNftABI(nft.chain),
+            } 
+            else if (Number(nft.chain) === Number(tronChain)) {
+                console.log("else if")
+                const listContract = getCreateNftContract(
+                    nft.chain,
                     getNftContractAddress(nft)
                 );
 
-                console.log(listContract);
-
-                nft.contractType && nft.contractType == "1155"
+                nft.contractType && nft.contractType === "1155"
                     ? await listContract.methods
                           .setApprovalForAll(
                               getMarketPlaceContractAddress(nft.chain, "1155"),
@@ -760,39 +768,88 @@ const NftInfo = ({
                           )
                           .send({ from: address });
                 //else fr 1155 apprval fr all , params marketAdrress1155 , true
+                console.log("APPROVED!")
                 const res = await getMarketPlace(nft.chain)
                     .methods.createSale(
                         nft.contractAddress,
                         nft.tokenId,
                         web3.utils.toWei(startBid, "ether")
                     )
-                    .send({ from: address });
-
-                if (nft.chain === tronChain) {
-                    // setNftLoading(true);
-                    // setLoadingMessage(
-                    //   "Waiting for transaction confirmation.(It can take upto a min to confirm)"
-                    // );
-                    // const success = await setNotification(res);
-                    // if (success) {
-                    //   obj.auctionId = res;
-                    //   obj.auctionHash = res;
-                    // } else {
-                    //   throw Error("Transaction Failed");
-                    // }
-                } else if (res?.transactionHash) {
-                    obj.auctionId = res.events.saleCreated.returnValues.itemId;
-                    obj.auctionHash = res.transactionHash;
+                    .send({ from: address});
+                setNftLoading(true);
+                // setLoadingMessage(
+                //     "Waiting for transaction confirmation.(It can take upto a min to confirm)"
+                // );
+                const success = await setNotification(res);
+                if (success) {
+                    obj.auctionId = tronWeb.toDecimal(await decodeParams(['uint256'],"0x"+success?.log[2]?.topics[1],false));
+                    obj.auctionHash = res;
+                } else {
+                    throw Error("Transaction Failed");
                 }
+            } 
+            else {
+                console.log("else")
+                const listContract = new web3.eth.Contract(
+                    //@ts-ignore
+                    getCreateNftABI(),
+                    getNftContractAddress(nft)
+                );
+
+                const gasPrice = await web3.eth.getGasPrice()
+                let estimated = nft.contractType && nft.contractType === "1155"
+                    ? await listContract.methods
+                          .setApprovalForAll(
+                              getMarketPlaceContractAddress(nft.chain, "1155"),
+                              true
+                          )
+                          .estimateGas({ from: address })
+                    : await listContract.methods
+                          .approve(
+                              getMarketPlaceContractAddress(nft.chain),
+                              nft.tokenId
+                          )
+                          .estimateGas({ from: address });
+
+                nft.contractType && nft.contractType === "1155"
+                    ? await listContract.methods
+                          .setApprovalForAll(
+                              getMarketPlaceContractAddress(nft.chain, "1155"),
+                              true
+                          )
+                          .send({ from: address ,gas:estimated, gasPrice:gasPrice })
+                    : await listContract.methods
+                          .approve(
+                              getMarketPlaceContractAddress(nft.chain),
+                              nft.tokenId
+                          )
+                          .send({ from: address ,gas:estimated, gasPrice:gasPrice});
+                //else fr 1155 apprval fr all , params marketAdrress1155 , true
+                estimated = await getMarketPlace(nft.chain,auction.nftId.contractType)
+                    .methods.createSale(
+                        nft.contractAddress,
+                        nft.tokenId,
+                        web3.utils.toWei(startBid, "ether")
+                    )
+                    .estimateGas({ from: address });
+
+                const res = await getMarketPlace(nft.chain,auction.nftId.contractType)
+                    .methods.createSale(
+                        nft.contractAddress,
+                        nft.tokenId,
+                        web3.utils.toWei(startBid, "ether")
+                    )
+                    .send({ from: address ,gas:estimated, gasPrice:gasPrice});
+
+                obj.auctionId = res.events.saleCreated.returnValues.itemId;
+                obj.auctionHash = res.transactionHash;
             }
-            await createSellApi(obj).then((res) => {
-                toast.success("Sale created");
-                window.location.reload();
-                console.log(res.data);
-            });
+            await createSellApi(obj)
+            setNftLoading(false)
+            toast.success("Sale created");
+            await fetchItem()
         } catch (e) {
             console.log(e);
-
             toast.error(e);
         }
     }
@@ -800,6 +857,7 @@ const NftInfo = ({
     async function createAuction() {
         try {
             setPopUpShow(false);
+            setNftLoading(true)
             const address = await connectWallet(
                 nft.chain,
                 publicKey,
@@ -825,14 +883,14 @@ const NftInfo = ({
                 sellerId: userInfo && userInfo._id,
             };
 
-            if (nft.chain == nearChain) {
+            if (nft.chain.toString() === nearChain) {
                 obj.auctionId = nft.tokenId;
                 localStorage.setItem("nearAction", "Auction");
                 localStorage.setItem("nearAuctionObj", JSON.stringify(obj));
                 await sendStorageDeposit();
 
                 return;
-            } else if (nft.chain == solonaChain) {
+            } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await createAuctionSol(
                     nft.tokenId,
                     startBid,
@@ -845,15 +903,55 @@ const NftInfo = ({
                 );
                 obj.auctionId = aucMintKey;
                 obj.auctionHash = aucMintKey;
+            } else if (nft.chain.toString() === tronChain) {
+                await getCreateNftContract(nft.chain)
+                .methods.approve(
+                    getAuctionContractAddress(nft.chain),
+                    nft.tokenId
+                )
+                .send({ from: address });
+            console.log(getCreateNftContractAddress(nft.chain, "721"));
+
+            const res = await getAuctionContract(nft.chain)
+                .methods.createAuction(
+                    getCreateNftContractAddress(nft.chain, "721"),
+                    nft.tokenId,
+                    web3.utils.toWei(startBid.toString(), "ether"),
+                    Number(duration) * 86400
+                )
+                .send({ from: address });
+                const success = await setNotification(res);
+                console.log(success,"success")
+                    if (success) {
+                        obj.auctionId = tronWeb.toDecimal(await decodeParams(['uint256'],"0x"+success?.log[2]?.topics[1],false));;
+                        obj.auctionHash = res;
+                    } else {
+                        throw Error("Transaction Failed");
+                    }
+                await createAuctionApi(obj)
+                toast.success("Auction created");
             } else {
+                const gasPrice = await web3.eth.getGasPrice()
+                let estimated = await getCreateNftContract(nft.chain)
+                .methods.approve(
+                    getAuctionContractAddress(nft.chain),
+                    nft.tokenId
+                )
+                .estimateGas({ from: address });
                 await getCreateNftContract(nft.chain)
                     .methods.approve(
                         getAuctionContractAddress(nft.chain),
                         nft.tokenId
                     )
-                    .send({ from: address });
-                console.log(getCreateNftContractAddress(nft.chain, "721"));
+                    .send({ from: address ,gas:estimated, gasPrice:gasPrice});
 
+                estimated = await getAuctionContract(nft.chain)
+                .methods.createAuction(
+                    getCreateNftContractAddress(nft.chain, "721"),
+                    nft.tokenId,
+                    web3.utils.toWei(startBid.toString(), "ether"),
+                    Number(duration) * 86400
+                ).estimateGas({ from: address });
                 const res = await getAuctionContract(nft.chain)
                     .methods.createAuction(
                         getCreateNftContractAddress(nft.chain, "721"),
@@ -861,27 +959,16 @@ const NftInfo = ({
                         web3.utils.toWei(startBid.toString(), "ether"),
                         Number(duration) * 86400
                     )
-                    .send({ from: address });
-                console.log("res", res);
+                    .send({ from: address ,gas:estimated, gasPrice:gasPrice});
 
-                if (nft.chain === tronChain) {
-                    const success = await setNotification(res);
-                    if (success) {
-                        obj.auctionId = res;
-                        obj.auctionHash = res;
-                    } else {
-                        throw Error("Transaction Failed");
-                    }
-                } else if (res?.transactionHash) {
-                    obj.auctionId =
-                        res.events.AuctionCreated.returnValues.auctionId;
-                    obj.auctionHash = res.transactionHash;
-                }
-                await createAuctionApi(obj).then((res) => {
-                    toast.success("Auction created");
-                    console.log(res.data);
-                });
+                obj.auctionId =
+                    res.events.AuctionCreated.returnValues.auctionId;
+                obj.auctionHash = res.transactionHash;
+                await createAuctionApi(obj)
+                setNftLoading(false)
+                toast.success("Auction created");
             }
+            await fetchItem()
         } catch (e) {
             console.log(e);
             toast.error("Auction Failed");
@@ -897,19 +984,23 @@ const NftInfo = ({
                 connect,
                 setVisible
             );
-            console.log("buy item", address, auction);
 
-            let transactionHash;
-            if (nft.chain == nearChain) {
+            let transactionHash:any;
+            if (nft.chain.toString() === nearChain) {
                 await offerPrice(
                     nft.tokenId,
                     Number(auction.startBid) / getDecimal(nft.chain)
                 );
                 return;
-            } else if (nft.chain == solonaChain) {
+            } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await sellOrderSol(auction.auctionId);
                 transactionHash = aucMintKey;
-            } else {
+            } else if (nft.chain.toString() === tronChain) {
+                console.log("running")
+                const itemInfo = await getMarketPlace(auction.chain,
+                    auction.nftId.contractType)
+                    .methods.idToMarketItem(auction.auctionId).call()
+                    console.log(tronWeb.toDecimal(itemInfo.price),"itemInfo")
                 const res = await getMarketPlace(
                     auction.chain,
                     auction.nftId.contractType
@@ -917,23 +1008,42 @@ const NftInfo = ({
                     .methods.buyItem(auction.auctionId)
                     .send({
                         from: address,
-                        value: auction.startBid,
+                        value: "10000000000000000",
                     });
-                console.log(res);
+                const success = await setNotification(res);
+                if(success){
+                    transactionHash = res;
+                }
+            } else {
+                const gasPrice = await web3.eth.getGasPrice()
+                const estimated = await getMarketPlace(
+                    auction.chain,
+                    auction.nftId.contractType
+                ).methods.buyItem(auction.auctionId)
+                .estimateGas({
+                    from: address,
+                    value: auction.startBid,
+                });
+                const res = await getMarketPlace(
+                    auction.chain,
+                    auction.nftId.contractType
+                ).methods.buyItem(auction.auctionId)
+                .send({
+                    from: address,
+                    value: auction.startBid,
+                    gas:estimated, 
+                    gasPrice:gasPrice
+                });
                 transactionHash = res.transactionHash;
             }
-            toast("Buy Successful");
             if (transactionHash) {
-                toast("Updating asset info...");
                 await buyItemApi(
                     auction,
                     transactionHash,
                     creator.name,
                     creator.id
-                ).then((res: any) => {
-                    console.log(res.data);
-                    toast.success("Bought Item");
-                });
+                )
+                toast.success("Bought Item");
                 setNftLoading(false);
                 navigate("/profile/created");
             }
@@ -941,6 +1051,7 @@ const NftInfo = ({
             setNftLoading(false);
             toast.error(e);
         }
+        setNftLoading(false);
     }
 
     async function placeBid() {
@@ -954,11 +1065,11 @@ const NftInfo = ({
                 setVisible
             );
 
-            if (auction.chain.toString() == nearChain) {
+            if (auction.chain.toString() === nearChain) {
                 localStorage.setItem("nearBid", bid.toString());
                 offerBid(nft.tokenId, Number(bid));
                 return;
-            } else if (nft.chain == solonaChain) {
+            } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await bidAuctionSol(auction.auctionId, bid);
                 await placeBidApi(
                     auction,
@@ -967,17 +1078,47 @@ const NftInfo = ({
                     creator.name,
                     creator.email
                 );
-            } else {
+            } else if (nft.chain.toString() === tronChain) {
                 const res = await getAuctionContract(
                     auction.chain,
                     nft.contractType
-                )
-                    .methods.placeBid(auction.auctionId)
-                    .send({
-                        from: address,
-                        value: web3.utils.toWei(bid, "ether"),
-                    });
-                console.log(res);
+                ).methods.placeBid(auction.auctionId)
+                .send({
+                    from: address,
+                    value: web3.utils.toWei(bid, "ether"),
+                });
+                toast("Bid placed Successful");
+                const success = await setNotification(res);
+                if (res && success) {
+                    toast("Updating bid info...");
+                    await placeBidApi(
+                        auction,
+                        res,
+                        web3.utils.toWei(bid, "ether"),
+                        creator.name,
+                        creator.email
+                    )
+                }
+            } else {
+                const gasPrice = await web3.eth.getGasPrice()
+                const estimated = await getAuctionContract(
+                    auction.chain,
+                    nft.contractType
+                ).methods.placeBid(auction.auctionId)
+                .estimateGas({
+                    from: address,
+                    value: web3.utils.toWei(bid, "ether"),
+                });
+                const res = await getAuctionContract(
+                    auction.chain,
+                    nft.contractType
+                ).methods.placeBid(auction.auctionId)
+                .send({
+                    from: address,
+                    value: web3.utils.toWei(bid, "ether"),
+                    gas:estimated, 
+                    gasPrice:gasPrice
+                });
                 toast("Bid placed Successful");
                 if (res?.transactionHash) {
                     toast("Updating bid info...");
@@ -988,15 +1129,10 @@ const NftInfo = ({
                         creator.name,
                         creator.email
                     )
-                        .then((res) => {
-                            console.log(res.data);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
                 }
             }
             setNftLoading(false);
+            await fetchItem()
         } catch (e) {
             setNftLoading(false);
             toast.error(e);
@@ -1013,31 +1149,55 @@ const NftInfo = ({
                 setVisible
             );
 
-            if (nft.chain.toString() == nearChain) {
+            console.log(typeof nft.chain,typeof tronChain,"jdskfhdsjkfhhd")
+            if (nft.chain.toString() === nearChain) {
                 removeSale(nft.tokenId);
                 return;
-            } else if (nft.chain == solonaChain) {
+            } else if (Number(nft.chain) === Number(solonaChain)) {
                 const aucMintKey = await removeSaleSol(auction.auctionId);
-            } else {
+            } else if (Number(nft.chain) === Number(tronChain)) {
                 const res = await getMarketPlace(
                     auction.chain,
                     auction.nftId.contractType
                 )
                     .methods.EndSale(auction.auctionId)
                     .send({ from: address });
+                if (res) {
+                    await endSaleApi(
+                        auction,
+                        res,
+                        creator.name
+                    )
+                    toast.success("Sale Ended");
+                    setNftLoading(false);
+                    navigate("/profile/created");
+                }
+            } else {
+                const gasPrice = await web3.eth.getGasPrice()
+                const estimated = await getMarketPlace(
+                    auction.chain,
+                    auction.nftId.contractType
+                )
+                    .methods.EndSale(auction.auctionId)
+                    .estimateGas({ from: address });
+                const res = await getMarketPlace(
+                    auction.chain,
+                    auction.nftId.contractType
+                )
+                    .methods.EndSale(auction.auctionId)
+                    .send({ from: address ,gas:estimated, gasPrice:gasPrice});
                 if (res?.transactionHash) {
                     await endSaleApi(
                         auction,
                         res.transactionHash,
                         creator.name
-                    ).then((res) => {
-                        console.log(res.data);
-                        toast.success("Sale Ended");
-                    });
+                    )
+                    toast.success("Sale Ended");
                     setNftLoading(false);
                     navigate("/profile/created");
                 }
             }
+            await fetchItem()
         } catch (e) {
             setNftLoading(false);
             toast.error(e);
@@ -1061,36 +1221,55 @@ const NftInfo = ({
                 setVisible
             );
 
-            if (auction.chain == nearChain) {
+            if (auction.chain.toString() === nearChain) {
                 processPurchase(nft.tokenId);
-            } else if (nft.chain == solonaChain) {
+            } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await auctionResolveSol(auction.auctionId);
-            } else {
+            } else if (nft.chain.toString() === tronChain) {
                 const res = await getAuctionContract(
                     auction.chain,
                     nft.contractType
                 )
                     .methods.endAuction(auction.auctionId)
                     .send({ from: address });
+                if (res) {
+                    await endSaleApi(
+                        auction,
+                        res,
+                        creator.name
+                    )
+                    toast.success("Sale Ended");
+                    setNftLoading(false);
+                    navigate("/profile/created");
+                }
+            } else {
+                const gasPrice = await web3.eth.getGasPrice()
+                const estimated = await getAuctionContract(
+                    auction.chain,
+                    nft.contractType
+                )
+                .methods.endAuction(auction.auctionId)
+                .estimateGas({ from: address });
+                const res = await getAuctionContract(
+                    auction.chain,
+                    nft.contractType
+                )
+                    .methods.endAuction(auction.auctionId)
+                    .send({ from: address ,gas:estimated, gasPrice:gasPrice});
                 if (res?.transactionHash) {
                     await endSaleApi(
                         auction,
                         res.transactionHash,
                         creator.name
-                    ).then((res) => {
-                        console.log(res.data);
-                        toast.success("Sale Ended");
-                    });
+                    )
+                    toast.success("Sale Ended");
                     setNftLoading(false);
-
                     navigate("/profile/created");
                 }
             }
         } catch (e) {
             setNftLoading(false);
-
-            console.log(e);
-            toast.error(e);
+            toast.error(e?.message? e.message : e);
         }
     }
 
@@ -1106,56 +1285,67 @@ const NftInfo = ({
                 setVisible
             );
 
-            if (auction.chain == nearChain) {
+            if (auction.chain.toString() === nearChain) {
                 removeAuction(nft.tokenId);
-            } else if (nft.chain == solonaChain) {
+            } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await cancelAuctionSol(auction.auctionId);
-            } else {
+            } else if (nft.chain.toString() === tronChain) {
                 const res = await getAuctionContract(
                     auction.chain,
                     nft.contractType
                 )
                     .methods.cancelAuction(auction.auctionId)
                     .send({ from: address });
+                if (res) {
+                    await cancelAuctionApi(
+                        auction,
+                        res,
+                        creator.name
+                    )
+                    toast.success("Auction Cancelled");
+                    setNftLoading(false);
+                }
+            } else {
+                const gasPrice = await web3.eth.getGasPrice()
+                const estimated = await getAuctionContract(
+                    auction.chain,
+                    nft.contractType
+                )
+                    .methods.cancelAuction(auction.auctionId)
+                    .estimateGas({ from: address });
+                const res = await getAuctionContract(
+                    auction.chain,
+                    nft.contractType
+                )
+                    .methods.cancelAuction(auction.auctionId)
+                    .send({ from: address ,gas:estimated, gasPrice:gasPrice});
                 if (res?.transactionHash) {
                     await cancelAuctionApi(
                         auction,
                         res.transactionHash,
                         creator.name
-                    ).then((res) => {
-                        console.log(res.data);
-                        toast.success("Auction Cancelled");
-                    });
-
+                    )
+                    toast.success("Auction Cancelled");
                     setNftLoading(false);
-
-                    navigate("/profile/created");
                 }
             }
+            await fetchItem()
         } catch (e) {
             setNftLoading(false);
-
             console.log(e);
-            toast.error(e);
+            toast.error(e?.message?e?.message:e);
         }
     }
 
     const getButtonName = () => {
         const userInfo = getUserInfo();
-        console.log("button name", nft, userInfo);
 
         if (userInfo) {
-            if (userInfo._id == nft.uploadedBy) {
-                if (nft.nftStatus == 2) {
+            console.log(userInfo._id, nft.uploadedBy, "addresses")
+            if (userInfo._id === nft.uploadedBy) {
+                if (nft.nftStatus === 2) {
                     return "End Sale";
-                } else if (nft.nftStatus == 3) {
-                    console.log(
-                        "datw",
-                        auction.auctionTimer,
-                        new Date() > new Date(auction.auctionTimer),
-                        new Date() < new Date(auction.auctionTimer)
-                    );
-
+                } else if (nft.nftStatus === 3) {
                     if (new Date() < new Date(auction.auctionTimer)) {
                         return "Cancel Auction";
                     } else {
@@ -1163,16 +1353,16 @@ const NftInfo = ({
                     }
                 }
             } else {
-                if (nft.nftStatus == 1) {
+                if (nft.nftStatus === 1) {
                     return "Not For Sale";
-                } else if (nft.nftStatus == 2) {
+                } else if (nft.nftStatus === 2) {
                     return "Buy Now";
-                } else if (nft.nftStatus == 3) {
+                } else if (nft.nftStatus === 3) {
                     return "Place Bid";
                 }
             }
         } else {
-            return "Connect Wallet";
+            setChainConnected(false)
         }
     };
 
@@ -1180,10 +1370,10 @@ const NftInfo = ({
         const userInfo = getUserInfo();
 
         if (userInfo) {
-            if (userInfo._id == nft.uploadedBy) {
-                if (nft.nftStatus == 2) {
+            if (userInfo._id === nft.uploadedBy) {
+                if (nft.nftStatus === 2) {
                     endSale();
-                } else if (nft.nftStatus == 3) {
+                } else if (nft.nftStatus === 3) {
                     if (new Date() < new Date(auction.auctionTimer)) {
                         cancelAuction();
                     } else {
@@ -1210,18 +1400,22 @@ const NftInfo = ({
         }
     };
 
+    const checkChain = () => {
+        if(isChainConnected(pageChain))
+        setChainConnected(pageChain)
+    }
+
     useEffect(() => {
+        
         (async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const txhash = urlParams.get("transactionHashes");
             const errorCode = urlParams.get("errorCode");
             const errMsg = urlParams.get("errorMessage");
 
-            console.log("sear", txhash, errorCode, errMsg);
-
             if (errorCode) {
                 toast.error(errorCode);
-            } else if (txhash != null) {
+            } else if (txhash !== null) {
                 const address = await connectNear();
                 axios
                     .post("https://rpc.testnet.near.org", {
@@ -1231,8 +1425,6 @@ const NftInfo = ({
                         params: [txhash, address],
                     })
                     .then((res: any) => {
-                        console.log("sear 1", res);
-
                         if (
                             res.data.result.transaction.actions[0].FunctionCall
                                 .method_name == "storage_deposit"
@@ -1265,7 +1457,7 @@ const NftInfo = ({
                             }
                         } else if (
                             res.data.result.transaction.actions[0].FunctionCall
-                                .method_name == "nft_approve"
+                                .method_name === "nft_approve"
                         ) {
                             const obj = JSON.parse(
                                 localStorage.getItem("nearSellObj")
@@ -1275,11 +1467,10 @@ const NftInfo = ({
                                 toast.success("Sale created");
                                 localStorage.removeItem("nearSellObj");
                                 navigate("/explore");
-                                console.log(res.data);
                             });
                         } else if (
                             res.data.result.transaction.actions[0].FunctionCall
-                                .method_name == "approve_nft_auction"
+                                .method_name === "approve_nft_auction"
                         ) {
                             const obj = JSON.parse(
                                 localStorage.getItem("nearAuctionObj")
@@ -1293,7 +1484,7 @@ const NftInfo = ({
                             });
                         } else if (
                             res.data.result.transaction.actions[0].FunctionCall
-                                .method_name == "offer"
+                                .method_name === "offer"
                         ) {
                             buyItemApi(
                                 auction,
@@ -1307,7 +1498,7 @@ const NftInfo = ({
                             });
                         } else if (
                             res.data.result.transaction.actions[0].FunctionCall
-                                .method_name == "remove_sale"
+                                .method_name === "remove_sale"
                         ) {
                             endSaleApi(auction, txhash, creator.name).then(
                                 (res) => {
@@ -1318,7 +1509,7 @@ const NftInfo = ({
                             );
                         } else if (
                             res.data.result.transaction.actions[0].FunctionCall
-                                .method_name == "offer_bid"
+                                .method_name === "offer_bid"
                         ) {
                             const obj = JSON.parse(
                                 localStorage.getItem("nearSellObj")
@@ -1336,7 +1527,7 @@ const NftInfo = ({
                             });
                         } else if (
                             res.data.result.transaction.actions[0].FunctionCall
-                                .method_name == "remove_auction"
+                                .method_name === "remove_auction"
                         ) {
                             cancelAuctionApi(
                                 auction,
@@ -1349,7 +1540,7 @@ const NftInfo = ({
                             });
                         } else if (
                             res.data.result.transaction.actions[0].FunctionCall
-                                .method_name == "process_auction_purchase"
+                                .method_name === "process_auction_purchase"
                         ) {
                             endSaleApi(auction, txhash, creator.name).then(
                                 (res) => {
@@ -1362,8 +1553,16 @@ const NftInfo = ({
                     });
             }
         })();
-    }, []);
 
+        checkChain()
+    }, []);
+    
+
+    useEffect(() => {
+        if(localStorage.getItem('walletConnected')) {
+            checkChain()
+        }
+    },[fullLoading])
     return (
         <>
             <PlaceBid
@@ -1374,7 +1573,7 @@ const NftInfo = ({
             >
                 <div className="success__body">
                     <>
-                        <div className="mt-5 input_price">
+                        <div className="input_price">
                             <Input
                                 title="Asset Price"
                                 placeholder="Enter Asset Price"
@@ -1485,7 +1684,7 @@ const NftInfo = ({
                 <div className="nft-price">
                     {auction && (
                         <span>
-                            {auction?.lastBid
+                            {auction?.lastBid && auction?.lastBid !== 0
                                 ? (
                                       auction?.lastBid / getDecimal(nft.chain)
                                   ).toFixed(4)
@@ -1495,12 +1694,9 @@ const NftInfo = ({
                             {getChainSymbol(nft.chain)}
                         </span>
                     )}
-                    {/* <span>$ 5768.6</span>
-        <span>12 in stock</span> */}
                 </div>
                 <div className="nft-description">
                     <p>{nft.description}</p>
-                    {/* <button>Read More</button> */}
                 </div>
                 <div className="nft-creator">
                     <span>Creator</span>
@@ -1514,7 +1710,7 @@ const NftInfo = ({
                             alt="creator"
                             className="user-img"
                         />
-                        <span>{creator && creator.username}</span>
+                        <span>{creator?.username}</span>
                     </div>
                 </div>
                 <div className="more-info">
@@ -1534,64 +1730,80 @@ const NftInfo = ({
                     {activeFilter === "History" && (
                         <History data={historyData} />
                     )}
-                    {activeFilter === "Properties" && <Properties tags={nft.tags} />}
+                    {activeFilter === "Properties" && (
+                        <Properties tags={nft.tags} />
+                    )}
                 </div>
                 <div className="bid-buy-box">
                     <div className="user-info">
                         <div>
-                           
                             {auction && (
                                 <div className="price-info">
                                     <span className="blue-head">
-                                        {auction.lastBid && auction.lastBid != 0
-                                            ? auction.lastBid
-                                            : auction.startBid /
-                                              getDecimal(nft.chain)}{" "}
-                                        {getChainSymbol(nft.chain)}
+                                    {auction?.lastBid && auction?.lastBid !== 0
+                                        ? (
+                                            auction?.lastBid / getDecimal(nft.chain)
+                                        ).toFixed(4)
+                                        : (
+                                            auction?.startBid / getDecimal(nft.chain)
+                                        ).toFixed(4)}{" "}
+                                    {getChainSymbol(nft.chain)}
                                     </span>
                                 </div>
                             )}
                         </div>
                     </div>
                     <div className="btn-box">
-                        {/* <button className="btn" onClick={() => placeBid()}>
-            Place a bid
-          </button> */}
-                        {userInfo &&
-                        userInfo._id == nft.uploadedBy &&
-                        nft.nftStatus == 1 ? (
-                            <div style={{ width: "100%", display: "flex" }}>
-                                <button
-                                    className="btn mr-2"
-                                    onClick={() => {
-                                        setType(0);
-                                        setPopUpShow(true);
-                                    }}
-                                >
-                                    Create Sale
-                                </button>
+                        {chainConnected ? (
+                            userInfo &&
+                            userInfo._id === nft.uploadedBy &&
+                            Number(nft.nftStatus) === 1 ? (
+                                <div style={{ width: "100%", display: "flex" }}>
+                                    <button
+                                        className="btn mr-2"
+                                        onClick={() => {
+                                            setType(0);
+                                            setPopUpShow(true);
+                                        }}
+                                    >
+                                        Create Sale
+                                    </button>
+                                    <button
+                                        className="btn"
+                                        onClick={() => {
+                                            setType(1);
+                                            setPopUpShow(true);
+                                        }}
+                                    >
+                                        Start Auction
+                                    </button>
+                                </div>
+                            ) : (
                                 <button
                                     className="btn"
-                                    onClick={() => {
-                                        setType(1);
-                                        setPopUpShow(true);
-                                    }}
+                                    onClick={() => handleButtonClick()}
                                 >
-                                    Start Auction
+                                    {getButtonName()}
                                 </button>
-                            </div>
+                            )
                         ) : (
                             <button
                                 className="btn"
-                                onClick={() => handleButtonClick()}
+                                onClick={() => setWalletModal(true)}
                             >
-                                {getButtonName()}
+                                Connect Wallet
                             </button>
                         )}
                     </div>
                     <span className="service-fee">Service fees 2%</span>
                 </div>
             </div>
+
+            <WalletsModal
+                open={walletModal}
+                setOpen={setWalletModal}
+                chainName={pageChain}
+            />
         </>
     );
 };
@@ -1633,3 +1845,7 @@ const Properties = ({ tags }) => {
     );
 };
 export default NftInfo;
+function setLoadingMessage(arg0: string) {
+    throw new Error("Function not implemented.");
+}
+

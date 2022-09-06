@@ -1,6 +1,7 @@
 // Images
 import filter from "../../assets/svgs/filter.svg";
 import cross from "../../assets/svgs/cross.svg";
+import uuid from "react-uuid";
 
 const ActiveFilterComponent = ({ acFilter, removeFilter }) => {
   return (
@@ -15,7 +16,7 @@ const ActiveFilterComponent = ({ acFilter, removeFilter }) => {
 
 const ActivityHeader = ({ activeFilters, setActiveFilters }) => {
   const removeFilter = (rmFilter: string) => {
-    const temp = activeFilters.filter((filter: string) => filter != rmFilter);
+    const temp = activeFilters.filter((filter: string) => filter !== rmFilter);
     setActiveFilters(temp);
   };
   const clearAllFilter = () => {
@@ -31,11 +32,11 @@ const ActivityHeader = ({ activeFilters, setActiveFilters }) => {
         {activeFilters.map((acFilter:string, i: number) => (
           <ActiveFilterComponent
             acFilter={acFilter}
-            key={`${i}ac`}
+            key={uuid()}
             removeFilter={removeFilter}
           />
         ))}
-        {activeFilters.length != 0 ? (
+        {activeFilters.length !== 0 ? (
           <button className="clear-all-button" onClick={clearAllFilter}>
             Clear All
           </button>

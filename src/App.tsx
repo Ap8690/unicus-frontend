@@ -62,7 +62,14 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 // import NFTById from "./components/NFTById/NFTById";
+import { UserProvider } from "./context/UserContext";
+import { TransactionProvider } from "./context/Web3Context";
+import { ChainProvider } from "./context/ChainContext";
+import { WalletConnectionProvider } from "./context/ConnectWalletContext";
 
+// redux integration
+import { Provider } from "react-redux";
+import { rstore } from "./Redux/Store";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 const App = () => {
@@ -108,8 +115,6 @@ const init = async () => {
 };
 const setLogin = () => {
   const cookieUser = Cookies.get("userInfo");
-  console.log("cookieUser: ", cookieUser);
-
   let userInfo: any;
   if (cookieUser) {
     userInfo = JSON.parse(cookieUser);
@@ -121,15 +126,12 @@ const setLogin = () => {
     console.log("UnSetting localstorage")
   }
   const token = Cookies.get(ACCESS_TOKEN);
-  console.log("token: ", token);
   if (token) {
     setAccessToken(token)
   }
 };
 const getStoreForUser = async () => {
   try {
-    console.log("main store access", Cookies.get(ACCESS_TOKEN));
-    
     if (Cookies.get(ACCESS_TOKEN)) {
       const res = await getStoreByUser();
       if (res.data.store) {
@@ -143,9 +145,10 @@ const getStoreForUser = async () => {
   }
 };
 useEffect(() => {
-  if (location.pathname == "/") {
+  if (location.pathname === "/") {
     navigate("/home", {replace:true});
   }
+  console.log("Aeiossdfi: ",Cookies.get("userInfo"))
 }, []);
 
 // useEffect(() => {
@@ -172,6 +175,11 @@ useEffect(() => {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets}>
         <WalletModalProvider>
+        <UserProvider>
+            <ChainProvider>
+                <WalletConnectionProvider>
+                    <Provider store={rstore}>
+                        <TransactionProvider>
           <div className="App">
             <Navbar store={isMainStore() ? userStore : store} />
             <ToastContainer limit={3} />
@@ -213,7 +221,7 @@ useEffect(() => {
                         title={"Privacy Policy"}
                         text={
                           store.advance.privacyPolicy &&
-                          store.advance.privacyPolicy != ""
+                          store.advance.privacyPolicy !== ""
                             ? store.advance.privacyPolicy
                             : defaultPrivacyText
                         }
@@ -226,7 +234,7 @@ useEffect(() => {
                       <PrivacyPolicy
                         title={"Terms and Conditions"}
                         text={
-                          store.advance.terms && store.advance.terms != ""
+                          store.advance.terms && store.advance.terms !== ""
                             ? store.advance.terms
                             : defaultPrivacyText
                         }
@@ -252,7 +260,7 @@ useEffect(() => {
                       <PrivacyPolicy
                         title={"Creators"}
                         text={
-                          store.advance.creators && store.advance.creators != ""
+                          store.advance.creators && store.advance.creators !== ""
                             ? store.advance.creators
                             : defaultPrivacyText
                         }
@@ -278,6 +286,11 @@ useEffect(() => {
             </Routes>
             <Footer />
           </div>
+          </TransactionProvider>
+                    </Provider>
+                </WalletConnectionProvider>
+            </ChainProvider>
+        </UserProvider>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

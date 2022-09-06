@@ -103,7 +103,7 @@ const AppearanceOther = (appearance: IAppearance) => {
             <img
               className="logo-img cursor-pointer"
               src={
-                Appearance.storeLoader && Appearance.storeLoader != ""
+                Appearance.storeLoader && Appearance.storeLoader !== ""
                   ? Appearance.storeLoader
                   : uploadImg
               }
@@ -111,7 +111,7 @@ const AppearanceOther = (appearance: IAppearance) => {
               onClick={uploadImage}
             />
             {!Appearance.storeLoader ||
-            (Appearance.storeLoader == "" && !loadingImage) ? (
+            (Appearance.storeLoader === "" && !loadingImage) ? (
               <div className="text-center cursor-pointer upload-img">
                 <img width={120} src={uploadImg} alt="" onClick={uploadImage} />
                 <p>Click here to upload image</p>

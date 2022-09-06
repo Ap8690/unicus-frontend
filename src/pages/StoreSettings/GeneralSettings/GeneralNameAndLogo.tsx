@@ -129,7 +129,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
               onChange={(e) => handleCountry(e.target.value)}
             >
               {options.map((item) => (
-                <MenuItem key={item.value} value={item.value}>
+                <MenuItem key={uuid()} value={item.value}>
                   {item.label}
                 </MenuItem>
               ))}
@@ -143,7 +143,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
       <div className="file-upload-container">
         <div className="title">Logo</div>
         <label className="file-upload-box">
-          {generals.logoUrl == "" ? (
+          {generals.logoUrl === "" ? (
             <img src={uploadImg} alt="" onClick={uploadImage} />)
           :(
             <img

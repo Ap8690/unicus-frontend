@@ -1,5 +1,6 @@
-// Libs
+// Libs 
 import { Link } from "react-router-dom";
+import uuid from "react-uuid";
 
 // Styles
 import "./ProfileNavigation.scss";
@@ -33,7 +34,7 @@ const ProfileNavigation = ({ tabs, currentTab, setCurrentTab }) => {
             tab={tab}
             currentTab={currentTab}
             onClick={updateTab}
-            key={`expf${i}`}
+            key={uuid()}
             index={i}
           />
         )

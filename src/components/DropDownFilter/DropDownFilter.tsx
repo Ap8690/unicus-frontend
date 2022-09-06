@@ -3,7 +3,7 @@ import { useState } from "react";
 
 // Images
 import chevronDown from "../../assets/svgs/chevronDown.svg";
-
+import uuid from 'react-uuid'
 // SASS
 import "./DropDownFilter.scss";
 
@@ -34,7 +34,7 @@ const DropDownFilter = ({
     setActiveFilters(temp);
   };
   const onClickRemove = (rmFilter: string) => {
-    const temp = activeFilters.filter((filter: string) => filter != rmFilter);
+    const temp = activeFilters.filter((filter: string) => filter !== rmFilter);
     setActiveFilters(temp);
   };
 
@@ -58,7 +58,7 @@ const DropDownFilter = ({
       >
         {filters.map((type: string, i: Number) => (
           <TypeButton
-            key={`evt${i}`}
+            key={uuid()}
             type={type}
             activeFilters={activeFilters}
             onClickAdd={onClickAdd}

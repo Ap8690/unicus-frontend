@@ -1,5 +1,6 @@
 // Lib
 import { useState } from "react";
+import uuid from "react-uuid";
 
 // Images
 import chevronLeft from "../../assets/svgs/chevronLeft.svg";
@@ -48,7 +49,7 @@ const RankingSwitcher = ({
       {displayRanges.slice(displayIdx, displayIdx + 2).map((range) => (
         <RankingSwitcherElement
           range={range}
-          key={range[0]}
+          key={uuid()}
           currentRange={[currRangeStart, currRangeEnd]}
           updateRankingList={updateRankingList}
         />

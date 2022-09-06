@@ -1,5 +1,4 @@
 import Cookies from "js-cookie";
-import { WalletConnection } from "near-api-js";
 import { toast } from "react-toastify";
 import TronWeb from "tronweb";
 import Web3 from "web3";
@@ -12,18 +11,16 @@ import {
   UNICUS_STORE,
   solonaChain,
   cookieDomain,
+  avalancheChain,
 } from "../config";
 import { IStore } from "../models/Store";
 import {
-  auctionAbiB,
   auctionAddressB,
 } from "../Redux/Blockchain/Binance/auction";
 import {
-  createNFTAbiB,
   createNFTAddressB,
 } from "../Redux/Blockchain/Binance/createNFT";
 import {
-  marketPlaceAbiB,
   marketPlaceAddressB,
 } from "../Redux/Blockchain/Binance/marketPlace";
 import {
@@ -34,13 +31,11 @@ import {
 } from "../Redux/Blockchain/contracts";
 import {
   auctionAbiE,
-  auctionAbiE1155,
   auctionAddressE,
   auctionAddressE1155,
 } from "../Redux/Blockchain/Ethereum/auction";
 import {
   createNFTAbiE,
-  createNFTAbiE1155,
   createNFTAddressE,
   createNFTAddressE1155,
 } from "../Redux/Blockchain/Ethereum/createNFT";
@@ -51,19 +46,16 @@ import {
 } from "../Redux/Blockchain/Ethereum/marketPlace";
 import { MEWethereum } from "../Redux/Blockchain/mewConfig";
 import {
-  auctionAbiP,
   auctionAddressP,
 } from "../Redux/Blockchain/Polygon/auction";
 import {
-  createNFTAbiP,
   createNFTAddressP,
 } from "../Redux/Blockchain/Polygon/createNFT";
 import {
-  marketPlaceAbiP,
   marketPlaceAddressP,
 } from "../Redux/Blockchain/Polygon/marketPlace";
 import { addWalletAdd } from "../services/api/supplier";
-import { ACCESS_TOKEN, RPC_URLS } from "./constants";
+import { ACCESS_TOKEN } from "./constants";
 import { initContract, sendMeta } from "./helpers";
 import * as nearAPI from "near-api-js";
 import {
@@ -75,13 +67,12 @@ import {
   marketPlaceAddressT,
 } from "../Redux/Blockchain/Tron/marketplace";
 import { auctionAbiT, auctionAddressT } from "../Redux/Blockchain/Tron/auction";
-import { useNavigate } from "react-router-dom";
-import {
-  useWalletModal,
-} from "@solana/wallet-adapter-react-ui";
 
 import BN from "bn.js";
-
+import { createNFTAddressA } from "../Redux/Blockchain/Avalanche/createNFT";
+import { marketPlaceAddressA } from "../Redux/Blockchain/Avalanche/marketPlace";
+import { auctionAddressA } from "../Redux/Blockchain/Avalanche/auction";
+import Web3Token from "web3-token";
 const {
   utils: {
     format: { parseNearAmount },
@@ -91,7 +82,6 @@ const {
 const HttpProvider = TronWeb.providers.HttpProvider;
 const fullNode = new HttpProvider("https://shasta.api.trongrid.io");
 const solidityNode = new HttpProvider("https://shasta.api.trongrid.io");
-const eventServer = new HttpProvider("https://shasta.api.trongrid.io");
 const privateKey = "01";
 
 export const userInfo: any = Cookies.get("userInfo") && Cookies.get("userInfo") !== undefined
@@ -102,8 +92,14 @@ export const getUserInfo = () => {
   const userInfo: any = Cookies.get("userInfo")
     ? JSON.parse(Cookies.get("userInfo"))
     : "";
+  console.log("userInfo: ", userInfo);
   return userInfo;
 };
+
+// returns chain name
+export const getWalletChain = () => {
+  return localStorage.getItem("walletChain")
+}
 export let nearWalletConnection: any;
 
 export let web3 = new Web3(Web3.givenProvider);
@@ -112,31 +108,42 @@ export let web3 = new Web3(Web3.givenProvider);
 export let tronWeb = window.tronWeb? window.tronWeb
   : new TronWeb({ fullNode, solidityNode, privateKey });
 
+interface requestAccountsResponse{
+  code: Number, // 200：ok 4000：in queue, no need to repeat commit， 4001：user rejected
+  message: String
+}
+
 export const connectWallet = async (
   network: any, 
   publicKey: any,
   wallet: any,
   connect: any,
-  setVisible: any
+  setVisible: any,
 ) => {
   try {
     let address: any;
-    console.log("Connect wallet network: ", network);
+    console.log(network,"network")
     if (network.toString() === nearChain) {
-      console.log("Connecting to Near...")
+      if(getWalletChain() !== "Near") {
+        return toast.error("Please login with NEAR Wallet!")
+      }
       if (nearWalletConnection && nearWalletConnection.account()) {
         address = nearWalletConnection.account().accountId;
       } else {
         address = await connectNear();
       }
     } else if (network.toString() === tronChain) {
-      console.log("Connecting to Tron...")
+      //@ts-ignore
+      const res: requestAccountsResponse = await tronLink.request({method: 'tron_requestAccounts'})
+      if(res?.code === 4001){
+        toast.error("Rejected the authorization!");
+      }
+      tronWeb.trx.sign("This has to be signed!")
+      console.log("this one has to be signed")
       address = tronWeb.defaultAddress.base58;
     } else if (network.toString() === solonaChain) {
-      console.log("Connecting to Solana...")
       address = await connToSol(publicKey, wallet, connect, setVisible);
     } else {
-      console.log("Connecting to Metamask...")
       //@ts-ignore
       await SwitchNetwork(network);
       const accounts = await window.ethereum.request({
@@ -150,21 +157,20 @@ export const connectWallet = async (
       window.location.href = "/login";
       return;
     }
-    if (
-      userInfo?.wallets.length === 0 ||
-      !userInfo?.wallets.some((el:any) => {
-        return el?.toLowerCase() == address?.toLowerCase();
-      })
-    ) {
-      await addWalletAdd(address).then(async (res: any) => {
-        console.log(res);
-        Cookies.set("userInfo", JSON.stringify(res.data.user), {
-          domain: cookieDomain,
-          expires: 30,
-        });
-        localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-      });
-    }
+    // if (
+    //   userInfo?.wallets?.length === 0 ||
+    //   !userInfo?.wallets?.some((el:any) => {
+    //     return el?.toLowerCase() === address?.toLowerCase();
+    //   })
+    // ) {
+    //   await addWalletAdd(address).then(async (res: any) => {
+    //     Cookies.set("userInfo", JSON.stringify(res.data.user), {
+    //       domain: cookieDomain,
+    //       expires: 30,
+    //     });
+    //     localStorage.setItem("userInfo", JSON.stringify(res?.data?.user));
+    //   });
+    // }
 
     return address;
   } catch (e) {
@@ -172,12 +178,27 @@ export const connectWallet = async (
     toast.error(e?.message);
   }
 };
-
+const getChainData = (network:any) => {
+  switch(network) {
+    case bscChain:
+      return  {
+        chainId: Web3.utils.toHex(network),
+        rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+        chainName: "BSC Testnet",
+        nativeCurrency: {
+          name: "TBNB",
+          symbol: "TBNB", // 2-6 characters long
+          decimals: 18,
+        },
+        blockExplorerUrls: ["https://testnet.bscscan.com/"],
+      }
+    default: 
+      return ''
+  }
+}
 export const SwitchNetwork = async (network: any) => {
   try {
-    console.log("switch network: ", network);
     const metaMaskProvider: any = await getMetamaskProvider();
-    console.log("Web3.utils.toHex(network): ", Web3.utils.toHex(network));
     return await metaMaskProvider.request({
       method: "wallet_switchEthereumChain",
       params: [
@@ -187,17 +208,16 @@ export const SwitchNetwork = async (network: any) => {
       ],
     });
   } catch (error: any) {
-    console.log("err", error);
+    console.log("err",typeof error?.code);
 
-    if (error?.code === 4902) {
+    if (error?.code.toString() === '4902') {
+      console.log("ERROR IN ")
       try {
         const metaMaskProvider: any = await getMetamaskProvider();
         await metaMaskProvider.request({
           method: "wallet_addEthereumChain",
           params: [
-            {
-              chainId: Web3.utils.toHex(network),
-            },
+            getChainData(network)
           ],
         });
         await SwitchNetwork(network)
@@ -208,36 +228,19 @@ export const SwitchNetwork = async (network: any) => {
   }
 };
 
-// export const checkAndAddNetwork = (data: any) => async (dispatch: any) => {
-//   try {
-//     await metaMaskProvider.request({
-//       method: "wallet_switchEthereumChain",
-//       params: [{ chainId: data[0]?.chainId }],
-//     });
-//   } catch (error: any) {
-//     console.log(error);
-//     if (error?.code === 4902) {
-//       try {
-//         await metaMaskProvider.request({
-//           method: "wallet_addEthereumChain",
-//           params: data,
-//         });
-//       } catch (addError: any) {
-//         console.error(addError?.message);
-//       }
-//     }
-//   }
-// };
 
 export const connToMetaMask = async () => {
   try {
     const metaMaskProvider: any = await getMetamaskProvider();
-    const accounts = await metaMaskProvider.request({
+    const connectWallet = await metaMaskProvider.request({
       method: "eth_requestAccounts",
-    });
+    }); 
+    const accounts = await web3.eth.getAccounts();
     web3 = new Web3(metaMaskProvider);
+    //@ts-ignore
+    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
     localStorage.setItem("walletType", "Metamask");
-    return accounts[0];
+    return {account: accounts[0], token: token};
   } catch (error: any) {
     console.log(error);
   }
@@ -245,12 +248,12 @@ export const connToMetaMask = async () => {
 
 export const connToCoinbase = async () => {
   try {
-    // dispatch(checkAndAddNetwork())
     const accounts = await ethereumCoinbase.enable();
-    // coinbaseWeb3.eth.defaultAccount = accounts[0]
     web3 = new Web3(ethereumCoinbase);
     localStorage.setItem("walletType", "Coinbase");
-    return accounts[0];
+    //@ts-ignore
+    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
+    return {account: accounts[0], token: token}
   } catch (error: any) {
     console.error(error?.message);
   }
@@ -261,7 +264,9 @@ export const connToWalletConnector = async () => {
     const accounts = await walletConnectorProvider.enable();
     web3 = new Web3(walletConnectorProvider);
     localStorage.setItem("walletType", "WalletConnect");
-    return accounts[0];
+    //@ts-ignore
+    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
+    return {account: accounts[0], token: token}
   } catch (error: any) {
     console.error(error?.message);
   }
@@ -274,24 +279,33 @@ export const connToMew = async () => {
     });
     web3 = new Web3(MEWethereum);
     localStorage.setItem("walletType", "MEW");
-    return accounts[0];
+    //@ts-ignore
+    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
+    return {account: accounts[0], token: token}
   } catch (error: any) {
     console.error(error?.message);
   }
 };
 
+
+
 export const connToTron = async () => {
   try {
     let i = 0;
+    //@ts-ignore
+    const res: requestAccountsResponse = await tronLink.request({method: 'tron_requestAccounts'})
+    if(res?.code === 4001){
+      toast.error("Rejected the authorization!");
+    }
     return new Promise(function (resolve) {
       var obj = setInterval(async () => {
         //@ts-ignore
-        if (i === 50 || window.tronWeb && window.tronWeb.defaultAddress.base58) {
+        if (i === 50 || (window.tronWeb && window.tronWeb.defaultAddress.base58)) {
           clearInterval(obj);
           //@ts-ignore
           tronWeb = window.tronWeb;
-          console.log(tronWeb.defaultAddress.base58);
-
+          const hex = tronWeb.toHex("this has to be singed!")
+          tronWeb.trx.sign(hex)
           resolve(tronWeb.defaultAddress.base58);
         }
         i++
@@ -305,7 +319,7 @@ export const connToTron = async () => {
 export const connectNear = async () => {
   const { config, walletConnection } = await initContract();
   if (!walletConnection.isSignedIn()) {
-    const res = await walletConnection.requestSignIn(
+     await walletConnection.requestSignIn(
       {
         contractId: "nft.subauction.testnet",
       },
@@ -314,44 +328,40 @@ export const connectNear = async () => {
       "" // failureUrl. Optional, by the way
     );
   } else {
-    console.log("near wallet", walletConnection.account());
-    console.log("wallet is already connected");
     nearWalletConnection = walletConnection;
+    localStorage.setItem("walletChain","Near");
+
     return walletConnection.account().accountId;
   }
 
   sendMeta(walletConnection, config);
-
   nearWalletConnection = walletConnection;
-
+  localStorage.setItem("walletChain","Near");
   return walletConnection.account().accountId;
 };
 
- export const connToSol = async (publicKey, getSolWallet, connect, setVisible) => {
-   try {
-     if (publicKey) {
-       return publicKey.toBase58();
-     }
-
-     if (!getSolWallet()) {
-       setVisible(true);
-     } else {
-       console.log("sol before", publicKey);
-       const res = await connect();
-       if (getSolWallet().adapter.publicKey) {
-         return getSolWallet().adapter.publicKey.toBase58();
-       } else {
-         throw new Error("Connection refused");
-       }
-     }
-   } catch (error) {
-     console.log("Error connecting wallet:", error);
-   }
- };
+export const connToSol = async (publicKey: any, getSolWallet: any, connect: any, setVisible: any) => {
+  try {
+    if (publicKey) {
+      return publicKey.toBase58();
+    }
+    if (!getSolWallet()) {
+      setVisible(true);
+    } else {
+    await connect();
+      if (getSolWallet().adapter.publicKey) {
+        return getSolWallet().adapter.publicKey.toBase58();
+      } else {
+        throw new Error("Connection refused");
+      }
+    }
+  } catch (error) {
+    console.log("Error connecting wallet:", error);
+  }
+};
 
 export const disConnectWallet = () => {
-  localStorage.removeItem("walletType");
-  localStorage.removeItem("userAddress");
+  localStorage.clear()
 
   Cookies.remove(ACCESS_TOKEN, { domain:cookieDomain,
     expires: 30,
@@ -359,12 +369,11 @@ export const disConnectWallet = () => {
   Cookies.remove("userInfo", {domain:cookieDomain,
     expires: 30,
   });
-  // web3.currentProvider._handleDisconnect()
   walletConnectorProvider.disconnect();
   walletLink.disconnect();
 };
 
-export const getUserWallet = async (network) => {
+export const getUserWallet = async (network: any) => {
   try {
     let accounts = [];
     if (network.toString() === tronChain) {
@@ -380,16 +389,16 @@ export const getUserWallet = async (network) => {
   }
 };
 
-export const getNftContractAddress = (nft) => {
+export const getNftContractAddress = (nft: any) => {
   if (nft) {
-    if (nft.contractAddress != undefined) {
+    if (nft.contractAddress !== undefined) {
       return nft.contractAddress;
     } else {
       return getCreateNftContractAddress(nft.chain, "721");
     }
   }
 };
-export const getChainSymbol = (chain) => {
+export const getChainSymbol = (chain: any) => {
   if (chain) {
     return chain.toString() === bscChain
       ? "BSC"
@@ -397,6 +406,8 @@ export const getChainSymbol = (chain) => {
       ? "MATIC"
       : chain.toString() === tronChain
       ? "TRX"
+      : chain.toString() === avalancheChain
+      ? "AVAX"
       : chain.toString() === nearChain
       ? "NEAR"
       : chain.toString() === solonaChain
@@ -404,28 +415,45 @@ export const getChainSymbol = (chain) => {
       : "ETH";
   }
 };
-export const getChainId = (chain) => {
-  try {
-    if (chain) {
-      return chain.toString() === "ethereum"
-        ? ethChain
-        : chain.toString() === "binance"
-        ? bscChain
-        : chain.toString() === "polygon"
-        ? polygonChain
-        : chain.toString() === "near"
-        ? nearChain
-        : chain.toString() === "tron"
-        ? tronChain
-        : chain.toString() === "solana"
-        ? solonaChain
-        : 0;
-    } else {
-      return 0;
-    }
-  } catch (e) {
-    console.log(e);
-    return 0;
+export const getChainId = (chain:any) => {
+  switch(chain.toString()) {
+    case "ethereum":
+      return ethChain
+    case "binance":
+      return bscChain
+    case "polygon":
+      return polygonChain
+    case "avalanche":
+      return avalancheChain
+    case "near":
+      return nearChain
+    case "tron":
+      return tronChain
+    case "solana":
+      return solonaChain
+    default: 
+      return 0
+  }
+};
+
+export const getChainName = (chain:any) => {
+  switch(chain.toString()) {
+    case ethChain:
+      return "ethereum"
+    case bscChain:
+      return "binance"
+    case polygonChain:
+      return "polygon"
+    case avalancheChain:
+      return "avalanche"
+    case nearChain:
+      return "near"
+    case tronChain:
+      return "tron"
+    case solonaChain:
+      return "solana"
+    default: 
+      return 0
   }
 };
 export const selectNetwork = (chain: string) => {
@@ -436,6 +464,8 @@ export const selectNetwork = (chain: string) => {
       ? "ETH"
       : chain.toString() === tronChain
       ? "TRX"
+      : chain.toString() === avalancheChain
+      ? "Avalanche"
       : "Matic";
   SwitchNetwork(chain);
   toast(`Your are now on ${type} chain`, {
@@ -443,63 +473,29 @@ export const selectNetwork = (chain: string) => {
   });
 };
 
-export const getCreateNftABI = (chain, contractType) => {
-  switch (chain.toString()) {
-    case ethChain:
-      return contractType == "1155" ? createNFTAbiE1155 : createNFTAbiE;
-    case bscChain:
-      return createNFTAbiB;
-
-    case polygonChain:
-      return createNFTAbiP;
-    case tronChain:
-      return createNFTAbiT;
-    default:
-      return createNFTAbiE;
-  }
+export const getCreateNftABI = () => {
+  return createNFTAbiE;
 };
-export const getMarketplaceABI = (chain) => {
-  switch (chain.toString()) {
-    case ethChain:
-      return marketPlaceAbiE;
-    case bscChain:
-      return marketPlaceAbiB;
-
-    case polygonChain:
-      return marketPlaceAbiP;
-    case tronChain:
-      return marketPlaceAbiT;
-    default:
-      return marketPlaceAbiE;
-  }
+export const getMarketplaceABI = () => {
+  return marketPlaceAbiE;
 };
 
-export const getAuctionABI = (chain) => {
-  switch (chain.toString()) {
-    case ethChain:
-      return auctionAbiE;
-    case bscChain:
-      return auctionAbiB;
-
-    case polygonChain:
-      return auctionAbiP;
-    case tronChain:
-      return auctionAbiT;
-    default:
-      return auctionAbiE;
-  }
+export const getAuctionABI = () => {
+  return auctionAbiE;
 };
-export const getCreateNftContractAddress = (chain, contractType) => {
+export const getCreateNftContractAddress = (chain: any, contractType: any) => {
   if (chain) {
     switch (chain.toString()) {
       case ethChain:
-        return contractType == "1155"
+        return contractType === "1155"
           ? createNFTAddressE1155
           : createNFTAddressE;
       case bscChain:
         return createNFTAddressB;
       case polygonChain:
         return createNFTAddressP;
+      case avalancheChain:
+        return createNFTAddressA
       case tronChain:
         return createNFTAddressT;
       case nearChain:
@@ -507,17 +503,17 @@ export const getCreateNftContractAddress = (chain, contractType) => {
       case solonaChain:
         return 
       default:
-        return contractType == "721"
+        return contractType === "721"
           ? createNFTAddressE
           : createNFTAddressE1155;
     }
   }
 };
 
-export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
+export const getMarketPlaceContractAddress = (chain: any, contractType = "721") => {
   switch (chain.toString()) {
     case ethChain:
-      return contractType == "1155"
+      return contractType === "1155"
         ? marketPlaceAddressE1155
         : marketPlaceAddressE;
     case bscChain:
@@ -526,62 +522,63 @@ export const getMarketPlaceContractAddress = (chain, contractType = "721") => {
       return marketPlaceAddressP;
     case tronChain:
       return marketPlaceAddressT;
-
+    case avalancheChain:
+      return marketPlaceAddressA;
     default:
-      return contractType == "721"
+      return contractType === "721"
         ? "0x424bb7731c056a52b45cbd613ef08c69c628735f"
         : "0x424bb7731c056a52b45CBD613Ef08c69c628735f";
   }
 };
-export const getAuctionContractAddress = (chain, contractType = "721") => {
+export const getAuctionContractAddress = (chain: { toString: () => any; }, contractType = "721") => {
   switch (chain.toString()) {
     case ethChain:
-      return contractType == "1155" ? auctionAddressE1155 : auctionAddressE;
+      return contractType === "1155" ? auctionAddressE1155 : auctionAddressE;
     case bscChain:
       return auctionAddressB;
     case polygonChain:
       return auctionAddressP;
     case tronChain:
       return auctionAddressT;
+    case avalancheChain:
+      return auctionAddressA;
 
     default:
-      return contractType == "1155" ? auctionAddressE1155 : auctionAddressE;
+      return contractType === "1155" ? auctionAddressE1155 : auctionAddressE;
   }
 };
 
-export const getCreateNftContract = (chain, contractType = "721") => {
-  if (chain.toString() == tronChain) {
+export const getCreateNftContract = (chain: any, contractType = "721") => {
+  if (chain.toString() === tronChain) {
     return tronWeb.contract(createNFTAbiT, createNFTAddressT);
   } else {
     return new web3.eth.Contract(
       //@ts-ignore
-      getCreateNftABI(chain, contractType),
+      getCreateNftABI(),
       getCreateNftContractAddress(chain, contractType)
     );
   }
 };
 
-export const getMarketPlace = (chain, contractType = "721") => {
-  if (chain.toString() == tronChain) {
+export const getMarketPlace = (chain: any, contractType = "721") => {
+  if (chain.toString() === tronChain) {
     return tronWeb.contract(marketPlaceAbiT, marketPlaceAddressT);
   } else {
     return new web3.eth.Contract(
       //@ts-ignore
-      getMarketplaceABI(chain, contractType),
+      getMarketplaceABI(),
       getMarketPlaceContractAddress(chain, contractType)
     );
   }
 };
 
-export const getAuctionContract = (chain, contractType = "721") => {
-  if (chain.toString() == tronChain) {
+export const getAuctionContract = (chain: any, contractType = "721") => {
+  if (chain.toString() === tronChain) {
     return tronWeb.contract(auctionAbiT, auctionAddressT);
   } else {
-    console.log("auc contract", getAuctionContractAddress(chain, contractType));
-
     return new web3.eth.Contract(
       //@ts-ignore
-      getAuctionABI(chain, contractType),
+      getAuctionABI(),
       getAuctionContractAddress(chain, contractType)
     );
   }
@@ -590,8 +587,6 @@ export const getAuctionContract = (chain, contractType = "721") => {
 //Near MarketPlace
 export const offerPrice = async (token_id: string, assetBid: any) => {
   try {
-    console.log("amount", parseNearAmount(assetBid.toString()));
-
     await nearWalletConnection.account().functionCall({
       contractId: "market_auct.subauction.testnet",
       methodName: "offer",
@@ -608,8 +603,6 @@ export const offerPrice = async (token_id: string, assetBid: any) => {
 };
 
 export const approveNFTForSale = async (token_id: string, assetPrice: any) => {
-  console.log("approve near", assetPrice);
-
   let sale_conditions = {
     sale_conditions: parseNearAmount(assetPrice.toString()), // set asset price in ui
   };
@@ -625,7 +618,7 @@ export const approveNFTForSale = async (token_id: string, assetPrice: any) => {
   });
 };
 
-export const removeSale = async (token_id) => {
+export const removeSale = async (token_id:any) => {
   await nearWalletConnection.account().functionCall({
     contractId: "market_auct.subauction.testnet",
     methodName: "remove_sale",
@@ -640,10 +633,10 @@ export const removeSale = async (token_id) => {
 
 //Near Auctions
 export const approveNFTForAuction = async (
-  token_id,
-  assetPrice,
-  startTime,
-  endTime
+  token_id: any,
+  assetPrice: number,
+  startTime: number,
+  endTime: number
 ) => {
   let sale_conditions = {
     sale_conditions: parseNearAmount(assetPrice.toString()), // set asset price in ui
@@ -661,7 +654,7 @@ export const approveNFTForAuction = async (
     attachedDeposit: parseNearAmount("0.01"),
   });
 };
-export const offerBid = async (token_id, assetBid) => {
+export const offerBid = async (token_id: any, assetBid: any) => {
   await nearWalletConnection.account().functionCall({
     contractId: "market_auct.subauction.testnet",
     methodName: "offer_bid",
@@ -674,7 +667,7 @@ export const offerBid = async (token_id, assetBid) => {
   });
 };
 //removes auction and refunds if there is any existing bid
-export const removeAuction = async (token_id) => {
+export const removeAuction = async (token_id: any) => {
   await nearWalletConnection.account().functionCall({
     contractId: "market_auct.subauction.testnet",
     methodName: "remove_auction",
@@ -688,7 +681,7 @@ export const removeAuction = async (token_id) => {
 };
 
 //remove the auction and resolve purchase
-export const processPurchase = async (token_id) => {
+export const processPurchase = async (token_id:any) => {
   await nearWalletConnection.account().functionCall({
     contractId: "market_auct.subauction.testnet",
     methodName: "process_auction_purchase",
@@ -702,13 +695,9 @@ export const processPurchase = async (token_id) => {
 };
 
 const getMinimumStorage = async () => {
-  console.log("min");
-
   let minimum_balance = await nearWalletConnection
     .account()
     .viewFunction("market_auct.subauction.testnet", "storage_minimum_balance");
-  console.log("minimum", minimum_balance);
-
   return minimum_balance;
 };
 
@@ -725,7 +714,7 @@ export const sendStorageDeposit = async () => {
 
 export const getStoreName = () => {
   const store = JSON.parse(localStorage.getItem("store")) as IStore;
-  if (store && store.general.storeName != "") {
+  if (store && store.general.storeName !== "") {
     return store.general.storeName;
   } else {
     return "Unicus";

@@ -3,6 +3,7 @@ import { useState } from "react";
 
 // Images
 import { Link } from "react-router-dom";
+import uuid from "react-uuid";
 import chevronDownBlue from "../../../assets/svgs/chevronDownBlue.svg";
 
 const DayListElement = ({ day, updateDay }) => {
@@ -53,8 +54,8 @@ const MarketPlaceTopCollectionsHeader = ({ day, setDay, days }) => {
                   }
             }
           >
-            {days.map((d, i) => (
-              <DayListElement day={d} key={`dle${i}`} updateDay={updateDay} />
+            {days.map((d:any) => (
+              <DayListElement day={d} key={uuid()} updateDay={updateDay} />
             ))}
           </div>
         </div>

@@ -16,7 +16,6 @@ const Listing = ({ list, search, setSearch, columns }) => {
 
  useEffect(() => {
    setFilteredList(list)
- 
  }, [list])
  
   return (

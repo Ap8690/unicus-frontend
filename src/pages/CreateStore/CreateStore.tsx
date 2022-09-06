@@ -110,19 +110,8 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
       if (!validator.isEmail(generals.email)) {
         throw "Invalid Email";
       }
-      let res;
-      await createStore(generals).then((val)=> {
-        console.log(val,"isval");
-        
-        res= val}).catch((e)=>{
-        console.log("eeee", e);
-        
-        toast.error(e.response.data.err)
-        return;
-      });
+      let res = await createStore(generals)
       setLoading(false);
-      console.log("isres",res);
-      
       if (res) {
         toast.success("Store Created");
         setTimeout(function () {
@@ -142,10 +131,10 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
       console.log("err", err.message, err.response);
       setLoading(false);
       if (err.response) {
-        if (err.response.status == 401) {
+        if (err.response.status === 401) {
           toast.error("Login expired. Please Login again.");
         } else {
-          toast.error(err.response.data.msg);
+          toast.error(err.response.data.msg || e.response.data.err);
         }
         return;
       }
@@ -165,7 +154,7 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
           <h3 className="form-heading">Upload File</h3>
           <div className="create-store-image-holder">
             <button className="upload-image-button" onClick={uploadImage}>
-              {generals.logoUrl == "" && (
+              {generals.logoUrl === "" && (
                 <img src={placeHolder} alt="Upload Image" />
               )}
               {generals.logoUrl !== "" && (
@@ -233,7 +222,7 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
                 onChange={(e) => handleCountry(e.target.value)}
               >
                 {options.map((item) => (
-                  <MenuItem key={item.value} value={item.value}>
+                  <MenuItem key={uuid()} value={item.value}>
                     {item.label}
                   </MenuItem>
                 ))}

@@ -37,22 +37,19 @@ const Navbar = ({ store }) => {
     const openProfile = Boolean(anchorProfile);
 
     const accessToken = Cookies.get(ACCESS_TOKEN);
-    console.log("accessToken: ", accessToken);
 
     const handleClickStats = (event: React.MouseEvent<HTMLButtonElement>) => {
-        console.log(event.currentTarget);
         setAnchorStats(event.currentTarget);
     };
     const handleCloseStats = () => {
         setAnchorStats(null);
     };
     const handleClickChains = (event: React.MouseEvent<HTMLButtonElement>) => {
-        console.log(event.currentTarget);
         setAnchorChains(event.currentTarget);
     };
     const handleCloseChains = (chain: any) => {
         setAnchorChains(null);
-        if (chain != "") {
+        if (chain !== "") {
             // navigate(`/explore/${chain}`);
             setChain(chain);
             toast.dismiss()
@@ -241,6 +238,12 @@ const Navbar = ({ store }) => {
                                     Binance
                                 </MenuItem>
                                 <MenuItem
+                                    onClick={() => handleCloseChains("avalanche")}
+                                    selected={chain === 'avalanche'}
+                                >
+                                    Avalanche
+                                </MenuItem>
+                                <MenuItem
                                     onClick={() => handleCloseChains("tron")}
                                     selected={chain === 'tron'}
                                 >
@@ -297,8 +300,11 @@ const Navbar = ({ store }) => {
                             {!Cookies.get(ACCESS_TOKEN) ? <button
                                 onClick={() =>
                                     navigate(
-                                        `/connect-wallet${location.pathname}`
+                                        `/connect-wallet`
                                     )
+                                    // navigate(
+                                    //     `/connect-wallet${location.pathname}`
+                                    // )
                                 }
                                 className="btn nav-link"
                             >
@@ -363,7 +369,7 @@ const ProfileButton = ({ accessToken, store }) => {
                 </MenuItem>
                 {!isMainStore() &&
                     store.general &&
-                    store.general.user == userInfo._id && (
+                    store.general.user === userInfo._id && (
                         <MenuItem onClick={handleCloseProfile}>
                             <Link to={"/store/settings"} className="menu-link">
                                 My Store

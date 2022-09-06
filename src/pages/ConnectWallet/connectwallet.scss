@@ -4,7 +4,8 @@
 
 .connect-wallet-page{
     @include mixins.flex-center();
-    padding: 6rem 2rem;
+    // padding: 6rem 2rem;
+    min-height: 300px;
     width: 100%;
     .connect-wrapper{
         max-width: 400px;
@@ -15,12 +16,12 @@
     }
     .using-email{
         @include mixins.flex-col(center, flex-start);
-        gap: 1.5rem;
+        gap: 1rem;
     }
     .using-wallets{
-        margin-top: 3rem;
+        // margin-top: 1rem;
         @include mixins.flex-col(center, flex-start);
-        gap: 1.5rem;
+        // gap: 1rem;
         .blue-head{
             margin-bottom: 0;
         }

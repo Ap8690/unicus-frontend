@@ -26,8 +26,6 @@ const MarketPlace = () => {
     artists: "27k",
     auctions: "99k",
   };
-
-
   // Categories
   const categories = ["Funny","Art","Nature","Animal","Sports","Photography","Music","Metaverse"];
   return (

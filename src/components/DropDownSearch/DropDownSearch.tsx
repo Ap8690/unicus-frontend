@@ -6,6 +6,7 @@ import chevronDown from "../../assets/svgs/chevronDown.svg";
 
 // Components
 import SearchBar from "../SearchBar/SearchBar";
+import uuid from 'react-uuid'
 
 // SASS
 import "./DropDownSearch.scss";
@@ -14,11 +15,11 @@ const CollectionList = ({ list, setSearch }) => {
   const onClick = (ele: string) => setSearch(ele);
   return (
     <div className="drop-down-list">
-      {list.map((listEle, i: number) => (
+      {list.map((listEle:any, i: number) => (
         <button
           className="drop-down-list-element"
           onClick={() => onClick(listEle.name)}
-          key={`ddl${i}`}
+          key={uuid()}
         >
           <img
             src={listEle.image}

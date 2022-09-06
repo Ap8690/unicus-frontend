@@ -7,29 +7,36 @@ import { IGeneral } from "../../models/General";
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { getChainSymbol, userInfo ,getChainId} from "../../utils/utils";
 
-const accessToken = Cookies.get(ACCESS_TOKEN);
-export const axiosConfig: any = {
-  headers: {
-    Authorization: `Bearer ${accessToken}`,
-  },
-};
-
 export const getAccessToken =()=>{
   return Cookies.get(ACCESS_TOKEN);
 }
+
+export const axiosConfig = () => {
+  const accessToken = getAccessToken()
+  return {headers: {
+    Authorization: `Bearer ${accessToken}`,
+  }}
+};
+export const getUserId = () => {
+  return JSON.parse(Cookies.get('userInfo'))._id
+}
+
 export async function getFeaturedNft(number: number,chain: any) {
-  return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}/${getChainId(chain)}`);
+  return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}/${getChainId(chain)}`,
+  axiosConfig());
 }
 
 export async function getTrendingNft(number: number, category: string,chain: any) {
   return await axios.get(
-    `${BASE_URL}/nft/getTrendingNfts/${number}/${category}/${getChainId(chain)}`
+    `${BASE_URL}/nft/getTrendingNfts/${number}/${category}/${getChainId(chain)}`,
+    axiosConfig()
   );
 }
 
 export async function getAuctions(number: number, auctionType: string,chain: any) {
   return await axios.get(
-    `${BASE_URL}/auction/getAuctions/${number}/${auctionType}/${getChainId(chain)}`
+    `${BASE_URL}/auction/getAuctions/${number}/${auctionType}/${getChainId(chain)}`,
+    axiosConfig()
   );
 }
 
@@ -42,19 +49,22 @@ export async function getMarketplaceNfts(
   return await axios.get(
     `${BASE_URL}/auction/getAllExplore/${skip}/${networkID}/${encodeURIComponent(
       JSON.stringify(sortBy)
-    )}/${currentFilter}`
+    )}/${currentFilter}`,
+    axiosConfig()
   );
 }
 
 export async function getNftById(chain: any, contractAddress: any, nftId: any) {
   return await axios.get(
-    `${BASE_URL}/nft/getNftById/${chain}/${contractAddress}/${nftId}`
+    `${BASE_URL}/nft/getNftById/${chain}/${contractAddress}/${nftId}`,
+    axiosConfig()
   );
 }
 
 export async function getNftByUserId() {
   return await axios.get(
-    `${BASE_URL}/nft/getNFTByUserId/${userInfo && userInfo._id}`
+    `${BASE_URL}/nft/getNFTByUserId/${userInfo && userInfo._id}`,
+    axiosConfig()
   );
 }
 
@@ -62,21 +72,21 @@ export async function uploadToPinata(formData: FormData) {
   return await axios.post(
     `${BASE_URL}/nft/upload-pinata`,
     formData,
-    axiosConfig
+    axiosConfig()
   );
 }
 
 export async function createNft(nftObj: {}) {
-  return await axios.post(`${BASE_URL}/nft/create`, nftObj, axiosConfig);
+  return await axios.post(`${BASE_URL}/nft/create`, nftObj, axiosConfig());
 }
 
 export async function createSellApi(createObj: any) {
-  return await axios.post(`${BASE_URL}/auction/sell`, createObj, axiosConfig);
+  return await axios.post(`${BASE_URL}/auction/sell`, createObj, axiosConfig());
 }
 
 export async function createAuctionApi(createObj:any){
   return await axios
-    .post(`${BASE_URL}/auction/create`, createObj, axiosConfig)
+    .post(`${BASE_URL}/auction/create`, createObj, axiosConfig())
     
 }
 
@@ -96,7 +106,7 @@ export async function buyItemApi(
       endAuctionHash: hash,
       userInfo: username,
     },
-    axiosConfig
+    axiosConfig()
   );
 }
 
@@ -120,7 +130,7 @@ export async function placeBidApi(
       bidSuccess: true,
       bidObj: {},
     },
-    axiosConfig
+    axiosConfig()
   );
 }
 
@@ -137,7 +147,7 @@ export async function endSaleApi(
       userInfo: username,
       endAuctionHash: hash,
     },
-    axiosConfig
+    axiosConfig()
   );
 }
 
@@ -154,7 +164,7 @@ export async function cancelAuctionApi(
       userInfo: username,
       transactionHash: hash,
     },
-    axiosConfig
+    axiosConfig()
   );
 }
 
@@ -162,7 +172,7 @@ export async function createStore(generals){
   return await axios.post(
     `${BASE_URL}/store/create`,
     { store: generals, user: userInfo },
-    axiosConfig
+    axiosConfig()
   );
 }
 
@@ -171,17 +181,17 @@ export async function getStoreApi() {
 }
 
 export async function saveGenerals(generals:IGeneral){
-  return await axios.post(`${BASE_URL}/general`, generals, axiosConfig);
+  return await axios.post(`${BASE_URL}/general`, generals, axiosConfig());
 }
 export async function saveAdvance(advance: IAdvance) {
-  return await axios.post(`${BASE_URL}/advance`, advance, axiosConfig);
+  return await axios.post(`${BASE_URL}/advance`, advance, axiosConfig());
 }
 export async function saveAppearance(appearance: IAppearance) {
-  return await axios.post(`${BASE_URL}/appearance`, appearance, axiosConfig);
+  return await axios.post(`${BASE_URL}/appearance`, appearance, axiosConfig());
 }
 
 export async function getStoreByUser(){
-  return await axios.get(`${BASE_URL}/store/getStoreByUser`, axiosConfig);
+  return await axios.get(`${BASE_URL}/store/getStoreByUser`, axiosConfig());
 }
 
 export async function emailRegister(email: string, password: string, username:string) {
@@ -189,21 +199,29 @@ export async function emailRegister(email: string, password: string, username:st
     email: email,
     password: password,
     username
-  });
+  },axiosConfig());
 }
 
 export async function emailLogin(email: string, password: string) {
   return await axios.post(`${BASE_URL}/auth/login`, {
     email: email,
     password: password,
+  },axiosConfig());
+}
+
+// export async function walletLogin(walletAddress: string) {
+//   return await axios.post(`${BASE_URL}/auth/login`, {
+//     walletAddress,
+//   });
+// }
+
+export async function walletLogin(walletAddress: string,token: string) {
+  return await axios.post(`${BASE_URL}/auth/wallet-connect`, {
+    walletAddress,
+    token
   });
 }
 
-export async function walletLogin(walletAddress: string) {
-  return await axios.post(`${BASE_URL}/auth/login`, {
-    walletAddress,
-  });
-}
 export async function verifyEmailApi(token: string, email: string) {
   return await axios.get(
     `${BASE_URL}/auth/verify-email?token=${
@@ -216,7 +234,7 @@ export async function resetPasswordApi(email: string, password: string, token:st
     token,
     email: email,
     password: password,
-  });
+  },axiosConfig());
 }
 
 export async function changePasswordApi(
@@ -226,13 +244,14 @@ export async function changePasswordApi(
   return await axios.post(`${BASE_URL}/auth/change-password`, {
     email: email,
     password: password,
-  });
+  },axiosConfig());
 }
 
 export async function addWalletAdd(userWallet: string) {
+  console.log(getAccessToken(),"axxew tokwen")
   return await axios.get(
     `${BASE_URL}/users/addWallet/${userWallet}`,
-    axiosConfig
+    axiosConfig()
   );
 }
 
@@ -244,7 +263,7 @@ export async function updateProfile(username: string, bio: string) {
       username: username,
       bio: bio,
     },
-    axiosConfig
+    axiosConfig()
   );
 }
 
@@ -259,7 +278,7 @@ export async function updateProfileSocial(instagram, facebook, twitter, discord,
       discord: discord,
       linkedIn: linkedIn,
     },
-    axiosConfig
+    axiosConfig()
   );
 }
 export async function updateProfilePic(url:string) {
@@ -269,7 +288,7 @@ export async function updateProfilePic(url:string) {
       userId: userInfo._id,
       cloudinaryUrl: url,
     },
-    axiosConfig
+    axiosConfig()
   );
 }
 export async function updateProfileBg(url: string) {
@@ -279,18 +298,18 @@ export async function updateProfileBg(url: string) {
       userId: userInfo._id,
       cloudinaryUrl: url,
     },
-    axiosConfig
+    axiosConfig()
   );
 }
 export async function getCollectionsByUser() {
   return await axios.post(
     `${BASE_URL}/nft/getCollectionsByUser`,
-    axiosConfig
+    axiosConfig()
   );
 }
 export async function getNftByCollection(collection: string) {
   return await axios.get(
     `${BASE_URL}/nft/getNftByCollections/${collection}`,
-    axiosConfig
+    axiosConfig()
   );
 }

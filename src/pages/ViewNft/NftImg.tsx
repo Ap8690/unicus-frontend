@@ -4,7 +4,6 @@ import likesImg from "../../assets/svgs/likes.svg";
 import flagImg from "../../assets/svgs/flag.svg";
 import nftImg from "../../assets/images/marketPlaceMain.png";
 import { ReactComponent as FiCopy } from "../../assets/react-icons/FiCopy.svg";
-
 import "./viewnft.scss";
 import { useState } from "react";
 import ShareProfile from "../../components/modals/Share/Share";
@@ -124,9 +123,9 @@ const NftImg = ({ img, likes, views, shares, nftType }) => {
                 </video>
             )}
             <div className="nft-interactions">
-                <button>
+                {/* <button>
                     {views} <img src={viewImg} alt="views" />
-                </button>
+                </button> */}
                 <button onClick={() => setopenShareProfile(true)}>
                     <img src={shareImg} alt="shares" />
                 </button>

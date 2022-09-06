@@ -1,5 +1,4 @@
 import "./viewnft.scss";
-
 import { Link, useParams } from "react-router-dom";
 import nftImg from "../../assets/images/marketPlaceMain.png";
 import NftImg from "./NftImg";
@@ -9,6 +8,7 @@ import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import { AllNFTsElement } from "../AllNFTs/AllNFTsBody/AllNFTsElements";
 import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
+import uuid from "react-uuid";
 
 const filters = ["History", "Properties"];
 
@@ -37,8 +37,7 @@ const ViewNft = () => {
             setNftLoading(true);
             const res = await getNftById(chain, contractAddress, nftId);
             const resData = await res.data.nft;
-            console.log(resData, "res");
-            
+            console.log(resData,res.data, "res");
 
             setNft(res.data.nft);
             setNftStates(res.data.nftStates);
@@ -89,6 +88,8 @@ const ViewNft = () => {
                                 nft={nft}
                                 auction={auction}
                                 setNftLoading={setNftLoading}
+                                fetchItem={fetchItem}
+                                pageChain={chain}
                             />
                         )}
                     </div>
@@ -98,6 +99,7 @@ const ViewNft = () => {
                             <div>
                                 {nftByCollection && nftByCollection.map((item: any) => (
                                     <Link
+                                        key={uuid()}
                                         to={`/nft/${item.chain}/${item.contractAddress}/${item._id}`}
                                     >
                                         <AllNFTsElement element={item} />s

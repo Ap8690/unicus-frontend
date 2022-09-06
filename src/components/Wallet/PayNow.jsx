@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-// import { cashfreeSandbox } from "cashfree-dropjs";
 import { cashfreeSandbox } from "cashfree-dropjs";
 // API CALL
 import {
@@ -23,7 +22,7 @@ import TicketBuyLoading from "../../Loading/TicketBuyLoading.js";
 
 const getArrayIndex = (arr, id) => {
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i]._id == id) {
+    if (arr[i]._id === id) {
       return arr[i];
     }
   }
@@ -74,12 +73,10 @@ const PayNow = ({ isLogin, setSignIn }) => {
     setShowFullLoading(true);
     // setModalShow(true);
     try {
-      // const accounts = await web3.eth.getAccounts()
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
 
-      // //console.log(accounts[0]);
       // setMetaWalletAddress(accounts[0])
       localStorage.setItem("METAMASK_WALLET", accounts[0]);
 
@@ -114,12 +111,10 @@ const PayNow = ({ isLogin, setSignIn }) => {
               }
             )
             .then((res) => {
-              // //console.log(res);
               setShowFullLoading(false);
               setShowWalletAdded(true);
             })
             .catch((err) => {
-              // //console.log(err.response);
               setShowFullLoading(false);
             });
         } else {
@@ -127,7 +122,6 @@ const PayNow = ({ isLogin, setSignIn }) => {
         }
       }
     } catch (err) {
-      // //console.log(err.response);
       setShowFullLoading(false);
     }
     // setModalShow(false)
@@ -172,47 +166,47 @@ const PayNow = ({ isLogin, setSignIn }) => {
   var tokenUri;
 
   const getDropName = (ticketId, index) => {
-    if (ticketId == "627ea2bd14a38824d673de34") {
+    if (ticketId === "627ea2bd14a38824d673de34") {
       return "silver";
-    } else if (ticketId == "627ea2bd14a38824d673de38") {
+    } else if (ticketId === "627ea2bd14a38824d673de38") {
       return "gold";
-    } else if (ticketId == "627ea2be14a38824d673de3c") {
-      if (index == 0) {
+    } else if (ticketId === "627ea2be14a38824d673de3c") {
+      if (index === 0) {
         return "platinum";
-      } else if (index == 1) {
+      } else if (index === 1) {
         return "actor";
-      } else if (index == 2) {
+      } else if (index === 2) {
         return "jacquline";
       }
-    } else if (ticketId == "627ea2be14a38824d673de40") {
-      if (index == 0) {
+    } else if (ticketId === "627ea2be14a38824d673de40") {
+      if (index === 0) {
         return "diamond";
-      } else if (index == 1) {
+      } else if (index === 1) {
         return "actor";
-      } else if (index == 2) {
+      } else if (index === 2) {
         return "jacquline";
       }
     }
   };
   const getDropUrl = (ticketId, index) => {
-    if (ticketId == "627ea2bd14a38824d673de34") {
+    if (ticketId === "627ea2bd14a38824d673de34") {
       return "https://res.cloudinary.com/dhmglymaz/video/upload/v1653140818/Blocktickets/fdh56tfi3u2ld2y3rdtn.mp4";
-    } else if (ticketId == "627ea2bd14a38824d673de38") {
+    } else if (ticketId === "627ea2bd14a38824d673de38") {
       return "https://res.cloudinary.com/dhmglymaz/video/upload/v1653140820/Blocktickets/ue4cz8uso3iddblnn5lk.mp4";
-    } else if (ticketId == "627ea2be14a38824d673de3c") {
-      if (index == 0) {
+    } else if (ticketId === "627ea2be14a38824d673de3c") {
+      if (index === 0) {
         return "https://res.cloudinary.com/dhmglymaz/video/upload/v1653140821/Blocktickets/ehtoapw6jeak7m9ufqcq.mp4";
-      } else if (index == 1) {
+      } else if (index === 1) {
         return "https://res.cloudinary.com/dhmglymaz/video/upload/v1653140819/Blocktickets/hwuwdsnxnycwiamg1qie.mp4";
-      } else if (index == 2) {
+      } else if (index === 2) {
         return "https://res.cloudinary.com/dhmglymaz/video/upload/v1653140819/Blocktickets/hzj3oizsikzm7h6ki6td.mp4";
       }
-    } else if (ticketId == "627ea2be14a38824d673de40") {
-      if (index == 0) {
+    } else if (ticketId === "627ea2be14a38824d673de40") {
+      if (index === 0) {
         return "https://res.cloudinary.com/dhmglymaz/video/upload/v1653140820/Blocktickets/mygqba4obitho2ozjii9.mp4";
-      } else if (index == 1) {
+      } else if (index === 1) {
         return "https://res.cloudinary.com/dhmglymaz/video/upload/v1653140819/Blocktickets/hwuwdsnxnycwiamg1qie.mp4";
-      } else if (index == 2) {
+      } else if (index === 2) {
         return "https://res.cloudinary.com/dhmglymaz/video/upload/v1653140819/Blocktickets/hzj3oizsikzm7h6ki6td.mp4";
       }
     }
@@ -230,7 +224,6 @@ const PayNow = ({ isLogin, setSignIn }) => {
             dropName: getDropName(ticketInfo._id, j),
             dropUrl: getDropUrl(ticketInfo._id, j),
           };
-          console.log("drop", nftDrop);
           const res = await axios.post(
             `${process.env.REACT_APP_BACKEND_URL}/nftDrop/create`,
             nftDrop,
@@ -241,7 +234,6 @@ const PayNow = ({ isLogin, setSignIn }) => {
               },
             }
           );
-          console.log("drop res", res);
           j++;
         }
       }
@@ -253,14 +245,12 @@ const PayNow = ({ isLogin, setSignIn }) => {
   const newcbs = (data) => {
     const selectedTickets = JSON.parse(localStorage.getItem("selectedTickets"));
     if (
-      (data.order && data.order.status == "PAID") ||
-      data.order.status == "ACTIVE"
+      (data.order && data.order.status === "PAID") ||
+      data.order.status === "ACTIVE"
     ) {
       //order is paid
       //verify order status by making an API call to your server
       // using data.order.orderId
-      // console.log("orderId ", data.order.orderId);
-      console.log("Success");
       setShowFullLoading(true);
       setPayMessage(
         "Your transaction is successful. Please wait while we book your ticket"
@@ -367,7 +357,6 @@ const PayNow = ({ isLogin, setSignIn }) => {
     let cashfree = new cashfreeSandbox.Cashfree();
 
     console.log("before Initialisation");
-    // console.log(resultOrderToken);
     cashfree.initialiseDropin(parent, {
       orderToken: resultOrderToken,
       onSuccess: newcbs,
@@ -425,12 +414,10 @@ const PayNow = ({ isLogin, setSignIn }) => {
             )
             .then((response) => {
               const { status } = response;
-              // console.log("RES", response);
               setShowFullLoading(false);
               return response.data;
             })
             .then((result) => {
-              // console.log("result ", result);
               setOrderToken(result.orderToken);
               renderDropin(result.orderToken);
             })

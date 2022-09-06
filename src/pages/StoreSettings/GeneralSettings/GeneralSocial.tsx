@@ -23,6 +23,7 @@ import {
   FaStackOverflow,
 } from "react-icons/fa";
 import { axiosConfig } from "../../../services/api/supplier";
+import uuid from "react-uuid";
 const GeneralSocial = () => {
   //@ts-ignore
   const [socialLinks, setSocialLinks] = useState<ISocialLinks>({});
@@ -131,7 +132,7 @@ const GeneralSocial = () => {
     try {
       const res = await axios.post(
         `${BASE_URL}/general/socialLinks`,
-        socialLinks, axiosConfig
+        socialLinks, axiosConfig()
       );
       if (res) {
         toast.success("Saved Changes");
@@ -155,11 +156,11 @@ const GeneralSocial = () => {
       <div className="socialInputs">
         {socials.map((social) => (
           <Input
-            key={social.title}
+            key={uuid()}
             title={social.title.toUpperCase()}
             placeholder={`Enter ${social.title} url`}
             state={social.link}
-            setState={(e)=> handleSocialLink(social.title, e)}
+            setState={(e:any)=> handleSocialLink(social.title, e)}
           />
         ))}
       </div>

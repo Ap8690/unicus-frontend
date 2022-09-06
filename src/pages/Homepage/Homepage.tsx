@@ -32,6 +32,7 @@ import circlesImg from "../../assets/svgs/circles.svg";
 // Components
 import HomepageBackground from "./HomepageBackground";
 import { Helmet } from "react-helmet";
+import uuid from "react-uuid";
 
 const Homepage = () => {
   return (
@@ -127,8 +128,8 @@ const UnicusEcosystem = () => {
         Economy
       </p>
       <div className="ecosystemGrid">
-        {data.map((item) => (
-          <div key={item.title} className="gridData">
+        {data && data.map((item:any) => (
+          <div key={uuid()} className="gridData">
             <img src={item.img} alt="ecosystem" />
             <p className="itemMid">{item.title}</p>
             <p>{item.info}</p>
