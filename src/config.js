@@ -29,7 +29,8 @@ export const UNICUS_STORE =
         : process.env.REACT_APP_ENV === "staging"
         ? "marketplace.qa.unicus.one"
         : process.env.REACT_APP_ENV === "demo"
-        ? "marketplace.demo.unicus.one"
+        // ? "marketplace.demo.unicus.one"
+        ? "unicus-marketplace-demo.herokuapp.com"
         : "marketplace.unicus.one";
 
 export const cookieDomain =

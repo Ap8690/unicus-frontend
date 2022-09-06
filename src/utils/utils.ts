@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import TronWeb from "tronweb";
 import Web3 from "web3";
+import bs58 from 'bs58'
 import {
   tronChain,
   bscChain,
@@ -58,6 +59,7 @@ import { addWalletAdd } from "../services/api/supplier";
 import { ACCESS_TOKEN } from "./constants";
 import { initContract, sendMeta } from "./helpers";
 import * as nearAPI from "near-api-js";
+
 import {
   createNFTAbiT,
   createNFTAddressT,
@@ -78,11 +80,14 @@ const {
     format: { parseNearAmount },
   },
 } = nearAPI;
+
+
 //testnet
 const HttpProvider = TronWeb.providers.HttpProvider;
-const fullNode = new HttpProvider("https://shasta.api.trongrid.io");
-const solidityNode = new HttpProvider("https://shasta.api.trongrid.io");
-const privateKey = "01";
+const fullNode = 'https://api.shasta.trongrid.io';
+const solidityNode = 'https://api.shasta.trongrid.io';
+const eventServer = 'https://api.shasta.trongrid.io';
+const privateKey = "";
 
 export const userInfo: any = Cookies.get("userInfo") && Cookies.get("userInfo") !== undefined
   ? JSON.parse(Cookies.get("userInfo"))
@@ -92,7 +97,6 @@ export const getUserInfo = () => {
   const userInfo: any = Cookies.get("userInfo")
     ? JSON.parse(Cookies.get("userInfo"))
     : "";
-  console.log("userInfo: ", userInfo);
   return userInfo;
 };
 
@@ -106,7 +110,7 @@ export let web3 = new Web3(Web3.givenProvider);
 
 //@ts-ignore
 export let tronWeb = window.tronWeb? window.tronWeb
-  : new TronWeb({ fullNode, solidityNode, privateKey });
+  : new TronWeb({ fullNode,solidityNode,eventServer,privateKey });
 
 interface requestAccountsResponse{
   code: Number, // 200：ok 4000：in queue, no need to repeat commit， 4001：user rejected
@@ -228,32 +232,32 @@ export const SwitchNetwork = async (network: any) => {
   }
 };
 
+export const createSignature = async (address: string, message: any) => {
+  return await web3.eth.sign(web3.eth.accounts.hashMessage(message),address)
+}
 
 export const connToMetaMask = async () => {
-  try {
+    const message = ((new Date()).getTime()).toString()
     const metaMaskProvider: any = await getMetamaskProvider();
     const connectWallet = await metaMaskProvider.request({
       method: "eth_requestAccounts",
     }); 
     const accounts = await web3.eth.getAccounts();
     web3 = new Web3(metaMaskProvider);
-    //@ts-ignore
-    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
+    const token = await createSignature(accounts[0],message)
     localStorage.setItem("walletType", "Metamask");
-    return {account: accounts[0], token: token};
-  } catch (error: any) {
-    console.log(error);
-  }
+    return {account: accounts[0], token: token, message: message};
+ 
 };
 
 export const connToCoinbase = async () => {
   try {
+    const message = ((new Date()).getTime()).toString()
     const accounts = await ethereumCoinbase.enable();
     web3 = new Web3(ethereumCoinbase);
     localStorage.setItem("walletType", "Coinbase");
-    //@ts-ignore
-    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
-    return {account: accounts[0], token: token}
+    const token = await createSignature(accounts[0],message)
+    return {account: accounts[0], token: token, message: message}
   } catch (error: any) {
     console.error(error?.message);
   }
@@ -261,12 +265,13 @@ export const connToCoinbase = async () => {
 
 export const connToWalletConnector = async () => {
   try {
+    const message = ((new Date()).getTime()).toString()
     const accounts = await walletConnectorProvider.enable();
+    console.log("accounts: ", accounts);
     web3 = new Web3(walletConnectorProvider);
     localStorage.setItem("walletType", "WalletConnect");
-    //@ts-ignore
-    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
-    return {account: accounts[0], token: token}
+    const token = await createSignature(accounts[0],message)
+    return {account: accounts[0], token: token,message: message}
   } catch (error: any) {
     console.error(error?.message);
   }
@@ -274,14 +279,14 @@ export const connToWalletConnector = async () => {
 
 export const connToMew = async () => {
   try {
+    const message = ((new Date()).getTime()).toString()
     const accounts = await MEWethereum.request({
       method: "eth_requestAccounts",
     });
     web3 = new Web3(MEWethereum);
     localStorage.setItem("walletType", "MEW");
-    //@ts-ignore
-    const token = await Web3Token.sign((msg: any) => web3.eth.personal.sign(msg, accounts[0]),"3 days");
-    return {account: accounts[0], token: token}
+    const token = await createSignature(accounts[0],message)
+    return {account: accounts[0], token: token, message: message}
   } catch (error: any) {
     console.error(error?.message);
   }
@@ -290,34 +295,47 @@ export const connToMew = async () => {
 
 
 export const connToTron = async () => {
-  try {
     let i = 0;
+    const timestamp = (new Date()).getTime()
+    //@ts-ignore
+    if(!window?.tronWeb) {
+      throw new Error("Please install TronLink Wallet")
+    }
     //@ts-ignore
     const res: requestAccountsResponse = await tronLink.request({method: 'tron_requestAccounts'})
     if(res?.code === 4001){
-      toast.error("Rejected the authorization!");
+      toast.error("Rejected the authorization!")
     }
-    return new Promise(function (resolve) {
-      var obj = setInterval(async () => {
-        //@ts-ignore
-        if (i === 50 || (window.tronWeb && window.tronWeb.defaultAddress.base58)) {
-          clearInterval(obj);
-          //@ts-ignore
-          tronWeb = window.tronWeb;
-          const hex = tronWeb.toHex("this has to be singed!")
-          tronWeb.trx.sign(hex)
-          resolve(tronWeb.defaultAddress.base58);
-        }
-        i++
-      }, 300);
-    });
-  } catch (error: any) {
-    console.error(error?.message);
-  }
+    //@ts-ignore
+    tronWeb = window.tronWeb;
+          const hex = tronWeb.toHex(timestamp)
+          const signHex = await tronWeb.trx.sign(hex)
+          return {
+            account: tronWeb.defaultAddress.base58,
+            token: signHex,
+            message: hex
+          }
 };
 
+async function createNearSignature(keyStore: any,networkId: any, accountId: any) {
+  const timestamp = (((new Date).getTime()).toString()).toString()
+  const msg = Buffer.from(timestamp);
+  console.log("msg: ", msg);
+
+  const signer = new nearAPI.InMemorySigner(keyStore)
+  const sign = await signer.signMessage(msg,accountId,networkId)
+  const publicKey = await signer.getPublicKey(accountId,networkId)
+  return {
+    signature: sign.signature,
+    message: timestamp,
+    publicKey: publicKey
+  }
+}
+
 export const connectNear = async () => {
-  const { config, walletConnection } = await initContract();
+  const { config, walletConnection, keyStore,networkId } = await initContract()
+  let accountId: any;
+  console.log("walletConnection.isSignedIn(): ", walletConnection.isSignedIn());
   if (!walletConnection.isSignedIn()) {
      await walletConnection.requestSignIn(
       {
@@ -327,37 +345,73 @@ export const connectNear = async () => {
       "", // successUrl. Optional, by the way
       "" // failureUrl. Optional, by the way
     );
+    await sendMeta(walletConnection, config);
+    console.log("nearWalletConnection: ", nearWalletConnection);
+    nearWalletConnection = walletConnection;
+
+    localStorage.setItem("walletChain","Near");
+    accountId = walletConnection.account().accountId
+
   } else {
     nearWalletConnection = walletConnection;
     localStorage.setItem("walletChain","Near");
-
-    return walletConnection.account().accountId;
+    accountId = walletConnection.account().accountId
+    
   }
-
-  sendMeta(walletConnection, config);
-  nearWalletConnection = walletConnection;
-  localStorage.setItem("walletChain","Near");
-  return walletConnection.account().accountId;
+  const data = await createNearSignature(keyStore,networkId,accountId)
+  // let p = new nearAPI
+  // const pk = await PublicKey.from(data.publicKey).data;
+  return {account: accountId,message: data.message, token: {
+    publicKey: data.publicKey,
+    signature: data.signature
+  }}
 };
 
+export const sign_solana_message = async () => {
+   const message_for_backend = ((new Date()).getTime()).toString()
+  // @ts-ignore
+  const { signature, publicKey } = await window?.solana.signMessage(new TextEncoder().encode(message_for_backend),'utf8')
+  return {
+    message: message_for_backend,
+    token: {
+      signature, publicKey
+    }
+  }
+}
+
 export const connToSol = async (publicKey: any, getSolWallet: any, connect: any, setVisible: any) => {
-  try {
+  // @ts-ignore  
+  const isPhantomInstalled = window.phantom?.solana?.isPhantom
+  if(!isPhantomInstalled) {
+    throw new Error("Please install Phantom Wallet")
+  }
     if (publicKey) {
-      return publicKey.toBase58();
+      const sm = await sign_solana_message()
+        return {
+          account: publicKey.toBase58(),
+          message: sm.message,
+          token: sm.token
+        };
     }
     if (!getSolWallet()) {
       setVisible(true);
     } else {
+
+
     await connect();
       if (getSolWallet().adapter.publicKey) {
-        return getSolWallet().adapter.publicKey.toBase58();
+        const address = getSolWallet().adapter.publicKey.toBase58()
+        console.log("address: ", address);
+        const sm = await sign_solana_message()
+        return {
+          account: address,
+          message: sm.message,
+          token: sm.token
+        };
       } else {
         throw new Error("Connection refused");
       }
     }
-  } catch (error) {
-    console.log("Error connecting wallet:", error);
-  }
 };
 
 export const disConnectWallet = () => {
@@ -456,6 +510,22 @@ export const getChainName = (chain:any) => {
       return 0
   }
 };
+
+export const ChainIdUsingWalletName = (chainName:any) => {
+  console.log("chainName: ", chainName);
+  switch(chainName) {
+    case "Metamask":
+      return ethChain
+    case "Near":
+      return nearChain
+    case "Tron":
+      return tronChain
+    case "Solana":
+      return solonaChain
+    default: 
+      return bscChain
+  }
+}
 export const selectNetwork = (chain: string) => {
   const type =
     chain.toString() === bscChain
@@ -703,13 +773,14 @@ const getMinimumStorage = async () => {
 
 export const sendStorageDeposit = async () => {
   const minimum = await getMinimumStorage();
-  await nearWalletConnection.account().functionCall({
+  const res = await nearWalletConnection.account().functionCall({
     contractId: "market_auct.subauction.testnet",
     methodName: "storage_deposit",
     args: {},
 
     attachedDeposit: minimum,
   });
+  return res
 };
 
 export const getStoreName = () => {
@@ -723,6 +794,7 @@ export const getStoreName = () => {
 
 export const isMainStore = () => {
   return window.location.host === UNICUS_STORE;
+  // return false
 };
 export interface WalletsPopupProps {
   show: boolean;

@@ -5,7 +5,7 @@ import { IAdvance } from "../../models/Advance";
 import { IAppearance } from "../../models/Appearance";
 import { IGeneral } from "../../models/General";
 import { ACCESS_TOKEN } from "../../utils/constants";
-import { getChainSymbol, userInfo ,getChainId} from "../../utils/utils";
+import { getChainSymbol, userInfo ,getChainId, getUserInfo} from "../../utils/utils";
 
 export const getAccessToken =()=>{
   return Cookies.get(ACCESS_TOKEN);
@@ -62,8 +62,9 @@ export async function getNftById(chain: any, contractAddress: any, nftId: any) {
 }
 
 export async function getNftByUserId() {
+  const _id = getUserId()
   return await axios.get(
-    `${BASE_URL}/nft/getNFTByUserId/${userInfo && userInfo._id}`,
+    `${BASE_URL}/nft/getNFTByUserId/${_id}`,
     axiosConfig()
   );
 }
@@ -168,10 +169,11 @@ export async function cancelAuctionApi(
   );
 }
 
-export async function createStore(generals){
+export async function createStore(generals:any){
+  let userData = getUserInfo()
   return await axios.post(
     `${BASE_URL}/store/create`,
-    { store: generals, user: userInfo },
+    { store: generals, user: userData },
     axiosConfig()
   );
 }
@@ -215,10 +217,12 @@ export async function emailLogin(email: string, password: string) {
 //   });
 // }
 
-export async function walletLogin(walletAddress: string,token: string) {
+export async function walletLogin(walletAddress: string,token: string,walletNetwork: string,message: string) {
   return await axios.post(`${BASE_URL}/auth/wallet-connect`, {
     walletAddress,
-    token
+    token,
+    walletNetwork,
+    message
   });
 }
 
@@ -282,20 +286,22 @@ export async function updateProfileSocial(instagram, facebook, twitter, discord,
   );
 }
 export async function updateProfilePic(url:string) {
+  const _id = getUserId()
   return await axios.post(
     `${BASE_URL}/users/update/profilePicture`,
     {
-      userId: userInfo._id,
+      userId: _id,
       cloudinaryUrl: url,
     },
     axiosConfig()
   );
 }
 export async function updateProfileBg(url: string) {
+  const _id = getUserId()
   return await axios.post(
     `${BASE_URL}/users/update/backgroundPicture`,
     {
-      userId: userInfo._id,
+      userId: _id,
       cloudinaryUrl: url,
     },
     axiosConfig()
