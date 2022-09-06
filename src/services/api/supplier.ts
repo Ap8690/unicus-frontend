@@ -5,7 +5,7 @@ import { IAdvance } from "../../models/Advance";
 import { IAppearance } from "../../models/Appearance";
 import { IGeneral } from "../../models/General";
 import { ACCESS_TOKEN } from "../../utils/constants";
-import { getChainSymbol, userInfo ,getChainId} from "../../utils/utils";
+import { getChainSymbol, userInfo ,getChainId, getUserInfo} from "../../utils/utils";
 
 export const getAccessToken =()=>{
   return Cookies.get(ACCESS_TOKEN);
@@ -168,10 +168,11 @@ export async function cancelAuctionApi(
   );
 }
 
-export async function createStore(generals){
+export async function createStore(generals:any){
+  let userData = getUserInfo()
   return await axios.post(
     `${BASE_URL}/store/create`,
-    { store: generals, user: userInfo },
+    { store: generals, user: userData },
     axiosConfig()
   );
 }

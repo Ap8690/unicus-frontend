@@ -92,7 +92,6 @@ export const getUserInfo = () => {
   const userInfo: any = Cookies.get("userInfo")
     ? JSON.parse(Cookies.get("userInfo"))
     : "";
-  console.log("userInfo: ", userInfo);
   return userInfo;
 };
 

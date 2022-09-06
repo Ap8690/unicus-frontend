@@ -90,17 +90,17 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
     }
     setLoadingImage(false);
   };
-  const handleStoreName = (e) => {
+  const handleStoreName = (e: any) => {
     setGeneral({ ...generals, storeName: e });
   };
 
-  const handleEmail = (e) => {
+  const handleEmail = (e: any) => {
     setGeneral({ ...generals, email: e });
   };
-  const handleCountry = (e) => {
+  const handleCountry = (e: any) => {
     setGeneral({ ...generals, country: e });
   };
-  const handleCreateStore = async (e) => {
+  const handleCreateStore = async (e: any) => {
     e.preventDefault();
     try {
       setLoading(true);
@@ -239,7 +239,7 @@ const CreateStoreForm = ({store, setLoadingImage}): ReactJSXElement => {
 };
 const CreateStore = (store): ReactJSXElement => {
     const [loadingImage, setLoadingImage] = useState(false);
-
+ 
   return (
     <>
       {loadingImage && <FullLoading />}
