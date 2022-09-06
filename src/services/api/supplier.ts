@@ -217,10 +217,12 @@ export async function emailLogin(email: string, password: string) {
 //   });
 // }
 
-export async function walletLogin(walletAddress: string,token: string) {
+export async function walletLogin(walletAddress: string,token: string,walletNetwork: string,message: string) {
   return await axios.post(`${BASE_URL}/auth/wallet-connect`, {
     walletAddress,
-    token
+    token,
+    walletNetwork,
+    message
   });
 }
 

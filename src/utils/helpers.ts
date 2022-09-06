@@ -26,12 +26,11 @@ export async function initContract() {
   const near =  await nearAPI.connect({keyStore, ...nearConfig})
   const walletConnection = new nearAPI.WalletConnection(near)*/
 
-  return { config, walletConnection };
+  return { config, walletConnection,keyStore, networkId: config.networkId };
 }
 
 export const sendMeta = async (walletConnection:any,nearConfig:any ) => {
-  try{
-  let functionCallResult = await walletConnection.account().functionCall({
+  return await walletConnection.account().functionCall({
     contractId: "nft-contract.boomboom.testnet",
     methodName: "new_default_meta",
     args: {
@@ -41,11 +40,6 @@ export const sendMeta = async (walletConnection:any,nearConfig:any ) => {
     walletMeta: "",
     walletCallbackUrl: "",
   });
-
-}catch(e){
-  console.log(e);
-  
-}
 };
 
 export const getDecimal=(chain: any)=>{
