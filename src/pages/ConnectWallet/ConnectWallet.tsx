@@ -54,7 +54,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
     }, []);
 
     return (
-        <div className="connect-wallet-page">
+        <div className="connect-wallet-page my-8">
             {fullLoading ? (
                 <PageLoader info={""} />
             ) : (

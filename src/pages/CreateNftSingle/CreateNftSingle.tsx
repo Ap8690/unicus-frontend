@@ -35,6 +35,7 @@ import {
     tronWeb,
     userInfo,
     getWalletChain,
+    ChainIdUsingWalletName
 } from "../../utils/utils";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import {
@@ -84,6 +85,7 @@ import Cookies from "js-cookie";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 
 const CreateNftSingle = () => {
+    // let chain_name = ChainIdUsingWalletName(localStorage.getItem("walletChain"))
     const [name, setName] = useState("");
     const [extLink, setExtlink] = useState("");
     const [description, setDescription] = useState("");
@@ -731,6 +733,7 @@ const CreateNftSingle = () => {
         ) {
             convertToFile();
         }
+
     }, []);
 
     useEffect(() => {
@@ -873,12 +876,14 @@ const CreateNftSingle = () => {
                                 />{" "}
                             </div>
                             <div className="basic-info">
+                                <div className="mt-2"></div>
                                 <Input
                                     title="Name"
                                     placeholder={"Item Name"}
                                     state={name}
                                     setState={setName}
                                 />
+                                <div className="mt-8"></div>
                                 <Input
                                     title="External Link"
                                     placeholder={
@@ -887,6 +892,7 @@ const CreateNftSingle = () => {
                                     state={extLink}
                                     setState={setExtlink}
                                 />
+                                <div className="mt-8"></div>
                                 <Input
                                     title="Description (Word limit 240)"
                                     multi
@@ -914,6 +920,7 @@ const CreateNftSingle = () => {
                                             value={chain}
                                             onChange={handleChange}
                                             label="Chain"
+                                            // disabled={true}
                                         >
                                             <MenuItem value={ethChain}>
                                                 Ethereum

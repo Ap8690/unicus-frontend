@@ -1,5 +1,4 @@
 import "./viewnft.scss";
-
 import { Link, useParams } from "react-router-dom";
 import nftImg from "../../assets/images/marketPlaceMain.png";
 import NftImg from "./NftImg";
@@ -39,7 +38,6 @@ const ViewNft = () => {
             const res = await getNftById(chain, contractAddress, nftId);
             const resData = await res.data.nft;
             console.log(resData,res.data, "res");
-            
 
             setNft(res.data.nft);
             setNftStates(res.data.nftStates);

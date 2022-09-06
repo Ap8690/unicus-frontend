@@ -70,7 +70,6 @@
   "resolutions": {
     "@metaplex-foundation/mpl-candy-machine": "4.3.0"
   },
-
   "scripts": {
     "start": "serve -s build",
     "dev": "set REACT_APP_ENV=local&& react-app-rewired start",
