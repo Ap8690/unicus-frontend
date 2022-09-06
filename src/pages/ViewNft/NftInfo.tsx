@@ -916,13 +916,13 @@ const NftInfo = ({
                     nft.tokenId
                 )
                 .send({ from: address });
-            console.log(getCreateNftContractAddress(nft.chain, "721"));
-
-            const res = await getAuctionContract(nft.chain)
+                const amount = startBid * getDecimal(tronChain)
+                console.log(amount,nft.tokenId)
+                const res = await getAuctionContract(nft.chain)
                 .methods.createAuction(
                     getCreateNftContractAddress(nft.chain, "721"),
                     nft.tokenId,
-                    web3.utils.toWei(startBid.toString(), "ether"),
+                    amount.toString(),
                     Number(duration) * 86400
                 )
                 .send({ from: address });
@@ -977,6 +977,7 @@ const NftInfo = ({
             await fetchItem()
         } catch (e) {
             console.log(e);
+            setNftLoading(false)
             toast.error("Auction Failed");
         }
     }
@@ -1071,6 +1072,14 @@ const NftInfo = ({
                 setVisible
             );
 
+            console.log(auction.startBid,bid,"start bid and price")
+
+            if(auction.startBid/getDecimal(tronChain) >= Number(bid)){
+                setNftLoading(false)
+                toast.error("The new bid value should be more then the last big!")
+                return
+            }
+
             if (auction.chain.toString() === nearChain) {
                 localStorage.setItem("nearBid", bid.toString());
                 offerBid(nft.tokenId, Number(bid));
@@ -1085,13 +1094,14 @@ const NftInfo = ({
                     creator.email
                 );
             } else if (nft.chain.toString() === tronChain) {
+                const amount = Number(bid) * getDecimal(tronChain)
                 const res = await getAuctionContract(
                     auction.chain,
                     nft.contractType
                 ).methods.placeBid(auction.auctionId)
                 .send({
                     from: address,
-                    value: web3.utils.toWei(bid, "ether"),
+                    callValue: amount.toString(),
                 });
                 toast("Bid placed Successful");
                 const success = await setNotification(res);
@@ -1100,7 +1110,7 @@ const NftInfo = ({
                     await placeBidApi(
                         auction,
                         res,
-                        web3.utils.toWei(bid, "ether"),
+                        amount,
                         creator.name,
                         creator.email
                     )
