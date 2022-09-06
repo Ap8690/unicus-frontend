@@ -62,8 +62,9 @@ export async function getNftById(chain: any, contractAddress: any, nftId: any) {
 }
 
 export async function getNftByUserId() {
+  const _id = getUserId()
   return await axios.get(
-    `${BASE_URL}/nft/getNFTByUserId/${userInfo && userInfo._id}`,
+    `${BASE_URL}/nft/getNFTByUserId/${_id}`,
     axiosConfig()
   );
 }
@@ -283,20 +284,22 @@ export async function updateProfileSocial(instagram, facebook, twitter, discord,
   );
 }
 export async function updateProfilePic(url:string) {
+  const _id = getUserId()
   return await axios.post(
     `${BASE_URL}/users/update/profilePicture`,
     {
-      userId: userInfo._id,
+      userId: _id,
       cloudinaryUrl: url,
     },
     axiosConfig()
   );
 }
 export async function updateProfileBg(url: string) {
+  const _id = getUserId()
   return await axios.post(
     `${BASE_URL}/users/update/backgroundPicture`,
     {
-      userId: userInfo._id,
+      userId: _id,
       cloudinaryUrl: url,
     },
     axiosConfig()

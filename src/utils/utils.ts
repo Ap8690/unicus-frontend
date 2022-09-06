@@ -455,6 +455,22 @@ export const getChainName = (chain:any) => {
       return 0
   }
 };
+
+export const ChainIdUsingWalletName = (chainName:any) => {
+  console.log("chainName: ", chainName);
+  switch(chainName) {
+    case "Metamask":
+      return ethChain
+    case "Near":
+      return nearChain
+    case "Tron":
+      return tronChain
+    case "Solana":
+      return solonaChain
+    default: 
+      return bscChain
+  }
+}
 export const selectNetwork = (chain: string) => {
   const type =
     chain.toString() === bscChain
@@ -721,10 +737,8 @@ export const getStoreName = () => {
 };
 
 export const isMainStore = () => {
-  console.log("IS MAIN STORE: ",window.location.host === UNICUS_STORE)
-  console.log("UNICUS_STORE: ", UNICUS_STORE);
-  console.log("window.location.host: ", window.location.host);
-  return window.location.host === UNICUS_STORE;
+  // return window.location.host === UNICUS_STORE;
+  return false
 };
 export interface WalletsPopupProps {
   show: boolean;
