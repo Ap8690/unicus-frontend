@@ -5,44 +5,49 @@ import { bscChain, ethChain, tronChain } from "../../../config";
 import { getChainSymbol } from "../../../utils/utils";
 import { getCompleteDate } from "../../../utils/date";
 import uuid from "react-uuid";
+import { useEffect, useState } from "react";
+import { Skeleton } from "@mui/material";
 // Element of data of activity table
 const TableData = ({ activity, link }) => {
     let navigate = useNavigate();
+    useEffect(()=>{
+        console.log(activity)
+    },[activity])
     return (
         <tr
-            className="table-data cursor-pointer"
+            className="table-data cursor-pointer pb-6"
             onClick={() => navigate(link)}
         >
             <td className="table-data-item-name">
-                {activity.hasOwnProperty('nftId') && activity?.nftId.nftType?.includes("image") ? (
+                {activity.hasOwnProperty('nftId') ? ( activity?.nftId.nftType?.match(/image/) ? (
                     <img
                         src={activity.cloudinaryUrl}
                         alt={activity.name}
-                        style={{ width: "80px", marginRight: "15px" }}
+                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4'
                     />
                 ) : (
                     <video
                         autoPlay
                         loop
-                        style={{ width: "80px", marginRight: "15px" }}
+                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4'
                     >
                         <source
                             src={activity.cloudinaryUrl}
                             type={activity?.nftType}
                         />
                     </video>
-                )}
-                {activity.hasOwnProperty('nftType') && activity?.nftType?.includes("image") ? (
+                ))
+                : activity.hasOwnProperty('nftType') && activity?.nftType?.match(/image/) ? (
                     <img
                         src={activity.cloudinaryUrl}
                         alt={activity.name}
-                        style={{ width: "80px", marginRight: "15px" }}
+                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4'
                     />
                 ) : (
                     <video
                         autoPlay
                         loop
-                        style={{ width: "80px", marginRight: "15px" }}
+                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4'
                     >
                         <source
                             src={activity.cloudinaryUrl}
@@ -79,18 +84,53 @@ const TableData = ({ activity, link }) => {
         </tr>
     );
 };
-const Table = ({ rows, columns }) => {
+const Table = ({ rows, columns, loading }) => {
     return (
         <div className="table">
             <table>
-                <thead>
+                <thead className="tableHeadBorder">
                     <tr>
                         {columns.map((column: String, index: Number) => (
-                            <th key={uuid()}>{column}</th>
+                            <th key={`${column}${index}`}>{column}</th>
                         ))}
                     </tr>
                 </thead>
-                <tbody>
+                {loading 
+                ? <tbody>
+                        <tr className="table-data cursor-pointer pb-6">
+                            <td className="table-data-item-name">
+                                <Skeleton
+                                    variant="rectangular"
+                                    sx={{
+                                        width: "80px",
+                                        height: "80px",
+                                        borderRadius: "20px",
+                                        bgcolor: "#66666666",
+                                    }}
+                                />
+                                <Skeleton
+                                    sx={{
+                                        bgcolor: "#66666666",
+                                        fontSize: "20px",
+                                    }}
+                                />
+                            </td>
+                        {columns.map((item, i)=>{
+                            if(i === columns.length - 2) return
+                            return(
+                                <td key={item+i}>
+                                    <Skeleton
+                                        sx={{
+                                            bgcolor: "#66666666",
+                                            fontSize: "20px",
+                                        }}
+                                    />
+                                </td>
+                            )
+                        })}
+                    </tr>
+                </tbody>
+                : <tbody>
                     {rows && rows.length > 0 ? (
                         rows.map((row: any, i: number) => (
                             <TableData
@@ -109,6 +149,7 @@ const Table = ({ rows, columns }) => {
                         </tr>
                     )}
                 </tbody>
+                }
             </table>
         </div>
     );

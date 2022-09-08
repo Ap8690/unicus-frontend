@@ -78,18 +78,20 @@ const Profile = (): ReactJSXElement => {
     ];
 
     const createdColumns = ["Item", "Chain", "Created"];
-    const listingColumns = ["Image","Item", "Unit Price", "Status", "Created"];
-    const offersColumns = ["Item", "Lastest Bid", "Chain", "Created"];
+    const listingColumns = ["Item", "Unit Price", "Status", "Created"];
+    const offersColumns = ["Item", "Latest Bid", "Chain", "Created"];
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
     const [ordisplayListing, setorDisplayListing] = useState([]);
     const [ordisplayCreated, setorDisplayCreated] = useState([]);
     const [displayListing, setDisplayListing] = useState([]);
     const [displayCreated, setDisplayCreated] = useState([]);
+    const [tableLoading, setTableLoading] = useState(true)
     const navigate = useNavigate();
     const { profileState } = useParams();
 
     const getNfts = async () => {
+        setTableLoading(true)
         try {
             const res = await getNftByUserId();
             console.log("res nfts", res);
@@ -97,9 +99,11 @@ const Profile = (): ReactJSXElement => {
             setorDisplayListing(res.data.auctions);
             setDisplayCreated(res.data.nfts);
             setDisplayListing(res.data.auctions);
+            setTableLoading(false)
         } catch (e) {
             console.log(e);
             toast.error(e);
+            setTableLoading(false)
         }
     };
     const getUserProfile = async () => {
@@ -176,6 +180,7 @@ const Profile = (): ReactJSXElement => {
                             search={search}
                             setSearch={setSearch}
                             columns={listingColumns}
+                            loading={tableLoading}
                         />
                     )}
                     {profileState === "offers" && (
@@ -184,6 +189,7 @@ const Profile = (): ReactJSXElement => {
                             search={search}
                             setSearch={setSearch}
                             columns={offersColumns}
+                            loading={tableLoading}
                         />
                     )}
                     {(profileState === "created" || !profileState) && (
@@ -192,6 +198,7 @@ const Profile = (): ReactJSXElement => {
                             search={search}
                             setSearch={setSearch}
                             columns={createdColumns}
+                            loading={tableLoading}
                         />
                     )}
                 </div>

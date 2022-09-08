@@ -44,6 +44,7 @@ const Properties = ({ state, setState }) => {
               handleChange={handleChange}
               index={index}
               handleRemove={handleRemove}
+              className=''
             />
           ))}
         </div>
@@ -57,6 +58,7 @@ const Properties = ({ state, setState }) => {
               state={singleProperty.value}
               handleChange={handleChange}
               index={index}
+              className='noLeftBorder'
             />
           ))}
         </div>
@@ -68,7 +70,7 @@ const Properties = ({ state, setState }) => {
   )
 }
 
-const PropertyInput = ({ state, handleChange, handleRemove, index, name }) => {
+const PropertyInput = ({ state, handleChange, handleRemove, index, name, className }) => {
   return (
     <div className="property-input">
       {name !== "value" && (
@@ -84,6 +86,7 @@ const PropertyInput = ({ state, handleChange, handleRemove, index, name }) => {
         value={state}
         onChange={(e:any) => handleChange(e, index)}
         placeholder={name}
+        className={className}
       />
     </div>
   )

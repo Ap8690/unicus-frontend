@@ -89,23 +89,22 @@ const NftImg = ({ img, likes, views, shares, nftType }) => {
                     >
                         <TelegramIcon size={42} round />
                     </TelegramShareButton>
-                    {
                         <div className="user__id">
                             <p
                                 onClick={setCopied}
-                                className="txt__gray id"
-                                style={{ overflow: "auto" }}
+                                className="txt__gray id flex gap-4 py-4 items-center"
                             >
-                                {window.location.href}
+                                <div className="noScrollbar overflow-x-scroll overflow-y-hidden">
+                                    {window.location.href}
+                                </div>
                                 <span>
                                     <FiCopy />
                                 </span>
                             </p>
                             <div className="toolt">
-                                {isCopied ? "Copied" : "Copy"}
+                                {isCopied ? "Copied" : " "}
                             </div>
                         </div>
-                    }
                 </div>
             </PlaceBid>
             {!nftType?.includes("video") ? (
