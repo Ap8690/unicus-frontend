@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "0xsequence": "^0.39.3",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@metamask/detect-provider": "^1.2.0",
@@ -30,6 +29,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-select-country-list": "^2.2.0",
     "@walletconnect/web3-provider": "^1.7.8",
+    "0xsequence": "^0.39.3",
     "axios": "^0.27.2",
     "bs58": "^5.0.0",
     "dotenv": "^16.0.0",
@@ -38,6 +38,7 @@
     "js-cookie": "^3.0.1",
     "moment": "^2.29.4",
     "near-api-js": "^0.45.1",
+    "near-cli": "^3.4.2",
     "node-polyfill-webpack-plugin": "^2.0.0",
     "react": "^18.0.0",
     "react-bootstrap": "^2.4.0",

@@ -192,6 +192,9 @@ const CreateNftSingle = () => {
     };
 
     const handleRoyaltyChange = (e: any) => {
+        if(e.target.value <= 0 || e.target.value > 100) {
+            return 
+        }
         setRoyalty(e);
     };
 

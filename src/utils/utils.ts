@@ -320,11 +320,13 @@ export const connToTron = async () => {
 async function createNearSignature(keyStore: any,networkId: any, accountId: any) {
   const timestamp = (((new Date).getTime()).toString()).toString()
   const msg = Buffer.from(timestamp);
-  console.log("msg: ", msg);
 
   const signer = new nearAPI.InMemorySigner(keyStore)
+  console.log("signer: ", signer);
   const sign = await signer.signMessage(msg,accountId,networkId)
+  console.log("sign: ", sign);
   const publicKey = await signer.getPublicKey(accountId,networkId)
+  console.log("publicKey: ", publicKey);
   return {
     signature: sign.signature,
     message: timestamp,

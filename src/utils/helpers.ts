@@ -21,11 +21,6 @@ export async function initContract() {
   const near = await nearAPI.connect(config);
   const walletConnection = new nearAPI.WalletConnection(near, "unicus");
 
-  /*const config = getConfig(process.env.NEAR_ENV || 'testnet');
-  const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore()
-  const near =  await nearAPI.connect({keyStore, ...nearConfig})
-  const walletConnection = new nearAPI.WalletConnection(near)*/
-
   return { config, walletConnection,keyStore, networkId: config.networkId };
 }
 

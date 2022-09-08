@@ -3,8 +3,8 @@ import userImg from "../../assets/images/userImage.png";
 import twitterImg from "../../assets/svgs/profileTwitter.svg";
 import instagramImg from "../../assets/svgs/profileInstagram.svg";
 import facebookImg from "../../assets/svgs/profileFacebook.svg";
-import discord from "../../assets/svgs/discord-icon.svg";
-import linkedin from "../../assets/svgs/link.svg";
+import discord from "../../assets/images/discord.svg";
+import linkedin from "../../assets/images/linkedin.png";
 import { useEffect, useState } from "react";
 // import Input from "../../components/Input/Input";
 import Menu from "@mui/material/Menu";
@@ -42,13 +42,11 @@ const EditProfile = (props: any) => {
     const accessToken = getAccessToken();
     const getUserProfile = async () => {
         try {
-            console.log("BASE_URL: ", BASE_URL);
             const res = await axios.get(`${BASE_URL}/users/getUserProfile`, {
                 headers: {
                     Authorization: "Bearer " + `${accessToken}`,
                 },
             });
-            console.log("User Data: ", res?.data.user?.email);
             setUser(res.data.user);
         } catch (err) {
             console.log(err);
@@ -182,7 +180,7 @@ const EditProfile = (props: any) => {
                                         Add Social Links
                                     </span>
                                 </MenuItem>
-                                <MenuItem onClick={handleClose}>
+                                {/* <MenuItem onClick={handleClose}>
                                     <span
                                         onClick={() =>
                                             setActive("walletAddress")
@@ -195,7 +193,7 @@ const EditProfile = (props: any) => {
                                     >
                                         Wallet Address
                                     </span>
-                                </MenuItem>
+                                </MenuItem> */}
                             </Menu>
                         </div>
                     </div>
@@ -235,7 +233,7 @@ const EditProfile = (props: any) => {
                     >
                         Add Social Links
                     </span>
-                    <span
+                    {/* <span
                         onClick={() => setActive("walletAddress")}
                         className={`font-semibold cursor-pointer ${
                             active === "walletAddress"
@@ -244,7 +242,7 @@ const EditProfile = (props: any) => {
                         }`}
                     >
                         WalletAddress
-                    </span>
+                    </span> */}
                 </div>
                 <div className="w-full">
                     {active === "general" && <GeneralSettings resUser={user} />}
@@ -265,7 +263,6 @@ const EditProfile = (props: any) => {
 };
 
 const GeneralSettings = ({ resUser }) => {
-    console.log("resUser: ", resUser);
     const [username, setUserName] = useState<string>();
     const [email, setEmail] = useState("");
     const [bio, setBio] = useState<string>();
@@ -413,23 +410,26 @@ const AddSocials = ({ resUser, handleCancel }) => {
     };
     const updateProfile = async () => {
         try {
+            console.log("fa",facebook)
+            console.log('tw',twitter)
+            console.log('ds',discord)
             if (
+                twitter && twitter.length > 0 &&
                 !validator.isURL(twitter) &&
-                twitter.length > 0 &&
                 !twitter.includes("twitter")
             ) {
                 return toast.error("Please enter a valid url link to twitter");
             }
             if (
+                facebook && facebook.length > 0 &&
                 !validator.isURL(facebook) &&
-                facebook.length > 0 &&
                 !facebook.includes("facebook")
             ) {
                 return toast.error("Please enter a valid url link to facebook");
             }
             if (
+                instagram && instagram.length > 0 &&
                 !validator.isURL(instagram) &&
-                instagram.length > 0 &&
                 !instagram.includes("instagram")
             ) {
                 return toast.error(
@@ -437,15 +437,15 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 );
             }
             if (
+                discord && discord.length > 0 &&
                 !validator.isURL(discord) &&
-                discord.length > 0 &&
                 !discord.includes("discord")
             ) {
                 return toast.error("Please enter a valid url link to discord");
             }
             if (
+                linkedIn && linkedIn.length > 0 &&
                 !validator.isURL(linkedIn) &&
-                linkedIn.length > 0 &&
                 !linkedIn.includes("linkedIn")
             ) {
                 return toast.error("Please enter a valid url link to linkedIn");

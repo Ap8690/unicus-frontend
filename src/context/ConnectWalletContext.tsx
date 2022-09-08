@@ -153,7 +153,7 @@ export const WalletConnectionProvider = ({ children }) => {
             
         } catch (e) {
             toast.error(e.message);
-            console.log(e);
+            console.log("ERROR",e);
             setFullLoading(false)
         }
     };
