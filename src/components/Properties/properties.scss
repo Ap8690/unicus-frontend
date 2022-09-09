@@ -2,6 +2,10 @@
 @use '/src/styles/fonts';
 @use '/src/styles/mixins';
 
+.noLeftBorder{
+    border-left: none !important;
+}
+
 .adding-values{
     padding: 1rem 0;
     @include mixins.flex(center, space-between);

@@ -35,6 +35,7 @@ import {
     tronWeb,
     userInfo,
     getWalletChain,
+    ChainIdUsingWalletName,
 } from "../../utils/utils";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import {
@@ -83,7 +84,45 @@ import { decodeParams } from "../../utils/helpers";
 import Cookies from "js-cookie";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 
+const metamask = [
+    {
+        chain: "Ethereum",
+        id: ethChain,
+    },
+    {
+        chain: "Polygon",
+        id: polygonChain,
+    },
+    {
+        chain: "Binance",
+        id: bscChain,
+    },
+    {
+        chain: "Avalanche",
+        id: avalancheChain,
+    },
+];
+const near = [
+    {
+        chain: "Near",
+        id: nearChain,
+    },
+];
+const solana = [
+    {
+        chain: "Solana",
+        id: solonaChain,
+    },
+];
+const tron = [
+    {
+        chain: "Tron",
+        id: tronChain,
+    },
+];
+
 const CreateNftSingle = () => {
+    // let chain_name = ChainIdUsingWalletName(localStorage.getItem("walletChain"))
     const [name, setName] = useState("");
     const [extLink, setExtlink] = useState("");
     const [description, setDescription] = useState("");
@@ -190,6 +229,9 @@ const CreateNftSingle = () => {
     };
 
     const handleRoyaltyChange = (e: any) => {
+        if (e.target.value <= 0 || e.target.value > 100) {
+            return;
+        }
         setRoyalty(e);
     };
 
@@ -731,6 +773,7 @@ const CreateNftSingle = () => {
         ) {
             convertToFile();
         }
+        window.scrollTo(0, 0)
     }, []);
 
     useEffect(() => {
@@ -788,13 +831,24 @@ const CreateNftSingle = () => {
                     });
             }
         }
+
+
+        if(localStorage.getItem("walletChain") === "Tron") {
+            setChain(tronChain)
+        }
+        else if(localStorage.getItem("walletChain") === "Solana") {
+            setChain(solonaChain)
+        }
+        else if(localStorage.getItem("walletChain") === "Near") {
+            setChain(nearChain)
+        }
     }, []);
 
     return (
         <>
-            {modals.map((e: any) => (
+            {modals.map((e: any, i) => (
                 <AddProperties
-                    key={uuid()}
+                    key={i + "property"}
                     description={e.description}
                     open={e.open}
                     onClose={e.onClose}
@@ -873,12 +927,14 @@ const CreateNftSingle = () => {
                                 />{" "}
                             </div>
                             <div className="basic-info">
+                                <div className="mt-2"></div>
                                 <Input
                                     title="Name"
                                     placeholder={"Item Name"}
                                     state={name}
                                     setState={setName}
                                 />
+                                <div className="mt-8"></div>
                                 <Input
                                     title="External Link"
                                     placeholder={
@@ -887,6 +943,7 @@ const CreateNftSingle = () => {
                                     state={extLink}
                                     setState={setExtlink}
                                 />
+                                <div className="mt-8"></div>
                                 <Input
                                     title="Description (Word limit 240)"
                                     multi
@@ -908,35 +965,110 @@ const CreateNftSingle = () => {
                                             width: "100%",
                                         }}
                                     >
-                                        <Select
-                                            labelId="chain-select-label"
-                                            id="chain-select"
-                                            value={chain}
-                                            onChange={handleChange}
-                                            label="Chain"
-                                        >
-                                            <MenuItem value={ethChain}>
-                                                Ethereum
-                                            </MenuItem>
-                                            <MenuItem value={polygonChain}>
-                                                Polygon
-                                            </MenuItem>
-                                            <MenuItem value={bscChain}>
-                                                Binance
-                                            </MenuItem>
-                                            <MenuItem value={avalancheChain}>
-                                                Avalanche
-                                            </MenuItem>
-                                            <MenuItem value={tronChain}>
-                                                Tron
-                                            </MenuItem>
-                                            <MenuItem value={nearChain}>
-                                                Near
-                                            </MenuItem>
-                                            <MenuItem value={solonaChain}>
-                                                Solana
-                                            </MenuItem>
-                                        </Select>
+                                        {localStorage.getItem("walletChain") ===
+                                        "Metamask" ? (
+                                            <Select
+                                                labelId="chain-select-label"
+                                                id="chain-select"
+                                                value={chain}
+                                                onChange={handleChange}
+                                                label="Chain"
+                                                // disabled={true}
+                                            >
+                                                <MenuItem value={ethChain}>
+                                                    Ethereum
+                                                </MenuItem>
+                                                <MenuItem value={polygonChain}>
+                                                    Polygon
+                                                </MenuItem>
+                                                <MenuItem value={bscChain}>
+                                                    Binance
+                                                </MenuItem>
+                                                <MenuItem
+                                                    value={avalancheChain}
+                                                >
+                                                    Avalanche
+                                                </MenuItem>
+                                            </Select>
+                                        ) : localStorage.getItem(
+                                              "walletChain"
+                                          ) === "Tron" ? (
+                                            <Select
+                                                labelId="chain-select-label"
+                                                id="chain-select"
+                                                value={chain}
+                                                onChange={handleChange}
+                                                label="Chain"
+                                                // disabled={true}
+                                            >
+                                                <MenuItem value={tronChain}>
+                                                    Tron
+                                                </MenuItem>
+                                            </Select>
+                                        ) : localStorage.getItem(
+                                              "walletChain"
+                                          ) === "Near" ? (
+                                            <Select
+                                                labelId="chain-select-label"
+                                                id="chain-select"
+                                                value={chain}
+                                                onChange={handleChange}
+                                                label="Chain"
+                                                // disabled={true}
+                                            >
+                                                <MenuItem value={nearChain}>
+                                                    Near
+                                                </MenuItem>
+                                            </Select>
+                                        ) : localStorage.getItem(
+                                              "walletChain"
+                                          ) === "Solana" ? (
+                                            <Select
+                                                labelId="chain-select-label"
+                                                id="chain-select"
+                                                value={chain}
+                                                onChange={handleChange}
+                                                label="Chain"
+                                                // disabled={true}
+                                            >
+                                                <MenuItem value={solonaChain}>
+                                                    Solana
+                                                </MenuItem>
+                                            </Select>
+                                        ) : (
+                                            <Select
+                                                labelId="chain-select-label"
+                                                id="chain-select"
+                                                value={chain}
+                                                onChange={handleChange}
+                                                label="Chain"
+                                                // disabled={true}
+                                            >
+                                                <MenuItem value={ethChain}>
+                                                    Ethereum
+                                                </MenuItem>
+                                                <MenuItem value={polygonChain}>
+                                                    Polygon
+                                                </MenuItem>
+                                                <MenuItem value={bscChain}>
+                                                    Binance
+                                                </MenuItem>
+                                                <MenuItem
+                                                    value={avalancheChain}
+                                                >
+                                                    Avalanche
+                                                </MenuItem>
+                                                <MenuItem value={tronChain}>
+                                                    Tron
+                                                </MenuItem>
+                                                <MenuItem value={nearChain}>
+                                                    Near
+                                                </MenuItem>
+                                                <MenuItem value={solonaChain}>
+                                                    Solana
+                                                </MenuItem>
+                                            </Select>
+                                        )}
                                     </FormControl>
                                 </div>
                                 {chain === ethChain && (

@@ -43,56 +43,74 @@ export const WalletConnectionProvider = ({ children }) => {
     };
     //@ts-ignore
     const loginWallet = async (walletAddress: string) => {
-        // toast("Connecting to wallet...");
         try {
             setFullLoading(true)
-            let address: any, token: any;
+            let address: any, token: any,walletNetwork: any, message: any;
             switch (walletAddress) {
                 case "meta": {
                     const data = await connToMetaMask();
                     address = data.account;
                     token = data.token;
+                    message = data.message;
+                    walletNetwork="Metamask"
                     break;
                 }
                 case "cb": {
                     const data = await connToCoinbase();
                     address = data.account;
                     token = data.token;
+                    message = data.message;
+                    walletNetwork="Metamask"
                     break;
                 }
                 case "wc": {
                     const data = await connToWalletConnector();
                     address = data.account;
                     token = data.token;
+                    message = data.message;
+                    walletNetwork="Metamask"
                     break;
                 }
                 case "mew": {
                     const data = await connToMew();
                     address = data.account;
                     token = data.token;
+                    message = data.message;
+                    walletNetwork="Metamask"
                     break;
                 }
                 case "tron": {
-                    address = await connToTron();
-                    console.log(address,"address")
+                    const data = await connToTron(); 
+                    address = data.account;
+                    token = data.token;
+                    message = data.message;
+                    walletNetwork="Tron"
                     break;
                 }
                 case "sol": {
-                    address = await connToSol(
+                    const data = await connToSol(
                         publicKey,
                         getSolWallet,
                         connect,
                         setVisible
                     );
+                    address = data.account;
+                    token = data.token;
+                    message = data.message;
+                    walletNetwork="Solana"
                     break;
                 }
                 case "near": {
-                    address = await connectNear();
+                    const data = await connectNear();
+                    walletNetwork="Near"
+                    address = data.account
+                    token = data.token;
+                    message = data.message;
                     break;
                 }
             }
             if (address) {
-                const res = await walletLogin(address,token);
+                const res = await walletLogin(address,token,walletNetwork,message);
                 toast.success("Login successful");
                 Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
                     domain: cookieDomain,
@@ -123,12 +141,10 @@ export const WalletConnectionProvider = ({ children }) => {
                 setChainConnected(walletAddress)
                 setFullLoading(false)
                 setWalletModal(false)
-                console.log("redirect: ", redirect['*']);
                 // if(redirect)
                 //     navigate(`/${redirect["*"]}`, { replace: true });
                 if (window.location.pathname.includes('connect-wallet'))
                     navigate(`/marketplace`)
-                // window.location.reload();
             } else {
                 if (walletAddress !== "near") {
                     toast.error("Wallet connection failed");
@@ -136,8 +152,8 @@ export const WalletConnectionProvider = ({ children }) => {
             }
             
         } catch (e) {
-            toast.error(e.message);
-            console.log(e);
+            toast.error(e?.message || e || "Something went wrong, Please try again");
+            console.log("ERROR",e);
             setFullLoading(false)
         }
     };

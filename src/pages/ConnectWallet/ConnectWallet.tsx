@@ -34,13 +34,14 @@ const ConnectWallet: React.FC<AuthType> = () => {
     const [walletModal, setWalletModal] = useState(false);
     const { loginWallet, fullLoading } = useContext(ConnectWalletContext);
     useEffect(() => {
+        const message = ''
         const urlParams = new URLSearchParams(window.location.search);
         const nearAccountId = urlParams.get("account_id");
         const nearPublicKey = urlParams.get("public_key");
         if (nearAccountId !== null && nearPublicKey !== null) {
             // toast("Connection successful...");
             let token: string;
-            walletLogin(nearAccountId, token).then((res) => {
+            walletLogin(nearAccountId, token,"Near", message).then((res) => {
                 toast.success("Login successful");
                 Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
                     domain: cookieDomain,
@@ -55,13 +56,13 @@ const ConnectWallet: React.FC<AuthType> = () => {
                 console.log(":redirect", redirect["*"]);
 
                 navigate(`/${redirect["*"]}`, { replace: true });
-                window.location.reload();
+                // window.location.reload();
             });
         }
     }, []);
 
     return (
-        <div className="connect-wallet-page">
+        <div className="connect-wallet-page my-8">
             {fullLoading ? (
                 <PageLoader info={""} />
             ) : (
@@ -176,7 +177,7 @@ function AllWallets({ scase, loginWallet }) {
                                         alt="metamask"
                                     />
                                 </button>
-                                <button onClick={() => loginWallet("near")}>
+                                <button onClick={() => loginWallet("mew")}>
                                     MEW
                                     <img src={mewLogo} alt="metamask" />
                                 </button>
@@ -201,7 +202,7 @@ function AllWallets({ scase, loginWallet }) {
                                         alt="metamask"
                                     />
                                 </button>
-                                <button onClick={() => loginWallet("near")}>
+                                <button onClick={() => loginWallet("mew")}>
                                     MEW
                                     <img src={mewLogo} alt="metamask" />
                                 </button>
@@ -226,7 +227,7 @@ function AllWallets({ scase, loginWallet }) {
                                         alt="metamask"
                                     />
                                 </button>
-                                <button onClick={() => loginWallet("near")}>
+                                <button onClick={() => loginWallet("mew")}>
                                     MEW
                                     <img src={mewLogo} alt="metamask" />
                                 </button>
@@ -251,7 +252,7 @@ function AllWallets({ scase, loginWallet }) {
                                         alt="metamask"
                                     />
                                 </button>
-                                <button onClick={() => loginWallet("near")}>
+                                <button onClick={() => loginWallet("mew")}>
                                     MEW
                                     <img src={mewLogo} alt="metamask" />
                                 </button>

@@ -3,8 +3,8 @@ import userImg from "../../assets/images/userImage.png";
 import twitterImg from "../../assets/svgs/profileTwitter.svg";
 import instagramImg from "../../assets/svgs/profileInstagram.svg";
 import facebookImg from "../../assets/svgs/profileFacebook.svg";
-import discord from "../../assets/svgs/discord-icon.svg";
-import linkedin from "../../assets/svgs/link.svg";
+import discord from "../../assets/images/discord.svg";
+import linkedin from "../../assets/images/linkedin.png";
 import { useEffect, useState } from "react";
 // import Input from "../../components/Input/Input";
 import Menu from "@mui/material/Menu";
@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import WalletAdd from "../../components/Wallet/WalletAdd";
 import axios from "axios";
 import "./editprofile.scss";
+import Loader from "../../components/Loading/Loader";
 
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -42,13 +43,11 @@ const EditProfile = (props: any) => {
     const accessToken = getAccessToken();
     const getUserProfile = async () => {
         try {
-            console.log("BASE_URL: ", BASE_URL);
             const res = await axios.get(`${BASE_URL}/users/getUserProfile`, {
                 headers: {
                     Authorization: "Bearer " + `${accessToken}`,
                 },
             });
-            console.log("User Data: ", res?.data.user?.email);
             setUser(res.data.user);
         } catch (err) {
             console.log(err);
@@ -121,7 +120,7 @@ const EditProfile = (props: any) => {
                                 <img
                                     src={linkedin}
                                     alt="socials"
-                                    className="h-8 left-0 screen11:left-auto screen11:m-auto cursor-pointer"
+                                    className="h-6 left-0 screen11:left-auto screen11:m-auto cursor-pointer"
                                     onClick={() => setActive("social")}
                                 />
                             </div>
@@ -182,7 +181,7 @@ const EditProfile = (props: any) => {
                                         Add Social Links
                                     </span>
                                 </MenuItem>
-                                <MenuItem onClick={handleClose}>
+                                {/* <MenuItem onClick={handleClose}>
                                     <span
                                         onClick={() =>
                                             setActive("walletAddress")
@@ -195,7 +194,7 @@ const EditProfile = (props: any) => {
                                     >
                                         Wallet Address
                                     </span>
-                                </MenuItem>
+                                </MenuItem> */}
                             </Menu>
                         </div>
                     </div>
@@ -235,7 +234,7 @@ const EditProfile = (props: any) => {
                     >
                         Add Social Links
                     </span>
-                    <span
+                    {/* <span
                         onClick={() => setActive("walletAddress")}
                         className={`font-semibold cursor-pointer ${
                             active === "walletAddress"
@@ -244,7 +243,7 @@ const EditProfile = (props: any) => {
                         }`}
                     >
                         WalletAddress
-                    </span>
+                    </span> */}
                 </div>
                 <div className="w-full">
                     {active === "general" && <GeneralSettings resUser={user} />}
@@ -265,10 +264,10 @@ const EditProfile = (props: any) => {
 };
 
 const GeneralSettings = ({ resUser }) => {
-    console.log("resUser: ", resUser);
     const [username, setUserName] = useState<string>();
     const [email, setEmail] = useState("");
     const [bio, setBio] = useState<string>();
+    const [loading, setLoading] = useState(false);
     let navigate = useNavigate();
     const getUserProfile = async () => {
         setUserName(resUser?.username);
@@ -279,10 +278,13 @@ const GeneralSettings = ({ resUser }) => {
         try {
             if (!(username?.length > 0) && !(bio?.length > 0))
                 return toast.error("Please enter either username or bio");
+
+            setLoading(true);
             const res = await updateProfile(username, bio);
             toast.success("Profile updated Successfully", {
                 position: "bottom-center",
             });
+            setLoading(false);
         } catch (err) {
             console.log(err);
             toast.error(err);
@@ -293,41 +295,50 @@ const GeneralSettings = ({ resUser }) => {
     }, [resUser]);
 
     return (
-        <div className="flex flex-col gap-4">
-            <Input
-                title="Username"
-                placeholder="Enter your name"
-                state={username}
-                setState={setUserName}
-                multi={undefined}
-                date={undefined}
-                time={undefined}
-                password={undefined}
-                required={undefined}
-                disabled={undefined}
-            />
-            <Input
-                title="Bio"
-                placeholder="Enter your Bio"
-                multi
-                state={bio}
-                setState={setBio}
-                date={undefined}
-                time={undefined}
-                password={undefined}
-                required={undefined}
-                disabled={undefined}
-            />
+        <>
+            {loading ? (
+                <Loader />
+            ) : (
+                <div className="flex flex-col gap-4">
+                    <Input
+                        title="Username"
+                        placeholder="Enter your name"
+                        state={username}
+                        setState={setUserName}
+                        multi={undefined}
+                        date={undefined}
+                        time={undefined}
+                        password={undefined}
+                        required={undefined}
+                        disabled={undefined}
+                    />
+                    <Input
+                        title="Bio"
+                        placeholder="Enter your Bio"
+                        multi
+                        state={bio}
+                        setState={setBio}
+                        date={undefined}
+                        time={undefined}
+                        password={undefined}
+                        required={undefined}
+                        disabled={undefined}
+                    />
 
-            <div className="flex justify-between">
-                <button onClick={() => navigate("/profile")} className="btn">
-                    Cancel
-                </button>
-                <button className="btn" onClick={updateUserProfile}>
-                    Save Changes
-                </button>
-            </div>
-        </div>
+                    <div className="flex justify-between">
+                        <button
+                            onClick={() => navigate("/profile")}
+                            className="btn"
+                        >
+                            Cancel
+                        </button>
+                        <button className="btn" onClick={updateUserProfile}>
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 
@@ -403,7 +414,7 @@ const AddSocials = ({ resUser, handleCancel }) => {
     const [instagram, setInstagram] = useState("");
     const [discord, setDiscord] = useState("");
     const [linkedIn, setLinkedIn] = useState("");
-
+    const [loading, setLoading] = useState(false);
     const getUserProfile = async () => {
         setTwitter(resUser?.twitter);
         setFacebook(resUser?.facebook);
@@ -413,23 +424,29 @@ const AddSocials = ({ resUser, handleCancel }) => {
     };
     const updateProfile = async () => {
         try {
+            console.log("fa", facebook);
+            console.log("tw", twitter);
+            console.log("ds", discord);
             if (
-                !validator.isURL(twitter) &&
+                twitter &&
                 twitter.length > 0 &&
+                !validator.isURL(twitter) &&
                 !twitter.includes("twitter")
             ) {
                 return toast.error("Please enter a valid url link to twitter");
             }
             if (
-                !validator.isURL(facebook) &&
+                facebook &&
                 facebook.length > 0 &&
+                !validator.isURL(facebook) &&
                 !facebook.includes("facebook")
             ) {
                 return toast.error("Please enter a valid url link to facebook");
             }
             if (
-                !validator.isURL(instagram) &&
+                instagram &&
                 instagram.length > 0 &&
+                !validator.isURL(instagram) &&
                 !instagram.includes("instagram")
             ) {
                 return toast.error(
@@ -437,19 +454,22 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 );
             }
             if (
-                !validator.isURL(discord) &&
+                discord &&
                 discord.length > 0 &&
+                !validator.isURL(discord) &&
                 !discord.includes("discord")
             ) {
                 return toast.error("Please enter a valid url link to discord");
             }
             if (
-                !validator.isURL(linkedIn) &&
+                linkedIn &&
                 linkedIn.length > 0 &&
+                !validator.isURL(linkedIn) &&
                 !linkedIn.includes("linkedIn")
             ) {
                 return toast.error("Please enter a valid url link to linkedIn");
             }
+            setLoading(true)
             const res = await updateProfileSocial(
                 instagram,
                 facebook,
@@ -468,8 +488,9 @@ const AddSocials = ({ resUser, handleCancel }) => {
             toast.success("Socials Updated Successfully", {
                 position: "bottom-center",
             });
+            setLoading(false)
         } catch (err) {
-            console.log(err);
+            setLoading(false)
             toast.error(err);
         }
     };
@@ -481,76 +502,82 @@ const AddSocials = ({ resUser, handleCancel }) => {
         getUserProfile();
     }, []);
     return (
-        <div className="flex flex-col gap-4">
-            <Input
-                title="Add Twitter"
-                placeholder="Enter Twitter link"
-                state={twitter}
-                setState={setTwitter}
-                multi={undefined}
-                date={undefined}
-                time={undefined}
-                password={undefined}
-                required={undefined}
-                disabled={undefined}
-            />
-            <Input
-                title="Add Facebook"
-                placeholder="Enter facebook link"
-                state={facebook}
-                setState={setFacebook}
-                multi={undefined}
-                date={undefined}
-                time={undefined}
-                password={undefined}
-                required={undefined}
-                disabled={undefined}
-            />
-            <Input
-                title="Add Instagram"
-                placeholder="Enter Instagram link"
-                state={instagram}
-                setState={setInstagram}
-                multi={undefined}
-                date={undefined}
-                time={undefined}
-                password={undefined}
-                required={undefined}
-                disabled={undefined}
-            />
-            <Input
-                title="Add Discord"
-                placeholder="Enter Discord link"
-                state={discord}
-                setState={setDiscord}
-                multi={undefined}
-                date={undefined}
-                time={undefined}
-                password={undefined}
-                required={undefined}
-                disabled={undefined}
-            />
-            <Input
-                title="Add LinkedIn"
-                placeholder="Enter LinkedIn link"
-                state={linkedIn}
-                setState={setLinkedIn}
-                multi={undefined}
-                date={undefined}
-                time={undefined}
-                password={undefined}
-                required={undefined}
-                disabled={undefined}
-            />
-            <div className="flex justify-between">
-                <button className="btn" onClick={handleCancel}>
-                    Cancel
-                </button>
-                <button className="btn" onClick={() => updateProfile()}>
-                    Save Changes
-                </button>
-            </div>
-        </div>
+        <>
+            {loading ? (
+                <Loader />
+            ) : (
+                <div className="flex flex-col gap-4">
+                    <Input
+                        title="Add Twitter"
+                        placeholder="Enter Twitter link"
+                        state={twitter}
+                        setState={setTwitter}
+                        multi={undefined}
+                        date={undefined}
+                        time={undefined}
+                        password={undefined}
+                        required={undefined}
+                        disabled={undefined}
+                    />
+                    <Input
+                        title="Add Facebook"
+                        placeholder="Enter facebook link"
+                        state={facebook}
+                        setState={setFacebook}
+                        multi={undefined}
+                        date={undefined}
+                        time={undefined}
+                        password={undefined}
+                        required={undefined}
+                        disabled={undefined}
+                    />
+                    <Input
+                        title="Add Instagram"
+                        placeholder="Enter Instagram link"
+                        state={instagram}
+                        setState={setInstagram}
+                        multi={undefined}
+                        date={undefined}
+                        time={undefined}
+                        password={undefined}
+                        required={undefined}
+                        disabled={undefined}
+                    />
+                    <Input
+                        title="Add Discord"
+                        placeholder="Enter Discord link"
+                        state={discord}
+                        setState={setDiscord}
+                        multi={undefined}
+                        date={undefined}
+                        time={undefined}
+                        password={undefined}
+                        required={undefined}
+                        disabled={undefined}
+                    />
+                    <Input
+                        title="Add LinkedIn"
+                        placeholder="Enter LinkedIn link"
+                        state={linkedIn}
+                        setState={setLinkedIn}
+                        multi={undefined}
+                        date={undefined}
+                        time={undefined}
+                        password={undefined}
+                        required={undefined}
+                        disabled={undefined}
+                    />
+                    <div className="flex justify-between">
+                        <button className="btn" onClick={handleCancel}>
+                            Cancel
+                        </button>
+                        <button className="btn" onClick={() => updateProfile()}>
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 
