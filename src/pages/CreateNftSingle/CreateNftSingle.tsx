@@ -229,10 +229,10 @@ const CreateNftSingle = () => {
     };
 
     const handleRoyaltyChange = (e: any) => {
-        if (e.target.value <= 0 || e.target.value > 100) {
+        if (e.target.value < 0 || e.target.value > 100) {
             return;
         }
-        setRoyalty(e);
+        setRoyalty(e.target.value);
     };
 
     const uploadFile = async (e: any) => {
@@ -1167,7 +1167,7 @@ const CreateNftSingle = () => {
                                         title={"Royalty"}
                                         placeholder="0 - 99 %"
                                         state={royalty}
-                                        setState={handleRoyaltyChange}
+                                        setState={setRoyalty}
                                         number
                                     />
                                     {royaltyError && (
@@ -1205,30 +1205,12 @@ const CreateNftSingle = () => {
                                     </button>
                                 </div>
                             </div>
-                            {chain === nearChain &&
-                                (getWalletChain() == "Near" ? (
-                                    <button
-                                        className="btn create-btn"
-                                        onClick={() => cryptoPayment()}
-                                    >
-                                        Create
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="btn create-btn"
-                                        onClick={() => loginWallet("near")}
-                                    >
-                                        Connect Wallet
-                                    </button>
-                                ))}
-                            {chain !== nearChain && (
                                 <button
                                     className="btn create-btn"
                                     onClick={() => cryptoPayment()}
                                 >
                                     Create
                                 </button>
-                            )}
                         </div>
                         <div className="preview-field">
                             <div className="field-title">Preview</div>

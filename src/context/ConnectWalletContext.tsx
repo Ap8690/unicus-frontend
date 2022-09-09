@@ -43,6 +43,7 @@ export const WalletConnectionProvider = ({ children }) => {
     };
     //@ts-ignore
     const loginWallet = async (walletAddress: string) => {
+        console.log("walletAddress: ", walletAddress);
         try {
             setFullLoading(true)
             let address: any, token: any,walletNetwork: any, message: any;
