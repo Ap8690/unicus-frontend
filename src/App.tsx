@@ -1,5 +1,5 @@
 // Libraries
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 import { clusterApiUrl } from "@solana/web3.js";
@@ -25,10 +25,8 @@ import "react-toastify/dist/ReactToastify.css";
 // Components
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
-
 //utils
 import ScrollToTop from "./utils/ScrollToTop";
-
 // Pages
 import ConnectWallet from "./pages/ConnectWallet/ConnectWallet";
 import CreateNftSelector from "./pages/CreateNftSelector/CreateNftSelectior";
@@ -64,9 +62,17 @@ import 'swiper/css/pagination';
 // import NFTById from "./components/NFTById/NFTById";
 import { UserProvider } from "./context/UserContext";
 import { TransactionProvider } from "./context/Web3Context";
-import { ChainProvider } from "./context/ChainContext";
+import { ChainContext, ChainProvider } from "./context/ChainContext";
 import { WalletConnectionProvider } from "./context/ConnectWalletContext";
-
+import {
+  tronChain,
+  bscChain,
+  ethChain,
+  polygonChain,
+  nearChain,
+  solonaChain,
+  avalancheChain,
+} from "./config";
 // redux integration
 import { Provider } from "react-redux";
 import { rstore } from "./Redux/Store";
@@ -77,6 +83,7 @@ const App = () => {
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 //@ts-ignore
 const [store, setStore] = useState<IStore>({});
+
 const [userStore, setUserStore] = useState<any>();
 const [accessToken, setAccessToken] = useState("");
 const [showStore, setShowStore] = useState(true);
@@ -89,7 +96,6 @@ useEffect(() => {
   } else {
     init();
     setLogin();
-
   }
 }, [accessToken]);
 
@@ -148,13 +154,12 @@ useEffect(() => {
   if (location.pathname === "/") {
     navigate("/home", {replace:true});
   }
+  
 }, []);
 
 // useEffect(() => {
 //   getStoreForUser();
 // }, [accessToken]);
-
-
   //@ts-ignore
   const wallets = useMemo(
     () => [

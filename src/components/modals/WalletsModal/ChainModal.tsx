@@ -17,7 +17,7 @@ const ChainCard = ({ chainName, chainLogo, handleChain }) => {
         <div onClick={() => handleChain(chainName)} className="py-6 rounded-2xl hover:border hover:border-white border border-black cursor-pointer flex justify-center items-center px-4 w-1/2 overflow-hidden sm:w-full lg:w-1/2">
             <button className="wallet-logo flex items-center justify-center flex-col">
                 <img className="h-8" src={chainLogo} alt="MetaMask" />
-                <span className='text-white font-2xl'>{chainName}</span>
+                <span className='text-white font-medium text-[20px]'>{chainName}</span>
             </button>
         </div>
     )
@@ -30,9 +30,8 @@ const ChainModal = ({ open, setOpen, setWalletModal}) => {
         setOpen(false)
     }
     const handleChain = (chain:any) => {
-        console.log("chain: ", chain);
-        chain = getChainId(chain.toLowerCase())
-        console.log("chain: ", chain);
+        chain = getChainId(chain?.toLowerCase())
+        setOpen(false)
         setWalletModal(true)
         setChain(chain)
         localStorage.setItem("CHAIN",chain)
@@ -52,7 +51,7 @@ const ChainModal = ({ open, setOpen, setWalletModal}) => {
             }}
         >
             {/* <div className="container"> */}
-            <div className="flex flex-wrap  overflow-hidden">
+            <div className="flex flex-wrap  overflow-hidden m-4">
                 <ChainCard handleChain={handleChain} chainName={"Ethereum"} chainLogo={ethereumLogo} />
                 <ChainCard handleChain={handleChain} chainName={"Binance"} chainLogo={binanceLogo} />
                 <ChainCard handleChain={handleChain} chainName={"Avalanche"} chainLogo={avalancheLogo} />

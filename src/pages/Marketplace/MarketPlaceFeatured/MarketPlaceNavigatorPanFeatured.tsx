@@ -23,7 +23,7 @@ const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll, loading }) => {
     loading ? (
       <NftSkeletonLoader singleRow className='loader-margin'/>
     ) :
-    <Swiper 
+    list && list.length>0 ? <Swiper 
       modules={[Navigation, Pagination]}  
       className="market-place-featured-elements"
       navigation={{
@@ -42,7 +42,7 @@ const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll, loading }) => {
         },
     }}
     >
-      {list.map((element: any, i: number) => (
+     { list.map((element: any, i: number) => (
         <SwiperSlide
         key={uuid()}
           onClick={()=>navigate(`/nft/${element.chain}/${getNftContractAddress(
@@ -52,8 +52,8 @@ const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll, loading }) => {
         >
           <Element key={uuid()} element={element} />
         </SwiperSlide>
-      ))}
-    </Swiper>
+      )) }
+    </Swiper>: <div className="min-h-[300px] text-xl font-bold flex justify-center items-center">No Nfts Found</div>
   );
 };
 export default MarketPlaceNavigatorPanFeatured;

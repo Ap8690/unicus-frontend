@@ -472,6 +472,8 @@ export const getChainSymbol = (chain: any) => {
             : "ETH";
     }
 };
+
+// Returns CHAIN ID
 export const getChainId = (chain: any) => {
     switch (chain.toString()) {
         case "ethereum":
@@ -493,6 +495,8 @@ export const getChainId = (chain: any) => {
     }
 };
 
+
+// Returns CHAIN Name
 export const getChainName = (chain: any) => {
     switch (chain?.toString()) {
         case ethChain:
@@ -514,6 +518,7 @@ export const getChainName = (chain: any) => {
     }
 };
 
+// Return Chain Name Using wallet name
 export const ChainIdUsingWalletName = (chainName: any) => {
     console.log("chainName: ", chainName);
     switch (chainName) {

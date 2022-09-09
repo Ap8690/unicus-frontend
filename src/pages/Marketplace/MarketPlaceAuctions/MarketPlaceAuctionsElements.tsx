@@ -58,7 +58,7 @@ const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType, loading 
     loading ? (
       <NftSkeletonLoader singleRow className='loader-margin'/>
     ) : (
-    <Swiper 
+   list && list.length>0 ? <Swiper 
       modules={[Navigation, Pagination]}  
       className="market-place-auctions-elements"
       navigation={{
@@ -93,7 +93,8 @@ const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType, loading 
           />
         </SwiperSlide>
       ))}
-    </Swiper>
+    </Swiper> : <div className="min-h-[300px] text-xl font-bold flex justify-center items-center">No Nfts Found</div>
+
   ))
 };
 

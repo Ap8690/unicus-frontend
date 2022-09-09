@@ -15,7 +15,7 @@ const DayListElement = ({ day, updateDay }) => {
 };
 const MarketPlaceTopCollectionsHeader = ({ day, setDay, days }) => {
   const [ifOpen, setIfOpen] = useState(false);
-  const updateDay = (d) => {
+  const updateDay = (d:any) => {
     setDay(d);
     setIfOpen(false);
   };

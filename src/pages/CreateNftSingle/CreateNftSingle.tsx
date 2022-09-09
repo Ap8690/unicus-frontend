@@ -833,7 +833,6 @@ const CreateNftSingle = () => {
             }
         }
 
-
         if(localStorage.getItem("walletChain") === "Tron") {
             setChain(tronChain)
         }
@@ -843,6 +842,10 @@ const CreateNftSingle = () => {
         else if(localStorage.getItem("walletChain") === "Near") {
             setChain(nearChain)
         }
+        else {
+          setChain(ethChain)
+        }
+        
     }, []);
 
     return (

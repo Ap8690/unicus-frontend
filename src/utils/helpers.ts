@@ -112,3 +112,7 @@ export const isChainConnected = (pageChain:any) => {
   return connectedChain === chainName
 }
 
+export const getLocalStorage = (item: any) => {
+  return localStorage.getItem(item) ? localStorage.getItem(item) : null
+}
+

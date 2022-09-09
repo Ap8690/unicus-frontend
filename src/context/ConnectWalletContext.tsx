@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { WalletConnection } from "near-api-js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
@@ -15,8 +15,9 @@ import {
 } from "../utils/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "../utils/constants";
-import { cookieDomain } from "../config";
+import { cookieDomain, ethChain, nearChain,solonaChain , tronChain } from "../config";
 import { walletLogin } from "../services/api/supplier";
+import { ChainContext } from "./ChainContext";
 
 export type ConnectWalletContextType = {
     loginWallet?: any;
@@ -38,12 +39,12 @@ export const WalletConnectionProvider = ({ children }) => {
     const [fullLoading,setFullLoading] = useState(false)
     const [chainConnected,setChainConnected] = useState('')
     const [walletModal,setWalletModal] = useState<boolean>(false)
+    const {chain,setChain} = useContext(ChainContext)
     const getSolWallet = () => {
         return wallet;
     };
     //@ts-ignore
     const loginWallet = async (walletAddress: string) => {
-        console.log("walletAddress: ", walletAddress);
         try {
             setFullLoading(true)
             let address: any, token: any,walletNetwork: any, message: any;
@@ -54,6 +55,8 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data.token;
                     message = data.message;
                     walletNetwork="Metamask"
+                    // convert the chain to selected chain
+                    setChain(ethChain)
                     break;
                 }
                 case "cb": {
@@ -62,6 +65,8 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data.token;
                     message = data.message;
                     walletNetwork="Metamask"
+                    // convert the chain to selected chain
+                    setChain(ethChain)
                     break;
                 }
                 case "wc": {
@@ -70,6 +75,8 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data.token;
                     message = data.message;
                     walletNetwork="Metamask"
+                    // convert the chain to selected chain
+                    setChain(ethChain)
                     break;
                 }
                 case "mew": {
@@ -78,6 +85,8 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data.token;
                     message = data.message;
                     walletNetwork="Metamask"
+                    // convert the chain to selected chain
+                    setChain(ethChain)
                     break;
                 }
                 case "tron": {
@@ -86,6 +95,7 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data.token;
                     message = data.message;
                     walletNetwork="Tron"
+                    setChain(tronChain)
                     break;
                 }
                 case "sol": {
@@ -99,6 +109,7 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data.token;
                     message = data.message;
                     walletNetwork="Solana"
+                    setChain(solonaChain)
                     break;
                 }
                 case "near": {
@@ -107,6 +118,7 @@ export const WalletConnectionProvider = ({ children }) => {
                     address = data.account
                     token = data.token;
                     message = data.message;
+                    setChain(nearChain)
                     break;
                 }
             }
@@ -137,7 +149,6 @@ export const WalletConnectionProvider = ({ children }) => {
                 else if(walletAddress === "sol") {
                     walletChain = "Solana"
                 }
-                console.log("walletChain: ", walletChain);
                 localStorage.setItem("walletChain",walletChain);
                 setChainConnected(walletAddress)
                 setFullLoading(false)
