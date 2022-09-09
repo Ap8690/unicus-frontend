@@ -38,10 +38,10 @@ const Homepage = () => {
   return (
     <div className="homepage">
       <Helmet>
-                <meta charSet="utf-8" />
-                <title>UnicusOne - Marketplace</title>
-                <link rel="canonical" href={window.location.href} />
-            </Helmet>
+        <meta charSet="utf-8" />
+        <title>UnicusOne - Marketplace</title>
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <HomepageBackground />
       <Circles />
       <TopBanner />
@@ -128,7 +128,7 @@ const UnicusEcosystem = () => {
         Economy
       </p>
       <div className="ecosystemGrid">
-        {data && data.map((item:any) => (
+        {data && data.map((item: any) => (
           <div key={uuid()} className="gridData">
             <img src={item.img} alt="ecosystem" />
             <p className="itemMid">{item.title}</p>
@@ -269,7 +269,7 @@ const Solution2 = () => {
     </div>
   );
 };
-const Solution3 = ({}) => {
+const Solution3 = ({ }) => {
   return (
     <div className="soln-3">
       <div className="soln-head">
@@ -382,7 +382,7 @@ const Token = () => {
         <img src={tokenImg} alt="token" />
         <div>
           <span>
-            The UnicusOne Token called “UI” is deployed on the Binance Smart
+            The UnicusOne Token called “U1” is deployed on the Binance Smart
             Chain
           </span>
           <span>The total supply is 150 Million Tokens</span>
