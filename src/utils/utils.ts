@@ -109,8 +109,8 @@ export let nearWalletConnection: any;
 export let web3 = new Web3(Web3.givenProvider);
 
 //@ts-ignore
-export let tronWeb = window.tronWeb? window.tronWeb
-  : new TronWeb({ fullNode,solidityNode,eventServer,privateKey });
+export let tronWeb = window.tronWeb ? window.tronWeb
+  : new TronWeb({ fullNode,solidityNode,eventServer,privateKey })
 
 interface requestAccountsResponse{
   code: Number, // 200：ok 4000：in queue, no need to repeat commit， 4001：user rejected
@@ -126,7 +126,6 @@ export const connectWallet = async (
 ) => {
   try {
     let address: any;
-    console.log(network,"network")
     if (network.toString() === nearChain) {
       if(getWalletChain() !== "Near") {
         return toast.error("Please login with NEAR Wallet!")
@@ -139,12 +138,14 @@ export const connectWallet = async (
     } else if (network.toString() === tronChain) {
       //@ts-ignore
       const res: requestAccountsResponse = await tronLink.request({method: 'tron_requestAccounts'})
+      console.log("res: ", res);
       if(res?.code === 4001){
         toast.error("Rejected the authorization!");
       }
-      tronWeb.trx.sign("This has to be signed!")
+      await tronWeb.trx.sign("This has to be signed!")
       console.log("this one has to be signed")
-      address = tronWeb.defaultAddress.base58;
+      address = await tronWeb.defaultAddress.base58;
+      console.log("address: ", address);
     } else if (network.toString() === solonaChain) {
       address = await connToSol(publicKey, wallet, connect, setVisible);
     } else {

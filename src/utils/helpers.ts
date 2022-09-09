@@ -111,3 +111,4 @@ export const isChainConnected = (pageChain:any) => {
   
   return connectedChain === chainName
 }
+
