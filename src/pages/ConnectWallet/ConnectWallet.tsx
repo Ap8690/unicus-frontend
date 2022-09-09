@@ -8,6 +8,7 @@ import nearLogo from "../../assets/svgs/nearLogo.svg";
 import coinbaseLogo from "../../assets/svgs/coinbase.svg";
 import mewLogo from "../../assets/svgs/myetherwallet.svg";
 import walletconnectLogo from "../../assets/svgs/walletconnect.svg";
+import { AiFillCloseCircle } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import { WalletConnection } from "near-api-js";
 import { walletLogin } from "../../services/api/supplier";
@@ -17,24 +18,30 @@ import { ACCESS_TOKEN } from "../../utils/constants";
 import { cookieDomain } from "../../config";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 import PageLoader from "../../components/Loading/PageLoader";
+import ChainModal from "../../components/modals/WalletsModal/ChainModal";
+import WalletsModal from "../../components/modals/WalletsModal/WalletsModal";
+import { ChainContext } from "../../context/ChainContext";
 
 type AuthType = Readonly<{
     wallet?: WalletConnection;
 }>;
 
 const ConnectWallet: React.FC<AuthType> = () => {
+    const { chain, setChain } = useContext(ChainContext);
     const navigate = useNavigate();
     let redirect = useParams();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [walletModal, setWalletModal] = useState(false);
     const { loginWallet, fullLoading } = useContext(ConnectWalletContext);
     useEffect(() => {
-        const message = ''
+        const message = "";
         const urlParams = new URLSearchParams(window.location.search);
         const nearAccountId = urlParams.get("account_id");
         const nearPublicKey = urlParams.get("public_key");
         if (nearAccountId !== null && nearPublicKey !== null) {
             // toast("Connection successful...");
             let token: string;
-            walletLogin(nearAccountId, token,"Near", message).then((res) => {
+            walletLogin(nearAccountId, token, "Near", message).then((res) => {
                 toast.success("Login successful");
                 Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
                     domain: cookieDomain,
@@ -59,7 +66,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
             {fullLoading ? (
                 <PageLoader info={""} />
             ) : (
-                <div className="connect-wrapper">
+                <div className="connect-wrapper h-[90vh] flex justify-center items-center flex-col">
                     <div className="using-email">
                         <div className="blue-head">Connect using Email</div>
                         <button
@@ -68,21 +75,44 @@ const ConnectWallet: React.FC<AuthType> = () => {
                         >
                             Login
                         </button>
+                    </div>
+                    <div className="using-wallets mt-10">
+                        <div className="blue-head">Connect using Wallet</div>
+                        <div className="wallet-text mb-[20px]">
+                            Connect with one of our available wallet providers
+                            or create a new one{" "}
+                        </div>
                         <button
                             className="large-btn-outline"
-                            onClick={() => navigate("/register")}
+                            onClick={() =>
+                                setIsModalOpen((prevState) => !prevState)
+                            }
                         >
-                            Register
+                            Connect Wallet
                         </button>
                     </div>
-                    <Wallets loginWallet={loginWallet} chainName={"all"} />
+
+                    <ChainModal
+                        open={isModalOpen}
+                        setOpen={setIsModalOpen}
+                        setWalletModal={setWalletModal}
+                    />
+                    <WalletsModal
+                        open={walletModal}
+                        setOpen={setWalletModal}
+                        chainName={chain?.toLowerCase()}
+                    />
                 </div>
             )}
         </div>
     );
 };
 
-export const Wallets = ({ loginWallet, chainName }) => {
+type WalletProps = {
+    loginWallet?: any;
+    chainName?: any;
+};
+export const Wallets = ({ loginWallet, chainName }: WalletProps) => {
     return (
         <div className="connect-wallet-page">
             <div className="connect-wrapper">
@@ -92,6 +122,7 @@ export const Wallets = ({ loginWallet, chainName }) => {
                         Connect with one of our available wallet providers or
                         create a new one{" "}
                     </div>
+
                     <AllWallets scase={chainName} loginWallet={loginWallet} />
                     <div className="wallets"></div>
                 </div>
@@ -178,6 +209,32 @@ function AllWallets({ scase, loginWallet }) {
                             </>
                         );
                     case "binance":
+                        return (
+                            <>
+                                <button onClick={() => loginWallet("meta")}>
+                                    Metamask
+                                    <img src={metamaskLogo} alt="metamask" />
+                                </button>
+
+                                <button onClick={() => loginWallet("cb")}>
+                                    Coinbase
+                                    <img src={coinbaseLogo} alt="metamask" />
+                                </button>
+                                <button onClick={() => loginWallet("wc")}>
+                                    WalletConnect
+                                    <img
+                                        src={walletconnectLogo}
+                                        alt="metamask"
+                                    />
+                                </button>
+                                <button onClick={() => loginWallet("mew")}>
+                                    MEW
+                                    <img src={mewLogo} alt="metamask" />
+                                </button>
+                            </>
+                        );
+
+                    case "avalanche":
                         return (
                             <>
                                 <button onClick={() => loginWallet("meta")}>

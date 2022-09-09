@@ -53,16 +53,16 @@ const Navbar = ({ store }) => {
             // navigate(`/explore/${chain}`);
             setChain(chain);
             toast.dismiss()
-            if(chain!=="all")
-            toast.info(`You are on ${capitalize(chain)} network`);
+            if (chain !== "all")
+                toast.info(`You are on ${capitalize(chain)} network`);
         }
     };
     const handleClickProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
         accessToken
             ? setAnchorProfile(event.currentTarget)
             : navigate(`../connect-wallet${location.pathname}`, {
-                  replace: true,
-              });
+                replace: true,
+            });
     };
     const handleCloseProfile = () => {
         disConnectWallet();
@@ -73,17 +73,17 @@ const Navbar = ({ store }) => {
         navigate(`/search/${search}`)
     }
     useEffect(() => {
-      function new_bg() {
-        if (window.scrollY === 0) return setSolidNav(false);
-        if (window.scrollY > 0) return setSolidNav(true);
-        setSolidNav(false);
-      }
-      window.addEventListener("scroll",new_bg);
+        function new_bg() {
+            if (window.scrollY === 0) return setSolidNav(false);
+            if (window.scrollY > 0) return setSolidNav(true);
+            setSolidNav(false);
+        }
+        window.addEventListener("scroll", new_bg);
 
-      return () => {
-        window.removeEventListener('scroll', new_bg);
-      };
-    },[])
+        return () => {
+            window.removeEventListener('scroll', new_bg);
+        };
+    }, [])
 
     return (
         <>
@@ -119,8 +119,8 @@ const Navbar = ({ store }) => {
                         </button>
                     </div>
                     {isMainStore() &&
-                    (location.pathname === "/home" ||
-                        location.pathname === "/blog") ? (
+                        (location.pathname === "/home" ||
+                            location.pathname === "/blog") ? (
                         <div className="nav-links">
                             <Link to={"/about-us"} className="nav-link">
                                 About
@@ -270,8 +270,8 @@ const Navbar = ({ store }) => {
                                 store={store}
                             />
                             {isMainStore() &&
-                            store &&
-                            Object.keys(store).length !== 0 ? (
+                                store &&
+                                Object.keys(store).length !== 0 ? (
                                 <a
                                     href={
                                         store.domain && store.domain.length > 0
@@ -309,10 +309,10 @@ const Navbar = ({ store }) => {
                                 className="btn nav-link"
                             >
                                 Connect Wallet
-                            </button> : 
-                            <Link to={"/marketplace"} className="btn nav-link">
-                                Marketplace
-                            </Link>
+                            </button> :
+                                <Link to={"/marketplace"} className="btn nav-link">
+                                    Marketplace
+                                </Link>
                             }
                         </div>
                     )}

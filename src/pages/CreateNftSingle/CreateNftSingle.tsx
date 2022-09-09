@@ -229,10 +229,10 @@ const CreateNftSingle = () => {
     };
 
     const handleRoyaltyChange = (e: any) => {
-        if (e.target.value <= 0 || e.target.value > 100) {
+        if (e.target.value < 0 || e.target.value > 100) {
             return;
         }
-        setRoyalty(e);
+        setRoyalty(e.target.value);
     };
 
     const uploadFile = async (e: any) => {
@@ -477,14 +477,15 @@ const CreateNftSingle = () => {
                 setMetamaskNotFound(true);
                 return null;
             }
-            await connectWallet(
-                chain,
-                publicKey,
-                getSolWallet,
-                connect,
-                setVisible
-            )
-                .then(async (address) => {
+            // await connectWallet(
+            //     chain,
+            //     publicKey,
+            //     getSolWallet,
+            //     connect,
+            //     setVisible
+            // )
+            //     .then(async (address) => {
+                let address = localStorage.getItem("walletConnected")
                     if (!address) {
                         toast.error("Wallet connection failed");
                         return;
@@ -584,7 +585,7 @@ const CreateNftSingle = () => {
                                 chain,
                                 contractType
                             );
-
+                                console.log("createNFT ",address)
                             let res: any;
                             if (contractType === "721") {
                                 res = await createNFT.methods
@@ -715,11 +716,11 @@ const CreateNftSingle = () => {
                         }
                         setdefaultErrorModal(true);
                     }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    toast.error("Mint failed.");
-                });
+                // })
+                // .catch((err) => {
+                //     console.log(err);
+                //     toast.error("Mint failed.");
+                // });
         } catch (e) {
             console.log(e);
             setNftLoading(false);
@@ -1167,7 +1168,7 @@ const CreateNftSingle = () => {
                                         title={"Royalty"}
                                         placeholder="0 - 99 %"
                                         state={royalty}
-                                        setState={handleRoyaltyChange}
+                                        setState={setRoyalty}
                                         number
                                     />
                                     {royaltyError && (
@@ -1205,30 +1206,12 @@ const CreateNftSingle = () => {
                                     </button>
                                 </div>
                             </div>
-                            {chain === nearChain &&
-                                (getWalletChain() == "Near" ? (
-                                    <button
-                                        className="btn create-btn"
-                                        onClick={() => cryptoPayment()}
-                                    >
-                                        Create
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="btn create-btn"
-                                        onClick={() => loginWallet("near")}
-                                    >
-                                        Connect Wallet
-                                    </button>
-                                ))}
-                            {chain !== nearChain && (
                                 <button
                                     className="btn create-btn"
                                     onClick={() => cryptoPayment()}
                                 >
                                     Create
                                 </button>
-                            )}
                         </div>
                         <div className="preview-field">
                             <div className="field-title">Preview</div>

@@ -2,49 +2,104 @@
 @use '/src/styles/colors';
 @use '/src/styles/mixins';
 
-.connect-wallet-page{
+.connect-wallet-page {
     @include mixins.flex-center();
     // padding: 6rem 2rem;
     min-height: 300px;
     width: 100%;
-    .connect-wrapper{
+
+    .connect-wrapper {
         max-width: 400px;
         width: 100%;
     }
-    .blue-head{
-        margin-bottom: 1rem;
+
+
+    .connect-wallet-button {
+        background: linear-gradient(#a7a9fa, #7460ed);
+        padding: 1rem;
+        border-radius: 0.625rem;
+        margin-top: 12px;
+        font-weight: 500;
+        font-size: 1rem;
     }
-    .using-email{
+
+    .chainSelectorModal {
+        background-color: rgba(115, 115, 115, .4);
+        padding: 10px;
+        border-radius: 20px;
+        margin-top: 20px;
+    }
+
+    .closeModal {
+        float: right;
+    }
+
+    .chainSelection {
+        display: flex;
+        justify-content: space-evenly;
+        column-gap: 10px;
+        row-gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 25px;
+    }
+
+    .wallet-button-container {
+        display: flex;
+        justify-content: center;
+        width: 180px;
+        background: rgba(64, 64, 64);
+        padding: 20px 20px;
+        border-radius: 20px;
+        box-shadow: 3px 3px #000000;
+    }
+
+    .wallet-logo {
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+        align-items: center;
+    }
+
+    .using-email {
         @include mixins.flex-col(center, flex-start);
         gap: 1rem;
     }
-    .using-wallets{
+
+    .using-wallets {
         // margin-top: 1rem;
         @include mixins.flex-col(center, flex-start);
+
         // gap: 1rem;
-        .blue-head{
-            margin-bottom: 0;
+        .blue-head {
+            margin-bottom: 0 !important;
         }
-        .wallet-text{
+
+        .wallet-text {
             font-size: fonts.$font-size-xs;
         }
-        .wallets{
+
+        .wallets {
             @include mixins.flex-col(center, flex-start);
             border-radius: 10px;
             margin-top: 1rem;
             width: 100%;
             border: 1px solid rgba($color: #fff, $alpha: 0.3);
-            button{
+
+            button {
                 @include mixins.flex(center, space-between);
                 width: 100%;
                 padding: 1rem 1rem;
-                img{
+
+                img {
                     height: 2rem;
                     width: 2rem;
                 }
+
                 border-bottom: 1px solid rgba($color: #fff, $alpha: 0.3);
             }
-            button:last-child{
+
+            button:last-child {
                 border: none;
             }
         }

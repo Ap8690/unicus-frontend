@@ -1,0 +1,28 @@
+@use "/src/styles/colors";
+@use "/src/styles/fonts";
+@use "/src/styles/mixins";
+
+.container {
+    padding: 10px;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+
+.chain-name-container {
+    display: flex;
+    justify-content: space-evenly;
+    column-gap: 10px;
+    row-gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.walletLogo {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    align-items: center;
+    justify-content: center;
+    color:white;
+}

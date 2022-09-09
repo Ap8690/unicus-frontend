@@ -6,6 +6,9 @@ const Input = (props:any) => {
       props.setState((e.target.value.slice(0,240)))
       return 
     }
+    if(props.title?.includes('Royalty') && (e.target.value >99 || e.target.value < 0) ) {
+      return 
+    }
     props.setState(e.target.value);
   };
   
