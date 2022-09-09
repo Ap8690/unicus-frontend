@@ -18,15 +18,20 @@ import { ACCESS_TOKEN } from "../../utils/constants";
 import { cookieDomain } from "../../config";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 import PageLoader from "../../components/Loading/PageLoader";
-import ChainModal from "../../components/modals/WalletsModal/ChainModal"
+import ChainModal from "../../components/modals/WalletsModal/ChainModal";
+import WalletsModal from "../../components/modals/WalletsModal/WalletsModal";
+import { ChainContext } from "../../context/ChainContext";
 
 type AuthType = Readonly<{
     wallet?: WalletConnection;
 }>;
 
 const ConnectWallet: React.FC<AuthType> = () => {
+    const { chain, setChain } = useContext(ChainContext);
     const navigate = useNavigate();
     let redirect = useParams();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [walletModal, setWalletModal] = useState(false);
     const { loginWallet, fullLoading } = useContext(ConnectWalletContext);
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -60,7 +65,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
             {fullLoading ? (
                 <PageLoader info={""} />
             ) : (
-                <div className="connect-wrapper">
+                <div className="connect-wrapper h-[90vh] flex justify-center items-center flex-col">
                     <div className="using-email">
                         <div className="blue-head">Connect using Email</div>
                         <button
@@ -69,24 +74,44 @@ const ConnectWallet: React.FC<AuthType> = () => {
                         >
                             Login
                         </button>
+                    </div>
+                    <div className="using-wallets mt-10">
+                        <div className="blue-head">Connect using Wallet</div>
+                        <div className="wallet-text mb-[20px]">
+                            Connect with one of our available wallet providers
+                            or create a new one{" "}
+                        </div>
                         <button
                             className="large-btn-outline"
-                            onClick={() => navigate("/register")}
+                            onClick={() =>
+                                setIsModalOpen((prevState) => !prevState)
+                            }
                         >
-                            Register
+                            Connect Wallet
                         </button>
                     </div>
-                    <Wallets loginWallet={loginWallet} />
+
+                    <ChainModal
+                        open={isModalOpen}
+                        setOpen={setIsModalOpen}
+                        setWalletModal={setWalletModal}
+                    />
+                    <WalletsModal
+                        open={walletModal}
+                        setOpen={setWalletModal}
+                        chainName={chain?.toLowerCase()}
+                    />
                 </div>
             )}
         </div>
     );
 };
 
-export const Wallets = ({ loginWallet }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [chainName, setChainName] = useState("")
-
+type WalletProps = {
+    loginWallet?: any;
+    chainName?: any;
+};
+export const Wallets = ({ loginWallet, chainName }: WalletProps) => {
     return (
         <div className="connect-wallet-page">
             <div className="connect-wrapper">
@@ -96,52 +121,7 @@ export const Wallets = ({ loginWallet }) => {
                         Connect with one of our available wallet providers or
                         create a new one{" "}
                     </div>
-                    <button
-                        className="connect-wallet-button"
-                        onClick={() => setIsModalOpen(prevState => !prevState)}>
-                        Connect Wallet
-                    </button>
-                    <ChainModal open={isModalOpen} setOpen={setIsModalOpen} setChainName={setChainName} />
-                    {/* {isModalOpen ? (
-                        <div className="chainSelectorModal">
-                            <div className="closeModal">
-                                <button className="closeModalButton" onClick={() => setIsModalOpen(prevState => !prevState)}>
-                                    <AiFillCloseCircle />
-                                </button>
-                            </div>
-                            <div className="chainSelection">
-                                <div className="wallet-button-container">
-                                    <button className="wallet-logo">
-                                        <img src={metamaskLogo} alt="MetaMask" style={{ width: "2rem" }} />
-                                        Metamask
-                                    </button>
-                                </div>
-                                <div className="wallet-button-container">
-                                    <button className="wallet-logo">
-                                        <img src={tronLinkLogo} alt="TronLink" style={{ width: "2rem" }} />
-                                        TronLink
-                                    </button>
-                                </div>
-                                <div className="wallet-button-container">
-                                    <button className="wallet-logo">
-                                        <img src={nearLogo} alt="NearWallet" style={{ width: "1.9rem" }} />
-                                        NearWallet
-                                    </button>
-                                </div>
-                                <div className="wallet-button-container">
-                                    <button className="wallet-logo">
-                                        <img src={phantomLogo} alt="SolanaConnect" style={{ width: "2rem" }} />
-                                        SolanaConnect
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ) : <button
-                        className="connect-wallet-button"
-                        onClick={() => setIsModalOpen(prevState => !prevState)}>
-                        Connect Wallet
-                    </button>
-                    } */}
+
                     <AllWallets scase={chainName} loginWallet={loginWallet} />
                     <div className="wallets"></div>
                 </div>

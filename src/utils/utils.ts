@@ -305,7 +305,7 @@ export const connToTron = async () => {
           //@ts-ignore
           tronWeb = window.tronWeb;
           const hex = tronWeb.toHex("this has to be singed!")
-          tronWeb.trx.sign(hex)
+          await tronWeb.trx.sign(hex)
           resolve(tronWeb.defaultAddress.base58);
         }
         i++
@@ -437,7 +437,7 @@ export const getChainId = (chain:any) => {
 };
 
 export const getChainName = (chain:any) => {
-  switch(chain.toString()) {
+  switch(chain?.toString()) {
     case ethChain:
       return "ethereum"
     case bscChain:
@@ -453,7 +453,7 @@ export const getChainName = (chain:any) => {
     case solonaChain:
       return "solana"
     default: 
-      return 0
+      return chain
   }
 };
 export const selectNetwork = (chain: string) => {
