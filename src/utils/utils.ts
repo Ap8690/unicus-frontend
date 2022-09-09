@@ -382,43 +382,36 @@ export const sign_solana_message = async () => {
     };
 };
 
-export const connToSol = async (
-    publicKey: any,
-    getSolWallet: any,
-    connect: any,
-    setVisible: any
-) => {
-    // @ts-ignore
-    const isPhantomInstalled = window.phantom?.solana?.isPhantom
-    if (!isPhantomInstalled) {
-        throw new Error("Please install Phantom Wallet")
+
+const getProvider = () => {
+  if ('phantom' in window) {
+    // @ts-ignore  
+    const provider = window.phantom?.solana;
+
+    if (provider?.isPhantom) {
+      return provider;
     }
-    if (publicKey) {
+  }
+
+  window.open('https://phantom.app/', '_blank');
+};
+
+export const connToSol = async (publicKey: any, getSolWallet: any, connect: any, setVisible: any) => {
+  // @ts-ignore  
+    const provider = getProvider(); 
+    const resp = await provider.connect();
+      if (resp.publicKey) {
+        const address = resp.publicKey.toBase58()
+        console.log("address: ", address);
         const sm = await sign_solana_message()
         return {
-            account: publicKey.toBase58(),
-            message: sm.message,
-            token: sm.token,
-        }
-    }
-    console.log("getSolWallet(): ", getSolWallet());
-    if (!getSolWallet()) {
-        setVisible(true)
-    } else {
-        await connect()
-        if (getSolWallet().adapter.publicKey) {
-            const address = getSolWallet().adapter.publicKey.toBase58()
-            console.log("address: ", address)
-            const sm = await sign_solana_message()
-            return {
-                account: address,
-                message: sm.message,
-                token: sm.token,
-            }
-        } else {
-            throw new Error("Connection refused")
-        }
-    }
+          account: address,
+          message: sm.message,
+          token: sm.token
+        };
+      } else {
+        throw new Error("Connection refused");
+      }
 };
 
 export const disConnectWallet = () => {

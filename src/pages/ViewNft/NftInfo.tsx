@@ -981,6 +981,7 @@ const NftInfo = ({
             toast.error("Auction Failed");
         }
     }
+
     async function buyItem() {
         try {
             setNftLoading(true);
@@ -1154,6 +1155,7 @@ const NftInfo = ({
             toast.error(e);
         }
     }
+    
     async function endSale() {
         try {
             setNftLoading(true);
