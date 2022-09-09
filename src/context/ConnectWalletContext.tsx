@@ -40,9 +40,7 @@ export const WalletConnectionProvider = ({ children }) => {
     const [chainConnected,setChainConnected] = useState('')
     const [walletModal,setWalletModal] = useState<boolean>(false)
     const {chain,setChain} = useContext(ChainContext)
-    const getSolWallet = () => {
-        return wallet;
-    };
+
     //@ts-ignore
     const loginWallet = async (walletAddress: string) => {
         try {
@@ -101,13 +99,14 @@ export const WalletConnectionProvider = ({ children }) => {
                 case "sol": {
                     const data = await connToSol(
                         publicKey,
-                        getSolWallet,
+                        wallet,
                         connect,
                         setVisible
                     );
-                    address = data.account;
-                    token = data.token;
-                    message = data.message;
+                    console.log("SOL Data",data)
+                    address = data?.account;
+                    token = data?.token;
+                    message = data?.message;
                     walletNetwork="Solana"
                     setChain(solonaChain)
                     break;

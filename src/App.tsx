@@ -81,81 +81,80 @@ require("@solana/wallet-adapter-react-ui/styles.css");
 const App = () => {
   const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-//@ts-ignore
-const [store, setStore] = useState<IStore>({});
-
-const [userStore, setUserStore] = useState<any>();
-const [accessToken, setAccessToken] = useState("");
-const [showStore, setShowStore] = useState(true);
-const [loading, setLoading] = useState(false);
-const navigate = useNavigate()
-const location = useLocation()
-useEffect(() => {
-  if (isMainStore()) {
-    getStoreForUser();
-  } else {
-    init();
-    setLogin();
-  }
-}, [accessToken]);
-
-useEffect(() => {
-  if (store && store.appearance && store.appearance.storeLoader) {
-    localStorage.setItem("storeLoader", store.appearance.storeLoader);
-  }
-}, [store]);
-
-const init = async () => {
-  try {
-  
-    setLoading(true);
-    const res = await getStoreApi();
-    setStore(res.data.store);
-    setShowStore(true);
-    localStorage.setItem("store", JSON.stringify(res.data.store));
-  } catch (err: any) {
-    // window.open("http://store-front.unicus.one/create-store", "_self");
-    setShowStore(false);
-  }
-  setLoading(false);
-};
-const setLogin = () => {
-  const cookieUser = Cookies.get("userInfo");
-  let userInfo: any;
-  if (cookieUser) {
-    userInfo = JSON.parse(cookieUser);
-    localStorage.setItem("userInfo", JSON.stringify(userInfo));
-    console.log("Setting localstorage")
-  }
-  else{
-    localStorage.removeItem("userInfo")
-    console.log("UnSetting localstorage")
-  }
-  const token = Cookies.get(ACCESS_TOKEN);
-  if (token) {
-    setAccessToken(token)
-  }
-};
-const getStoreForUser = async () => {
-  try {
-    if (Cookies.get(ACCESS_TOKEN)) {
-      const res = await getStoreByUser();
-      if (res.data.store) {
-        setUserStore(res.data.store);
-      }
+  //@ts-ignore
+  const [store, setStore] = useState<IStore>({});
+  const [userStore, setUserStore] = useState<any>();
+  const [accessToken, setAccessToken] = useState("");
+  const [showStore, setShowStore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
+  const location = useLocation()
+  useEffect(() => {
+    if (isMainStore()) {
+      getStoreForUser();
     } else {
-      setUserStore({});
+      init();
+      setLogin();
     }
-  } catch (err) {
-    console.log("err", err);
-  }
-};
-useEffect(() => {
-  if (location.pathname === "/") {
-    navigate("/home", {replace:true});
-  }
-  
-}, []);
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (store && store.appearance && store.appearance.storeLoader) {
+      localStorage.setItem("storeLoader", store.appearance.storeLoader);
+    }
+  }, [store]);
+
+  const init = async () => {
+    try {
+    
+      setLoading(true);
+      const res = await getStoreApi();
+      setStore(res.data.store);
+      setShowStore(true);
+      localStorage.setItem("store", JSON.stringify(res.data.store));
+    } catch (err: any) {
+      // window.open("http://store-front.unicus.one/create-store", "_self");
+      setShowStore(false);
+    }
+    setLoading(false);
+  };
+  const setLogin = () => {
+    const cookieUser = Cookies.get("userInfo");
+    let userInfo: any;
+    if (cookieUser) {
+      userInfo = JSON.parse(cookieUser);
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      console.log("Setting localstorage")
+    }
+    else{
+      localStorage.removeItem("userInfo")
+      console.log("UnSetting localstorage")
+    }
+    const token = Cookies.get(ACCESS_TOKEN);
+    if (token) {
+      setAccessToken(token)
+    }
+  };
+  const getStoreForUser = async () => {
+    try {
+      if (Cookies.get(ACCESS_TOKEN)) {
+        const res = await getStoreByUser();
+        if (res.data.store) {
+          setUserStore(res.data.store);
+        }
+      } else {
+        setUserStore({});
+      }
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("/home", {replace:true});
+    }
+    
+  }, []);
 
 // useEffect(() => {
 //   getStoreForUser();
@@ -184,113 +183,112 @@ useEffect(() => {
                 <WalletConnectionProvider>
                     <Provider store={rstore}>
                         <TransactionProvider>
-          <div className="App">
-            <Navbar store={isMainStore() ? userStore : store} />
-            <ToastContainer limit={3} />
-
-            <ScrollToTop />
-            <Routes>
-              {isMainStore() ? (
-                <Route path="/home" element={<Homepage />} />
-              ) : (
-                <Route path="/home" element={<StoreHomepage />} />
-              )}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/readblog/:id" element={<ReadBlog />} />
-              <Route path="/connect-wallet/*" element={<ConnectWallet />} />
-              <Route path="/create-nft" element={<CreateNftSingle />} />
-              <Route
-                path="/create-nft/single-item"
-                element={<CreateNftSingle />}
-              />
-              {/* <Route path="/stats/ranking" element={<Ranking />} />
-              <Route path="/stats/activity" element={<Activity />} /> */}
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/explore/:chainNetwork" element={<Explore />} />
-              <Route path="/search/:search" element={<GlobalSearch/>} />
-              <Route path="/login/:token/:email" element={<Explore />} />{" "}
-              <Route
-                path="/reset-password/:token/:email"
-                element={<Explore />}
-              />
-              {isMainStore() && Object.keys(store).length > 0 && (
-                <>
-                  <Route path="/store/settings" element={<StoreSettings />} />
-                  <Route
-                    path="/privacy-policy"
-                    element={
-                      <PrivacyPolicy
-                        title={"Privacy Policy"}
-                        text={
-                          store.advance.privacyPolicy &&
-                          store.advance.privacyPolicy !== ""
-                            ? store.advance.privacyPolicy
-                            : defaultPrivacyText
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/terms"
-                    element={
-                      <PrivacyPolicy
-                        title={"Terms and Conditions"}
-                        text={
-                          store.advance.terms && store.advance.terms !== ""
-                            ? store.advance.terms
-                            : defaultPrivacyText
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/about-us"
-                    element={
-                      <PrivacyPolicy
-                        title={"About Us"}
-                        text={
-                          store.advance.aboutUs && store.advance.aboutUs != ""
-                            ? store.advance.aboutUs
-                            : defaultPrivacyText
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/creators"
-                    element={
-                      <PrivacyPolicy
-                        title={"Creators"}
-                        text={
-                          store.advance.creators && store.advance.creators !== ""
-                            ? store.advance.creators
-                            : defaultPrivacyText
-                        }
-                      />
-                    }
-                  />
-                </>
-              )}
-              <Route path="/marketplace" element={<MarketPlace />} />
-              {isMainStore() && (
-                <Route path="/create-store" element={<CreateStore />} />
-              )}
-              <Route path="/all-nfts" element={<AllNFTs />} />
-              <Route
-                path="/nft/:chain/:contractAddress/:nftId"
-                element={<ViewNft />}
-              />
-              <Route path="/auctions" element={<Auctions />} />
-              <Route path="/edit-profile" element={<EditProfile isLogin={accessToken}/>} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/profile/:profileState" element={<Profile />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Footer />
-          </div>
-          </TransactionProvider>
+                <div className="App">
+                  <Navbar store={isMainStore() ? userStore : store} />
+                  <ToastContainer limit={3} />
+                  <ScrollToTop />
+                  <Routes>
+                    {isMainStore() ? (
+                      <Route path="/home" element={<Homepage />} />
+                    ) : (
+                      <Route path="/home" element={<StoreHomepage />} />
+                    )}
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/readblog/:id" element={<ReadBlog />} />
+                    <Route path="/connect-wallet/*" element={<ConnectWallet />} />
+                    <Route path="/create-nft" element={<CreateNftSingle />} />
+                    <Route
+                      path="/create-nft/single-item"
+                      element={<CreateNftSingle />}
+                    />
+                    {/* <Route path="/stats/ranking" element={<Ranking />} />
+                    <Route path="/stats/activity" element={<Activity />} /> */}
+                    <Route path="/explore" element={<Explore />} />
+                    <Route path="/explore/:chainNetwork" element={<Explore />} />
+                    <Route path="/search/:search" element={<GlobalSearch/>} />
+                    <Route path="/login/:token/:email" element={<Explore />} />{" "}
+                    <Route
+                      path="/reset-password/:token/:email"
+                      element={<Explore />}
+                    />
+                    {isMainStore() && Object.keys(store).length > 0 && (
+                      <>
+                        <Route path="/store/settings" element={<StoreSettings />} />
+                        <Route
+                          path="/privacy-policy"
+                          element={
+                            <PrivacyPolicy
+                              title={"Privacy Policy"}
+                              text={
+                                store.advance.privacyPolicy &&
+                                store.advance.privacyPolicy !== ""
+                                  ? store.advance.privacyPolicy
+                                  : defaultPrivacyText
+                              }
+                            />
+                          }
+                        />
+                        <Route
+                          path="/terms"
+                          element={
+                            <PrivacyPolicy
+                              title={"Terms and Conditions"}
+                              text={
+                                store.advance.terms && store.advance.terms !== ""
+                                  ? store.advance.terms
+                                  : defaultPrivacyText
+                              }
+                            />
+                          }
+                        />
+                        <Route
+                          path="/about-us"
+                          element={
+                            <PrivacyPolicy
+                              title={"About Us"}
+                              text={
+                                store.advance.aboutUs && store.advance.aboutUs != ""
+                                  ? store.advance.aboutUs
+                                  : defaultPrivacyText
+                              }
+                            />
+                          }
+                        />
+                        <Route
+                          path="/creators"
+                          element={
+                            <PrivacyPolicy
+                              title={"Creators"}
+                              text={
+                                store.advance.creators && store.advance.creators !== ""
+                                  ? store.advance.creators
+                                  : defaultPrivacyText
+                              }
+                            />
+                          }
+                        />
+                      </>
+                    )}
+                    <Route path="/marketplace" element={<MarketPlace />} />
+                    {isMainStore() && (
+                      <Route path="/create-store" element={<CreateStore />} />
+                    )}
+                    <Route path="/all-nfts" element={<AllNFTs />} />
+                    <Route
+                      path="/nft/:chain/:contractAddress/:nftId"
+                      element={<ViewNft />}
+                    />
+                    <Route path="/auctions" element={<Auctions />} />
+                    <Route path="/edit-profile" element={<EditProfile isLogin={accessToken}/>} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/profile/:profileState" element={<Profile />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                  <Footer />
+                </div>
+                        </TransactionProvider>
                     </Provider>
                 </WalletConnectionProvider>
             </ChainProvider>
