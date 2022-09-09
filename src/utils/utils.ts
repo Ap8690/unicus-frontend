@@ -401,6 +401,7 @@ export const connToSol = async (
             token: sm.token,
         }
     }
+    console.log("getSolWallet(): ", getSolWallet());
     if (!getSolWallet()) {
         setVisible(true)
     } else {

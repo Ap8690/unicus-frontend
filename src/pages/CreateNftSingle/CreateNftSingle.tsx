@@ -477,14 +477,15 @@ const CreateNftSingle = () => {
                 setMetamaskNotFound(true);
                 return null;
             }
-            await connectWallet(
-                chain,
-                publicKey,
-                getSolWallet,
-                connect,
-                setVisible
-            )
-                .then(async (address) => {
+            // await connectWallet(
+            //     chain,
+            //     publicKey,
+            //     getSolWallet,
+            //     connect,
+            //     setVisible
+            // )
+            //     .then(async (address) => {
+                let address = localStorage.getItem("walletConnected")
                     if (!address) {
                         toast.error("Wallet connection failed");
                         return;
@@ -584,7 +585,7 @@ const CreateNftSingle = () => {
                                 chain,
                                 contractType
                             );
-
+                                console.log("createNFT ",address)
                             let res: any;
                             if (contractType === "721") {
                                 res = await createNFT.methods
@@ -715,11 +716,11 @@ const CreateNftSingle = () => {
                         }
                         setdefaultErrorModal(true);
                     }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    toast.error("Mint failed.");
-                });
+                // })
+                // .catch((err) => {
+                //     console.log(err);
+                //     toast.error("Mint failed.");
+                // });
         } catch (e) {
             console.log(e);
             setNftLoading(false);

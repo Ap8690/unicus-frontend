@@ -34,14 +34,14 @@ const ConnectWallet: React.FC<AuthType> = () => {
     const [walletModal, setWalletModal] = useState(false);
     const { loginWallet, fullLoading } = useContext(ConnectWalletContext);
     useEffect(() => {
-        const message = ''
+        const message = "";
         const urlParams = new URLSearchParams(window.location.search);
         const nearAccountId = urlParams.get("account_id");
         const nearPublicKey = urlParams.get("public_key");
         if (nearAccountId !== null && nearPublicKey !== null) {
             // toast("Connection successful...");
             let token: string;
-            walletLogin(nearAccountId, token,"Near", message).then((res) => {
+            walletLogin(nearAccountId, token, "Near", message).then((res) => {
                 toast.success("Login successful");
                 Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
                     domain: cookieDomain,
@@ -209,6 +209,32 @@ function AllWallets({ scase, loginWallet }) {
                             </>
                         );
                     case "binance":
+                        return (
+                            <>
+                                <button onClick={() => loginWallet("meta")}>
+                                    Metamask
+                                    <img src={metamaskLogo} alt="metamask" />
+                                </button>
+
+                                <button onClick={() => loginWallet("cb")}>
+                                    Coinbase
+                                    <img src={coinbaseLogo} alt="metamask" />
+                                </button>
+                                <button onClick={() => loginWallet("wc")}>
+                                    WalletConnect
+                                    <img
+                                        src={walletconnectLogo}
+                                        alt="metamask"
+                                    />
+                                </button>
+                                <button onClick={() => loginWallet("mew")}>
+                                    MEW
+                                    <img src={mewLogo} alt="metamask" />
+                                </button>
+                            </>
+                        );
+
+                    case "avalanche":
                         return (
                             <>
                                 <button onClick={() => loginWallet("meta")}>

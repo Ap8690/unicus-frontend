@@ -6,6 +6,7 @@ import ploygonLogo from "../../../assets/svgs/polygon-matic-logo.svg"
 import solanaLogo from "../../../assets/svgs/solana-sol-logo.svg"
 import tronLogo from "../../../assets/svgs/tron-trx-logo.svg"
 import nearLogo from "../../../assets/svgs/nearLogo.svg"
+import avalancheLogo from "../../../assets/svgs/avalanche.svg"
 import {getChainId} from "../../../utils/utils"
 import "./ChainModal.scss"
 import { useContext } from "react"
@@ -31,6 +32,7 @@ const ChainModal = ({ open, setOpen, setWalletModal}) => {
     const handleChain = (chain:any) => {
         console.log("chain: ", chain);
         chain = getChainId(chain.toLowerCase())
+        console.log("chain: ", chain);
         setWalletModal(true)
         setChain(chain)
         localStorage.setItem("CHAIN",chain)
@@ -53,7 +55,7 @@ const ChainModal = ({ open, setOpen, setWalletModal}) => {
             <div className="flex flex-wrap  overflow-hidden">
                 <ChainCard handleChain={handleChain} chainName={"Ethereum"} chainLogo={ethereumLogo} />
                 <ChainCard handleChain={handleChain} chainName={"Binance"} chainLogo={binanceLogo} />
-                {/* <ChainCard handleChain={handleChain} chainName={"Avalanche"} chainLogo={binanceLogo} /> */}
+                <ChainCard handleChain={handleChain} chainName={"Avalanche"} chainLogo={avalancheLogo} />
                 <ChainCard handleChain={handleChain} chainName={"Polygon"} chainLogo={ploygonLogo} />
                 <ChainCard handleChain={handleChain} chainName={"Near"} chainLogo={nearLogo} />
                 <ChainCard handleChain={handleChain} chainName={"Solana"} chainLogo={solanaLogo} />
