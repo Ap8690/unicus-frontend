@@ -119,7 +119,7 @@ const tron = [
         chain: "Tron",
         id: tronChain,
     },
-];
+]; 
 
 const CreateNftSingle = () => {
     // let chain_name = ChainIdUsingWalletName(localStorage.getItem("walletChain"))

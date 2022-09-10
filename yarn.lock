@@ -15211,6 +15211,11 @@ stylis@4.0.13:
   resolved "https://registry.npmjs.org/stylis/-/stylis-4.0.13.tgz"
   integrity sha512-xGPXiFVl4YED9Jh7Euv2V220mriG9u4B2TA6Ybjc1catrstKD2PpIdU3U0RKpkVBC2EhmL/F0sPCr9vrFTNRag==
 
+subtle-crypto@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/subtle-crypto/-/subtle-crypto-0.0.0.tgz#e4495cea39fe017b2ad865391df90f445308f530"
+  integrity sha512-F1x1HFdCstetBCpG9t3DtYXjQYSfxc6UFb391JLi+OGdAz1NZnJWV+wb4HMMFkzrrbTd0bz8t5RBYXSnLTDM0Q==
+
 superagent@^6.1.0:
   version "6.1.0"
   resolved "https://registry.npmjs.org/superagent/-/superagent-6.1.0.tgz"

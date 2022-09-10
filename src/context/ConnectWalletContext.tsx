@@ -1,7 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { WalletConnection } from "near-api-js";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { toast } from "react-toastify";
 import {
@@ -103,7 +102,7 @@ export const WalletConnectionProvider = ({ children }) => {
                         connect,
                         setVisible
                     );
-                    console.log("SOL Data",data)
+                    console.log("Date ",data)
                     address = data?.account;
                     token = data?.token;
                     message = data?.message;

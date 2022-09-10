@@ -425,9 +425,11 @@ export const connToSol = async (
 ) => {
     // @ts-ignore
     const isPhantomInstalled = window.phantom?.solana?.isPhantom
+    console.log("isPhantomInstalled: ", isPhantomInstalled);
     if (!isPhantomInstalled) {
         throw new Error("Please install Phantom Wallet")
     }
+    
     if (publicKey) {
         const sm = await sign_solana_message()
         return {
@@ -436,14 +438,10 @@ export const connToSol = async (
             token: sm.token,
         }
     }
-    console.log("wallet: ", wallet);
-    if (!wallet) {
-        setVisible(true)
-    } else {
+    if (wallet) {
         await connect()
         if (wallet.adapter.publicKey) {
             const address = await wallet.adapter.publicKey.toBase58()
-            console.log("address: ", address)
             const sm = await sign_solana_message()
             return {
                 account: address,
@@ -454,6 +452,7 @@ export const connToSol = async (
             throw new Error("Connection refused")
         }
     }
+    setVisible(true)
 }
 export const disConnectWallet = () => {
     localStorage.clear();
