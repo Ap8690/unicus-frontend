@@ -102,8 +102,7 @@ export const WalletConnectionProvider = ({ children }) => {
                         publicKey,
                         wallet,
                         connect,
-                        setVisible,
-                        connection
+                        setVisible
                     );
                     
                     address = data?.account;

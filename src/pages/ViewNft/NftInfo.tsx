@@ -23,7 +23,6 @@ import {
     removeSale,
     sendStorageDeposit,
     tronWeb,
-    userInfo,
 } from "../../utils/utils";
 import {
     buyItemApi,
@@ -95,6 +94,7 @@ const NftInfo = ({
     fetchItem,
     pageChain
 }) => {
+    let userInfo = getUserInfo()
     const {fullLoading,chainConnected,setChainConnected,setWalletModal,walletModal} = useContext(ConnectWalletContext)
     const [startBid, setStartBid] = useState<any>(
         auction ? auction.startBid : 0.0
@@ -712,13 +712,14 @@ const NftInfo = ({
             setPopUpShow(false);
             setNftLoading(true)
             console.log(nft.chain,typeof nft.chain,"chains")
-            const address = await connectWallet(
-                nft.chain,
-                publicKey,
-                getSolWallet,
-                connect,
-                setVisible
-            );
+            // const address = await connectWallet(
+            //     nft.chain,
+            //     publicKey,
+            //     getSolWallet,
+            //     connect,
+            //     setVisible
+            // );
+            let address: String = localStorage.getItem('walletConnected')
             let obj = {
                 nftId: nft._id,
                 sellerInfo: userInfo.username,
@@ -865,13 +866,14 @@ const NftInfo = ({
         try {
             setPopUpShow(false);
             setNftLoading(true)
-            const address = await connectWallet(
-                nft.chain,
-                publicKey,
-                getSolWallet,
-                connect,
-                setVisible
-            );
+            // const address = await connectWallet(
+            //     nft.chain,
+            //     publicKey,
+            //     getSolWallet,
+            //     connect,
+            //     setVisible
+            // );
+            let address: String = localStorage.getItem('walletConnected')
             console.log("create auction", address, auction);
 
             let obj = {
@@ -985,14 +987,14 @@ const NftInfo = ({
     async function buyItem() {
         try {
             setNftLoading(true);
-            const address = await connectWallet(
-                auction.chain,
-                publicKey,
-                getSolWallet,
-                connect,
-                setVisible
-            );
-
+            // const address = await connectWallet(
+            //     auction.chain,
+            //     publicKey,
+            //     getSolWallet,
+            //     connect,
+            //     setVisible
+            // );
+            let address: String = localStorage.getItem('walletConnected')
             let transactionHash:any;
             if (nft.chain.toString() === nearChain) {
                 await offerPrice(
@@ -1062,20 +1064,17 @@ const NftInfo = ({
         setNftLoading(false);
     }
 
-   
-
-
     async function placeBid() {
         try {
             setNftLoading(true);
-            const address = await connectWallet(
-                auction.chain,
-                publicKey,
-                getSolWallet,
-                connect,
-                setVisible
-            );
-
+            // const address = await connectWallet(
+            //     auction.chain,
+            //     publicKey,
+            //     getSolWallet,
+            //     connect,
+            //     setVisible
+            // );
+            let address: String = localStorage.getItem('walletConnected')
             if(auction.startBid/getDecimal(nft.chain.toString()) >= Number(bid)){
                 setNftLoading(false)
                 toast.error("The new bid value should be more then the last bid!")
@@ -1160,14 +1159,14 @@ const NftInfo = ({
     async function endSale() {
         try {
             setNftLoading(true);
-            const address = await connectWallet(
-                auction.chain,
-                publicKey,
-                getSolWallet,
-                connect,
-                setVisible
-            );
-
+            // const address = await connectWallet(
+            //     auction.chain,
+            //     publicKey,
+            //     getSolWallet,
+            //     connect,
+            //     setVisible
+            // );
+            let address: String = localStorage.getItem('walletConnected')
             console.log(typeof nft.chain,typeof tronChain,"jdskfhdsjkfhhd")
             if (nft.chain.toString() === nearChain) {
                 removeSale(nft.tokenId);
@@ -1232,14 +1231,14 @@ const NftInfo = ({
             //   return console.log("Auction Not ended Yet");
             // }
 
-            const address = await connectWallet(
-                auction.chain,
-                publicKey,
-                getSolWallet,
-                connect,
-                setVisible
-            );
-
+            // const address = await connectWallet(
+            //     auction.chain,
+            //     publicKey,
+            //     getSolWallet,
+            //     connect,
+            //     setVisible
+            // );
+            let address: String = localStorage.getItem('walletConnected')
             if (auction.chain.toString() === nearChain) {
                 processPurchase(nft.tokenId);
             } else if (nft.chain.toString() === solonaChain) {
@@ -1296,14 +1295,14 @@ const NftInfo = ({
         try {
             setNftLoading(true);
 
-            const address = await connectWallet(
-                auction.chain,
-                publicKey,
-                getSolWallet,
-                connect,
-                setVisible
-            );
-
+            // const address = await connectWallet(
+            //     auction.chain,
+            //     publicKey,
+            //     getSolWallet,
+            //     connect,
+            //     setVisible
+            // );
+            let address: String = localStorage.getItem('walletConnected')
             if (auction.chain.toString() === nearChain) {
                 removeAuction(nft.tokenId);
             } else if (nft.chain.toString() === solonaChain) {
@@ -1359,7 +1358,8 @@ const NftInfo = ({
         const userInfo = getUserInfo();
 
         if (userInfo) {
-            console.log(userInfo._id, nft.uploadedBy, "addresses")
+            console.log(userInfo._id, nft.owner, "addresses")
+            console.log("userInfo: ", userInfo);
             if (userInfo._id === nft.owner) {
                 if (nft.nftStatus === 2) {
                     return "End Sale";
@@ -1369,6 +1369,9 @@ const NftInfo = ({
                     } else {
                         return "End Auction";
                     }
+                }
+                else if(nft.nftStatus === 1) {
+                    console.log("HERE")
                 }
             } else {
                 if (nft.nftStatus === 1) {
@@ -1398,6 +1401,7 @@ const NftInfo = ({
                         endAuction();
                     }
                 }
+                
             } else {
                 if (nft.nftStatus == 1) {
                     toast("NFT is not for sale yet");

@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import TronWeb from "tronweb";
 import Web3 from "web3";
-import {AnchorProvider} from '@project-serum/anchor';
+import {AnchorProvider,Program, web3 as sol_web3} from '@project-serum/anchor';
 import {
     tronChain,
     bscChain,
@@ -71,7 +71,9 @@ const {
         format: { parseNearAmount },
     },
 } = nearAPI;
-
+// for SOLANA
+const {SystemProgram, Keypair} = sol_web3
+const baseAccount = Keypair.generate();
 //testnet
 const HttpProvider = TronWeb.providers.HttpProvider;
 const fullNode = "https://api.shasta.trongrid.io";
@@ -418,7 +420,7 @@ export const sign_solana_message = async () => {
 //         throw new Error("Connection refused");
 //       }
 // };
-export async function getProvider(wallet: any,connection: any) {
+export async function getProvider(wallet: any) {
     /* create the provider and return it to the caller */
     /* network set to local network for now */
     const network = 'http://localhost:3000'
@@ -426,12 +428,10 @@ export async function getProvider(wallet: any,connection: any) {
         preflightCommitment: "processed"
     }
     const con = new Connection(network, opts.preflightCommitment);
-    console.log("connection: ", con);
     const ne = new PhantomWalletAdapter('devnet')
     const provider = new AnchorProvider(
-        connection, ne , opts.preflightCommitment,
+        con, ne , opts.preflightCommitment,
         );
-        console.log("provider: ", provider);
     return provider;
   }
  
@@ -440,7 +440,6 @@ export const connToSol = async (
     wallet: any,
     connect: any,
     setVisible: any,
-    connection: any
 ) => {
     
     // const { solana } = window;
@@ -450,33 +449,50 @@ export const connToSol = async (
     if (!solana || !solana?.isPhantom) {
         throw new Error("Please install Phantom Wallet")
     }
-    const r:any = await getProvider(wallet,connection)
-    console.log("r: ", r);
+    const provider:any = await getProvider(wallet)
+    console.log("provider: ", provider);
     
     
-    if (r?.publicKey) {
+    if (provider?.publicKey) {
         console.log("IN public key")
         const sm = await sign_solana_message()
         return {
-            account: r?.publicKey.toBase58(),
+            account: provider?.publicKey.toBase58(),
             message: sm.message,
             token: sm.token,
         }
     }
-    if (r?.wallet) {
-        console.log("IN wallet")
+    if (provider?.wallet) {
+        console.log("IN wallet",provider?.wallet)
         // const cc = await connection.
         // await connect()
-        if (r?.wallet.adapter.publicKey) {
-            const address = await r?.wallet.adapter.publicKey.toBase58()
-            const sm = await sign_solana_message()
-            return {
-                account: address,
-                message: sm.message,
-                token: sm.token,
-            }
-        } else {
-            throw new Error("Connection refused")
+        // if (r?.wallet.adapter.publicKey) {
+        //     const address = await r?.wallet.adapter.publicKey.toBase58()
+        //     const sm = await sign_solana_message()
+        //     return {
+        //         account: address,
+        //         message: sm.message,
+        //         token: sm.token,
+        //     }
+        // } else {
+        //     throw new Error("Connection refused")
+        // }
+        // const program = new Program('idl', 'programID', provider);
+        try {
+        /* interact with the program via rpc */
+        // await program.rpc.create({
+        //     accounts: {
+        //     baseAccount: baseAccount.publicKey,
+        //     user: provider.wallet.publicKey,
+        //     systemProgram: SystemProgram.programId,
+        //     },
+        //     signers: [baseAccount]
+        // });
+
+        // const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+        // console.log('account: ', account);
+        } catch (err) {
+        console.log("Transaction error: ", err);
         }
     }
     else {

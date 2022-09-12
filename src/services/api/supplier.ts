@@ -277,7 +277,6 @@ export async function updateProfileSocial(instagram, facebook, twitter, discord,
     {
       instagram: instagram,
       facebook: facebook,
-
       twitter: twitter,
       discord: discord,
       linkedIn: linkedIn,
