@@ -1,4 +1,4 @@
-const env_uri = 'local'
+const env_uri = process.env.REACT_APP_ENV
 
 
 export const BASE_URL = 
