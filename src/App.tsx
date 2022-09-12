@@ -16,6 +16,7 @@ import {
 } from "@solana/wallet-adapter-wallets";
 import {
   ConnectionProvider,
+  useWallet,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
@@ -83,6 +84,7 @@ const App = () => {
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   //@ts-ignore
   const [store, setStore] = useState<IStore>({});
+
   const [userStore, setUserStore] = useState<any>();
   const [accessToken, setAccessToken] = useState("");
   const [showStore, setShowStore] = useState(true);
@@ -163,20 +165,20 @@ const App = () => {
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter({ network }),
-      new GlowWalletAdapter(),
-      new SlopeWalletAdapter(),
-      new SolflareWalletAdapter({ network }),
-      new TorusWalletAdapter(),
-      new LedgerWalletAdapter(),
-      new SolletExtensionWalletAdapter({ network }),
-      new SolletWalletAdapter({ network }),
+      // new GlowWalletAdapter(),
+      // new SlopeWalletAdapter(),
+      // new SolflareWalletAdapter({ network }),
+      // new TorusWalletAdapter(),
+      // new LedgerWalletAdapter(),
+      // new SolletExtensionWalletAdapter({ network }),
+      // new SolletWalletAdapter({ network }),
     ],
     [network]
   );
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets}>
+      <WalletProvider  wallets={wallets} >
         <WalletModalProvider>
         <UserProvider>
             <ChainProvider>

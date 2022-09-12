@@ -21,7 +21,7 @@ export async function initContract() {
   const near = await nearAPI.connect(config);
   const walletConnection = new nearAPI.WalletConnection(near, "unicus");
 
-  return { config, walletConnection,keyStore, networkId: config.networkId };
+  return { config, walletConnection , keyStore, networkId: config.networkId };
 }
 
 export const sendMeta = async (walletConnection:any,nearConfig:any ) => {

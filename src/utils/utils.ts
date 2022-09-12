@@ -63,6 +63,7 @@ import { createNFTAddressA } from "../Redux/Blockchain/Avalanche/createNFT";
 import { marketPlaceAddressA } from "../Redux/Blockchain/Avalanche/marketPlace";
 import { auctionAddressA } from "../Redux/Blockchain/Avalanche/auction";
 import Web3Token from "web3-token";
+import { WalletConnection } from "near-api-js";
 const {
     utils: {
         format: { parseNearAmount },
@@ -224,9 +225,11 @@ export const createSignature = async (address: string, message: any) => {
 };
 
 export const connToMetaMask = async () => {
+    const chain = localStorage.getItem("chainName")
+    await SwitchNetwork(getChainId(chain))
     const message = new Date().getTime().toString();
     const metaMaskProvider: any = await getMetamaskProvider();
-    const connectWallet = await metaMaskProvider.request({
+    await metaMaskProvider.request({
         method: "eth_requestAccounts",
     });
     const accounts = await web3.eth.getAccounts();
@@ -328,10 +331,6 @@ export const connectNear = async () => {
     const { config, walletConnection, keyStore, networkId } =
         await initContract();
     let accountId: any;
-    console.log(
-        "walletConnection.isSignedIn(): ",
-        walletConnection.isSignedIn()
-    );
     if (!walletConnection.isSignedIn()) {
         await walletConnection.requestSignIn(
             {
@@ -342,17 +341,11 @@ export const connectNear = async () => {
             "" // failureUrl. Optional, by the way
         );
         await sendMeta(walletConnection, config);
-        console.log("nearWalletConnection: ", nearWalletConnection);
-        nearWalletConnection = walletConnection;
-
-        localStorage.setItem("walletChain", "Near");
-        accountId = walletConnection.account().accountId;
-    } else {
-        nearWalletConnection = walletConnection;
-
-        localStorage.setItem("walletChain", "Near");
-        accountId = walletConnection.account().accountId;
     }
+    nearWalletConnection = walletConnection;
+    console.log(walletConnection.isSignedIn(),"is")
+    localStorage.setItem("walletChain", "Near");
+    accountId = walletConnection.account().accountId;
     const data = await createNearSignature(keyStore, networkId, accountId);
     // let p = new nearAPI
     // const pk = await PublicKey.from(data.publicKey).data;
@@ -436,10 +429,10 @@ export const connToSol = async (
             token: sm.token,
         }
     }
-    console.log("wallet: ", wallet);
-    if (!wallet) {
-        setVisible(true)
-    } else {
+    // console.log("wallet: ", wallet);
+    // if (!wallet) {
+    //     setVisible(true)
+    // } else {
         await connect()
         if (wallet.adapter.publicKey) {
             const address = await wallet.adapter.publicKey.toBase58()
@@ -450,18 +443,24 @@ export const connToSol = async (
                 message: sm.message,
                 token: sm.token,
             }
-        } else {
-            throw new Error("Connection refused")
-        }
+        // } else {
+        //     throw new Error("Connection refused")
+        // }
     }
+
 }
-export const disConnectWallet = () => {
+export const disConnectWallet = async () => {
     localStorage.clear();
 
     Cookies.remove(ACCESS_TOKEN, { domain: cookieDomain, expires: 30 });
     Cookies.remove("userInfo", { domain: cookieDomain, expires: 30 });
     walletConnectorProvider.disconnect();
     walletLink.disconnect();
+    const { config, walletConnection, keyStore, networkId } =
+        await initContract();
+    if(walletConnection.isSignedIn()){
+        walletConnection.signOut();
+    }
 };
 
 export const getUserWallet = async (network: any) => {

@@ -16,6 +16,7 @@ import { disConnectWallet, isMainStore, userInfo } from "../../utils/utils";
 import { capitalize, getLocalStorage } from "../../utils/helpers";
 import NavMenu from "../menu/NavMenu/NavMenu";
 import { toast } from "react-toastify";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const Navbar = ({ store }) => {
     const [search, setSearch] = useState("");
@@ -24,7 +25,6 @@ const Navbar = ({ store }) => {
     const navigate = useNavigate();
     const [solidNav, setSolidNav] = useState(false);
     const [menu, setMenu] = useState(false);
-
     const [anchorStats, setAnchorStats] = useState<null | HTMLElement>(null);
     const [anchorChains, setAnchorChains] = useState<null | HTMLElement>(null);
     const [anchorProfile, setAnchorProfile] = useState<null | HTMLElement>(
@@ -373,6 +373,13 @@ const ProfileButton = ({ accessToken, store }) => {
     const openProfile = Boolean(anchorProfile);
     const location = useLocation();
     const navigate = useNavigate();
+    const { disconnect } = useWallet();
+
+
+    const handleDisconnect =async () => {
+        disConnectWallet()
+        await disconnect()
+    }
 
     const handleClickProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
         accessToken
@@ -420,7 +427,7 @@ const ProfileButton = ({ accessToken, store }) => {
                             </Link>
                         </MenuItem>
                     )}
-                <MenuItem onClick={() => disConnectWallet()}>
+                <MenuItem onClick={() => handleDisconnect()}>
                     <Link
                         to={"/connect-wallet/marketplace"}
                         className="menu-link"

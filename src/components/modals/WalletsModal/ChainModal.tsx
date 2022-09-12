@@ -11,6 +11,7 @@ import {getChainId} from "../../../utils/utils"
 import "./ChainModal.scss"
 import { useContext } from "react"
 import { ChainContext } from "../../../context/ChainContext"
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const ChainCard = ({ chainName, chainLogo, handleChain }) => {
     return (
@@ -24,11 +25,11 @@ const ChainCard = ({ chainName, chainLogo, handleChain }) => {
 }
 
 const ChainModal = ({ open, setOpen, setWalletModal}) => {
-
     const {chain,setChain} = useContext(ChainContext)
     const handleClose = () => {
         setOpen(false)
     }
+    const { setVisible } = useWalletModal();
     const handleChain = (chain:any) => {
         chain = getChainId(chain?.toLowerCase())
         setOpen(false)
@@ -36,6 +37,14 @@ const ChainModal = ({ open, setOpen, setWalletModal}) => {
         setChain(chain)
         localStorage.setItem("CHAIN",chain)
     }
+    // const handleSolana = (chain:any) => {
+    //     // chain = getChainId(chain?.toLowerCase())
+    //     setOpen(false)
+    //     // setWalletModal(true)
+    //     // setChain(chain)
+    //     // localStorage.setItem("CHAIN",chain)
+    //     // setVisible(true)
+    // }
     return (
         <Dialog
             onClose={handleClose}

@@ -133,6 +133,7 @@ export const Wallets = ({ loginWallet, chainName }: WalletProps) => {
 
 function AllWallets({ scase, loginWallet }) {
     console.log("scase: ", scase);
+    localStorage.setItem("chainName",scase)
     return (
         <div className="wallets">
             {(() => {

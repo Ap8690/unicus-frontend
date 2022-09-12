@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { WalletConnection } from "near-api-js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
@@ -12,12 +12,15 @@ import {
     connToSol,
     connToTron,
     connToWalletConnector,
+    sign_solana_message,
 } from "../utils/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "../utils/constants";
 import { cookieDomain, ethChain, nearChain,solonaChain , tronChain } from "../config";
 import { walletLogin } from "../services/api/supplier";
 import { ChainContext } from "./ChainContext";
+import { WalletAdapterNetwork, WalletName } from "@solana/wallet-adapter-base";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 
 export type ConnectWalletContextType = {
     loginWallet?: any;
@@ -34,12 +37,63 @@ export const ConnectWalletContext =
 export const WalletConnectionProvider = ({ children }) => {
     const navigate = useNavigate();
     const redirect = useParams();
-    const { wallet, connect, publicKey } = useWallet();
+    const { wallet, connect, select, publicKey } = useWallet();
     const { setVisible } = useWalletModal();
     const [fullLoading,setFullLoading] = useState(false)
     const [chainConnected,setChainConnected] = useState('')
     const [walletModal,setWalletModal] = useState<boolean>(false)
     const {chain,setChain} = useContext(ChainContext)
+    const [solana,setSolana] = useState(false)
+    const [solWallet, setSolWallet] = useState(wallet)
+    const [solPublicKey,setSolPublicKey] = useState(publicKey)
+    const network = WalletAdapterNetwork.Devnet;
+
+    // const setSolAttributes = async() =>{
+    //     const { wallet, connect, select, publicKey } = useWallet();
+    //     setSolWallet(wallet)
+    //     setSolPublicKey(publicKey)
+    // }
+
+    useEffect(()=>{
+        console.log(solana,"chain")
+        // if(solana === true){
+            // logInSolana()
+        // }
+        const name:any = "Phantom"
+        select(name)
+    },[])
+
+    const logInSolana =async () => {
+        try {
+            const sign = await sign_solana_message()
+            // select(name)
+            //@ts-ignore
+            const address = publicKey.toBase58();
+            const token : any = sign?.token;
+            const message = sign?.message;
+            const walletNetwork="Solana"
+            const res = await walletLogin(publicKey.toBase58(),token,walletNetwork,message);
+            toast.success("Login successful");
+            Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
+                domain: cookieDomain,
+                expires: 30,
+            });
+            Cookies.set("userInfo", JSON.stringify(res.data.user), {
+                domain: cookieDomain,
+                expires: 30,
+            });
+
+            localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+            localStorage.setItem("walletConnected",address)
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
+    // useEffect(()=>{
+
+    // })
 
     //@ts-ignore
     const loginWallet = async (walletAddress: string) => {
@@ -97,6 +151,8 @@ export const WalletConnectionProvider = ({ children }) => {
                     break;
                 }
                 case "sol": {
+                    const name:any = "Phantom"
+                    select(name)
                     const data = await connToSol(
                         publicKey,
                         wallet,
@@ -109,6 +165,7 @@ export const WalletConnectionProvider = ({ children }) => {
                     message = data?.message;
                     walletNetwork="Solana"
                     setChain(solonaChain)
+                    setSolana(true)
                     break;
                 }
                 case "near": {
@@ -163,6 +220,7 @@ export const WalletConnectionProvider = ({ children }) => {
             }
             
         } catch (e) {
+            localStorage.setItem("error",e)
             toast.error(e?.message || e || "Something went wrong, Please try again");
             console.log("ERROR",e);
             setFullLoading(false)
@@ -175,3 +233,4 @@ export const WalletConnectionProvider = ({ children }) => {
         </ConnectWalletContext.Provider>
     );
 };
+
