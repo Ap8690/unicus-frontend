@@ -1,41 +1,44 @@
-export const BASE_URL =
-    process.env.REACT_APP_ENV === "local"
+const env_uri = 'local'
+
+
+export const BASE_URL = 
+    env_uri === "local"
         ? "http://localhost:4000"
-        : process.env.REACT_APP_ENV === "development"
+        : env_uri === "development"
         ? "https://unicus-storefront-backend-test.herokuapp.com"
-        : process.env.REACT_APP_ENV === "staging"
+        : env_uri === "staging"
         ? "https://unicus-storefront-backend-qa.herokuapp.com"
-        : process.env.REACT_APP_ENV === "demo"
+        : env_uri === "demo"
         ? "https://unicus-storefront-backend-demo.herokuapp.com"
         : "https://unicus-storefront-backend.herokuapp.com";
 // testnet
-export const bscChain = process.env.REACT_APP_ENV === "prod" ? "56" : "97";
-export const ethChain = process.env.REACT_APP_ENV === "prod" ? "1" : "4";
-export const ethChain1155 = process.env.REACT_APP_ENV === "prod" ? "1" : "4";
+export const bscChain = env_uri === "prod" ? "56" : "97";
+export const ethChain = env_uri === "prod" ? "1" : "4";
+export const ethChain1155 = env_uri === "prod" ? "1" : "4";
 export const polygonChain =
-    process.env.REACT_APP_ENV === "prod" ? "137" : "80001";
-export const tronChain = process.env.REACT_APP_ENV === "prod" ? "8700" : "8766";
+    env_uri === "prod" ? "137" : "80001";
+export const tronChain = env_uri === "prod" ? "8700" : "8766";
 export const solonaChain =
-    process.env.REACT_APP_ENV === "prod" ? "6700" : "6766";
-export const nearChain = process.env.REACT_APP_ENV === "prod" ? "7700" : "7766";
+    env_uri === "prod" ? "6700" : "6766";
+export const nearChain = env_uri === "prod" ? "7700" : "7766";
 export const avalancheChain =
-    process.env.REACT_APP_ENV === "prod" ? "43114" : "43113";
+    env_uri === "prod" ? "43114" : "43113";
 
 export const UNICUS_STORE =
-    process.env.REACT_APP_ENV === "local"
+    env_uri === "local"
         ? "localhost:3000"
-        : process.env.REACT_APP_ENV === "development"
+        : env_uri === "development"
         ? "marketplace.test.unicus.one"
-        : process.env.REACT_APP_ENV === "staging"
+        : env_uri === "staging"
         ? "marketplace.qa.unicus.one"
-        : process.env.REACT_APP_ENV === "demo"
+        : env_uri === "demo"
         // ? "marketplace.demo.unicus.one"
         ? "unicus-marketplace-demo.herokuapp.com"
         : "marketplace.unicus.one";
 
 export const cookieDomain =
-    process.env.REACT_APP_ENV === "local"
+    env_uri === "local"
         ? "localhost"
-        : process.env.REACT_APP_ENV === "demo"
+        : env_uri === "demo"
         ? "unicus-marketplace-demo.herokuapp.com"
         : "unicus.one";

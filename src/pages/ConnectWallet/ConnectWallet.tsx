@@ -21,6 +21,8 @@ import PageLoader from "../../components/Loading/PageLoader";
 import ChainModal from "../../components/modals/WalletsModal/ChainModal";
 import WalletsModal from "../../components/modals/WalletsModal/WalletsModal";
 import { ChainContext } from "../../context/ChainContext";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 type AuthType = Readonly<{
     wallet?: WalletConnection;
@@ -32,6 +34,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
     let redirect = useParams();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [walletModal, setWalletModal] = useState(false);
+    const { wallet } = useWallet();
     const { loginWallet, fullLoading } = useContext(ConnectWalletContext);
     useEffect(() => {
         const message = "";
@@ -60,7 +63,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
             });
         }
     }, []);
-
+    
     return (
         <div className="connect-wallet-page my-8">
             {fullLoading ? (
@@ -132,14 +135,17 @@ export const Wallets = ({ loginWallet, chainName }: WalletProps) => {
 };
 
 function AllWallets({ scase, loginWallet }) {
-    console.log("scase: ", scase);
+    const { setVisible } = useWalletModal()
     return (
         <div className="wallets">
             {(() => {
                 switch (scase) {
                     case "solana":
                         return (
-                            <button onClick={() => loginWallet("sol")}>
+                            <button onClick={() => {
+                                // setVisible(true)
+                                loginWallet("sol")
+                                }}>
                                 SolanaConnect
                                 <img src={phantomLogo} alt="Phantom" />
                             </button>

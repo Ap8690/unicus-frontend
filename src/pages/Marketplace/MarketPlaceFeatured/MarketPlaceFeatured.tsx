@@ -30,7 +30,6 @@ const MarketPlaceFeatured = ({ chain, title }) => {
     setLoading(true)
     getFeaturedNft(10,chain)
     .then((res) => {
-      console.log(res)
       setFeturedNft(res?.data.nfts);
       setLoading(false)
     })

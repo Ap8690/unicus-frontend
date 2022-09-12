@@ -84,43 +84,6 @@ import { decodeParams } from "../../utils/helpers";
 import Cookies from "js-cookie";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 
-const metamask = [
-    {
-        chain: "Ethereum",
-        id: ethChain,
-    },
-    {
-        chain: "Polygon",
-        id: polygonChain,
-    },
-    {
-        chain: "Binance",
-        id: bscChain,
-    },
-    {
-        chain: "Avalanche",
-        id: avalancheChain,
-    },
-];
-const near = [
-    {
-        chain: "Near",
-        id: nearChain,
-    },
-];
-const solana = [
-    {
-        chain: "Solana",
-        id: solonaChain,
-    },
-];
-const tron = [
-    {
-        chain: "Tron",
-        id: tronChain,
-    },
-]; 
-
 const CreateNftSingle = () => {
     // let chain_name = ChainIdUsingWalletName(localStorage.getItem("walletChain"))
     const [name, setName] = useState("");
@@ -150,30 +113,17 @@ const CreateNftSingle = () => {
     const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
     const inputFile = useRef(null);
     const navigate = useNavigate();
-
     const { loginWallet, fullLoading } = useContext(ConnectWalletContext);
-
     const { connection } = useConnection();
-
     const { wallet, connect, publicKey, sendTransaction } = useWallet();
     const { setVisible } = useWalletModal();
-
     const anWallet = useAnchorWallet();
-
-    const getSolWallet = () => {
-        return wallet;
-    };
-
     const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
         "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
     );
-
     const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
         "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
     );
-
-    const NFT_SYMBOL = "unicus-nft";
-
     //sol Nft mint
     const [properties, setProperties] = useState([
         {
@@ -485,242 +435,227 @@ const CreateNftSingle = () => {
             //     setVisible
             // )
             //     .then(async (address) => {
-                let address = localStorage.getItem("walletConnected")
-                    if (!address) {
-                        toast.error("Wallet connection failed");
+            let address = localStorage.getItem("walletConnected");
+            if (!address) {
+                toast.error("Wallet connection failed");
+                return;
+            }
+            const contractAddress = getCreateNftContractAddress(
+                chain,
+                contractType
+            );
+
+            setNftModalMessage("Uploading the metadata.");
+            setNftLoading(true);
+            let formData = new FormData();
+            formData.append("name", name);
+            formData.append("royalty", royalty + "");
+            formData.append("image", fileSrc);
+            // formData.append('imageUrl', "kdakjadkjakjd")
+            formData.append("description", description);
+            formData.append("category", category);
+
+            formData.append("attributes", JSON.stringify(properties));
+
+            try {
+                toast.info("Uploading the metadata...");
+                const response: any = await uploadToPinata(formData);
+                if (!response) {
+                    setdefaultErrorMessage("Network Error");
+                    return;
+                }
+                var tokenHash = response.data;
+                var tokenUri =
+                    "https://unicus.mypinata.cloud/ipfs/" + tokenHash;
+                let imageUrl: any;
+                let tokenId: any;
+                let tranIsSuccess = false;
+
+                await axios.get(tokenUri).then((val) => {
+                    imageUrl = val.data.image;
+                });
+                setNftLoading(false);
+                toast.success("Metadata Uploaded...");
+                setNftModalMessage("An Awesome Asset is getting Minted");
+                let user = userInfo;
+                if (!user) {
+                    user = JSON.parse(localStorage.getItem("userInfo"));
+                }
+                console.log(user, "user");
+                const nftObj = {
+                    name,
+                    royalty,
+                    description,
+                    category,
+                    jsonIpfs: tokenUri,
+                    nftType: fileSrc.type,
+                    chain,
+                    contractAddress,
+                    owner: user._id,
+                    uploadedBy: user._id,
+                    mintedBy: user._id,
+                    mintedInfo: user.username,
+                    userInfo: user.username,
+                    cloudinaryUrl: imageUrl,
+                    tokenId,
+                    tags: properties,
+                };
+                if (chain === nearChain) {
+                    nftObj.tokenId = uuid();
+                    localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
+                    if (!nftObj.tokenId) {
                         return;
                     }
-                    const contractAddress = getCreateNftContractAddress(
-                        chain,
-                        contractType
+                    await mintAssetToNft(
+                        nftObj.tokenId,
+                        name,
+                        description,
+                        tokenUri,
+                        imageUrl
                     );
-
-                    setNftModalMessage("Uploading the metadata.");
+                    return;
+                } else if (chain === solonaChain) {
+                    const mintKey = await mintSolana(
+                        name,
+                        description,
+                        tokenUri
+                    );
+                    nftObj.tokenId = mintKey;
+                    await createNft(nftObj);
+                    navigate("/profile/created");
+                } else if (chain === tronChain) {
                     setNftLoading(true);
-                    let formData = new FormData();
-                    formData.append("name", name);
-                    formData.append("royalty", royalty + "");
-                    formData.append("image", fileSrc);
-                    // formData.append('imageUrl', "kdakjadkjakjd")
-                    formData.append("description", description);
-                    formData.append("category", category);
-
-                    formData.append("attributes", JSON.stringify(properties));
-
-                    try {
-                        toast.info("Uploading the metadata...");
-                        const response: any = await uploadToPinata(formData);
-                        if (!response) {
-                            setdefaultErrorMessage("Network Error");
-                            return;
+                    toast.info("Minting The Asset");
+                    const createNFT = getCreateNftContract(chain, contractType);
+                    console.log("createNFT ", address);
+                    let res: any;
+                    if (contractType === "721") {
+                        res = await createNFT.methods
+                            .batchMint([tokenUri], [royalty])
+                            .send({
+                                from: address,
+                            });
+                        if (res?.transactionHash) {
+                            nftObj.tokenId =
+                                res.events.Minted.returnValues._NftId; //returnValues NFTId
                         }
-                        var tokenHash = response.data;
-                        var tokenUri =
-                            "https://unicus.mypinata.cloud/ipfs/" + tokenHash;
-                        let imageUrl: any;
-                        let tokenId: any;
-                        let tranIsSuccess = false;
-
-                        await axios.get(tokenUri).then((val) => {
-                            imageUrl = val.data.image;
-                        });
-                        setNftLoading(false);
-                        toast.success("Metadata Uploaded...");
-                        setNftModalMessage(
-                            "An Awesome Asset is getting Minted"
-                        );
-                        let user = userInfo;
-                        if (!user) {
-                            user = JSON.parse(localStorage.getItem("userInfo"));
-                        }
-                        console.log(user, "user");
-                        const nftObj = {
-                            name,
-                            royalty,
-                            description,
-                            category,
-                            jsonIpfs: tokenUri,
-                            nftType: fileSrc.type,
-                            chain,
-                            contractAddress,
-                            owner: user._id,
-                            uploadedBy: user._id,
-                            mintedBy: user._id,
-                            mintedInfo: user.username,
-                            userInfo: user.username,
-                            cloudinaryUrl: imageUrl,
-                            tokenId,
-                            tags: properties,
-                        };
-                        if (chain === nearChain) {
-                            nftObj.tokenId = uuid();
-                            localStorage.setItem(
-                                "nearNftObj",
-                                JSON.stringify(nftObj)
-                            );
-                            if (!nftObj.tokenId) {
-                                return;
-                            }
-                            await mintAssetToNft(
-                                nftObj.tokenId,
-                                name,
-                                description,
+                    } else if (contractType === "1155") {
+                        res = await createNFT.methods
+                            .mintNFT(
                                 tokenUri,
-                                imageUrl
-                            );
-                            return;
-                        } else if (chain === solonaChain) {
-                            const mintKey = await mintSolana(
-                                name,
-                                description,
-                                tokenUri
-                            );
-                            nftObj.tokenId = mintKey;
-                            await createNft(nftObj);
-                            navigate("/profile/created");
-                        } else if (chain === tronChain) {
-                            setNftLoading(true);
-                            toast.info("Minting The Asset");
-                            const createNFT = getCreateNftContract(
-                                chain,
-                                contractType
-                            );
-                                console.log("createNFT ",address)
-                            let res: any;
-                            if (contractType === "721") {
-                                res = await createNFT.methods
-                                    .batchMint([tokenUri], [royalty])
-                                    .send({
-                                        from: address,
-                                    });
-                                if (res?.transactionHash) {
-                                    nftObj.tokenId =
-                                        res.events.Minted.returnValues._NftId; //returnValues NFTId
-                                }
-                            } else if (contractType === "1155") {
-                                res = await createNFT.methods
-                                    .mintNFT(
-                                        tokenUri,
-                                        supply,
-                                        address,
-                                        parseInt(royalty)
-                                    )
-                                    .send({
-                                        from: address,
-                                    });
-                                if (res?.transactionHash) {
-                                    nftObj.tokenId =
-                                        res.events.Minted.returnValues._id; //returnValues NFTId
-                                }
-                            } else {
-                                toast.error("Contract not found");
-                                return;
-                            }
-                            setNftModalMessage(
-                                "Waiting for transaction confirmation.(It can take upto a min to confirm)"
-                            );
-                            const success = await setNotification(res);
-                            let tokenId = await decodeParams(
-                                ["uint256"],
-                                "0x" + success?.log[0]?.topics[3],
-                                false
-                            );
-                            tokenId = tronWeb.toDecimal(tokenId[0]._hex);
-                            if (!success) {
-                                tranIsSuccess = false;
-                                throw Error("Tron Transaction Failed");
-                            } else {
-                                tranIsSuccess = true;
-                                nftObj.tokenId = tokenId;
-                            }
-                            setNftLoading(false);
-                            toast.success("Asset Minted");
-                            console.log(nftObj, "nftObj");
-                            await createNft(nftObj);
-                            navigate("/profile/created");
-                        } else {
-                            setNftLoading(true);
-                            toast.info("Minting The Asset");
-                            const gasPrice = await web3.eth.getGasPrice();
-                            const createNFT = getCreateNftContract(
-                                chain,
-                                contractType
-                            );
-
-                            let res: any;
-                            let estimated: any;
-                            if (contractType === "721") {
-                                estimated = await createNFT.methods
-                                    .batchMint([tokenUri], [royalty])
-                                    .estimateGas({
-                                        from: address,
-                                    });
-                                res = await createNFT.methods
-                                    .batchMint([tokenUri], [royalty])
-                                    .send({
-                                        from: address,
-                                        gas: estimated,
-                                        gasPrice: gasPrice,
-                                    });
-                                if (res?.transactionHash) {
-                                    nftObj.tokenId =
-                                        res.events.Minted.returnValues._NftId; //returnValues NFTId
-                                }
-                            } else if (contractType === "1155") {
-                                estimated = await createNFT.methods
-                                    .mintNFT(
-                                        tokenUri,
-                                        supply,
-                                        address,
-                                        parseInt(royalty)
-                                    )
-                                    .estimateGas({
-                                        from: address,
-                                    });
-                                res = await createNFT.methods
-                                    .mintNFT(
-                                        tokenUri,
-                                        supply,
-                                        address,
-                                        parseInt(royalty)
-                                    )
-                                    .send({
-                                        from: address,
-                                        gas: estimated,
-                                        gasPrice: gasPrice,
-                                    });
-                                if (res?.transactionHash) {
-                                    nftObj.tokenId =
-                                        res.events.Minted.returnValues._id; //returnValues NFTId
-                                }
-                            } else {
-                                toast.error(
-                                    "Contract type is not ERC721 or ERC1155!"
-                                );
-                                return;
-                            }
-
-                            setNftLoading(false);
-                            toast.success("Asset Minted");
-                            await createNft(nftObj);
-                            navigate("/profile/created");
+                                supply,
+                                address,
+                                parseInt(royalty)
+                            )
+                            .send({
+                                from: address,
+                            });
+                        if (res?.transactionHash) {
+                            nftObj.tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
                         }
-                    } catch (error) {
-                        toast.error("Minting Failed");
-                        console.log(error, error.message);
-                        setdefaultErrorMessage(error);
-                        setNftLoading(false);
-                        toast.dismiss();
-                        if (error.message) {
-                            setdefaultErrorMessage(error.message);
-                        }
-                        setdefaultErrorModal(true);
+                    } else {
+                        toast.error("Contract not found");
+                        return;
                     }
-                // })
-                // .catch((err) => {
-                //     console.log(err);
-                //     toast.error("Mint failed.");
-                // });
+                    setNftModalMessage(
+                        "Waiting for transaction confirmation.(It can take upto a min to confirm)"
+                    );
+                    const success = await setNotification(res);
+                    let tokenId = await decodeParams(
+                        ["uint256"],
+                        "0x" + success?.log[0]?.topics[3],
+                        false
+                    );
+                    tokenId = tronWeb.toDecimal(tokenId[0]._hex);
+                    if (!success) {
+                        tranIsSuccess = false;
+                        throw Error("Tron Transaction Failed");
+                    } else {
+                        tranIsSuccess = true;
+                        nftObj.tokenId = tokenId;
+                    }
+                    setNftLoading(false);
+                    toast.success("Asset Minted");
+                    console.log(nftObj, "nftObj");
+                    await createNft(nftObj);
+                    navigate("/profile/created");
+                } else {
+                    setNftLoading(true);
+                    toast.info("Minting The Asset");
+                    const gasPrice = await web3.eth.getGasPrice();
+                    const createNFT = getCreateNftContract(chain, contractType);
+
+                    let res: any;
+                    let estimated: any;
+                    if (contractType === "721") {
+                        estimated = await createNFT.methods
+                            .batchMint([tokenUri], [royalty])
+                            .estimateGas({
+                                from: address,
+                            });
+                        res = await createNFT.methods
+                            .batchMint([tokenUri], [royalty])
+                            .send({
+                                from: address,
+                                gas: estimated,
+                                gasPrice: gasPrice,
+                            });
+                        if (res?.transactionHash) {
+                            nftObj.tokenId =
+                                res.events.Minted.returnValues._NftId; //returnValues NFTId
+                        }
+                    } else if (contractType === "1155") {
+                        estimated = await createNFT.methods
+                            .mintNFT(
+                                tokenUri,
+                                supply,
+                                address,
+                                parseInt(royalty)
+                            )
+                            .estimateGas({
+                                from: address,
+                            });
+                        res = await createNFT.methods
+                            .mintNFT(
+                                tokenUri,
+                                supply,
+                                address,
+                                parseInt(royalty)
+                            )
+                            .send({
+                                from: address,
+                                gas: estimated,
+                                gasPrice: gasPrice,
+                            });
+                        if (res?.transactionHash) {
+                            nftObj.tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
+                        }
+                    } else {
+                        toast.error("Contract type is not ERC721 or ERC1155!");
+                        return;
+                    }
+
+                    setNftLoading(false);
+                    toast.success("Asset Minted");
+                    await createNft(nftObj);
+                    navigate("/profile/created");
+                }
+            } catch (error) {
+                toast.error("Minting Failed");
+                console.log(error, error.message);
+                setdefaultErrorMessage(error);
+                setNftLoading(false);
+                toast.dismiss();
+                if (error.message) {
+                    setdefaultErrorMessage(error.message);
+                }
+                setdefaultErrorModal(true);
+            }
+            // })
+            // .catch((err) => {
+            //     console.log(err);
+            //     toast.error("Mint failed.");
+            // });
         } catch (e) {
             console.log(e);
             setNftLoading(false);
@@ -774,7 +709,7 @@ const CreateNftSingle = () => {
         ) {
             convertToFile();
         }
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
     }, []);
 
     useEffect(() => {
@@ -833,19 +768,15 @@ const CreateNftSingle = () => {
             }
         }
 
-        if(localStorage.getItem("walletChain") === "Tron") {
-            setChain(tronChain)
+        if (localStorage.getItem("walletChain") === "Tron") {
+            setChain(tronChain);
+        } else if (localStorage.getItem("walletChain") === "Solana") {
+            setChain(solonaChain);
+        } else if (localStorage.getItem("walletChain") === "Near") {
+            setChain(nearChain);
+        } else {
+            setChain(ethChain);
         }
-        else if(localStorage.getItem("walletChain") === "Solana") {
-            setChain(solonaChain)
-        }
-        else if(localStorage.getItem("walletChain") === "Near") {
-            setChain(nearChain)
-        }
-        else {
-          setChain(ethChain)
-        }
-        
     }, []);
 
     return (
@@ -1209,12 +1140,12 @@ const CreateNftSingle = () => {
                                     </button>
                                 </div>
                             </div>
-                                <button
-                                    className="btn create-btn"
-                                    onClick={() => cryptoPayment()}
-                                >
-                                    Create
-                                </button>
+                            <button
+                                className="btn create-btn"
+                                onClick={() => cryptoPayment()}
+                            >
+                                Create
+                            </button>
                         </div>
                         <div className="preview-field">
                             <div className="field-title">Preview</div>

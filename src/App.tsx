@@ -5,14 +5,7 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { clusterApiUrl } from "@solana/web3.js";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
-  GlowWalletAdapter,
-  LedgerWalletAdapter,
   PhantomWalletAdapter,
-  SlopeWalletAdapter,
-  SolflareWalletAdapter,
-  SolletExtensionWalletAdapter,
-  SolletWalletAdapter,
-  TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import {
   ConnectionProvider,
@@ -149,20 +142,20 @@ const App = () => {
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter({ network }),
-      new GlowWalletAdapter(),
-      new SlopeWalletAdapter(),
-      new SolflareWalletAdapter({ network }),
-      new TorusWalletAdapter(),
-      new LedgerWalletAdapter(),
-      new SolletExtensionWalletAdapter({ network }),
-      new SolletWalletAdapter({ network }),
+      // new GlowWalletAdapter(),
+      // new SlopeWalletAdapter(),
+      // new SolflareWalletAdapter({ network }),
+      // new TorusWalletAdapter(),
+      // new LedgerWalletAdapter(),
+      // new SolletExtensionWalletAdapter({ network }),
+      // new SolletWalletAdapter({ network }),
     ],
     [network]
   );
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets}>
+      <WalletProvider wallets={wallets} >
         <WalletModalProvider>
         <UserProvider>
             <ChainProvider>

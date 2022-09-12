@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet,useConnection } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { toast } from "react-toastify";
 import {
@@ -34,6 +34,7 @@ export const WalletConnectionProvider = ({ children }) => {
     const navigate = useNavigate();
     const redirect = useParams();
     const { wallet, connect, publicKey } = useWallet();
+    const {connection} = useConnection()
     const { setVisible } = useWalletModal();
     const [fullLoading,setFullLoading] = useState(false)
     const [chainConnected,setChainConnected] = useState('')
@@ -96,13 +97,15 @@ export const WalletConnectionProvider = ({ children }) => {
                     break;
                 }
                 case "sol": {
+                    // setVisible(true)
                     const data = await connToSol(
                         publicKey,
                         wallet,
                         connect,
-                        setVisible
+                        setVisible,
+                        connection
                     );
-                    console.log("Date ",data)
+                    
                     address = data?.account;
                     token = data?.token;
                     message = data?.message;
