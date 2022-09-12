@@ -85,43 +85,6 @@ import { decodeParams } from "../../utils/helpers";
 import Cookies from "js-cookie";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 
-const metamask = [
-    {
-        chain: "Ethereum",
-        id: ethChain,
-    },
-    {
-        chain: "Polygon",
-        id: polygonChain,
-    },
-    {
-        chain: "Binance",
-        id: bscChain,
-    },
-    {
-        chain: "Avalanche",
-        id: avalancheChain,
-    },
-];
-const near = [
-    {
-        chain: "Near",
-        id: nearChain,
-    },
-];
-const solana = [
-    {
-        chain: "Solana",
-        id: solonaChain,
-    },
-];
-const tron = [
-    {
-        chain: "Tron",
-        id: tronChain,
-    },
-];
-
 const CreateNftSingle = () => {
     // let chain_name = ChainIdUsingWalletName(localStorage.getItem("walletChain"))
     const [name, setName] = useState("");
@@ -151,30 +114,17 @@ const CreateNftSingle = () => {
     const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
     const inputFile = useRef(null);
     const navigate = useNavigate();
-
     const { loginWallet, fullLoading } = useContext(ConnectWalletContext);
-
     const { connection } = useConnection();
-
     const { wallet, connect, publicKey, sendTransaction } = useWallet();
     const { setVisible } = useWalletModal();
-
     const anWallet = useAnchorWallet();
-
-    const getSolWallet = () => {
-        return wallet;
-    };
-
     const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
         "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
     );
-
     const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
         "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
     );
-
-    const NFT_SYMBOL = "unicus-nft";
-
     //sol Nft mint
     const [properties, setProperties] = useState([
         {
@@ -519,9 +469,6 @@ const CreateNftSingle = () => {
                 });
                 setNftLoading(false);
                 toast.success("Metadata Uploaded...");
-                setNftModalMessage(
-                    "An Awesome Asset is getting Minted"
-                );
                 let user = userInfo;
                 if (!user) {
                     user = JSON.parse(localStorage.getItem("userInfo"));
@@ -547,10 +494,7 @@ const CreateNftSingle = () => {
                 };
                 if (chain === nearChain) {
                     nftObj.tokenId = uuid();
-                    localStorage.setItem(
-                        "nearNftObj",
-                        JSON.stringify(nftObj)
-                    );
+                    localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
                     if (!nftObj.tokenId) {
                         return;
                     }
@@ -576,11 +520,8 @@ const CreateNftSingle = () => {
                 } else if (chain === tronChain) {
                     setNftLoading(true);
                     toast.info("Minting The Asset");
-                    const createNFT = getCreateNftContract(
-                        chain,
-                        contractType
-                    );
-                        console.log("createNFT ",address)
+                    const createNFT = getCreateNftContract(chain, contractType);
+                    console.log("createNFT ", address);
                     let res: any;
                     if (contractType === "721") {
                         res = await createNFT.methods
@@ -604,8 +545,7 @@ const CreateNftSingle = () => {
                                 from: address,
                             });
                         if (res?.transactionHash) {
-                            nftObj.tokenId =
-                                res.events.Minted.returnValues._id; //returnValues NFTId
+                            nftObj.tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
                         }
                     } else {
                         toast.error("Contract not found");
@@ -637,10 +577,7 @@ const CreateNftSingle = () => {
                     setNftLoading(true);
                     toast.info("Minting The Asset");
                     const gasPrice = await web3.eth.getGasPrice();
-                    const createNFT = getCreateNftContract(
-                        chain,
-                        contractType
-                    );
+                    const createNFT = getCreateNftContract(chain, contractType);
 
                     let res: any;
                     let estimated: any;
@@ -685,13 +622,10 @@ const CreateNftSingle = () => {
                                 gasPrice: gasPrice,
                             });
                         if (res?.transactionHash) {
-                            nftObj.tokenId =
-                                res.events.Minted.returnValues._id; //returnValues NFTId
+                            nftObj.tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
                         }
                     } else {
-                        toast.error(
-                            "Contract type is not ERC721 or ERC1155!"
-                        );
+                        toast.error("Contract type is not ERC721 or ERC1155!");
                         return;
                     }
 
@@ -764,7 +698,7 @@ const CreateNftSingle = () => {
         ) {
             convertToFile();
         }
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
     }, []);
 
     useEffect(() => {
@@ -1198,12 +1132,12 @@ const CreateNftSingle = () => {
                                     </button>
                                 </div>
                             </div>
-                                <button
-                                    className="btn create-btn"
-                                    onClick={() => cryptoPayment()}
-                                >
-                                    Create
-                                </button>
+                            <button
+                                className="btn create-btn"
+                                onClick={() => cryptoPayment()}
+                            >
+                                Create
+                            </button>
                         </div>
                         <div className="preview-field">
                             <div className="field-title">Preview</div>

@@ -20,7 +20,6 @@ const MarketPlaceTrending = ({ chain }) => {
   useEffect(() => {
     getTrendingNft(10,category,chain)
     .then((res) => {
-      console.log(res)
       setTrendingNfts(res?.data.nfts);
       setLoading(false)
     })

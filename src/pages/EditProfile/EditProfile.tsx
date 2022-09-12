@@ -424,9 +424,6 @@ const AddSocials = ({ resUser, handleCancel }) => {
     };
     const updateProfile = async () => {
         try {
-            console.log("fa", facebook);
-            console.log("tw", twitter);
-            console.log("ds", discord);
             if (
                 twitter &&
                 twitter.length > 0 &&

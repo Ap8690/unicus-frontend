@@ -1,18 +1,11 @@
 // Libraries
-import { useContext, useEffect, useMemo, useState } from "react";
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 import { clusterApiUrl } from "@solana/web3.js";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
-  GlowWalletAdapter,
-  LedgerWalletAdapter,
   PhantomWalletAdapter,
-  SlopeWalletAdapter,
-  SolflareWalletAdapter,
-  SolletExtensionWalletAdapter,
-  SolletWalletAdapter,
-  TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import {
   ConnectionProvider,
@@ -22,7 +15,6 @@ import {
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 // Components
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
@@ -37,8 +29,6 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Blog from "./pages/Blog/BlogMain";
 import ReadBlog from "./pages/ReadBlog/ReadBlog";
-import Ranking from "./pages/Ranking/Ranking";
-import Activity from "./pages/Activity/Activity";
 import Explore from "./pages/Explore/Explore";
 import MarketPlace from "./pages/Marketplace/MarketPlace";
 import CreateStore from "./pages/CreateStore/CreateStore";
@@ -63,17 +53,8 @@ import 'swiper/css/pagination';
 // import NFTById from "./components/NFTById/NFTById";
 import { UserProvider } from "./context/UserContext";
 import { TransactionProvider } from "./context/Web3Context";
-import { ChainContext, ChainProvider } from "./context/ChainContext";
+import { ChainProvider } from "./context/ChainContext";
 import { WalletConnectionProvider } from "./context/ConnectWalletContext";
-import {
-  tronChain,
-  bscChain,
-  ethChain,
-  polygonChain,
-  nearChain,
-  solonaChain,
-  avalancheChain,
-} from "./config";
 // redux integration
 import { Provider } from "react-redux";
 import { rstore } from "./Redux/Store";
@@ -108,7 +89,6 @@ const App = () => {
 
   const init = async () => {
     try {
-    
       setLoading(true);
       const res = await getStoreApi();
       setStore(res.data.store);
@@ -155,7 +135,6 @@ const App = () => {
     if (location.pathname === "/") {
       navigate("/home", {replace:true});
     }
-    
   }, []);
 
 // useEffect(() => {
@@ -178,118 +157,118 @@ const App = () => {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider  wallets={wallets} >
+      <WalletProvider wallets={wallets} >
         <WalletModalProvider>
         <UserProvider>
             <ChainProvider>
                 <WalletConnectionProvider>
                     <Provider store={rstore}>
                         <TransactionProvider>
-                <div className="App">
-                  <Navbar store={isMainStore() ? userStore : store} />
-                  <ToastContainer limit={3} />
-                  <ScrollToTop />
-                  <Routes>
-                    {isMainStore() ? (
-                      <Route path="/home" element={<Homepage />} />
-                    ) : (
-                      <Route path="/home" element={<StoreHomepage />} />
-                    )}
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="/readblog/:id" element={<ReadBlog />} />
-                    <Route path="/connect-wallet/*" element={<ConnectWallet />} />
-                    <Route path="/create-nft" element={<CreateNftSingle />} />
-                    <Route
-                      path="/create-nft/single-item"
-                      element={<CreateNftSingle />}
-                    />
-                    {/* <Route path="/stats/ranking" element={<Ranking />} />
-                    <Route path="/stats/activity" element={<Activity />} /> */}
-                    <Route path="/explore" element={<Explore />} />
-                    <Route path="/explore/:chainNetwork" element={<Explore />} />
-                    <Route path="/search/:search" element={<GlobalSearch/>} />
-                    <Route path="/login/:token/:email" element={<Explore />} />{" "}
-                    <Route
-                      path="/reset-password/:token/:email"
-                      element={<Explore />}
-                    />
-                    {isMainStore() && Object.keys(store).length > 0 && (
-                      <>
-                        <Route path="/store/settings" element={<StoreSettings />} />
-                        <Route
-                          path="/privacy-policy"
-                          element={
-                            <PrivacyPolicy
-                              title={"Privacy Policy"}
-                              text={
-                                store.advance.privacyPolicy &&
-                                store.advance.privacyPolicy !== ""
-                                  ? store.advance.privacyPolicy
-                                  : defaultPrivacyText
-                              }
-                            />
-                          }
-                        />
-                        <Route
-                          path="/terms"
-                          element={
-                            <PrivacyPolicy
-                              title={"Terms and Conditions"}
-                              text={
-                                store.advance.terms && store.advance.terms !== ""
-                                  ? store.advance.terms
-                                  : defaultPrivacyText
-                              }
-                            />
-                          }
-                        />
-                        <Route
-                          path="/about-us"
-                          element={
-                            <PrivacyPolicy
-                              title={"About Us"}
-                              text={
-                                store.advance.aboutUs && store.advance.aboutUs != ""
-                                  ? store.advance.aboutUs
-                                  : defaultPrivacyText
-                              }
-                            />
-                          }
-                        />
-                        <Route
-                          path="/creators"
-                          element={
-                            <PrivacyPolicy
-                              title={"Creators"}
-                              text={
-                                store.advance.creators && store.advance.creators !== ""
-                                  ? store.advance.creators
-                                  : defaultPrivacyText
-                              }
-                            />
-                          }
-                        />
-                      </>
-                    )}
-                    <Route path="/marketplace" element={<MarketPlace />} />
-                    {isMainStore() && (
-                      <Route path="/create-store" element={<CreateStore />} />
-                    )}
-                    <Route path="/all-nfts" element={<AllNFTs />} />
-                    <Route
-                      path="/nft/:chain/:contractAddress/:nftId"
-                      element={<ViewNft />}
-                    />
-                    <Route path="/auctions" element={<Auctions />} />
-                    <Route path="/edit-profile" element={<EditProfile isLogin={accessToken}/>} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/profile/:profileState" element={<Profile />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                  <Footer />
-                </div>
+                          <div className="App">
+                            <Navbar store={isMainStore() ? userStore : store} />
+                            <ToastContainer limit={3} />
+                            <ScrollToTop />
+                            <Routes>
+                              {isMainStore() ? (
+                                <Route path="/home" element={<Homepage />} />
+                              ) : (
+                                <Route path="/home" element={<StoreHomepage />} />
+                              )}
+                              <Route path="/login" element={<Login />} />
+                              <Route path="/register" element={<Register />} />
+                              <Route path="/blog" element={<Blog />} />
+                              <Route path="/readblog/:id" element={<ReadBlog />} />
+                              <Route path="/connect-wallet/*" element={<ConnectWallet />} />
+                              <Route path="/create-nft" element={<CreateNftSingle />} />
+                              <Route
+                                path="/create-nft/single-item"
+                                element={<CreateNftSingle />}
+                              />
+                              {/* <Route path="/stats/ranking" element={<Ranking />} />
+                              <Route path="/stats/activity" element={<Activity />} /> */}
+                              <Route path="/explore" element={<Explore />} />
+                              <Route path="/explore/:chainNetwork" element={<Explore />} />
+                              <Route path="/search/:search" element={<GlobalSearch/>} />
+                              <Route path="/login/:token/:email" element={<Explore />} />{" "}
+                              <Route
+                                path="/reset-password/:token/:email"
+                                element={<Explore />}
+                              />
+                              {isMainStore() && Object.keys(store).length > 0 && (
+                                <>
+                                  <Route path="/store/settings" element={<StoreSettings />} />
+                                  <Route
+                                    path="/privacy-policy"
+                                    element={
+                                      <PrivacyPolicy
+                                        title={"Privacy Policy"}
+                                        text={
+                                          store.advance.privacyPolicy &&
+                                          store.advance.privacyPolicy !== ""
+                                            ? store.advance.privacyPolicy
+                                            : defaultPrivacyText
+                                        }
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="/terms"
+                                    element={
+                                      <PrivacyPolicy
+                                        title={"Terms and Conditions"}
+                                        text={
+                                          store.advance.terms && store.advance.terms !== ""
+                                            ? store.advance.terms
+                                            : defaultPrivacyText
+                                        }
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="/about-us"
+                                    element={
+                                      <PrivacyPolicy
+                                        title={"About Us"}
+                                        text={
+                                          store.advance.aboutUs && store.advance.aboutUs != ""
+                                            ? store.advance.aboutUs
+                                            : defaultPrivacyText
+                                        }
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="/creators"
+                                    element={
+                                      <PrivacyPolicy
+                                        title={"Creators"}
+                                        text={
+                                          store.advance.creators && store.advance.creators !== ""
+                                            ? store.advance.creators
+                                            : defaultPrivacyText
+                                        }
+                                      />
+                                    }
+                                  />
+                                </>
+                              )}
+                              <Route path="/marketplace" element={<MarketPlace />} />
+                              {isMainStore() && (
+                                <Route path="/create-store" element={<CreateStore />} />
+                              )}
+                              <Route path="/all-nfts" element={<AllNFTs />} />
+                              <Route
+                                path="/nft/:chain/:contractAddress/:nftId"
+                                element={<ViewNft />}
+                              />
+                              <Route path="/auctions" element={<Auctions />} />
+                              <Route path="/edit-profile" element={<EditProfile isLogin={accessToken}/>} />
+                              <Route path="/profile" element={<Profile />} />
+                              <Route path="/profile/:profileState" element={<Profile />} />
+                              {/* <Route path="*" element={<NotFound />} /> */}
+                            </Routes>
+                            <Footer />
+                          </div>
                         </TransactionProvider>
                     </Provider>
                 </WalletConnectionProvider>

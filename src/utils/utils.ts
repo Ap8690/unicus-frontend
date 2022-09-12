@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import TronWeb from "tronweb";
 import Web3 from "web3";
-import bs58 from "bs58";
+import {AnchorProvider,Program, web3 as sol_web3} from '@project-serum/anchor';
 import {
     tronChain,
     bscChain,
@@ -14,6 +14,9 @@ import {
     cookieDomain,
     avalancheChain,
 } from "../config";
+import {
+    PhantomWalletAdapter,
+  } from "@solana/wallet-adapter-wallets";
 import { IStore } from "../models/Store";
 import { auctionAddressB } from "../Redux/Blockchain/Binance/auction";
 import { createNFTAddressB } from "../Redux/Blockchain/Binance/createNFT";
@@ -57,7 +60,7 @@ import {
     marketPlaceAddressT,
 } from "../Redux/Blockchain/Tron/marketplace";
 import { auctionAbiT, auctionAddressT } from "../Redux/Blockchain/Tron/auction";
-
+import {Connection,clusterApiUrl} from "@solana/web3.js";
 import BN from "bn.js";
 import { createNFTAddressA } from "../Redux/Blockchain/Avalanche/createNFT";
 import { marketPlaceAddressA } from "../Redux/Blockchain/Avalanche/marketPlace";
@@ -69,7 +72,9 @@ const {
         format: { parseNearAmount },
     },
 } = nearAPI;
-
+// for SOLANA
+const {SystemProgram, Keypair} = sol_web3
+const baseAccount = Keypair.generate();
 //testnet
 const HttpProvider = TronWeb.providers.HttpProvider;
 const fullNode = "https://api.shasta.trongrid.io";
@@ -377,18 +382,18 @@ export const sign_solana_message = async () => {
 };
 
 
-const getProvider = () => {
-  if ('phantom' in window) {
-    // @ts-ignore  
-    const provider = window.phantom?.solana;
+// const getProvider = () => {
+//   if ('phantom' in window) {
+//     // @ts-ignore  
+//     const provider = window.phantom?.solana;
 
-    if (provider?.isPhantom) {
-      return provider;
-    }
-  }
+//     if (provider?.isPhantom) {
+//       return provider;
+//     }
+//   }
 
-  window.open('https://phantom.app/', '_blank');
-};
+//   window.open('https://phantom.app/', '_blank');
+// };
 
 // export const connToSol = async (publicKey: any, getSolWallet: any, connect: any, setVisible: any) => {
 //   // @ts-ignore  
@@ -408,23 +413,44 @@ const getProvider = () => {
 //         throw new Error("Connection refused");
 //       }
 // };
-
-
+export async function getProvider(wallet: any) {
+    /* create the provider and return it to the caller */
+    /* network set to local network for now */
+    const network = 'http://localhost:3000'
+    const opts: any = {
+        preflightCommitment: "processed"
+    }
+    const con = new Connection(network, opts.preflightCommitment);
+    const ne = new PhantomWalletAdapter('devnet')
+    const provider = new AnchorProvider(
+        con, ne , opts.preflightCommitment,
+        );
+    return provider;
+  }
+ 
 export const connToSol = async (
     publicKey: any,
     wallet: any,
     connect: any,
-    setVisible: any
+    setVisible: any,
 ) => {
+    
+    // const { solana } = window;
+    // let connection = new Connection(clusterApiUrl('testnet'));
+    // console.log("connection: ", connection);
     // @ts-ignore
-    const isPhantomInstalled = window.phantom?.solana?.isPhantom
-    if (!isPhantomInstalled) {
+    if (!solana || !solana?.isPhantom) {
         throw new Error("Please install Phantom Wallet")
     }
-    if (publicKey) {
+    const provider:any = await getProvider(wallet)
+    console.log("provider: ", provider);
+    
+    
+    if (provider?.publicKey) {
+        console.log("IN public key")
         const sm = await sign_solana_message()
         return {
-            account: publicKey.toBase58(),
+            account: provider?.publicKey.toBase58(),
             message: sm.message,
             token: sm.token,
         }
