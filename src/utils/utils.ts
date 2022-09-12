@@ -886,3 +886,16 @@ export interface WalletsPopupProps {
 }
 export const METAMASK = "MetaMask";
 export const TRONLINK = "TronLink";
+
+export function getRPCErrorMessage(err: any){
+    var errorMessageToShow: any;
+    if(err?.message?.split('"')[0]?.slice(0,20) === "execution reverted: " || err?.message?.split('"')[0]?.slice(0,24) === "Internal JSON-RPC error."){
+        var open = err.stack.indexOf('{')
+        var close = err.stack.lastIndexOf('}')
+        var j_s = err.stack.substring(open, close + 1);
+        var j = JSON.parse(j_s);
+        console.log(j,"j")
+        errorMessageToShow =  j?.message ? j?.message:j?.originalError?.message
+    }
+    toast.error(errorMessageToShow? errorMessageToShow : err.message? err.message : err);
+}

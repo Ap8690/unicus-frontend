@@ -14,6 +14,7 @@ import {
     getMarketPlace,
     getMarketPlaceContractAddress,
     getNftContractAddress,
+    getRPCErrorMessage,
     getUserInfo,
     offerBid,
     offerPrice,
@@ -856,7 +857,7 @@ const NftInfo = ({
             await fetchItem()
         } catch (e) {
             console.log(e);
-            toast.error(e);
+            getRPCErrorMessage(e)
         }
     }
 
@@ -976,9 +977,8 @@ const NftInfo = ({
             }
             await fetchItem()
         } catch (e) {
-            console.log(e);
             setNftLoading(false)
-            toast.error("Auction Failed");
+            getRPCErrorMessage(e)
         }
     }
 
@@ -1031,7 +1031,7 @@ const NftInfo = ({
                 .estimateGas({
                     from: address,
                     value: auction.startBid,
-                });
+                })
                 const res = await getMarketPlace(
                     auction.chain,
                     auction.nftId.contractType
@@ -1057,10 +1057,13 @@ const NftInfo = ({
             }
         } catch (e) {
             setNftLoading(false);
-            toast.error(e);
+            getRPCErrorMessage(e)
         }
         setNftLoading(false);
     }
+
+   
+
 
     async function placeBid() {
         try {
@@ -1073,15 +1076,13 @@ const NftInfo = ({
                 setVisible
             );
 
-            console.log(auction.startBid,bid,"start bid and price")
-
-            if(auction.startBid/getDecimal(tronChain) >= Number(bid)){
+            if(auction.startBid/getDecimal(nft.chain.toString()) >= Number(bid)){
                 setNftLoading(false)
-                toast.error("The new bid value should be more then the last big!")
+                toast.error("The new bid value should be more then the last bid!")
                 return
             }
 
-            if (auction.chain.toString() === nearChain) {
+            if (nft.chain.toString() === nearChain) {
                 localStorage.setItem("nearBid", bid.toString());
                 offerBid(nft.tokenId, Number(bid));
                 return;
@@ -1152,7 +1153,7 @@ const NftInfo = ({
             await fetchItem()
         } catch (e) {
             setNftLoading(false);
-            toast.error(e);
+            getRPCErrorMessage(e)
         }
     }
     
@@ -1218,7 +1219,7 @@ const NftInfo = ({
             await fetchItem()
         } catch (e) {
             setNftLoading(false);
-            toast.error(e);
+            getRPCErrorMessage(e)
         }
     }
 
@@ -1287,7 +1288,7 @@ const NftInfo = ({
             }
         } catch (e) {
             setNftLoading(false);
-            toast.error(e?.message? e.message : e);
+            getRPCErrorMessage(e)
         }
     }
 
@@ -1350,8 +1351,7 @@ const NftInfo = ({
             await fetchItem()
         } catch (e) {
             setNftLoading(false);
-            console.log(e);
-            toast.error(e?.message?e?.message:e);
+            getRPCErrorMessage(e)
         }
     }
 
