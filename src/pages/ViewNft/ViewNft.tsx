@@ -10,7 +10,7 @@ import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
 import uuid from "react-uuid";
 
-const filters = ["History", "Properties"];
+const filters = ["Bids", "History", "Properties"];
 
 const topBid = {
     img: nftImg,

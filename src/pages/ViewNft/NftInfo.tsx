@@ -82,6 +82,16 @@ import WalletsModal from "../../components/modals/WalletsModal/WalletsModal";
 import {isChainConnected} from "../../utils/helpers"
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 
+const BIDS_PLACEHOLDER = [
+    {
+        bid: 5,
+        img: nftImg,
+        bidder: 'Jon Snow',
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString()
+    },
+]
+
 const NftInfo = ({
     filters,
     creator,
@@ -1751,6 +1761,9 @@ const NftInfo = ({
                     {activeFilter === "Properties" && (
                         <Properties tags={nft.tags} />
                     )}
+                    {activeFilter === "Bids" && (
+                        <Bids bids={BIDS_PLACEHOLDER}/>
+                    )}
                 </div>
                 <div className="bid-buy-box">
                     <div className="user-info">
@@ -1862,6 +1875,35 @@ const Properties = ({ tags }) => {
         </div>
     );
 };
+
+const Bids = ({ bids }) => {
+  return(
+    <div className="nft-bids-box">
+        {bids.map(bid=>(
+            <Bid bidInfo={bid} />
+        ))}
+    </div>
+  )
+}
+
+const Bid = ({bidInfo}) => {
+  return(
+    <div className="bidInfo-bid">
+        <div className="bid-user">
+            <img src={bidInfo.img} alt="" />
+        </div>
+        <div className="bid-info">
+            <div className="bid-head">
+                Bid {bidInfo.bid} wETH
+            </div>
+            <div className="bid-sub">
+                By {bidInfo.bidder} {bidInfo.date}, {bidInfo.time}
+            </div>
+        </div>
+    </div>
+  )
+}
+
 export default NftInfo;
 function setLoadingMessage(arg0: string) {
     throw new Error("Function not implemented.");
