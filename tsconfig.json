@@ -7,7 +7,6 @@
       "esnext"
     ],
     "allowJs": true,
-    "reactStrictMode":"true",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

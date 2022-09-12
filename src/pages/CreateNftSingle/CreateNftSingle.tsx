@@ -361,10 +361,9 @@ const CreateNftSingle = () => {
             const metaplex = new Metaplex(connection);
             //Fetch all nfts of by owner
             //the returned NFTs may be Metadatas
-            const myNfts = await metaplex
-                .nfts()
-                .findByMint(mintKey.publicKey)
-                .run();
+            console.log(mintKey,'mintkeyhodshf')
+            // const myNfts = await metaplex.nfts().findByMint(mintKey.publicKey)
+            //     .run();
             return mintKey.publicKey.toBase58();
     };
     // NEAR Protocol Minting
@@ -467,7 +466,6 @@ const CreateNftSingle = () => {
                 await axios.get(tokenUri).then((val) => {
                     imageUrl = val.data.image;
                 });
-                setNftLoading(false);
                 toast.success("Metadata Uploaded...");
                 let user = userInfo;
                 if (!user) {

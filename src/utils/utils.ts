@@ -340,10 +340,7 @@ export const connectNear = async () => {
         await walletConnection.requestSignIn(
             {
                 contractId: "nft.subauction.testnet",
-            },
-            "UNICUS", // title. Optional, by the way
-            "", // successUrl. Optional, by the way
-            "" // failureUrl. Optional, by the way
+            }
         );
         await sendMeta(walletConnection, config);
     }
