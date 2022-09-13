@@ -73,11 +73,6 @@ import {
     SYSVAR_RENT_PUBKEY,
 } from "@solana/web3.js";
 import SolMintNftIdl from "../../utils/sol_mint_nft.json";
-import {
-    Metaplex,
-    keypairIdentity,
-    bundlrStorage,
-} from "@metaplex-foundation/js";
 import validator from "validator";
 import { getBase64, blobUrlToFile } from "../../utils/imageConvert";
 import uuid from "react-uuid";
@@ -358,7 +353,7 @@ const CreateNftSingle = () => {
                 lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
                 signature: signature,
             });
-            const metaplex = new Metaplex(connection);
+            // const metaplex = new Metaplex(connection);
             //Fetch all nfts of by owner
             //the returned NFTs may be Metadatas
             console.log(mintKey,'mintkeyhodshf')
