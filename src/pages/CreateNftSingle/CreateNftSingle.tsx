@@ -441,7 +441,6 @@ const CreateNftSingle = () => {
             // formData.append('imageUrl', "kdakjadkjakjd")
             formData.append("description", description);
             formData.append("category", category);
-
             formData.append("attributes", JSON.stringify(properties));
 
             try {

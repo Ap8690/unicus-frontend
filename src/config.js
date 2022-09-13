@@ -40,5 +40,5 @@ export const cookieDomain =
     env_uri === "local"
         ? "localhost"
         : env_uri === "demo"
-        ? "marketplace.demo.unicus.one"
+        ? "demo.unicus.one"
         : "unicus.one";
