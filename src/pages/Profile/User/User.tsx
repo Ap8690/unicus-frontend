@@ -161,27 +161,27 @@ const User = ({ user }): ReactJSXElement => {
                     </p>
                     <div className="user-links mt-2">
                         {user?.twitter && (
-                            <a href={user?.twitter}>
+                            <a target="_blank" href={user?.twitter}>
                                 <img src={twitter} alt="twitter" />
                             </a>
                         )}
                         {user?.instagram && (
-                            <a href={user?.instagram}>
+                            <a target="_blank" href={user?.instagram}>
                                 <img src={instagram} alt="instagram" />
                             </a>
                         )}
                         {user?.facebook && (
-                            <a href={user?.facebook}>
+                            <a target="_blank" href={user?.facebook}>
                                 <img src={facebook} alt="facebook" />
                             </a>
                         )}
                         {user?.discord && (
-                            <a href={user?.discord} className="h-[24px]">
+                            <a target="_blank" href={user?.discord} className="h-[24px]">
                                 <img src={discord} alt="discord" className="h-[24px]" />
                             </a>
                         )}
                         {user?.linkedIn && (
-                            <a href={user?.linkedIn} className="h-[24px]">
+                            <a target="_blank" href={user?.linkedIn} className="h-[24px]">
                                 <img src={linkedin} alt="linkedin"  className="h-[24px]" />
                             </a>
                         )}

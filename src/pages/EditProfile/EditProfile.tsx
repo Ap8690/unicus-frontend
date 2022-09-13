@@ -1,64 +1,64 @@
-import userImg from "../../assets/images/userImage.png";
+import userImg from "../../assets/images/userImage.png"
 
-import twitterImg from "../../assets/svgs/profileTwitter.svg";
-import instagramImg from "../../assets/svgs/profileInstagram.svg";
-import facebookImg from "../../assets/svgs/profileFacebook.svg";
-import discord from "../../assets/images/discord.svg";
-import linkedin from "../../assets/images/linkedin.png";
-import { useEffect, useState } from "react";
-// import Input from "../../components/Input/Input";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import WalletAdd from "../../components/Wallet/WalletAdd";
-import axios from "axios";
-import "./editprofile.scss";
-import Loader from "../../components/Loading/Loader";
+import twitterImg from "../../assets/svgs/profileTwitter.svg"
+import instagramImg from "../../assets/svgs/profileInstagram.svg"
+import facebookImg from "../../assets/svgs/profileFacebook.svg"
+import discord from "../../assets/images/discord.svg"
+import linkedin from "../../assets/images/linkedin.png"
+import { useEffect, useState } from "react"
+// import Input from "../../components/Input/Input"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
+import WalletAdd from "../../components/Wallet/WalletAdd"
+import axios from "axios"
+import "./editprofile.scss"
+import Loader from "../../components/Loading/Loader"
 
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../config";
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
+import { BASE_URL } from "../../config"
 import {
     changePasswordApi,
     updateProfileSocial,
     updateProfile,
     getAccessToken,
-} from "../../services/api/supplier";
-import Input from "../../components/Input/Input";
-import Cookies from "js-cookie";
-import { cookieDomain } from "../../config";
-import validator from "validator";
+} from "../../services/api/supplier"
+import Input from "../../components/Input/Input"
+import Cookies from "js-cookie"
+import { cookieDomain } from "../../config"
+import validator from "validator"
 
 const EditProfile = (props: any) => {
-    const [active, setActive] = useState("general");
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [user, setUser] = useState<any>();
-    const open = Boolean(anchorEl);
+    const [active, setActive] = useState("general")
+    const [anchorEl, setAnchorEl] = useState(null)
+    const [user, setUser] = useState<any>()
+    const open = Boolean(anchorEl)
     const handleClick = (event: any) => {
-        setAnchorEl(event.currentTarget);
-    };
+        setAnchorEl(event.currentTarget)
+    }
     const handleClose = () => {
-        setAnchorEl(null);
-    };
-    let navigate = useNavigate();
-    const accessToken = getAccessToken();
+        setAnchorEl(null)
+    }
+    let navigate = useNavigate()
+    const accessToken = getAccessToken()
     const getUserProfile = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/users/getUserProfile`, {
                 headers: {
                     Authorization: "Bearer " + `${accessToken}`,
                 },
-            });
-            setUser(res.data.user);
+            })
+            setUser(res.data.user)
         } catch (err) {
-            console.log(err);
+            console.log(err)
         }
-    };
+    }
     const handleCancel = () => {
-        navigate("/profile");
-    };
+        navigate("/profile")
+    }
     useEffect(() => {
-        getUserProfile();
-    }, []);
+        getUserProfile()
+    }, [])
 
     return (
         <div className="mt-[70px] px-24 pb-12 screen7:pt-0 screen18:px-12 screen3:px-8 w-full">
@@ -260,39 +260,40 @@ const EditProfile = (props: any) => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
 const GeneralSettings = ({ resUser }) => {
-    const [username, setUserName] = useState<string>();
-    const [email, setEmail] = useState("");
-    const [bio, setBio] = useState<string>();
-    const [loading, setLoading] = useState(false);
-    let navigate = useNavigate();
+    const [username, setUserName] = useState<string>()
+    const [email, setEmail] = useState("")
+    const [bio, setBio] = useState<string>()
+    const [loading, setLoading] = useState(false)
+    let navigate = useNavigate()
     const getUserProfile = async () => {
-        setUserName(resUser?.username);
-        setEmail(resUser?.email);
-        setBio(resUser?.bio);
-    };
+        setUserName(resUser?.username)
+        setEmail(resUser?.email)
+        setBio(resUser?.bio)
+    }
     const updateUserProfile = async () => {
         try {
             if (!(username?.length > 0) && !(bio?.length > 0))
-                return toast.error("Please enter either username or bio");
+                return toast.error("Please enter either username or bio")
 
-            setLoading(true);
-            const res = await updateProfile(username, bio);
+            setLoading(true)
+            const res = await updateProfile(username, bio)
             toast.success("Profile updated Successfully", {
                 position: "bottom-center",
-            });
-            setLoading(false);
+            })
+            navigate('/profile')
+            setLoading(false)
         } catch (err) {
-            console.log(err);
-            toast.error(err);
+            console.log(err)
+            toast.error(err)
         }
-    };
+    }
     useEffect(() => {
-        getUserProfile();
-    }, [resUser]);
+        getUserProfile()
+    }, [resUser])
 
     return (
         <>
@@ -339,25 +340,25 @@ const GeneralSettings = ({ resUser }) => {
                 </div>
             )}
         </>
-    );
-};
+    )
+}
 
 const ChangePassword = ({ handleCancel }) => {
-    const [oldPass, setOldPass] = useState("");
-    const [newPass, setNewPass] = useState("");
-    const [confirmPass, setConfirmPass] = useState("");
+    const [oldPass, setOldPass] = useState("")
+    const [newPass, setNewPass] = useState("")
+    const [confirmPass, setConfirmPass] = useState("")
 
     const changePass = async () => {
         try {
-            const res = await changePasswordApi(oldPass, newPass);
+            const res = await changePasswordApi(oldPass, newPass)
             toast.success("Password changed Successfully", {
                 position: "bottom-center",
-            });
+            })
         } catch (err) {
-            console.log(err);
-            toast.error(err);
+            console.log(err)
+            toast.error(err)
         }
-    };
+    }
     return (
         <div className="flex flex-col gap-4">
             <Input
@@ -405,23 +406,23 @@ const ChangePassword = ({ handleCancel }) => {
                 </button>
             </div>
         </div>
-    );
-};
+    )
+}
 
 const AddSocials = ({ resUser, handleCancel }) => {
-    const [twitter, setTwitter] = useState("");
-    const [facebook, setFacebook] = useState("");
-    const [instagram, setInstagram] = useState("");
-    const [discord, setDiscord] = useState("");
-    const [linkedIn, setLinkedIn] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [twitter, setTwitter] = useState("")
+    const [facebook, setFacebook] = useState("")
+    const [instagram, setInstagram] = useState("")
+    const [discord, setDiscord] = useState("")
+    const [linkedIn, setLinkedIn] = useState("")
+    const [loading, setLoading] = useState(false)
     const getUserProfile = async () => {
-        setTwitter(resUser?.twitter);
-        setFacebook(resUser?.facebook);
-        setInstagram(resUser?.instagram);
-        setDiscord(resUser?.discord);
-        setLinkedIn(resUser?.linkedIn);
-    };
+        setTwitter(resUser?.twitter)
+        setFacebook(resUser?.facebook)
+        setInstagram(resUser?.instagram)
+        setDiscord(resUser?.discord)
+        setLinkedIn(resUser?.linkedIn)
+    }
     const updateProfile = async () => {
         try {
             if (
@@ -430,7 +431,7 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 !validator.isURL(twitter) &&
                 !twitter.includes("twitter")
             ) {
-                return toast.error("Please enter a valid url link to twitter");
+                return toast.error("Please enter a valid url link to twitter")
             }
             if (
                 facebook &&
@@ -438,7 +439,7 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 !validator.isURL(facebook) &&
                 !facebook.includes("facebook")
             ) {
-                return toast.error("Please enter a valid url link to facebook");
+                return toast.error("Please enter a valid url link to facebook")
             }
             if (
                 instagram &&
@@ -448,7 +449,7 @@ const AddSocials = ({ resUser, handleCancel }) => {
             ) {
                 return toast.error(
                     "Please enter a valid url link to instagram"
-                );
+                )
             }
             if (
                 discord &&
@@ -456,7 +457,7 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 !validator.isURL(discord) &&
                 !discord.includes("discord")
             ) {
-                return toast.error("Please enter a valid url link to discord");
+                return toast.error("Please enter a valid url link to discord")
             }
             if (
                 linkedIn &&
@@ -464,7 +465,7 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 !validator.isURL(linkedIn) &&
                 !linkedIn.includes("linkedIn")
             ) {
-                return toast.error("Please enter a valid url link to linkedIn");
+                return toast.error("Please enter a valid url link to linkedIn")
             }
             setLoading(true)
             const res = await updateProfileSocial(
@@ -473,31 +474,31 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 twitter,
                 discord,
                 linkedIn
-            );
+            )
 
             if (res.data && res.data?.msg) {
-                localStorage.setItem("userInfo", JSON.stringify(res.data?.msg));
+                localStorage.setItem("userInfo", JSON.stringify(res.data?.msg))
                 Cookies.set("userInfo", JSON.stringify(res.data?.msg), {
                     domain: cookieDomain,
                     expires: 30,
-                });
+                })
             }
             toast.success("Socials Updated Successfully", {
                 position: "bottom-center",
-            });
+            })
             setLoading(false)
         } catch (err) {
             setLoading(false)
-            toast.error(err);
+            toast.error(err)
         }
-    };
+    }
 
     useEffect(() => {
-        getUserProfile();
-    }, [resUser]);
+        getUserProfile()
+    }, [resUser])
     useEffect(() => {
-        getUserProfile();
-    }, []);
+        getUserProfile()
+    }, [])
     return (
         <>
             {loading ? (
@@ -575,8 +576,8 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 </div>
             )}
         </>
-    );
-};
+    )
+}
 
-export default EditProfile;
+export default EditProfile
 // export {}
