@@ -268,12 +268,12 @@ const NftInfo = ({
             const tx = program.transaction.createAuction(
                 "An auction",
                 new anchor.BN(price),
-                startTime,
-                endTime,
+                new anchor.BN(startTime),
+                new anchor.BN(endTime),
                 {
                     accounts: {
-                        order: auctionAccount,
-                        orderTokenAccount: auctionTokenAccount,
+                        auction: auctionAccount,
+                        auctionTokenAccount: auctionTokenAccount,
                         mintKey: mintKey,
                         creator: anWallet.publicKey,
                         creatorTokenAccount: associatedTokenAddress,
@@ -364,9 +364,11 @@ const NftInfo = ({
                     orderTokenAccount: orderTokenAccount,
                     mintKey: mintKey,
                     buyer: anWallet.publicKey,
+                    creator: creator.username,
                     buyerTokenAccount: buyerTokenAccount,
                     systemProgram: anchor.web3.SystemProgram.programId,
                     tokenProgram: TOKEN_PROGRAM_ID,
+                    payer: provider.wallet.publicKey,
                     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
                 },
             });
@@ -374,13 +376,19 @@ const NftInfo = ({
             const signature = await sendTransaction(tx, connection);
             const latestBlockhash = await connection.getLatestBlockhash();
 
+            console.log({
+                blockhash: latestBlockhash.blockhash,
+                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+                signature: signature,
+            },"connection")
+
             await connection.confirmTransaction({
                 blockhash: latestBlockhash.blockhash,
                 lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
                 signature: signature,
             });
 
-            console.log("Fill Order Success!");
+            console.log("Fill Order Success!",orderAccount,program.account.order,program.account);
             let order = await program.account.order.fetch(orderAccount);
             console.log("Create Order Success!", order);
 
@@ -396,6 +404,7 @@ const NftInfo = ({
             commitment: "processed",
         });
         anchor.setProvider(provider);
+        console.log(provider,"provider")
 
         program = new Program(
             //@ts-ignore
@@ -432,6 +441,7 @@ const NftInfo = ({
                     creatorTokenAccount: associatedTokenAddress,
                     systemProgram: anchor.web3.SystemProgram.programId,
                     tokenProgram: TOKEN_PROGRAM_ID,
+                    payer: provider.wallet.publicKey,
                     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
                 },
             });
@@ -446,7 +456,7 @@ const NftInfo = ({
                 signature: signature,
             });
 
-            console.log("Cancel Order Success!");
+            console.log("Cancel Order Success!",orderAccount);
             let order = await program.account.order.fetch(orderAccount);
 
             return order.mintKey;
@@ -876,13 +886,7 @@ const NftInfo = ({
         try {
             setPopUpShow(false);
             setNftLoading(true)
-            // const address = await connectWallet(
-            //     nft.chain,
-            //     publicKey,
-            //     getSolWallet,
-            //     connect,
-            //     setVisible
-            // );
+
             let address: String = localStorage.getItem('walletConnected')
             console.log("create auction", address, auction);
 
@@ -922,6 +926,9 @@ const NftInfo = ({
                 );
                 obj.auctionId = aucMintKey;
                 obj.auctionHash = aucMintKey;
+                await createAuctionApi(obj)
+                setNftLoading(false)
+                toast.success("Auction created");
             } else if (nft.chain.toString() === tronChain) {
                 await getCreateNftContract(nft.chain)
                 .methods.approve(
