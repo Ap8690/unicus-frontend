@@ -3,6 +3,8 @@ import SearchBar from "../../SearchBar/SearchBar";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import "./navmenu.scss";
 import { useLocation, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { ACCESS_TOKEN } from "../../../utils/constants";
 import { Link } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -36,7 +38,7 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
           <CloseRoundedIcon />
         </button>
       </div>
-      {location.pathname === "/home" || location.pathname === "/blog" ? (
+      {/* {location.pathname === "/home" || location.pathname === "/blog" ? (
         <div className="nav-links">
           <Link to={"/about"} className="nav-link main" onClick={toggleDrawer}>
             About
@@ -92,13 +94,13 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
             Marketplace
           </Link>
         </div>
-      ) : (
+      ) : ( */}
         <div className="nav-links main">
           <Link to={"/explore"} className="nav-link" onClick={toggleDrawer}>
             Explore
           </Link>
 
-          <Accordion disableGutters className="menu-accordion">
+          {/* <Accordion disableGutters className="menu-accordion">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon className="expandIcon" />}
               aria-controls="Stats"
@@ -122,7 +124,7 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
                 Activity
               </Link>
             </AccordionDetails>
-          </Accordion>
+          </Accordion> */}
           <Accordion disableGutters className="menu-accordion">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon className="expandIcon" />}
@@ -201,16 +203,25 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
               Create Store
             </Link>
           )}
-
-          <Link
+          {!Cookies.get(ACCESS_TOKEN) ? (
+            <Link
             to={`/connect-wallet${location.pathname}`}
             className="btn nav-link"
             onClick={toggleDrawer}
-          >
+            >
             {"Connect Wallet"}
           </Link>
+          ) : (
+            <Link
+            to={`/marketplace`}
+            className="btn nav-link"
+            onClick={toggleDrawer}
+            >
+            {"Marketplace"}
+          </Link>
+            )}
         </div>
-      )}
+      {/* )} */}
     </Drawer>
   );
 };

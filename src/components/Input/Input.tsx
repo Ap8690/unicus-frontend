@@ -21,29 +21,32 @@ const Input = (props:any) => {
         </span>
       )}
       {props.time ? (
-        <input type="time" onChange={handleChange} value={props.state} />
+        <input type="time" onChange={props.customChange ? props.customChange : handleChange} value={props.state} maxLength={props.maxLength ? props.maxLength : ''} />
       ) : props.date ? (
         <input
           type="date"
-          onChange={handleChange}
+          onChange={props.customChange ? props.customChange : handleChange}
           value={props.state}
           placeholder={props.placeholder}
+          maxLength={props.maxLength ? props.maxLength : ''}
         />
       ) : props.multi ? (
         <textarea
           rows={6}
-          onChange={handleChange}
+          onChange={props.customChange ? props.customChange : handleChange}
           value={props.state}
           placeholder={props.placeholder}
+          maxLength={props.maxLength ? props.maxLength : ''}
         />
       ) : props.password ? (
         <div className="password-field">
         <input
           type={"password"}
-          onChange={handleChange}
+          onChange={props.customChange ? props.customChange : handleChange}
           value={props.state}
           placeholder={props.placeholder}
           disabled={props.disabled}
+          maxLength={props.maxLength ? props.maxLength : ''}
         />
         {props.forgetPass &&
             <div className="forget-pass">
@@ -54,19 +57,21 @@ const Input = (props:any) => {
       ) : props.number ? (
         <input
           type={"number"}
-          onChange={handleChange}
+          onChange={props.customChange ? props.customChange : handleChange}
           value={props.state}
           placeholder={props.placeholder}
           disabled={props.disabled}
+          maxLength={props.maxLength ? props.maxLength : ''}
         />
       ):
        (
         <input
           type={props.email ? "email" : "text"}
-          onChange={handleChange}
+          onChange={props.customChange ? props.customChange : handleChange}
           value={props.state}
           placeholder={props.placeholder}
           disabled={props.disabled}
+          maxLength={props.maxLength ? props.maxLength : ''}
         />
       )}
     </div>

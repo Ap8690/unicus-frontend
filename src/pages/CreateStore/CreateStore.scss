@@ -3,8 +3,13 @@
 @use "/src/styles/fonts";
 
 .create-store {
-  margin: 131px 0;
+  // margin: 131px 0;
   max-width: 1290px;
+  width: 100%;
+  padding: 6rem 2rem;
+  @media screen and (max-width: 768px) {
+    padding: 2rem;
+  }
   .heading {
     @include fn.text-gradient;
     font-size: fonts.$font-size-5xl;
@@ -16,11 +21,10 @@
   }
   .create-store-form-holder {
     margin-top: 100px;
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-column-gap: 50px;
+    display: flex;
+    gap: 2rem;
      @media screen and (max-width: 768px) {
-       grid-template-columns: repeat(1, 1fr);
+       flex-direction: column;
      }
     .form-heading {
       grid-column: 1/3;
@@ -77,11 +81,7 @@
         }
       }
 
-      .btn {
-        font-size: fonts.$font-size-2xl;
-        padding: 16px 44px;
-        font-weight: 600;
-      }
+
     }
     .upload-instructions {
       margin-top: 20px;

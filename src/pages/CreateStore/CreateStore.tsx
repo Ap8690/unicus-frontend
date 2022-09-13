@@ -22,10 +22,16 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import FullLoading from "../../components/modals/Loading/FullLoading";
+import Input from "../../components/Input/Input";
 
 const CreateStoreForm = ({ store, setLoadingImage }): ReactJSXElement => {
     //@ts-ignore
-    const [generals, setGeneral] = useState<IGeneral>({});
+    const [generals, setGeneral] = useState<IGeneral>({
+            storeName: "",
+            email: "",
+            country: "US",
+            logoUrl: "",
+    });
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
 
@@ -151,7 +157,7 @@ const CreateStoreForm = ({ store, setLoadingImage }): ReactJSXElement => {
     return (
         <>
             <div className="create-store-form-holder">
-                <div>
+                <div className="w-full gap-4 flex flex-col">
                     <h3 className="form-heading">Upload File</h3>
                     <div className="create-store-image-holder">
                         <button
@@ -186,7 +192,7 @@ const CreateStoreForm = ({ store, setLoadingImage }): ReactJSXElement => {
 
                 <form
                     action=""
-                    className="create-store-form"
+                    className="create-store-form w-full"
                     onSubmit={(e) => handleCreateStore(e)}
                 >
                     <div className="form-input">
@@ -240,7 +246,7 @@ const CreateStoreForm = ({ store, setLoadingImage }): ReactJSXElement => {
                             </Select>
                         </FormControl>
                     </div>
-                    <button className="btn nav-link" type="submit">
+                    <button className="btn" type="submit">
                         Create Store
                     </button>
                 </form>
