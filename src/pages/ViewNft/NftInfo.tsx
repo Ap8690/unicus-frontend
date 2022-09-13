@@ -58,11 +58,7 @@ import {
     useWallet,
 } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import {
-    Metaplex,
-    keypairIdentity,
-    bundlrStorage,
-} from "@metaplex-foundation/js";
+
 import {
     ASSOCIATED_TOKEN_PROGRAM_ID,
     getAssociatedTokenAddress,
@@ -97,7 +93,7 @@ const NftInfo = ({
     activeFilter,
     setActiveFilter,
     historyData,
-    topBid,
+    bids,
     nft,
     auction,
     setNftLoading,
@@ -1773,7 +1769,7 @@ const NftInfo = ({
                         <Properties tags={nft.tags} />
                     )}
                     {activeFilter === "Bids" && (
-                        <Bids bids={BIDS_PLACEHOLDER}/>
+                        <Bids bids={bids} nftChain={nft?.chain}/>
                     )}
                 </div>
                 <div className="bid-buy-box">
@@ -1887,28 +1883,28 @@ const Properties = ({ tags }) => {
     );
 };
 
-const Bids = ({ bids }) => {
+const Bids = ({ bids, nftChain }) => {
   return(
     <div className="nft-bids-box">
-        {bids.map(bid=>(
-            <Bid bidInfo={bid} />
+        {bids.map((bid:any)=>(
+            <Bid nftChain={nftChain} key={uuid()} bidInfo={bid} />
         ))}
     </div>
   )
 }
 
-const Bid = ({bidInfo}) => {
+const Bid = ({bidInfo, key, nftChain}) => {
   return(
-    <div className="bidInfo-bid">
+    <div id={key} className="bidInfo-bid">
         <div className="bid-user">
-            <img src={bidInfo.img} alt="" />
+            <img src={nftImg} alt="" />
         </div>
         <div className="bid-info">
             <div className="bid-head">
-                Bid {bidInfo.bid} wETH
+                Bid {(bidInfo.bidValue) / getDecimal(nftChain)} {bidInfo.bidCurrency}
             </div>
             <div className="bid-sub">
-                By {bidInfo.bidder} {bidInfo.date}, {bidInfo.time}
+                By {bidInfo.bidder} {getCompleteDate(bidInfo.createdAt)}
             </div>
         </div>
     </div>

@@ -29,6 +29,7 @@ const ViewNft = () => {
     const [nftLoading, setNftLoading] = useState<boolean>(false);
     const [nftByCollection, setNftByCollection] = useState<any>();
     const { chain, contractAddress, nftId } = useParams();
+    const [bids,setBids] = useState([])
     const handleClose = () => setPlaceBidModal(false);
 
     async function fetchItem() {
@@ -43,6 +44,7 @@ const ViewNft = () => {
             setNftStates(res.data.nftStates);
             setAuction(res.data.auction);
             setNftImg(res.data.nft.cloudinaryUrl);
+            setBids(res.data.bids)
             setCreator(res.data.user);
             if (res.data.nft.collectionName && res.data.nft.collectionName !== "undefined") {
                 console.log("resData.collectionName: ", res.data.nft.collectionName);
@@ -84,12 +86,13 @@ const ViewNft = () => {
                                 activeFilter={activeFilter}
                                 setActiveFilter={setActiveFilter}
                                 historyData={nftStates}
-                                topBid={topBid}
+                                
                                 nft={nft}
                                 auction={auction}
                                 setNftLoading={setNftLoading}
                                 fetchItem={fetchItem}
                                 pageChain={chain}
+                                bids={bids}
                             />
                         )}
                     </div>

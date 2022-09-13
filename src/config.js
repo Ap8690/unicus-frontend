@@ -1,5 +1,5 @@
-const env_uri = 'local'
-
+// const env_uri = process.env.REACT_APP_ENV !== 'local' ? process.env.REACT_APP_ENV : "local"
+const env_uri = process.env.REACT_APP_ENV
 
 export const BASE_URL = 
     env_uri === "local"
@@ -32,13 +32,13 @@ export const UNICUS_STORE =
         : env_uri === "staging"
         ? "marketplace.qa.unicus.one"
         : env_uri === "demo"
-        // ? "marketplace.demo.unicus.one"
-        ? "unicus-marketplace-demo.herokuapp.com"
+        ? "marketplace.demo.unicus.one"
+        // ? "unicus-marketplace-demo.herokuapp.com"
         : "marketplace.unicus.one";
 
 export const cookieDomain =
     env_uri === "local"
         ? "localhost"
         : env_uri === "demo"
-        ? "unicus-marketplace-demo.herokuapp.com"
+        ? "demo.unicus.one"
         : "unicus.one";

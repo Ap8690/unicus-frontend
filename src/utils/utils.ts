@@ -2,7 +2,11 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import TronWeb from "tronweb";
 import Web3 from "web3";
-import {AnchorProvider,Program, web3 as sol_web3} from '@project-serum/anchor';
+import {
+    AnchorProvider,
+    Program,
+    web3 as sol_web3,
+} from "@project-serum/anchor";
 import {
     tronChain,
     bscChain,
@@ -14,9 +18,7 @@ import {
     cookieDomain,
     avalancheChain,
 } from "../config";
-import {
-    PhantomWalletAdapter,
-  } from "@solana/wallet-adapter-wallets";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { IStore } from "../models/Store";
 import { auctionAddressB } from "../Redux/Blockchain/Binance/auction";
 import { createNFTAddressB } from "../Redux/Blockchain/Binance/createNFT";
@@ -60,7 +62,7 @@ import {
     marketPlaceAddressT,
 } from "../Redux/Blockchain/Tron/marketplace";
 import { auctionAbiT, auctionAddressT } from "../Redux/Blockchain/Tron/auction";
-import {Connection,clusterApiUrl} from "@solana/web3.js";
+import { Connection, clusterApiUrl } from "@solana/web3.js";
 import BN from "bn.js";
 import { createNFTAddressA } from "../Redux/Blockchain/Avalanche/createNFT";
 import { marketPlaceAddressA } from "../Redux/Blockchain/Avalanche/marketPlace";
@@ -73,7 +75,7 @@ const {
     },
 } = nearAPI;
 // for SOLANA
-const {SystemProgram, Keypair} = sol_web3
+const { SystemProgram, Keypair } = sol_web3;
 const baseAccount = Keypair.generate();
 //testnet
 const HttpProvider = TronWeb.providers.HttpProvider;
@@ -103,7 +105,8 @@ export let nearWalletConnection: any;
 export let web3 = new Web3(Web3.givenProvider);
 
 //@ts-ignore
-export let tronWeb = window.tronWeb? window.tronWeb : new TronWeb({ fullNode, solidityNode, eventServer, privateKey });
+export let tronWeb = window.tronWeb ? window.tronWeb
+    : new TronWeb({ fullNode, solidityNode, eventServer, privateKey });
 
 interface requestAccountsResponse {
     code: Number; // 200：ok 4000：in queue, no need to repeat commit， 4001：user rejected
@@ -177,23 +180,124 @@ export const connectWallet = async (
         toast.error(e?.message);
     }
 };
-const getChainData = (network: any) => {
-    switch (network) {
-        case bscChain:
-            return {
-                chainId: Web3.utils.toHex(network),
-                rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-                chainName: "BSC Testnet",
-                nativeCurrency: {
-                    name: "TBNB",
-                    symbol: "TBNB", // 2-6 characters long
-                    decimals: 18,
-                },
-                blockExplorerUrls: ["https://testnet.bscscan.com/"],
-            };
-        default:
-            return "";
-    }
+// const getChainData = (network: any) => {
+//     switch (network) {
+//         case bscChain:
+//             return {
+//                 chainId: Web3.utils.toHex(network),
+//                 rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+//                 chainName: "BSC Testnet",
+//                 nativeCurrency: {
+//                     name: "TBNB",
+//                     symbol: "TBNB", // 2-6 characters long
+//                     decimals: 18,
+//                 },
+//                 blockExplorerUrls: ["https://testnet.bscscan.com/"],
+//             };
+//         default:
+//             return "";
+//     }
+// };
+
+const chainParams = {
+    // polygon testnet
+    "80001": [
+        {
+            chainId: "0x13881",
+            rpcUrls: ["https://rpc-mumbai.maticvigil.com"],
+            chainName: "Polygon Testnet Mumbai",
+            nativeCurrency: {
+                name: "tMATIC",
+                symbol: "tMATIC", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+        },
+    ],
+    //polygon mainnet
+    "137": [
+        {
+            chainId: "0x89",
+            rpcUrls: ["https://polygon-rpc.com/"],
+            chainName: "Polygon Mainnet Mumbai",
+            nativeCurrency: {
+                name: "MATIC",
+                symbol: "MATIC", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://polygonscan.com/"],
+        },
+    ],
+    //binance testnet
+    "97": [
+        {
+            chainId: "0x61",
+            rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+            chainName: "BSC Testnet",
+            nativeCurrency: {
+                name: "TBNB",
+                symbol: "TBNB", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://testnet.bscscan.com/"],
+        },
+    ],
+    //binance testnet
+    "56": [
+        {
+            chainId: "0x38",
+            rpcUrls: ["https://bsc-dataseed1.ninicoin.io"],
+            chainName: "BSC Mainnet",
+            nativeCurrency: {
+                name: "BNB",
+                symbol: "BNB", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://bscscan.com/"],
+        },
+    ],
+    // eth testnet
+    "4": [
+        {
+            chainId: "0x4",
+            rpcUrls: ["https://rinkeby.infura.io/v3/"],
+            chainName: "Rinkeby Test Network",
+            nativeCurrency: {
+                name: "RinkebyETH",
+                symbol: "RinkebyETH", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://rinkeby.etherscan.io"],
+        },
+    ],
+    // eth mainnet
+    "1": [
+        {
+            chainId: "0x4",
+            rpcUrls: ["https://mainnet.infura.io/v3/"],
+            chainName: "Ethereum Mainnet",
+            nativeCurrency: {
+                name: "ETH",
+                symbol: "ETH", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://etherscan.io"],
+        },
+    ],
+    // Avalanche testnet
+    "43113": [
+        {
+            chainId: "0xA869",
+            rpcUrls: ["https://api.avax-test.network/ext/C/rpc"],
+            chainName: "Fuji (C-Chain)",
+            nativeCurrency: {
+                name: "AVAX",
+                symbol: "AVAX", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://testnet.snowtrace.io"],
+        },
+    ],
 };
 export const SwitchNetwork = async (network: any) => {
     try {
@@ -207,31 +311,29 @@ export const SwitchNetwork = async (network: any) => {
             ],
         });
     } catch (error: any) {
-        console.log("err", typeof error?.code);
-
         if (error?.code.toString() === "4902") {
-            console.log("ERROR IN ");
             try {
                 const metaMaskProvider: any = await getMetamaskProvider();
                 await metaMaskProvider.request({
                     method: "wallet_addEthereumChain",
-                    params: [getChainData(network)],
+                    params: [chainParams[network]],
                 });
                 await SwitchNetwork(network);
             } catch (addError: any) {
-                console.error(addError?.message);
+                toast.error(addError?.message);
             }
         }
     }
 };
+
 
 export const createSignature = async (address: string, message: any) => {
     return await web3.eth.sign(web3.eth.accounts.hashMessage(message), address);
 };
 
 export const connToMetaMask = async () => {
-    const chain = localStorage.getItem("chainName")
-    await SwitchNetwork(getChainId(chain))
+    const chain = localStorage.getItem("chainName");
+    await SwitchNetwork(getChainId(chain));
     const message = new Date().getTime().toString();
     const metaMaskProvider: any = await getMetamaskProvider();
     await metaMaskProvider.request({
@@ -337,15 +439,13 @@ export const connectNear = async () => {
         await initContract();
     let accountId: any;
     if (!walletConnection.isSignedIn()) {
-        await walletConnection.requestSignIn(
-            {
-                contractId: "nft.subauction.testnet",
-            }
-        );
+        await walletConnection.requestSignIn({
+            contractId: "nft.subauction.testnet",
+        });
         await sendMeta(walletConnection, config);
     }
     nearWalletConnection = walletConnection;
-    console.log(walletConnection.isSignedIn(),"is")
+    console.log(walletConnection.isSignedIn(), "is");
     localStorage.setItem("walletChain", "Near");
     accountId = walletConnection.account().accountId;
     const data = await createNearSignature(keyStore, networkId, accountId);
@@ -378,10 +478,9 @@ export const sign_solana_message = async () => {
     };
 };
 
-
 // const getProvider = () => {
 //   if ('phantom' in window) {
-//     // @ts-ignore  
+//     // @ts-ignore
 //     const provider = window.phantom?.solana;
 
 //     if (provider?.isPhantom) {
@@ -393,8 +492,8 @@ export const sign_solana_message = async () => {
 // };
 
 // export const connToSol = async (publicKey: any, getSolWallet: any, connect: any, setVisible: any) => {
-//   // @ts-ignore  
-//     const provider = getProvider(); 
+//   // @ts-ignore
+//     const provider = getProvider();
 //     const resp = await provider.connect();
 //     console.log("resp: ", resp);
 //       if (resp.publicKey) {
@@ -413,65 +512,60 @@ export const sign_solana_message = async () => {
 export async function getProvider(wallet: any) {
     /* create the provider and return it to the caller */
     /* network set to local network for now */
-    const network = 'http://localhost:3000'
+    const network = "http://localhost:3000";
     const opts: any = {
-        preflightCommitment: "processed"
-    }
+        preflightCommitment: "processed",
+    };
     const con = new Connection(network, opts.preflightCommitment);
-    const ne = new PhantomWalletAdapter('devnet')
-    const provider = new AnchorProvider(
-        con, ne , opts.preflightCommitment,
-        );
+    const ne = new PhantomWalletAdapter("devnet");
+    const provider = new AnchorProvider(con, ne, opts.preflightCommitment);
     return provider;
-  }
- 
+}
+
 export const connToSol = async (
     publicKey: any,
     wallet: any,
     connect: any,
-    setVisible: any,
+    setVisible: any
 ) => {
-    
     // const { solana } = window;
     // let connection = new Connection(clusterApiUrl('testnet'));
     // console.log("connection: ", connection);
     // @ts-ignore
     if (!solana || !solana?.isPhantom) {
-        throw new Error("Please install Phantom Wallet")
+        throw new Error("Please install Phantom Wallet");
     }
-    const provider:any = await getProvider(wallet)
+    const provider: any = await getProvider(wallet);
     console.log("provider: ", provider);
-    
-    
+
     if (provider?.publicKey) {
-        console.log("IN public key")
-        const sm = await sign_solana_message()
+        console.log("IN public key");
+        const sm = await sign_solana_message();
         return {
             account: provider?.publicKey.toBase58(),
             message: sm.message,
             token: sm.token,
-        }
+        };
     }
     // console.log("wallet: ", wallet);
     // if (!wallet) {
     //     setVisible(true)
     // } else {
-        await connect()
-        if (wallet.adapter.publicKey) {
-            const address = await wallet.adapter.publicKey.toBase58()
-            console.log("address: ", address)
-            const sm = await sign_solana_message()
-            return {
-                account: address,
-                message: sm.message,
-                token: sm.token,
-            }
+    await connect();
+    if (wallet.adapter.publicKey) {
+        const address = await wallet.adapter.publicKey.toBase58();
+        console.log("address: ", address);
+        const sm = await sign_solana_message();
+        return {
+            account: address,
+            message: sm.message,
+            token: sm.token,
+        };
         // } else {
         //     throw new Error("Connection refused")
         // }
     }
-
-}
+};
 export const disConnectWallet = async () => {
     localStorage.clear();
 
@@ -481,7 +575,7 @@ export const disConnectWallet = async () => {
     walletLink.disconnect();
     const { config, walletConnection, keyStore, networkId } =
         await initContract();
-    if(walletConnection.isSignedIn()){
+    if (walletConnection.isSignedIn()) {
         walletConnection.signOut();
     }
 };
@@ -550,7 +644,6 @@ export const getChainId = (chain: any) => {
             return 0;
     }
 };
-
 
 // Returns CHAIN Name
 export const getChainName = (chain: any) => {
@@ -880,15 +973,26 @@ export interface WalletsPopupProps {
 export const METAMASK = "MetaMask";
 export const TRONLINK = "TronLink";
 
-export function getRPCErrorMessage(err: any){
+export function getRPCErrorMessage(err: any) {
     var errorMessageToShow: any;
-    if(err?.message?.split('"')[0]?.slice(0,20) === "execution reverted: " || err?.message?.split('"')[0]?.slice(0,24) === "Internal JSON-RPC error."){
-        var open = err.stack.indexOf('{')
-        var close = err.stack.lastIndexOf('}')
+    if (
+        err?.message?.split('"')[0]?.slice(0, 20) === "execution reverted: " ||
+        err?.message?.split('"')[0]?.slice(0, 24) === "Internal JSON-RPC error."
+    ) {
+        var open = err.stack.indexOf("{");
+        var close = err.stack.lastIndexOf("}");
         var j_s = err.stack.substring(open, close + 1);
         var j = JSON.parse(j_s);
-        console.log(j,"j")
-        errorMessageToShow =  j?.message ? j?.message:j?.originalError?.message
+        console.log(j, "j");
+        errorMessageToShow = j?.message
+            ? j?.message
+            : j?.originalError?.message;
     }
-    toast.error(errorMessageToShow? errorMessageToShow : err.message? err.message : err);
+    toast.error(
+        errorMessageToShow
+            ? errorMessageToShow
+            : err.message
+            ? err.message
+            : err
+    );
 }
