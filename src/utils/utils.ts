@@ -312,16 +312,20 @@ export const SwitchNetwork = async (network: any) => {
         });
     } catch (error: any) {
         if (error?.code.toString() === "4902") {
+            console.log(chainParams[network])
             try {
                 const metaMaskProvider: any = await getMetamaskProvider();
                 await metaMaskProvider.request({
                     method: "wallet_addEthereumChain",
-                    params: [chainParams[network]],
+                    params: chainParams[network],
                 });
                 await SwitchNetwork(network);
             } catch (addError: any) {
-                toast.error(addError?.message);
+                throw new Error(addError)
             }
+        }
+        else { 
+            throw new Error(error)
         }
     }
 };
