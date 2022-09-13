@@ -1,83 +1,70 @@
 // Types
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import React, { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace"
+import React, { FormEvent, useEffect, useMemo, useRef, useState } from "react"
 // Styles
-import "./CreateStore.scss";
-
+import "./CreateStore.scss"
 // Components
-import BlueBackground from "../../components/BlueBackground/BlueBackground";
-
+import BlueBackground from "../../components/BlueBackground/BlueBackground"
 // Images
-import placeHolder from "../../assets/svgs/uploadImage.svg";
-import { toast } from "react-toastify";
-import { createStore, getAccessToken } from "../../services/api/supplier";
-import countryList from "react-select-country-list";
-import validator from "validator";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import uuid from "react-uuid";
-import { userInfo } from "../../utils/utils";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import FullLoading from "../../components/modals/Loading/FullLoading";
-import Input from "../../components/Input/Input";
+import placeHolder from "../../assets/svgs/uploadImage.svg"
+import { toast } from "react-toastify"
+import { createStore, getAccessToken } from "../../services/api/supplier"
+import countryList from "react-select-country-list"
+import validator from "validator"
+import { useNavigate } from "react-router-dom"
+import uuid from "react-uuid"
+import { userInfo } from "../../utils/utils"
+import Select from "@mui/material/Select"
+import MenuItem from "@mui/material/MenuItem"
+import FormControl from "@mui/material/FormControl"
+import FullBlurLoading from "../../components/Loading/FullBlurLoading"
 
-const CreateStoreForm = ({ store, setLoadingImage }): ReactJSXElement => {
+const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
     //@ts-ignore
-    const [generals, setGeneral] = useState<IGeneral>({
-            storeName: "",
-            email: "",
-            country: "US",
-            logoUrl: "",
-    });
-    const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [generals, setGeneral] = useState<IGeneral>({})
+    const [country, setCountry] = useState({country: "US"})
 
-    const options = useMemo(() => countryList().getData(), []);
-    const inputFile = useRef(null);
-    const history = useNavigate();
+    const [open, setOpen] = useState(false)
+    const options = useMemo(() => countryList().getData(), [])
+    const inputFile = useRef(null)
+    const history = useNavigate()
     const uploadImage = () => {
         // `current` points to the mounted file input element
-        inputFile.current.click();
-    };
+        inputFile.current.click()
+    }
     useEffect(() => {
         if (!(userInfo.length > 0) && !localStorage.getItem("userInfo")) {
-            setOpen(true);
-            return;
+            setOpen(true)
+            return
         }
-        let email = "";
+        let email = ""
         if (userInfo.email) {
-            email = userInfo.email;
+            email = userInfo.email
         }
 
         setGeneral({
             ...generals,
             storeName: "",
             email: email,
-            country: "US",
             logoUrl: "",
-        });
-    }, [userInfo]);
+        })
+    }, [userInfo])
 
     // useEffect(() => {
     //   if (Object.keys(store).length !== 0) {
-    //     history("/",{replace:true});
-    //     return;
+    //     history("/",{replace:true})
+    //     return
     //   }
-    // }, [store]);
+    // }, [store])
 
     const getImageUrl = async (e: any) => {
         //uploading to cloudinary
         try {
-            setLoadingImage(true);
-            let cloudinaryFormData = new FormData();
-
-            cloudinaryFormData.append("file", e.target.files[0]);
-            cloudinaryFormData.append("upload_preset", `Unicus___User`);
-
-            cloudinaryFormData.append("public_id", uuid());
+            setLoading(true)
+            let cloudinaryFormData = new FormData()
+            cloudinaryFormData.append("file", e.target.files[0])
+            cloudinaryFormData.append("upload_preset", `Unicus___User`)
+            cloudinaryFormData.append("public_id", uuid())
 
             const cloudinaryRes = await fetch(
                 "https://api.cloudinary.com/v1_1/dhmglymaz/image/upload/",
@@ -85,75 +72,86 @@ const CreateStoreForm = ({ store, setLoadingImage }): ReactJSXElement => {
                     method: "POST",
                     body: cloudinaryFormData,
                 }
-            );
-            const JSONdata = await cloudinaryRes.json();
-
-            setGeneral({ ...generals, logoUrl: JSONdata.url });
+            )
+            const JSONdata = await cloudinaryRes.json()
+            setGeneral({ ...generals,country: country, logoUrl: JSONdata.url })
+            setLoading(false)
         } catch (err) {
-            console.log("Cloudinary User Image Upload Error ->", err);
+            console.log("Cloudinary User Image Upload Error ->", err)
+            setLoading(false)
+            toast.error("Image upload error!")
         }
-        setLoadingImage(false);
-    };
+        
+    }
     const handleStoreName = (e: any) => {
-        setGeneral({ ...generals, storeName: e });
-    };
+        setGeneral({ ...generals, storeName: e })
+    }
 
     const handleEmail = (e: any) => {
-        setGeneral({ ...generals, email: e });
-    };
+        setGeneral({ ...generals, email: e })
+    }
     const handleCountry = (e: any) => {
-        setGeneral({ ...generals, country: e });
-    };
+        setCountry({ country: e })
+    }
     const handleCreateStore = async (e: any) => {
-        e.preventDefault();
+        e.preventDefault()
         try {
-            setLoading(true);
+            setLoading(true)
             if (!generals.email && !generals.storeName) {
-                throw "Please fill all fields.";
+                throw "Please fill all fields."
             }
             if (!validator.isEmail(generals.email)) {
-                throw "Invalid Email";
+                throw "Invalid Email"
             }
-            let res = await createStore(generals);
-            setLoading(false);
+            let res = await createStore(generals)
+            setLoading(false)
             if (res) {
-                toast.success("Store Created");
+                toast.success("Store Created")
                 setTimeout(function () {
-                    toast("Redirecting to your store");
-                }, 1000);
+                    toast("Redirecting to your store")
+                }, 1000)
                 setTimeout(function () {
-                    history("/");
+                    history("/")
                     window.open(
                         `http://${res.data.createStore.domain[0]}/store/settings`
-                    );
-                    window.location.reload();
-                }, 3000);
+                    )
+                    window.location.reload()
+                }, 3000)
             } else {
-                throw "Failed";
+                throw "Failed"
             }
         } catch (err) {
-            console.log("err", err.response.data.err);
-            setLoading(false);
+            console.log("err", err.response.data.err)
+            setLoading(false)
             if (err.response) {
                 if (err.response.status === 401) {
-                    return toast.error("Login expired. Please Login again.");
+                    return toast.error("Login expired. Please Login again.")
                 }
-                if(err.response && err.response.data && err.response.data.msg) {
-                  return toast.error(err.response.data.msg)
+                if (
+                    err.response &&
+                    err.response.data &&
+                    err.response.data.msg
+                ) {
+                    return toast.error(err.response.data.msg)
                 }
-                if(err.response && err.response.data && err.response.data.err) {
-                  return toast.error(err.response.data.err)
+                if (
+                    err.response &&
+                    err.response.data &&
+                    err.response.data.err
+                ) {
+                    return toast.error(err.response.data.err)
                 }
             }
-            toast.error(err);
+            toast.error(err)
         }
-        setLoading(false);
-    };
+        setLoading(false)
+    }
     useEffect(() => {
         if (!getAccessToken()) {
-            history("/connect-wallet/create-store");
+            history("/connect-wallet/create-store")
         }
-    }, []);
+
+    }, [])
     return (
         <>
             <div className="create-store-form-holder">
@@ -235,7 +233,7 @@ const CreateStoreForm = ({ store, setLoadingImage }): ReactJSXElement => {
                             <Select
                                 labelId="chain-select-label"
                                 id="chain-select"
-                                value={generals.country}
+                                value={country.country}
                                 onChange={(e) => handleCountry(e.target.value)}
                             >
                                 {options.map((item) => (
@@ -252,31 +250,30 @@ const CreateStoreForm = ({ store, setLoadingImage }): ReactJSXElement => {
                 </form>
             </div>
         </>
-    );
-};
+    )
+}
 const CreateStore = (store: any): ReactJSXElement => {
-    const [loadingImage, setLoadingImage] = useState(false);
-
+    const [loadingImage, setLoadingImage] = useState(false)
     return (
         <>
-            {loadingImage && <FullLoading />}
-            <div className="create-store">
-                <BlueBackground />
-                <h2 className="heading">Create Store</h2>
-                <p className="intro">
-                    Launch your own white-label NFT store or NFT Marketplace
-                    without any technical knowledge.
-                </p>
-                <CreateStoreForm
-                    store={store}
-                    setLoadingImage={setLoadingImage}
-                />
-            </div>
+            {loadingImage ? (
+                <FullBlurLoading />
+            ) : (
+                <div className="create-store">
+                    <BlueBackground />
+                    <h2 className="heading">Create Store</h2>
+                    <p className="intro">
+                        Launch your own white-label NFT store or NFT Marketplace
+                        without any technical knowledge.
+                    </p>
+                    <CreateStoreForm
+                        loading={loadingImage}
+                        setLoading={setLoadingImage}
+                    />
+                </div>
+            )}
         </>
-    );
-};
-
-export default CreateStore;
-function fileSrc(fileSrc: any) {
-    throw new Error("Function not implemented.");
+    )
 }
+
+export default CreateStore
