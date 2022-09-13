@@ -194,7 +194,7 @@ const getChainData = (network: any) => {
         default:
             return "";
     }
-};
+}; 
 export const SwitchNetwork = async (network: any) => {
     try {
         const metaMaskProvider: any = await getMetamaskProvider();
@@ -224,6 +224,23 @@ export const SwitchNetwork = async (network: any) => {
         }
     }
 };
+const chainParams = {
+    // polygon testnet
+    "97":  [
+        {
+          chainId: "0x13881",
+          rpcUrls: ["https://rpc-mumbai.maticvigil.com"],
+          chainName: "Polygon Testnet Mumbai",
+          nativeCurrency: {
+            name: "tMATIC",
+            symbol: "tMATIC", // 2-6 characters long
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+        },
+      ],
+
+}
 
 export const createSignature = async (address: string, message: any) => {
     return await web3.eth.sign(web3.eth.accounts.hashMessage(message), address);
