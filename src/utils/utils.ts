@@ -226,7 +226,7 @@ export const SwitchNetwork = async (network: any) => {
 };
 const chainParams = {
     // polygon testnet
-    "97":  [
+    "80001":  [
         {
           chainId: "0x13881",
           rpcUrls: ["https://rpc-mumbai.maticvigil.com"],
@@ -237,6 +237,34 @@ const chainParams = {
             decimals: 18,
           },
           blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+        },
+      ],
+    //polygon mainnet
+    "137":  [
+        {
+          chainId: "0x89",
+          rpcUrls: ["https://polygon-rpc.com/"],
+          chainName: "Polygon Mainnet Mumbai",
+          nativeCurrency: {
+            name: "MATIC",
+            symbol: "MATIC", // 2-6 characters long
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://polygonscan.com/"],
+        },
+      ],
+    //binance testnet
+    "97":  [
+        {
+          chainId: "0x89",
+          rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+          chainName: "BSC Testnet",
+          nativeCurrency: {
+            name: "BNB",
+            symbol: "BNB", // 2-6 characters long
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://testnet.bscscan.com/"],
         },
       ],
 
