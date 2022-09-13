@@ -1,5 +1,6 @@
 // const env_uri = process.env.REACT_APP_ENV !== 'local' ? process.env.REACT_APP_ENV : "local"
-const env_uri: string | undefined  = (process.env.REACT_APP_ENV).trim()
+// const env_uri: string | undefined  = (process.env.REACT_APP_ENV).trim()
+const env_uri: string | undefined  = "local"
 
 export const BASE_URL: string | undefined = 
     env_uri === "local"

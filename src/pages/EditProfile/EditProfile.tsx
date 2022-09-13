@@ -1,11 +1,15 @@
 import userImg from "../../assets/images/userImage.png"
-
+import {
+    updateProfileBg,
+    updateProfilePic,
+} from "../../services/api/supplier";
+import uuid from "react-uuid";
 import twitterImg from "../../assets/svgs/profileTwitter.svg"
 import instagramImg from "../../assets/svgs/profileInstagram.svg"
 import facebookImg from "../../assets/svgs/profileFacebook.svg"
 import discord from "../../assets/images/discord.svg"
 import linkedin from "../../assets/images/linkedin.png"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 // import Input from "../../components/Input/Input"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
@@ -268,12 +272,92 @@ const GeneralSettings = ({ resUser }) => {
     const [email, setEmail] = useState("")
     const [bio, setBio] = useState<string>()
     const [loading, setLoading] = useState(false)
+    const [profileImg, setProfileImg] = useState()
+    const [bannerImg, setBannerImg] = useState()
     let navigate = useNavigate()
     const getUserProfile = async () => {
         setUserName(resUser?.username)
         setEmail(resUser?.email)
         setBio(resUser?.bio)
     }
+    const profilePicFile = useRef(null);
+    const bannerPicFile = useRef(null);
+
+    const uploadImage = (inputFile: any) => {
+        // `current` points to the mounted file input element
+        inputFile.current.click();
+    };
+
+    const uploadUserImage = async (e: any) => {
+        try {
+            setLoading(true);
+            let cloudinaryFormData = new FormData();
+            cloudinaryFormData.append("file", e.target.files[0]);
+            cloudinaryFormData.append("upload_preset", `Unicus___User`);
+            cloudinaryFormData.append("public_id", uuid());
+            const cloudinaryRes = await fetch(
+                "https://api.cloudinary.com/v1_1/dhmglymaz/image/upload/",
+                {
+                    method: "POST",
+                    body: cloudinaryFormData,
+                }
+            );
+            const JSONdata = await cloudinaryRes.json();
+            setProfileImg(JSONdata.url);
+            // now sendig cloudinary url to backend server
+            const res = await updateProfilePic(JSONdata.url);
+
+            if (res && res.data && res.data.user) {
+                localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+                Cookies.set("userInfo", JSON.stringify(res.data.user), {
+                    domain: cookieDomain,
+                    expires: 30,
+                });
+            }
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            toast.error(err?.response.data || "Image upload error");
+            console.log("Cloudinary User Image Upload Error ->", err);
+        }
+    };
+
+    // PORTFOLIO TO HEADER IMAGE
+    const uploadBackgroundImage = async (e: any) => {
+        try {
+            setLoading(true);
+            //set loading true
+            let cloudinaryFormData = new FormData();
+            cloudinaryFormData.append("file", e.target.files[0]);
+            cloudinaryFormData.append("upload_preset", `Unicus___User`);
+            cloudinaryFormData.append("public_id", uuid());
+
+            const cloudinaryRes = await fetch(
+                "https://api.cloudinary.com/v1_1/dhmglymaz/image/upload/",
+                {
+                    method: "POST",
+                    body: cloudinaryFormData,
+                }
+            );
+            const JSONdata = await cloudinaryRes.json();
+
+            setBannerImg(JSONdata.url);
+            // sending to backend
+            const res = await updateProfileBg(JSONdata.url);
+            if (res && res.data && res.data.user) {
+                localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+                Cookies.set("userInfo", JSON.stringify(res.data.user), {
+                    domain: cookieDomain,
+                    expires: 30,
+                });
+            }
+            setLoading(false);
+        } catch (err) {
+            console.log("Cloudinary User Image Upload Error ->", err);
+            setLoading(false);
+            toast.error(err?.response.data || "Image upload error");
+        }
+    };
     const updateUserProfile = async () => {
         try {
             if (!(username?.length > 0) && !(bio?.length > 0))
@@ -300,7 +384,8 @@ const GeneralSettings = ({ resUser }) => {
             {loading ? (
                 <Loader />
             ) : (
-                <div className="flex flex-col gap-4">
+                <div className="flex gap-8">
+                <div className="flex flex-col gap-4 w-[300px] min-w-[300px]">
                     <Input
                         title="Username"
                         placeholder="Enter your name"
@@ -337,6 +422,60 @@ const GeneralSettings = ({ resUser }) => {
                             Save Changes
                         </button>
                     </div>
+                </div>
+                <div className="flex flex-col gap-4 w-full">
+                    <div>
+                        <div>Profile Image</div>
+                        <div className="flex gap-4 items-center mt-2">
+                            <div className="w-[120px] h-[120px] rounded-lg bg-[#ffffff22]">
+                                {profileImg && <img src={profileImg} alt='' className="w-full h-full object-cover"/>}
+                            </div>
+                            <div className="flex flex-col gap-3 ">
+                                <button 
+                                    className="btn"
+                                    onClick={() => uploadImage(profilePicFile)}
+                                >
+                                    Upload New
+                                </button>
+                                <button className="btn">Delete</button>
+                            </div>
+                            <input
+                                type="file"
+                                id="file"
+                                ref={profilePicFile}
+                                accept="image/jpeg, image/png , image/svg+xml"
+                                onChange={(e) => uploadUserImage(e)}
+                                className="d-none"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <div>Banner Image</div>
+                        <div className="flex gap-4 items-center mt-2">
+                            <div className="w-[190px] h-[120px] rounded-lg bg-[#ffffff22]">
+                                {bannerImg && <img src={bannerImg} alt='' className="w-full h-full object-cover"/>}
+                            </div>
+                            <div className="flex flex-col gap-3 ">
+                                <button 
+                                    className="btn" 
+                                    onClick={() => uploadImage(bannerPicFile)}
+                                >
+                                    Upload New
+                                </button>
+                                <button className="btn">Delete</button>
+                            </div>
+                            <input
+                                type="file"
+                                id="file"
+                                ref={bannerPicFile}
+                                accept="image/jpeg, image/png , image/svg+xml"
+                                onChange={(e) => uploadBackgroundImage(e)}
+                                className="d-none"
+                            />
+                        </div>
+                    </div>
+                    
+                </div>
                 </div>
             )}
         </>

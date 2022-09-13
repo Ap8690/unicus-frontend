@@ -84,7 +84,8 @@
 
       .table {
         width: 100%;
-        overflow-x: auto;
+        overflow-x: scroll;
+        display: block;
         
         table {
           table-layout: fixed;

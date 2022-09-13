@@ -21,6 +21,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { cookieDomain } from "../../../config";
 import { toast } from "react-toastify";
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 
 const User = ({ user }): ReactJSXElement => {
     console.log("user: ", user);
@@ -120,15 +121,15 @@ const User = ({ user }): ReactJSXElement => {
                 className="user-background-image"
                 onClick={() => uploadImage(bgPicFile)}
             >
-                <img className="w-100" src={backgroundImage} alt="Background" />
-                <input
+                <img className="w-100 object-cover" src={backgroundImage} alt="Background" />
+                {/* <input
                     type="file"
                     id="file"
                     ref={bgPicFile}
                     accept="image/jpeg, image/png , image/svg+xml"
                     onChange={(e) => uploadBackgroundImage(e)}
                     className="d-none"
-                />
+                /> */}
             </div>
             <div className="user-details">
                 <div
@@ -136,14 +137,14 @@ const User = ({ user }): ReactJSXElement => {
                     onClick={() => uploadImage(profilePicFile)}
                 >
                     <img src={userImage} alt={user?.username} />
-                    <input
+                    {/* <input
                         type="file"
                         id="file"
                         ref={profilePicFile}
                         accept="image/jpeg, image/png , image/svg+xml"
                         onChange={(e) => uploadUserImage(e)}
                         className="d-none"
-                    />
+                    /> */}
                 </div>
                 <div className="user-info">
                     <h3 className="user-name custom-border-bottom">
@@ -188,7 +189,7 @@ const User = ({ user }): ReactJSXElement => {
                     </div>
                 </div>
                 <button className="edit-profile" onClick={handleClick}>
-                    Edit Profile
+                    <ModeEditOutlineOutlinedIcon />
                 </button>
             </div>
         </div>

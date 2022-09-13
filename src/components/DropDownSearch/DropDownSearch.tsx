@@ -49,7 +49,7 @@ const DropDownSearch = ({ searchList, heading, search, setSearch, list }) => {
       <h2 className="drop-down-search-heading">
         {heading}
         <button onClick={() => setIfOpen(!ifOpen)}>
-          <img src={chevronDown} alt="Expand List" />
+          <img src={chevronDown} alt="Expand List" className={`dropDownArrow ${ifOpen? 'openSearch' : ''}`} />
         </button>
       </h2>
       <div

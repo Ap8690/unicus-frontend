@@ -23,13 +23,13 @@ const TableData = ({ activity, link }) => {
                     <img
                         src={activity.cloudinaryUrl}
                         alt={activity.name}
-                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4'
+                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md'
                     />
                 ) : (
                     <video
                         autoPlay
                         loop
-                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4'
+                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md'
                     >
                         <source
                             src={activity.cloudinaryUrl}
@@ -41,13 +41,13 @@ const TableData = ({ activity, link }) => {
                     <img
                         src={activity.cloudinaryUrl}
                         alt={activity.name}
-                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4'
+                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md'
                     />
                 ) : (
                     <video
                         autoPlay
                         loop
-                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4'
+                        className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md'
                     >
                         <source
                             src={activity.cloudinaryUrl}

@@ -6,9 +6,9 @@
     overflow: hidden;
     border-radius: 10px;
     
-    @include mixins.max-width(1024px) {
-        margin: 0 1rem;
-    }
+    // @include mixins.max-width(1024px) {
+    //     margin: 0 1rem;
+    // }
 }
 
 .search{

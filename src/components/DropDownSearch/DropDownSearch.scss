@@ -10,13 +10,21 @@
   gap: 25px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
-  padding: 3rem 0;
-  padding-bottom: 2rem;
+  padding: 2rem;
   max-width: 356px;
-
+  @media screen and (max-width: 768px) {
+    max-width: none;
+    width: 100%;
+  }
+  .dropDownArrow{
+    transition: all 0.3s ease;
+  }
+  .openSearch{
+    transform: rotate(180deg);
+  }
   .drop-down-search-heading {
     @include fn.flex(center, space-between);
-    width: 80%;
+    width: 100%;
     margin: 0;
     text-align: left;
     font-size: fonts.$font-size-3xl;
@@ -34,9 +42,10 @@
   .drop-down-search-holder {
     @include fn.flex-col(center, flex-start);
     overflow: hidden;
-    max-width: 356px;
+    // max-width: 356px;
+    width: 100%;
     min-height: 0;
-    height: 300px;
+    height: 60px;
     gap: 30px;
 
     transition: height 0.3s ease-in-out;
@@ -54,7 +63,7 @@
     .search-bar {
       border: 1px solid rgba(255, 255, 255, 0.3);
       position: relative;
-      width: 90%;
+      width: 100%;
       height: 56px;
       min-height: 56px;
       input {
