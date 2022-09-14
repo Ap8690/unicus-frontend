@@ -28,28 +28,33 @@ import NftSkeletonLoader from "../../components/Loading/SkeletonLoading/NftSkele
 import { ChainContext } from "../../context/ChainContext";
 import { useQuery } from "../../Hooks/useQuery";
 import { Helmet } from "react-helmet";
+import {UserContext} from "../../context/UserContext"
 const Explore = () => {
     // HardCoded
+    const {filter,setFilter} = useContext(UserContext);
     const [skiploading, setskiploading] = useState(true);
     const [loading, setLoading] = useState(true);
     const [metadata, setmetadata] = useState<any>([]);
     const query = useQuery();
     const searchQuery = query.get("search");
+    console.log("searchQuery: ", searchQuery);
     const { chain } = useContext(ChainContext);
     const filters = [
-        "all",
-        "funny",
-        "art",
-        "nature",
-        "animal",
-        "sports",
-        "photography",
-        "music",
-        "metaverse",
+        "All",
+        "Art",
+        "Nft Collection",
+        "Trading Cards",
+        "Photography",
+        "Carbon Credits",
+        "Real Estate",
+        "Financial Instruments",
+        "Event Tickets",
+        "Metaverse",
+        "Gaming",
+        "Music",
     ];
     const { chainNetwork } = useParams();
     // States
-    const [currentFilter, setCurrentFilter] = useState(searchQuery || "all");
     const [displayElements, setDisplayItems] = useState([]);
     const [sortBy, setsortBy] = useState<any>([["createdAt", -1]]);
     const [sortBy2, setsortBy2] = useState<any>("createdAt");
@@ -62,7 +67,7 @@ const Explore = () => {
     const fetchItems = async () => {
         if (skiploading) {
             setLoading(true);
-            getMarketplaceNfts(skip, getChainId(chain), sortBy, currentFilter)
+            getMarketplaceNfts(skip, getChainId(chain), sortBy, filter.toLowerCase())
                 .then((res: any) => {
                     setDisplayItems(res.data.data);
                     setLoading(false);
@@ -90,7 +95,6 @@ const Explore = () => {
         localStorage.setItem("userInfo", JSON.stringify(res.data.user));
         navigate("/home", { replace: true });
     };
-    const resetPassword = async () => {};
     window.addEventListener("scroll", async function () {
         var root: any;
         root = document.querySelector(".market_place")?.getBoundingClientRect();
@@ -107,7 +111,7 @@ const Explore = () => {
         // nothing for now
         fetchItems();
         document.body.scrollTop = 0;
-    }, [currentFilter, chain]);
+    }, [filter, chain]);
 
     useEffect(() => {
         if (
@@ -129,9 +133,12 @@ const Explore = () => {
         if (chain !== "" && !searchQuery) {
             navigate(`/explore/${chain}`);
         }
+        if(searchQuery) {
+            setFilter(searchQuery)
+        }
         window.scrollTo(0, 0);
     }, []);
-
+    
     useEffect(() => {
         if (chain !== "" && !searchQuery) {
             navigate(`/explore/${chain}`);
@@ -150,8 +157,8 @@ const Explore = () => {
             <h1 className="explore-heading">Explore Assets</h1>
             <ExploreFilters
                 filters={filters}
-                setCurrentFilter={setCurrentFilter}
-                currentFilter={currentFilter}
+                setCurrentFilter={setFilter}
+                currentFilter={filter}
             />
             {loading ? (
                 <NftSkeletonLoader />

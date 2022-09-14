@@ -32,22 +32,10 @@ const Navbar = ({ store }) => {
     const [anchorProfile, setAnchorProfile] = useState<null | HTMLElement>(
         null
     );
-
-    const openStats = Boolean(anchorStats);
     const openChains = Boolean(anchorChains);
-    const openProfile = Boolean(anchorProfile);
-
     const accessToken = Cookies.get(ACCESS_TOKEN);
 
-    const handleClickStats = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorStats(event.currentTarget);
-    };
-    const handleCloseStats = () => {
-        setAnchorStats(null);
-    };
-    const handleClickChains = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorChains(event.currentTarget);
-    };
+    
     const handleCloseChains = (chain: any) => {
         setAnchorChains(null);
         if (chain !== "") {
@@ -57,17 +45,7 @@ const Navbar = ({ store }) => {
                 toast.info(`You are on ${capitalize(chain)} network`);
         }
     };
-    const handleClickProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
-        accessToken
-            ? setAnchorProfile(event.currentTarget)
-            : navigate(`../connect-wallet${location.pathname}`, {
-                  replace: true,
-              });
-    };
-    const handleCloseProfile = () => {
-        disConnectWallet();
-        setAnchorProfile(null);
-    };
+
     const handleGlobalSearch = (e: any) => {
         e.preventDefault();
         navigate(`/search/${search}`);
@@ -173,7 +151,7 @@ const Navbar = ({ store }) => {
                         </div>
                     ) : (
                         <div className="nav-links">
-                            <NestedMenu />
+                            <NestedMenu chain={chain}/>
                             <Link to={`/explore/${chain}`} className="nav-link">
                                 Explore
                             </Link>

@@ -1,0 +1,1 @@
+export const AssetList: any = ['Art', 'Nft Collection', 'Trading Cards', 'Photography', 'Carbon Credits', 'Real Estate', 'Financial Instruments', 'Event Tickets', 'Metaverse', 'Gaming', 'Music']
