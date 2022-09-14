@@ -17,6 +17,7 @@ import { capitalize, getLocalStorage } from "../../utils/helpers";
 import NavMenu from "../menu/NavMenu/NavMenu";
 import { toast } from "react-toastify";
 import { useWallet } from "@solana/wallet-adapter-react";
+import {getLocation} from "../../utils/helpers"
 
 const Navbar = ({ store }) => {
     const [search, setSearch] = useState("");
@@ -65,7 +66,7 @@ const Navbar = ({ store }) => {
     const handleCloseProfile = () => {
         disConnectWallet();
         setAnchorProfile(null);
-    };
+    }; 
     const handleGlobalSearch = (e: any) => {
         e.preventDefault();
         navigate(`/search/${search}`);
@@ -102,13 +103,13 @@ const Navbar = ({ store }) => {
                             alt="unicus"
                         />
                     </Link>
-                    <div className="search-bar-box">
+                   {getLocation('/explore') && <div className="search-bar-box">
                         <SearchBar
                             handleGlobalSearch={handleGlobalSearch}
                             search={search}
                             setSearch={setSearch}
                         />
-                    </div>
+                    </div>}
                     <div className="nav-menu-icons">
                         <ProfileButton
                             accessToken={accessToken}
@@ -121,54 +122,54 @@ const Navbar = ({ store }) => {
                             <MenuRoundedIcon />
                         </button>
                     </div>
-                    {isMainStore() &&
-                    // (location.pathname === "/home" ||
-                    //     location.pathname === "/blog") ? (
-                    //     <div className="nav-links">
-                    //         <Link to={"/about-us"} className="nav-link">
-                    //             About
-                    //         </Link>
-                    //         <Link to={"/for-creator"} className="nav-link">
-                    //             For Creators
-                    //         </Link>
-                    //         <Link to={"/token"} className="nav-link">
-                    //             Token
-                    //         </Link>
-                    //         <Link to={"/blog"} className="nav-link">
-                    //             Blog
-                    //         </Link>
-                    //         {store && Object.keys(store).length !== 0 ? (
-                    //             <a
-                    //                 href={
-                    //                     store.domain && store.domain.length > 0
-                    //                         ? `http://${store.domain[0]}`
-                    //                         : ""
-                    //                 }
-                    //                 target="_blank"
-                    //                 rel="noreferrer"
-                    //             >
-                    //                 <span className="btn nav-link">
-                    //                     Go to My Store
-                    //                 </span>
-                    //             </a>
-                    //         ) : (
-                    //             isMainStore() && (
-                    //                 <Link
-                    //                     to={"/create-store"}
-                    //                     className="btn nav-link"
-                    //                 >
-                    //                     Create Store
-                    //                 </Link>
-                    //             )
-                    //         )}
-                    //         <Link to={"/launchpad"} className="btn nav-link">
-                    //             Launchpad
-                    //         </Link>
-                    //         <Link to={"/marketplace"} className="btn nav-link">
-                    //             Marketplace
-                    //         </Link>
-                    //     </div>
-                    // ) : (
+                    {!isMainStore() &&
+                    (location.pathname === "/home" ||
+                        location.pathname === "/blog") ? (
+                        <div className="nav-links">
+                            <Link to={"/about-us"} className="nav-link">
+                                About
+                            </Link>
+                            <Link to={"/for-creator"} className="nav-link">
+                                For Creators
+                            </Link>
+                            <Link to={"/token"} className="nav-link">
+                                Token
+                            </Link>
+                            <Link to={"/blog"} className="nav-link">
+                                Blog
+                            </Link>
+                            {store && Object.keys(store).length !== 0 ? (
+                                <a
+                                    href={
+                                        store.domain && store.domain.length > 0
+                                            ? `http://${store.domain[0]}`
+                                            : ""
+                                    }
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    <span className="btn nav-link">
+                                        Go to My Store
+                                    </span>
+                                </a>
+                            ) : (
+                                isMainStore() && (
+                                    <Link
+                                        to={"/create-store"}
+                                        className="btn nav-link"
+                                    >
+                                        Create Store
+                                    </Link>
+                                )
+                            )}
+                            <Link to={"/launchpad"} className="btn nav-link">
+                                Launchpad
+                            </Link>
+                            <Link to={"/marketplace"} className="btn nav-link">
+                                Marketplace
+                            </Link>
+                        </div>
+                    ) : (
                         <div className="nav-links">
                             <Link to={`/explore/${chain}`} className="nav-link">
                                 Explore
@@ -360,7 +361,7 @@ const Navbar = ({ store }) => {
                                 </Link>
                             )}
                         </div>
-                    // )
+                    )
                     }
                 </div>
             </nav>

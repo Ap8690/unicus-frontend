@@ -115,4 +115,6 @@ export const isChainConnected = (pageChain:any) => {
 export const getLocalStorage = (item: any) => {
   return localStorage.getItem(item) ? localStorage.getItem(item) : null
 }
-
+export const getLocation = (path: string) => {
+  return window.location.pathname.includes(path)
+}
