@@ -417,7 +417,54 @@ export const connToTron = async () => {
     };
 };
 
-async function createNearSignature(
+// export async function createNearSignature(
+//     walletConnection : any,
+//     keyStore: any,
+//     networkId: any
+// ) {
+//     nearWalletConnection = walletConnection;
+//     console.log(walletConnection.isSignedIn(), "is");
+//     localStorage.setItem("walletChain", "Near");
+//     let accountId = await walletConnection.account().accountId;
+//     console.log(accountId,"accountId")
+//     const timestamp = new Date().getTime().toString().toString();
+//     const msg = Buffer.from(timestamp);
+
+//     const signer = new nearAPI.InMemorySigner(keyStore);
+//     console.log("signer: ", signer);
+//     const sign = await signer.signMessage(msg, accountId, networkId);
+//     console.log("sign: ", sign);
+//     const publicKey = await signer.getPublicKey(accountId, networkId);
+//     console.log("publicKey: ", publicKey);
+//     return {
+//         account: accountId,
+//         message: timestamp,
+//         token: {
+//             publicKey: publicKey,
+//             signature: sign.signature,
+//         },
+//     };
+// }
+
+// export const connectNear = async () => {
+//     const { config, walletConnection, keyStore, networkId } =
+//         await initContract();
+//     if (!walletConnection.isSignedIn()) {
+//         await walletConnection.requestSignIn({
+//             contractId: "nft.subauction.testnet",
+//             // methodNames: ["Unicus One"],
+//             // successUrl : `http://localhost:3000/explore/Near?near-login=success`,
+//             // failureUrl : 'http://localhost:3000/connect-wallet'
+//         });
+//         await sendMeta(walletConnection, config);
+//     }
+//     else{
+//       return await createNearSignature(walletConnection,keyStore,networkId);
+//     }
+// };
+
+
+export async function createNearSignature(
     keyStore: any,
     networkId: any,
     accountId: any
@@ -443,16 +490,15 @@ export const connectNear = async () => {
         await initContract();
     let accountId: any;
     if (!walletConnection.isSignedIn()) {
-        await walletConnection.requestSignIn({
-            contractId: "",
-            methodNames: ["Unicus One"],
-            successUrl : `http://localhost:3000/explore/Near`,
-            failureUrl : 'http://localhost:3000/connect-wallet'
-        });
-        // await sendMeta(walletConnection, config);
+        // await walletConnection.requestSignIn(
+        //     {
+        //         contractId: "nft.subauction.testnet",
+        //     }
+        // );
+        await sendMeta(walletConnection, config);
     }
     nearWalletConnection = walletConnection;
-    console.log(walletConnection.isSignedIn(), "is");
+    console.log(walletConnection.isSignedIn(),"is")
     localStorage.setItem("walletChain", "Near");
     accountId = walletConnection.account().accountId;
     const data = await createNearSignature(keyStore, networkId, accountId);
