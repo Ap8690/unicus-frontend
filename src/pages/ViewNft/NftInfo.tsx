@@ -122,7 +122,8 @@ const NftInfo = ({
         return wallet;
     };
     const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
-        "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
+        // "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
+        "8GZNDXBNypG9D98YfAZRe2pyQG4P5Pi6d3AM5yJ3CnTF"
     );
 
     useEffect(() => {
@@ -384,11 +385,11 @@ const NftInfo = ({
                 signature: signature,
             });
 
-            console.log("Fill Order Success!",orderAccount,program.account.order,program.account);
-            let order = await program.account.order.fetch(orderAccount);
-            console.log("Create Order Success!", order);
+            // console.log("Fill Order Success!",orderAccount,program.account.order,program.account);
+            // let order = await program.account.order.fetch(orderAccount);
+            // console.log("Create Order Success!", order);
 
-            return order.mintKey;
+            return latestBlockhash.blockhash;
         } catch (err) {
             console.log(err);
             return false;
@@ -452,10 +453,10 @@ const NftInfo = ({
                 signature: signature,
             });
 
-            console.log("Cancel Order Success!",orderAccount);
-            let order = await program.account.order.fetch(orderAccount);
+            // console.log("Cancel Order Success!",orderAccount);
+            // let order = await program.account.order.fetch(orderAccount);
 
-            return order.mintKey;
+            return latestBlockhash.blockhash;
         } catch (err) {
             console.log(err);
             return false;
@@ -668,59 +669,50 @@ const NftInfo = ({
             anWallet.publicKey
         );
 
-        try {
-            const tx = new anchor.web3.Transaction().add(
-                createAssociatedTokenAccountInstruction(
-                    anWallet.publicKey,
-                    creatorTokenAccount,
-                    anWallet.publicKey,
-                    mintKey
-                )
-            );
+        // let tx = new anchor.web3.Transaction().add(
+        //     createAssociatedTokenAccountInstruction(
+        //         anWallet.publicKey,
+        //         creatorTokenAccount,
+        //         anWallet.publicKey,
+        //         mintKey
+        //     )
+        // );
 
-            const signature = await sendTransaction(tx, connection);
-            const latestBlockhash = await connection.getLatestBlockhash();
+        // let signature = await sendTransaction(tx, connection);
+        // let latestBlockhash = await connection.getLatestBlockhash();
 
-            await connection.confirmTransaction({
-                blockhash: latestBlockhash.blockhash,
-                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-                signature: signature,
-            });
-        } catch (err) {
-            console.log(err);
-            return false;
-        }
+        // await connection.confirmTransaction({
+        //     blockhash: latestBlockhash.blockhash,
+        //     lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        //     signature: signature,
+        // });
 
-        try {
-            const tx = program.transaction.cancelAuction({
-                accounts: {
-                    auction: auctionAccount,
-                    auctionTokenAccount: auctionTokenAccount,
-                    mintKey: mintKey,
-                    creator: anWallet.publicKey,
-                    creatorTokenAccount: creatorTokenAccount,
-                    refundReceiver: auction.refundReceiver,
-                    systemProgram: anchor.web3.SystemProgram.programId,
-                    tokenProgram: TOKEN_PROGRAM_ID,
-                    associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-                },
-            });
+        const tx = program.transaction.cancelAuction({
+            accounts: {
+                auction: auctionAccount,
+                auctionTokenAccount: auctionTokenAccount,
+                mintKey: mintKey,
+                creator: anWallet.publicKey,
+                creatorTokenAccount: creatorTokenAccount,
+                refundReceiver: auction.refundReceiver,
+                systemProgram: anchor.web3.SystemProgram.programId,
+                tokenProgram: TOKEN_PROGRAM_ID,
+                associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+            },
+        });
 
-            const signature = await sendTransaction(tx, connection);
-            const latestBlockhash = await connection.getLatestBlockhash();
+        const signature = await sendTransaction(tx, connection);
+        const latestBlockhash = await connection.getLatestBlockhash();
 
-            await connection.confirmTransaction({
-                blockhash: latestBlockhash.blockhash,
-                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-                signature: signature,
-            });
+        await connection.confirmTransaction({
+            blockhash: latestBlockhash.blockhash,
+            lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+            signature: signature,
+        });
 
-            console.log("cancel auction Success!");
-            return auction.mintKey;
-        } catch (err) {
-            console.log(err);
-            return false;
-        }
+        console.log("cancel auction Success!");
+        return auction.mintKey;
+
     };
 
     async function createSell() {
@@ -1000,13 +992,6 @@ const NftInfo = ({
     async function buyItem() {
         try {
             setNftLoading(true);
-            // const address = await connectWallet(
-            //     auction.chain,
-            //     publicKey,
-            //     getSolWallet,
-            //     connect,
-            //     setVisible
-            // );
             let address: String = localStorage.getItem('walletConnected')
             let transactionHash:any;
             if (nft.chain.toString() === nearChain) {
@@ -1186,6 +1171,16 @@ const NftInfo = ({
                 return;
             } else if (Number(nft.chain) === Number(solonaChain)) {
                 const aucMintKey = await removeSaleSol(auction.auctionId);
+                if (aucMintKey) {
+                    await endSaleApi(
+                        auction,
+                        aucMintKey,
+                        creator.name
+                    )
+                    toast.success("Sale Ended");
+                    setNftLoading(false);
+                    navigate("/profile/created");
+                }
             } else if (Number(nft.chain) === Number(tronChain)) {
                 const res = await getMarketPlace(
                     auction.chain,
@@ -1308,18 +1303,20 @@ const NftInfo = ({
         try {
             setNftLoading(true);
 
-            // const address = await connectWallet(
-            //     auction.chain,
-            //     publicKey,
-            //     getSolWallet,
-            //     connect,
-            //     setVisible
-            // );
             let address: String = localStorage.getItem('walletConnected')
             if (auction.chain.toString() === nearChain) {
                 removeAuction(nft.tokenId);
             } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await cancelAuctionSol(auction.auctionId);
+                if (aucMintKey) {
+                    await cancelAuctionApi(
+                        auction,
+                        aucMintKey,
+                        creator.name
+                    )
+                    toast.success("Auction Cancelled");
+                    setNftLoading(false);
+                }
             } else if (nft.chain.toString() === tronChain) {
                 const res = await getAuctionContract(
                     auction.chain,
