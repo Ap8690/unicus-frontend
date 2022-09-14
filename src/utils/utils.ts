@@ -574,6 +574,7 @@ export const connToSol = async (
 export const disConnectWallet = async () => {
 
     Cookies.remove(ACCESS_TOKEN, { domain: cookieDomain, expires: 30 });
+    console.log("cookieDomain: ", cookieDomain);
     Cookies.remove("userInfo", { domain: cookieDomain, expires: 30 });
     // walletConnectorProvider.disconnect();
     walletLink.disconnect();

@@ -404,7 +404,7 @@ const ProfileButton = ({ accessToken, store,setShowChains,showChains }) => {
     const { disconnect } = useWallet();
 
     const handleDisconnect = async () => {
-        disConnectWallet();
+        await disConnectWallet();
         await disconnect();
     };
 
