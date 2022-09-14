@@ -66,11 +66,11 @@ const EditProfile = (props: any) => {
     }, [])
 
     return (
-        <div className="mt-[70px] px-24 pb-12 screen7:pt-0 screen18:px-12 screen3:px-8 w-full">
-            <div className=" w-full pt-12">
-                <div className="flex gap-8 screen11:flex-col">
-                    <div className="relative felx justify-center items-center screen11:flex-col screen11:ml-0">
-                        <div className="w-32 h-32 relative rounded-full overflow-hidden m-auto">
+        <div className="md:mt-[70px] px-8 pb-12 screen7:pt-0 screen18:px-12 screen3:px-8 w-full">
+            <div className="w-full pt-12">
+                <div className="editPage-info flex gap-8 screen11:flex-col">
+                    <div className="relative felx items-center screen11:flex-col screen11:ml-0 min-w-[200px] editPage-main-image">
+                        <div className="w-32 h-32 relative rounded-full overflow-hidden">
                             <img
                                 src={
                                     user && user.profileUrl
@@ -82,8 +82,8 @@ const EditProfile = (props: any) => {
                             />
                         </div>
                     </div>
-                    <div className="flex justify-between w-full screen11:flex-col screen11:justify-center screen11:items-center">
-                        <div className="flex flex-col items-start gap-2 relative mt-4">
+                    <div className="flex justify-between w-full screen11:flex-col screen11:justify-center screen11:items-center editPage-main-info-box">
+                        <div className="flex flex-col items-start gap-2 relative mt-4 editPage-main-info">
                             <span className="text-lg w-full screen11:text-center font-semibold">
                                 {user
                                     ? user?.username
@@ -91,7 +91,7 @@ const EditProfile = (props: any) => {
                                         : user?.email || ""
                                     : "Loading..."}
                             </span>
-                            <span className="text-DarkColor w-full screen11:text-center">
+                            <span className="text-DarkColor w-full screen11:text-center wallet-address-edit-page">
                                 {user && user.wallets.length > 0
                                     ? user.wallets[0]
                                     : "No wallet added"}{" "}
@@ -135,7 +135,7 @@ const EditProfile = (props: any) => {
                                 onClick={handleClick}
                                 className="bg-GreyButton p-2 text-lg font-semibold rounded-md d-none"
                             >
-                                ...
+                                <span className="capitalizeFirst">{active}</span> ...
                             </button>
                             <Menu
                                 id="basic-menu"
@@ -205,8 +205,8 @@ const EditProfile = (props: any) => {
                     </div>
                 </div>
             </div>
-            <div className="flex gap-12 mt-8">
-                <div className="flex flex-col gap-4 screen7:hidden">
+            <div className="flex gap-8 mt-8">
+                <div className="flex flex-col gap-6 text-lg screen7:hidden min-w-[200px] settings-sidebar">
                     <span
                         onClick={() => setActive("general")}
                         className={`font-semibold cursor-pointer ${
@@ -385,8 +385,8 @@ const GeneralSettings = ({ resUser }) => {
             {loading ? (
                 <Loader />
             ) : (
-                <div className="flex gap-8">
-                <div className="flex flex-col gap-4 w-[300px] min-w-[300px]">
+                <div className="flex gap-8 edit-userInfo">
+                <div className="flex flex-col gap-4 w-[300px] min-w-[300px] edit-details">
                     <Input
                         title="Username"
                         placeholder="Enter your name"
