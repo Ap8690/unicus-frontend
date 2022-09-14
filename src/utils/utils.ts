@@ -444,9 +444,12 @@ export const connectNear = async () => {
     let accountId: any;
     if (!walletConnection.isSignedIn()) {
         await walletConnection.requestSignIn({
-            contractId: "nft.subauction.testnet",
+            contractId: "",
+            methodNames: ["Unicus One"],
+            successUrl : `http://localhost:3000/explore/Near`,
+            failureUrl : 'http://localhost:3000/connect-wallet'
         });
-        await sendMeta(walletConnection, config);
+        // await sendMeta(walletConnection, config);
     }
     nearWalletConnection = walletConnection;
     console.log(walletConnection.isSignedIn(), "is");
