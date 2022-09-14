@@ -98,10 +98,10 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
         try {
             setLoading(true)
             if (!generals.email && !generals.storeName) {
-                throw "Please fill all fields."
+                throw new Error("Please fill all fields.")
             }
             if (!validator.isEmail(generals.email)) {
-                throw "Invalid Email"
+                throw new Error("Invalid Email")
             }
             let res = await createStore(generals)
             setLoading(false)
@@ -118,7 +118,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
                     window.location.reload()
                 }, 3000)
             } else {
-                throw "Failed"
+                throw new Error("Store creation failed!")
             }
         } catch (err) {
             console.log("err", err.response.data.err)
@@ -243,6 +243,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
                                 ))}
                             </Select>
                         </FormControl>
+
                     </div>
                     <button className="btn" type="submit">
                         Create Store

@@ -54,7 +54,6 @@ import * as nearAPI from "near-api-js";
 import BN from "bn.js";
 import { useNavigate } from "react-router-dom";
 import {
-    ASSOCIATED_TOKEN_PROGRAM_ID,
     getAssociatedTokenAddress,
     createInitializeMintInstruction,
     MINT_SIZE,
@@ -63,7 +62,7 @@ import {
 } from "@solana/spl-token";
 import PageLoader from "../../components/Loading/PageLoader";
 import * as anchor from "@project-serum/anchor";
-import { Program, getProvider, Provider, Wallet } from "@project-serum/anchor";
+import { Program } from "@project-serum/anchor";
 import web3 from "../../web3";
 import {AssetList} from "../../utils/AssetList"
 import SolMintNftIdl from "../../utils/sol_mint_nft.json";
@@ -85,13 +84,9 @@ const CreateNftSingle = () => {
     const [chain, setChain] = useState(ethChain);
     const [contractType, setContractType] = useState("721");
     const [supply, setSupply] = useState(1);
-    const [unlockContent, setUnlockContent] = useState("");
-    const [unlockable, setUnlockable] = useState(false);
     const [collection, setCollection] = useState<any>("");
     const [royalty, setRoyalty] = useState<any>(5);
     const [royaltyError, setRoyaltyError] = useState<boolean>(false);
-    const [explicit, setExplicit] = useState(false);
-    const [displayImage, setDisplayImage] = useState("");
     const [openProp, setOpenProp] = useState(false);
     const [openStats, setOpenStats] = useState(false);
     const [openLevels, setOpenLevels] = useState(false);
@@ -104,10 +99,9 @@ const CreateNftSingle = () => {
     const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
     const inputFile = useRef(null);
     const navigate = useNavigate();
-    const { loginWallet, fullLoading } = useContext(ConnectWalletContext);
+    const { fullLoading } = useContext(ConnectWalletContext);
     const { connection } = useConnection();
-    const { wallet, connect, publicKey, sendTransaction } = useWallet();
-    const { setVisible } = useWalletModal();
+    const { sendTransaction } = useWallet();
     const anWallet = useAnchorWallet();
     const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
         "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
@@ -147,18 +141,10 @@ const CreateNftSingle = () => {
     const handleCategoryChange = (event: any) => {
         setCategory(event.target.value);
     };
-    const handleChangeColllection = (event: any) => {
-        setCollection(event.target.value);
-    };
     const handleClickOpen = () => {
         setOpenProp(true);
     };
-    const handleClickOpenStats = () => {
-        setOpenStats(true);
-    };
-    const handleClickOpenLevels = () => {
-        setOpenLevels(true);
-    };
+
 
     const handleClose = (value: any) => {
         setOpenProp(false);
@@ -209,7 +195,7 @@ const CreateNftSingle = () => {
 
     useEffect(() => {
         if (!getAccessToken()) {
-            navigate("/connect-wallet/create-nft");
+            navigate("/explore");
             toast.warn("Please Login!");
         }
     }, []);
