@@ -1,9 +1,11 @@
 {
   "version": "0.1.0",
   "name": "unicus_js",
-  "instructions": [{
+  "instructions": [
+    {
       "name": "mintNft",
-      "accounts": [{
+      "accounts": [
+        {
           "name": "mintAuthority",
           "isMut": true,
           "isSigner": true
@@ -49,7 +51,8 @@
           "isSigner": false
         }
       ],
-      "args": [{
+      "args": [
+        {
           "name": "creatorKey",
           "type": "publicKey"
         },
@@ -69,7 +72,8 @@
     },
     {
       "name": "createOrder",
-      "accounts": [{
+      "accounts": [
+        {
           "name": "order",
           "isMut": true,
           "isSigner": false
@@ -115,7 +119,8 @@
           "isSigner": false
         }
       ],
-      "args": [{
+      "args": [
+        {
           "name": "memo",
           "type": "string"
         },
@@ -127,7 +132,8 @@
     },
     {
       "name": "cancelOrder",
-      "accounts": [{
+      "accounts": [
+        {
           "name": "order",
           "isMut": true,
           "isSigner": false
@@ -172,7 +178,8 @@
     },
     {
       "name": "fillOrder",
-      "accounts": [{
+      "accounts": [
+        {
           "name": "order",
           "isMut": true,
           "isSigner": false
@@ -222,7 +229,8 @@
     },
     {
       "name": "auctionResolve",
-      "accounts": [{
+      "accounts": [
+        {
           "name": "auction",
           "isMut": true,
           "isSigner": false
@@ -272,7 +280,8 @@
     },
     {
       "name": "bid",
-      "accounts": [{
+      "accounts": [
+        {
           "name": "auction",
           "isMut": true,
           "isSigner": false
@@ -313,14 +322,17 @@
           "isSigner": false
         }
       ],
-      "args": [{
-        "name": "price",
-        "type": "u64"
-      }]
+      "args": [
+        {
+          "name": "price",
+          "type": "u64"
+        }
+      ]
     },
     {
       "name": "cancelAuction",
-      "accounts": [{
+      "accounts": [
+        {
           "name": "auction",
           "isMut": true,
           "isSigner": false
@@ -370,7 +382,8 @@
     },
     {
       "name": "createAuction",
-      "accounts": [{
+      "accounts": [
+        {
           "name": "auction",
           "isMut": true,
           "isSigner": false
@@ -416,7 +429,8 @@
           "isSigner": false
         }
       ],
-      "args": [{
+      "args": [
+        {
           "name": "memo",
           "type": "string"
         },
@@ -435,11 +449,13 @@
       ]
     }
   ],
-  "accounts": [{
+  "accounts": [
+    {
       "name": "Order",
       "type": {
         "kind": "struct",
-        "fields": [{
+        "fields": [
+          {
             "name": "creator",
             "type": "publicKey"
           },
@@ -466,7 +482,8 @@
       "name": "Auction",
       "type": {
         "kind": "struct",
-        "fields": [{
+        "fields": [
+          {
             "name": "creator",
             "type": "publicKey"
           },
@@ -502,38 +519,45 @@
       }
     }
   ],
-  "types": [{
-    "name": "MarketError",
-    "type": {
-      "kind": "enum",
-      "variants": [{
-          "name": "TokenTransferFailed"
-        },
-        {
-          "name": "TokenTransferFailed2"
-        },
-        {
-          "name": "TokenTransferFailed3"
-        },
-        {
-          "name": "SolTransferFailed"
-        },
-        {
-          "name": "TokenCloseFailed"
-        },
-        {
-          "name": "InsufficientMoney"
-        },
-        {
-          "name": "AuctionEnded"
-        },
-        {
-          "name": "AuctionNotEnded"
-        }
-      ]
+  "types": [
+    {
+      "name": "MarketError",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "TokenTransferFailed"
+          },
+          {
+            "name": "TokenTransferFailed2"
+          },
+          {
+            "name": "TokenTransferFailed3"
+          },
+          {
+            "name": "SolTransferFailed"
+          },
+          {
+            "name": "TokenCloseFailed"
+          },
+          {
+            "name": "InsufficientMoney"
+          },
+          {
+            "name": "AuctionEnded"
+          },
+          {
+            "name": "AuctionNotEnded"
+          },
+          {
+            "name": "InvalidReceiver"
+          }
+        ]
+      }
     }
-  }],
-  "errors": [{
+  ],
+  "errors": [
+    {
       "code": 6000,
       "name": "MintFailed",
       "msg": "Mint failed!"
@@ -543,8 +567,5 @@
       "name": "MetadataCreateFailed",
       "msg": "Metadata account create failed!"
     }
-  ],
-  "metadata": {
-    "address": "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
-  }
+  ]
 }
