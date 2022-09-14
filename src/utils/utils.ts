@@ -106,8 +106,8 @@ export let web3 = new Web3(Web3.givenProvider);
 
 //@ts-ignore
 export let tronWeb = window.tronWeb
-//@ts-ignore
-    ? window.tronWeb
+    ? //@ts-ignore
+      window.tronWeb
     : new TronWeb({ fullNode, solidityNode, eventServer, privateKey });
 
 interface requestAccountsResponse {
@@ -648,6 +648,8 @@ export const getChainId = (chain: any) => {
             return tronChain;
         case "solana":
             return solonaChain;
+        case "all":
+            return 0;
         default:
             return null;
     }
@@ -692,6 +694,8 @@ export const ChainIdUsingWalletName = (chainName: any) => {
             return tronChain;
         case "solana":
             return solonaChain;
+        case "all":
+            return 0;
         default:
             return null;
     }

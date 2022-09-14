@@ -37,3 +37,9 @@ export const getYear = (newDate:any) => {
 export const getCompleteDate = (newDate: any) => {
   return moment(new Date(newDate)).format('llll');
 };
+
+export const getRemainingSeconds = (date: any) => {
+  var date1 = moment(date);
+  var date2 = moment();
+  return (date1.diff(date2) / 1000).toFixed(0)
+}

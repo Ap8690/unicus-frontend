@@ -22,6 +22,7 @@ export const getUserId = () => {
 }
 
 export async function getFeaturedNft(number: number,chain: any) {
+  console.log("chain: ", chain);
   return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}/${getChainId(chain)}`,
   axiosConfig());
 }

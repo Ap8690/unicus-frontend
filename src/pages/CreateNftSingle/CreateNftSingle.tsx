@@ -65,13 +65,7 @@ import PageLoader from "../../components/Loading/PageLoader";
 import * as anchor from "@project-serum/anchor";
 import { Program, getProvider, Provider, Wallet } from "@project-serum/anchor";
 import web3 from "../../web3";
-
-import {
-    clusterApiUrl,
-    PublicKey,
-    SystemProgram,
-    SYSVAR_RENT_PUBKEY,
-} from "@solana/web3.js";
+import {AssetList} from "../../utils/AssetList"
 import SolMintNftIdl from "../../utils/sol_mint_nft.json";
 import validator from "validator";
 import { getBase64, blobUrlToFile } from "../../utils/imageConvert";
@@ -82,6 +76,7 @@ import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 
 const CreateNftSingle = () => {
     // let chain_name = ChainIdUsingWalletName(localStorage.getItem("walletChain"))
+    console.log("AssetList ",AssetList)
     const [name, setName] = useState("");
     const [extLink, setExtlink] = useState("");
     const [description, setDescription] = useState("");
@@ -745,7 +740,6 @@ const CreateNftSingle = () => {
                     });
             }
         }
-
         if(localStorage.getItem("walletChain") === "Tron") {
             setChain(tronChain)
         }
@@ -776,7 +770,7 @@ const CreateNftSingle = () => {
             ) : (
                 <div className="create-nft-single-page">
                     <div className="head">
-                        <div className="blue-head">Create single item</div>
+                        <div className="blue-head">Tokenize Asset</div>
                         <div className="head-text">
                             Image, Video, Audio, or 3D Model. File types
                             supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV,
@@ -925,30 +919,14 @@ const CreateNftSingle = () => {
                                             onChange={handleCategoryChange}
                                             label="Category"
                                         >
-                                            <MenuItem value={"funny"}>
-                                                Funny
-                                            </MenuItem>
-                                            <MenuItem value={"art"}>
-                                                Art
-                                            </MenuItem>
-                                            <MenuItem value={"nature"}>
-                                                Nature
-                                            </MenuItem>
-                                            <MenuItem value={"animal"}>
-                                                Animal
-                                            </MenuItem>
-                                            <MenuItem value={"sports"}>
-                                                Sports
-                                            </MenuItem>
-                                            <MenuItem value={"photography"}>
-                                                Photography
-                                            </MenuItem>
-                                            <MenuItem value={"music"}>
-                                                Music
-                                            </MenuItem>
-                                            <MenuItem value={"metaverse"}>
-                                                Metaverse
-                                            </MenuItem>
+                                            {
+                                                AssetList.map((asset: any) => {
+                                                   return  <MenuItem key={uuid()} value={asset.toLowerCase()}>
+                                                        {asset}
+                                                    </MenuItem>
+                                                })
+                                            }
+                                            
                                         </Select>
                                     </FormControl>
                                 </div>

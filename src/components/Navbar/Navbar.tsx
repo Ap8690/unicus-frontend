@@ -32,22 +32,10 @@ const Navbar = ({ store }) => {
     const [anchorProfile, setAnchorProfile] = useState<null | HTMLElement>(
         null
     );
-
-    const openStats = Boolean(anchorStats);
     const openChains = Boolean(anchorChains);
-    const openProfile = Boolean(anchorProfile);
-
     const accessToken = Cookies.get(ACCESS_TOKEN);
 
-    const handleClickStats = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorStats(event.currentTarget);
-    };
-    const handleCloseStats = () => {
-        setAnchorStats(null);
-    };
-    const handleClickChains = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorChains(event.currentTarget);
-    };
+    
     const handleCloseChains = (chain: any) => {
         setAnchorChains(null);
         if (chain !== "") {
@@ -57,21 +45,16 @@ const Navbar = ({ store }) => {
                 toast.info(`You are on ${capitalize(chain)} network`);
         }
     };
-    const handleClickProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
-        accessToken
-            ? setAnchorProfile(event.currentTarget)
-            : navigate(`../connect-wallet${location.pathname}`, {
-                  replace: true,
-              });
-    };
-    const handleCloseProfile = () => {
-        disConnectWallet();
-        setAnchorProfile(null);
-    };
+
     const handleGlobalSearch = (e: any) => {
         e.preventDefault();
         navigate(`/search/${search}`);
     };
+    const handleAuthenticateClick = () => {
+        if(getUserInfo()) navigate("/create-store")
+        else setShowChains(true)
+                                        
+    }
     useEffect(() => {
         console.log("accessToken ", accessToken);
         function new_bg() {
@@ -159,12 +142,12 @@ const Navbar = ({ store }) => {
                                 </a>
                             ) : (
                                 isMainStore() && (
-                                    <Link
-                                        to={"/create-store"}
+                                    <button
+                                        onClick={handleAuthenticateClick}
                                         className="btn nav-link"
                                     >
                                         Create Store
-                                    </Link>
+                                    </button>
                                 )
                             )}
                             {/* <Link to={"/launchpad"} className="btn nav-link">
@@ -173,16 +156,16 @@ const Navbar = ({ store }) => {
                         </div>
                     ) : (
                         <div className="nav-links">
-                            <NestedMenu />
+                            <NestedMenu chain={chain}/>
                             <Link to={`/explore/${chain}`} className="nav-link">
                                 Explore
                             </Link>
-                           {!getUserInfo() && <button
+                           {/* {!getUserInfo() && <button
                                 className="nav-link"
                                 onClick={handleClickChains}
                             >
                                 Chains
-                            </button>}
+                            </button>} */}
 
                             {getUserInfo() ? 
                             getLocalStorage("walletChain") === "Tron" ? (
@@ -354,14 +337,14 @@ const Navbar = ({ store }) => {
                             {/* <Link to={"/create-nft"} className="nav-link">
                                 Create NFT
                             </Link> */}
-                            {!Cookies.get(ACCESS_TOKEN) ? (
+                            {!getUserInfo() ? (
                                 <button
                                     onClick={
                                         () => setShowChains(!showChains)
                                     }
                                     className="btn nav-link"
                                 >
-                                    Connect Wallet
+                                    Select Chain
                                 </button>
                             ) : (
                                 <Link
@@ -389,9 +372,7 @@ const Navbar = ({ store }) => {
                             ) : (
                                 isMainStore() && (
                                     <button
-                                        onClick={() =>
-                                            navigate("/create-store")
-                                        }
+                                        onClick={handleAuthenticateClick}
                                         className="btn nav-link"
                                     >
                                         Create Store
@@ -399,12 +380,12 @@ const Navbar = ({ store }) => {
                                 )
                             )}
 
-                            <ProfileButton
+                            {getUserInfo() && <ProfileButton
                                 accessToken={accessToken}
                                 store={store}
                                 setShowChains={setShowChains}
                                 showChains={showChains}
-                            />
+                            />}
                         </div>
                     )}
                 </div>

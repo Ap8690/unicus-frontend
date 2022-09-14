@@ -124,7 +124,7 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data.token;
                     message = data.message;
                     walletNetwork="Tron"
-                    setChain(tronChain)
+                    // setChain(tronChain)
                     break;
                 }
                 case "sol": {
@@ -141,7 +141,7 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data?.token;
                     message = data?.message;
                     walletNetwork="Solana"
-                    setChain(solonaChain)
+                    // setChain(solonaChain)
                     setSolana(true)
                     break;
                 }
@@ -151,7 +151,7 @@ export const WalletConnectionProvider = ({ children }) => {
                     address = data.account
                     token = data.token;
                     message = data.message;
-                    setChain(nearChain)
+                    // setChain(nearChain)
                     break;
                 }
             }

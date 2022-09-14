@@ -1,26 +1,17 @@
 import "./viewnft.scss";
 import { Link, useParams } from "react-router-dom";
-import nftImg from "../../assets/images/marketPlaceMain.png";
 import NftImg from "./NftImg";
 import NftInfo from "./NftInfo";
 import { useEffect, useState } from "react";
-import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import { AllNFTsElement } from "../AllNFTs/AllNFTsBody/AllNFTsElements";
 import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
 import uuid from "react-uuid";
 
-const filters = ["Bids", "History", "Properties"];
+const filters = ["Properties","Bids", "History" ];
 
-const topBid = {
-    img: nftImg,
-    name: "Richard Alpert",
-    bid: "2.45",
-};
 const ViewNft = () => {
     const [activeFilter, setActiveFilter] = useState(filters[0]);
-    const [placeBidModal, setPlaceBidModal] = useState(false);
-    const [currentLoaded, setCurrentLoaded] = useState(10);
     const [nft, setNft] = useState<any>();
     const [auction, setAuction] = useState("");
     const [nftImg, setNftImg] = useState("");
@@ -30,7 +21,6 @@ const ViewNft = () => {
     const [nftByCollection, setNftByCollection] = useState<any>();
     const { chain, contractAddress, nftId } = useParams();
     const [bids,setBids] = useState([])
-    const handleClose = () => setPlaceBidModal(false);
 
     async function fetchItem() {
         try {
@@ -60,6 +50,7 @@ const ViewNft = () => {
 
     useEffect(() => {
         fetchItem();
+        
         return () => {
             console.log("This will be logged on unmount");
         };
@@ -98,7 +89,6 @@ const ViewNft = () => {
                     </div>
                     {nft && nft?.collectionName && (
                         <div className="nft bottom-grid">
-                            <h1>More from this collection</h1>
                             <div>
                                 {nftByCollection && nftByCollection.map((item: any) => (
                                     <Link

@@ -14,6 +14,7 @@ import { ChainContext } from "../../../context/ChainContext";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import {Transition} from "../../Animation/Transition/Transition";
+import Alert from '@mui/material/Alert';
 
 const ChainCard = ({ chainName, chainLogo, handleChain }) => {
     return (
@@ -30,6 +31,13 @@ const ChainCard = ({ chainName, chainLogo, handleChain }) => {
         </div>
     );
 };
+const alertBox = {
+    backgroundColor: 'inherit',
+    color: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+}
 
 const ChainModal = ({ open, setOpen, setWalletModal }) => {
     const { chain, setChain } = useContext(ChainContext);
@@ -102,6 +110,7 @@ const ChainModal = ({ open, setOpen, setWalletModal }) => {
                     chainLogo={tronLogo}
                 />
             </div>
+                <Alert sx={alertBox} severity="info">You will be exploring assets on the chain you are selecting right now.</Alert>
         </Dialog>
     );
 };

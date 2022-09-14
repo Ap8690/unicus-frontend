@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ChainContext } from "../../context/ChainContext";
 // Sass
 import "./MarketPlace.scss";
@@ -26,7 +26,9 @@ const MarketPlace = () => {
         artists: "27k",
         auctions: "99k",
     };
-
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    },[])
     return (
         <section className="market-place">
             <Helmet>

@@ -2,7 +2,6 @@ import * as nearAPI from "near-api-js"
 import BN from "bn.js"
 import { nearChain, solonaChain,ethChain, bscChain,tronChain,avalancheChain, polygonChain } from "../config"
 import {ethers} from 'ethers'
-import {getChainId} from "../utils/utils"
 
 
 const { keyStores, connect, transactions, WalletConnection } = nearAPI;
