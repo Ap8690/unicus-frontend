@@ -1,0 +1,40 @@
+.edit-userInfo{
+    @media screen and (max-width: 992px) {
+        flex-direction: column-reverse;
+        .edit-details{
+            width: 100%;
+        }
+    }
+}
+.editPage-info{
+    .capitalizeFirst{
+        display: none;
+    }
+}
+@media screen and (max-width: 768px) {
+    .settings-sidebar{
+        display: none;
+    }
+    .wallet-address-edit-page{
+        font-size: small;
+    }
+    .editPage-info{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .editPage-main-image{
+            min-width: 0;
+        }
+        .capitalizeFirst{
+            display: inline;
+        }
+    }
+    .editPage-main-info-box{
+        flex-direction: column;
+        align-items: center;
+        .editPage-main-info{
+            align-items: center;
+            text-align: center;
+        }
+    }
+}
