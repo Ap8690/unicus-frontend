@@ -745,7 +745,6 @@ const CreateNftSingle = () => {
                     });
             }
         }
-
         if(localStorage.getItem("walletChain") === "Tron") {
             setChain(tronChain)
         }

@@ -98,7 +98,6 @@ const ViewNft = () => {
                     </div>
                     {nft && nft?.collectionName && (
                         <div className="nft bottom-grid">
-                            <h1>More from this collection</h1>
                             <div>
                                 {nftByCollection && nftByCollection.map((item: any) => (
                                     <Link

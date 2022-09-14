@@ -10,11 +10,12 @@ export type ChainContextType = {
 export const ChainContext = createContext<ChainContextType | null>(null)
  
 export const ChainProvider = ({children}) => {
-  const [chain, setChain] = useState('ethereum')
+  const [chain, setChain] = useState('all')
   const [showChains,setShowChains] = useState(false)
   
   useEffect(() => {
-    setChain(getChainName(localStorage.getItem("walletChain")))
+    if(localStorage.getItem("walletChain"))
+      setChain(getChainName(localStorage.getItem("walletChain")))
   },[localStorage.getItem("walletChain")])
 
   useEffect(() => {

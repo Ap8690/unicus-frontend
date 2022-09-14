@@ -39,7 +39,6 @@ const ConnectWallet: React.FC<AuthType> = () => {
         const nearAccountId = urlParams.get("account_id");
         const nearPublicKey = urlParams.get("public_key");
         if (nearAccountId !== null && nearPublicKey !== null) {
-            // toast("Connection successful...");
             let token: string;
             walletLogin(nearAccountId, token, "Near", message).then((res) => {
                 toast.success("Login successful");
@@ -51,12 +50,8 @@ const ConnectWallet: React.FC<AuthType> = () => {
                     domain: cookieDomain,
                     expires: 30,
                 });
-
                 localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-                console.log(":redirect", redirect["*"]);
-
                 navigate(`/${redirect["*"]}`, { replace: true });
-                // window.location.reload();
             });
         }
     }, []);

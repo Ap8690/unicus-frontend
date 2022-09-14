@@ -177,12 +177,12 @@ const Navbar = ({ store }) => {
                             <Link to={`/explore/${chain}`} className="nav-link">
                                 Explore
                             </Link>
-                           {!getUserInfo() && <button
+                           {/* {!getUserInfo() && <button
                                 className="nav-link"
                                 onClick={handleClickChains}
                             >
                                 Chains
-                            </button>}
+                            </button>} */}
 
                             {getUserInfo() ? 
                             getLocalStorage("walletChain") === "Tron" ? (
@@ -354,14 +354,14 @@ const Navbar = ({ store }) => {
                             {/* <Link to={"/create-nft"} className="nav-link">
                                 Create NFT
                             </Link> */}
-                            {!Cookies.get(ACCESS_TOKEN) ? (
+                            {!getUserInfo() ? (
                                 <button
                                     onClick={
                                         () => setShowChains(!showChains)
                                     }
                                     className="btn nav-link"
                                 >
-                                    Connect Wallet
+                                    Select Chain
                                 </button>
                             ) : (
                                 <Link
@@ -399,12 +399,12 @@ const Navbar = ({ store }) => {
                                 )
                             )}
 
-                            <ProfileButton
+                            {getUserInfo() && <ProfileButton
                                 accessToken={accessToken}
                                 store={store}
                                 setShowChains={setShowChains}
                                 showChains={showChains}
-                            />
+                            />}
                         </div>
                     )}
                 </div>
