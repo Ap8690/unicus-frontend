@@ -1627,7 +1627,7 @@ const NftInfo = ({
                     });
             }
         })();
-
+        window.scrollTo(0, 0);
         checkChain();
     }, []);
 
@@ -1789,7 +1789,17 @@ const NftInfo = ({
                 <div className="more-info">
                     <div className="filters">
                         {filters.map((filter: any) => (
-                            <button
+                            (filter !== "Bids") ? <button
+                                key={uuid()}
+                                onClick={() => setActiveFilter(filter)}
+                                className={`filter-btn mr-2 ${
+                                    filter === activeFilter ? "active" : ""
+                                }`}
+                            >
+                                {filter}
+                            </button> : 
+                            
+                            (nft && nft.nftStatus === 3) && <button
                                 key={uuid()}
                                 onClick={() => setActiveFilter(filter)}
                                 className={`filter-btn mr-2 ${
@@ -1800,12 +1810,13 @@ const NftInfo = ({
                             </button>
                         ))}
                     </div>
-                    {activeFilter === "History" && (
-                        <History data={historyData} />
-                    )}
                     {activeFilter === "Properties" && (
                         <Properties tags={nft.tags} />
                     )}
+                    {activeFilter === "History" && (
+                        <History data={historyData} />
+                    )}
+                    
                     {activeFilter === "Bids" && (
                         <Bids bids={bids} nftChain={nft?.chain} />
                     )}
@@ -1906,6 +1917,7 @@ const History = ({ data }) => {
 };
 
 const Properties = ({ tags }) => {
+    console.log("tags: ", tags);
     return (
         <div className="nft-history-box">
             {tags && tags.length > 0 ? (
@@ -1917,9 +1929,9 @@ const Properties = ({ tags }) => {
                         </div>
                     );
                 })
-            ) : (
+            ) : 
                 <div>No properties</div>
-            )}
+            }
         </div>
     );
 };

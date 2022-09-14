@@ -10,13 +10,8 @@ import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
 import uuid from "react-uuid";
 
-const filters = ["Bids", "History", "Properties"];
+const filters = ["Properties","Bids", "History" ];
 
-const topBid = {
-    img: nftImg,
-    name: "Richard Alpert",
-    bid: "2.45",
-};
 const ViewNft = () => {
     const [activeFilter, setActiveFilter] = useState(filters[0]);
     const [placeBidModal, setPlaceBidModal] = useState(false);
@@ -60,6 +55,7 @@ const ViewNft = () => {
 
     useEffect(() => {
         fetchItem();
+        
         return () => {
             console.log("This will be logged on unmount");
         };

@@ -129,14 +129,14 @@ const Explore = () => {
         if (chain !== "" && !searchQuery) {
             navigate(`/explore/${chain}`);
         }
-        document.body.scrollTop = 0;
+        window.scrollTo(0, 0);
     }, []);
 
     useEffect(() => {
         if (chain !== "" && !searchQuery) {
             navigate(`/explore/${chain}`);
         }
-        document.body.scrollTop = 0;
+        window.scrollTo(0, 0);
     }, [chain]);
 
     return (

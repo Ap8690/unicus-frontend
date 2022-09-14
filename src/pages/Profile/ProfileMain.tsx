@@ -153,6 +153,7 @@ const Profile = (): ReactJSXElement => {
         if (!getAccessToken()) {
             navigate("/connect-wallet/profile");
         }
+        window.scrollTo(0, 0);
     }, []);
 
     return (

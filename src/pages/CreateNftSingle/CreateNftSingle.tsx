@@ -775,7 +775,7 @@ const CreateNftSingle = () => {
             ) : (
                 <div className="create-nft-single-page">
                     <div className="head">
-                        <div className="blue-head">Create single item</div>
+                        <div className="blue-head">Tokenize Asset</div>
                         <div className="head-text">
                             Image, Video, Audio, or 3D Model. File types
                             supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV,

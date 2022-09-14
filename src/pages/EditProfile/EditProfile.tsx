@@ -62,6 +62,7 @@ const EditProfile = (props: any) => {
     }
     useEffect(() => {
         getUserProfile()
+        window.scrollTo(0, 0);
     }, [])
 
     return (

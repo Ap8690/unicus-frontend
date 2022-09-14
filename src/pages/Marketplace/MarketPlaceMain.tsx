@@ -23,7 +23,7 @@ const MarketPlaceMain = ({ saleStats, storeTitle, noStats, noBanner = false }) =
           </p>
           <div className="market-place-main-button-holder">
             <button onClick={() => navigate("/explore")} className="btn nav-link">Explore Now</button>
-            <button onClick={handleNavigateCreateNft} className="create">Create</button>
+            <button onClick={handleNavigateCreateNft} className="create">Tokenize Asset</button>
           </div>
           {!noStats &&
             <div className="market-place-main-stats">
