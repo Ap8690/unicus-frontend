@@ -35,35 +35,24 @@ import {
 import { useContext, useEffect, useState } from "react";
 import web3 from "../../web3";
 import { toast } from "react-toastify";
-import {
-    BASE_URL,
-    bscChain,
-    ethChain,
-    nearChain,
-    solonaChain,
-    tronChain,
-} from "../../config";
+import { nearChain, solonaChain, tronChain } from "../../config";
 import axios from "axios";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import { decodeParams, getDecimal } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import Input from "../../components/Input/Input";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import {
     useAnchorWallet,
     useConnection,
     useWallet,
 } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import {
     ASSOCIATED_TOKEN_PROGRAM_ID,
     getAssociatedTokenAddress,
-    createInitializeMintInstruction,
-    MINT_SIZE,
     createAssociatedTokenAccountInstruction,
     TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
@@ -76,7 +65,11 @@ import { getCompleteDate } from "../../utils/date";
 import WalletsModal from "../../components/modals/WalletsModal/WalletsModal";
 import { isChainConnected } from "../../utils/helpers";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
-import { ChainContext } from "../../context/ChainContext";
+import dayjs, { Dayjs } from "dayjs";
+import TextField from "@mui/material/TextField";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import {getRemainingSeconds} from '../../utils/date'
 
 const NftInfo = ({
     filters,
@@ -92,19 +85,14 @@ const NftInfo = ({
     pageChain,
 }) => {
     let userInfo = getUserInfo();
-    const {
-        fullLoading,
-        chainConnected,
-        setChainConnected,
-        setWalletModal,
-        walletModal,
-    } = useContext(ConnectWalletContext);
-    const { setShowChains } = useContext(ChainContext);
+    const { fullLoading, setChainConnected, setWalletModal, walletModal } =
+        useContext(ConnectWalletContext);
     const [startBid, setStartBid] = useState<any>(
         auction ? auction.startBid : 0.0
     );
 
-    const [duration, setDuration] = useState("1");
+    const [duration, setDuration] = useState<any>(0);
+    const [newTime, setNewTime] = useState<Dayjs | null>(dayjs(new Date()));
     const [bid, setBid] = useState("");
     const [type, setType] = useState(0);
     const [popUpShow, setPopUpShow] = useState(false);
@@ -710,7 +698,6 @@ const NftInfo = ({
 
         console.log("cancel auction Success!");
         return auction.mintKey;
-
     };
 
     async function createSell() {
@@ -790,9 +777,6 @@ const NftInfo = ({
                     )
                     .send({ from: address });
                 setNftLoading(true);
-                // setLoadingMessage(
-                //     "Waiting for transaction confirmation.(It can take upto a min to confirm)"
-                // );
                 const success = await setNotification(res);
                 if (success) {
                     obj.auctionId = tronWeb.toDecimal(
@@ -1025,8 +1009,8 @@ const NftInfo = ({
     async function buyItem() {
         try {
             setNftLoading(true);
-            let address: String = localStorage.getItem('walletConnected')
-            let transactionHash:any;
+            let address: String = localStorage.getItem("walletConnected");
+            let transactionHash: any;
             if (nft.chain.toString() === nearChain) {
                 await offerPrice(
                     nft.tokenId,
@@ -1218,11 +1202,7 @@ const NftInfo = ({
             } else if (Number(nft.chain) === Number(solonaChain)) {
                 const aucMintKey = await removeSaleSol(auction.auctionId);
                 if (aucMintKey) {
-                    await endSaleApi(
-                        auction,
-                        aucMintKey,
-                        creator.name
-                    )
+                    await endSaleApi(auction, aucMintKey, creator.name);
                     toast.success("Sale Ended");
                     setNftLoading(false);
                     navigate("/profile/created");
@@ -1349,17 +1329,13 @@ const NftInfo = ({
         try {
             setNftLoading(true);
 
-            let address: String = localStorage.getItem('walletConnected')
+            let address: String = localStorage.getItem("walletConnected");
             if (auction.chain.toString() === nearChain) {
                 removeAuction(nft.tokenId);
             } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await cancelAuctionSol(auction.auctionId);
                 if (aucMintKey) {
-                    await cancelAuctionApi(
-                        auction,
-                        aucMintKey,
-                        creator.name
-                    )
+                    await cancelAuctionApi(auction, aucMintKey, creator.name);
                     toast.success("Auction Cancelled");
                     setNftLoading(false);
                 }
@@ -1479,7 +1455,11 @@ const NftInfo = ({
     const checkChain = () => {
         if (isChainConnected(pageChain)) setChainConnected(pageChain);
     };
-
+    const handleDateChange = (e: Dayjs | null) => {
+        const remainingSeconds:any  = getRemainingSeconds(e['$d'])
+        setNewTime(e['$d']);
+        setDuration(remainingSeconds)
+    };
     useEffect(() => {
         (async () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -1636,6 +1616,10 @@ const NftInfo = ({
             checkChain();
         }
     }, [fullLoading]);
+
+    useEffect(() => {
+        console.log("duration", duration);
+    }, [duration]);
     return (
         <>
             <PlaceBid
@@ -1670,7 +1654,31 @@ const NftInfo = ({
                                                 width: "100%",
                                             }}
                                         >
-                                            <Select
+                                            <LocalizationProvider
+                                                dateAdapter={AdapterDayjs}
+                                            >
+                                                <MobileDatePicker
+                                                    inputFormat="MM/DD/YYYY"
+                                                    value={newTime}
+                                                    onChange={handleDateChange}
+                                                    disablePast={true}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            sx={{
+                                                                input: {
+                                                                    color: "white",
+                                                                },
+                                                                label: {
+                                                                    color: "white",
+                                                                },
+                                                            }}
+                                                        />
+                                                    )}
+                                                    className="date-picker"
+                                                />
+                                            </LocalizationProvider>
+                                            {/* <Select
                                                 labelId="chain-select-label"
                                                 id="chain-select"
                                                 value={duration}
@@ -1709,7 +1717,7 @@ const NftInfo = ({
                                                 <MenuItem value="10">
                                                     10 Days
                                                 </MenuItem>
-                                            </Select>
+                                            </Select> */}
                                         </FormControl>
                                     </div>
                                 </div>
@@ -1788,27 +1796,34 @@ const NftInfo = ({
                 </div>
                 <div className="more-info">
                     <div className="filters">
-                        {filters.map((filter: any) => (
-                            (filter !== "Bids") ? <button
-                                key={uuid()}
-                                onClick={() => setActiveFilter(filter)}
-                                className={`filter-btn mr-2 ${
-                                    filter === activeFilter ? "active" : ""
-                                }`}
-                            >
-                                {filter}
-                            </button> : 
-                            
-                            (nft && nft.nftStatus === 3) && <button
-                                key={uuid()}
-                                onClick={() => setActiveFilter(filter)}
-                                className={`filter-btn mr-2 ${
-                                    filter === activeFilter ? "active" : ""
-                                }`}
-                            >
-                                {filter}
-                            </button>
-                        ))}
+                        {filters.map((filter: any) =>
+                            filter !== "Bids" ? (
+                                <button
+                                    key={uuid()}
+                                    onClick={() => setActiveFilter(filter)}
+                                    className={`filter-btn mr-2 ${
+                                        filter === activeFilter ? "active" : ""
+                                    }`}
+                                >
+                                    {filter}
+                                </button>
+                            ) : (
+                                nft &&
+                                nft.nftStatus === 3 && (
+                                    <button
+                                        key={uuid()}
+                                        onClick={() => setActiveFilter(filter)}
+                                        className={`filter-btn mr-2 ${
+                                            filter === activeFilter
+                                                ? "active"
+                                                : ""
+                                        }`}
+                                    >
+                                        {filter}
+                                    </button>
+                                )
+                            )
+                        )}
                     </div>
                     {activeFilter === "Properties" && (
                         <Properties tags={nft.tags} />
@@ -1816,7 +1831,7 @@ const NftInfo = ({
                     {activeFilter === "History" && (
                         <History data={historyData} />
                     )}
-                    
+
                     {activeFilter === "Bids" && (
                         <Bids bids={bids} nftChain={nft?.chain} />
                     )}
@@ -1844,44 +1859,35 @@ const NftInfo = ({
                         </div>
                     </div>
                     <div className="btn-box">
-                        {chainConnected ? (
-                            userInfo &&
-                            userInfo._id === nft.owner &&
-                            Number(nft.nftStatus) === 1 ? (
-                                <div style={{ width: "100%", display: "flex" }}>
-                                    <button
-                                        className="btn mr-2"
-                                        onClick={() => {
-                                            setType(0);
-                                            setPopUpShow(true);
-                                        }}
-                                    >
-                                        Create Sale
-                                    </button>
-                                    <button
-                                        className="btn"
-                                        onClick={() => {
-                                            setType(1);
-                                            setPopUpShow(true);
-                                        }}
-                                    >
-                                        Start Auction
-                                    </button>
-                                </div>
-                            ) : (
+                        {getUserInfo()._id &&
+                        getUserInfo()._id === nft.owner &&
+                        Number(nft.nftStatus) === 1 ? (
+                            <div style={{ width: "100%", display: "flex" }}>
+                                <button
+                                    className="btn mr-2"
+                                    onClick={() => {
+                                        setType(0);
+                                        setPopUpShow(true);
+                                    }}
+                                >
+                                    Create Sale
+                                </button>
                                 <button
                                     className="btn"
-                                    onClick={() => handleButtonClick()}
+                                    onClick={() => {
+                                        setType(1);
+                                        setPopUpShow(true);
+                                    }}
                                 >
-                                    {getButtonName()}
+                                    Start Auction
                                 </button>
-                            )
+                            </div>
                         ) : (
                             <button
                                 className="btn"
-                                onClick={() => setShowChains(true)}
+                                onClick={() => handleButtonClick()}
                             >
-                                Connect Wallet
+                                {getButtonName()}
                             </button>
                         )}
                     </div>
@@ -1929,9 +1935,9 @@ const Properties = ({ tags }) => {
                         </div>
                     );
                 })
-            ) : 
+            ) : (
                 <div>No properties</div>
-            }
+            )}
         </div>
     );
 };
@@ -1966,6 +1972,3 @@ const Bid = ({ bidInfo, key, nftChain }) => {
 };
 
 export default NftInfo;
-function setLoadingMessage(arg0: string) {
-    throw new Error("Function not implemented.");
-}

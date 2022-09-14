@@ -50,6 +50,11 @@ const Navbar = ({ store }) => {
         e.preventDefault();
         navigate(`/search/${search}`);
     };
+    const handleAuthenticateClick = () => {
+        if(getUserInfo()) navigate("/create-store")
+        else setShowChains(true)
+                                        
+    }
     useEffect(() => {
         console.log("accessToken ", accessToken);
         function new_bg() {
@@ -137,12 +142,12 @@ const Navbar = ({ store }) => {
                                 </a>
                             ) : (
                                 isMainStore() && (
-                                    <Link
-                                        to={"/create-store"}
+                                    <button
+                                        onClick={handleAuthenticateClick}
                                         className="btn nav-link"
                                     >
                                         Create Store
-                                    </Link>
+                                    </button>
                                 )
                             )}
                             {/* <Link to={"/launchpad"} className="btn nav-link">
@@ -367,9 +372,7 @@ const Navbar = ({ store }) => {
                             ) : (
                                 isMainStore() && (
                                     <button
-                                        onClick={() =>
-                                            navigate("/create-store")
-                                        }
+                                        onClick={handleAuthenticateClick}
                                         className="btn nav-link"
                                     >
                                         Create Store

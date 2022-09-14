@@ -1,10 +1,8 @@
 import "./viewnft.scss";
 import { Link, useParams } from "react-router-dom";
-import nftImg from "../../assets/images/marketPlaceMain.png";
 import NftImg from "./NftImg";
 import NftInfo from "./NftInfo";
 import { useEffect, useState } from "react";
-import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import { AllNFTsElement } from "../AllNFTs/AllNFTsBody/AllNFTsElements";
 import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
@@ -14,8 +12,6 @@ const filters = ["Properties","Bids", "History" ];
 
 const ViewNft = () => {
     const [activeFilter, setActiveFilter] = useState(filters[0]);
-    const [placeBidModal, setPlaceBidModal] = useState(false);
-    const [currentLoaded, setCurrentLoaded] = useState(10);
     const [nft, setNft] = useState<any>();
     const [auction, setAuction] = useState("");
     const [nftImg, setNftImg] = useState("");
@@ -25,7 +21,6 @@ const ViewNft = () => {
     const [nftByCollection, setNftByCollection] = useState<any>();
     const { chain, contractAddress, nftId } = useParams();
     const [bids,setBids] = useState([])
-    const handleClose = () => setPlaceBidModal(false);
 
     async function fetchItem() {
         try {
