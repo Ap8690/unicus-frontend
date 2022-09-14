@@ -12,6 +12,7 @@ import "./ChainModal.scss"
 import { useContext } from "react"
 import { ChainContext } from "../../../context/ChainContext"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 const ChainCard = ({ chainName, chainLogo, handleChain }) => {
     return (
@@ -60,7 +61,8 @@ const ChainModal = ({ open, setOpen, setWalletModal}) => {
             }}
         >
             {/* <div className="container"> */}
-            <div className="flex flex-wrap  overflow-hidden m-4">
+            <div className="flex flex-wrap  overflow-hidden m-8">
+                <CloseRoundedIcon className="absolute top-4 right-4 text-white cursor-pointer" onClick={handleClose} />
                 <ChainCard handleChain={handleChain} chainName={"Ethereum"} chainLogo={ethereumLogo} />
                 <ChainCard handleChain={handleChain} chainName={"Binance"} chainLogo={binanceLogo} />
                 <ChainCard handleChain={handleChain} chainName={"Avalanche"} chainLogo={avalancheLogo} />

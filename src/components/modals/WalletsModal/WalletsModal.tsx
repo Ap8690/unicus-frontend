@@ -26,7 +26,8 @@ const WalletsModal = ({ open, setOpen,chainName }): JSX.Element => {
                 },
             }}
         >
-            <div className="place-bid-dialog">
+            <div className="place-bid-dialog !max-h-[none]">
+                <CloseRoundedIcon className="absolute top-4 right-4 text-white cursor-pointer" onClick={handleClose} />
                 {fullLoading ? <Loader/> :<Wallets loginWallet={loginWallet} chainName={getChainName(chainName)}/>}
             </div>
         </Dialog>

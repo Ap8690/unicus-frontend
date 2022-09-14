@@ -119,7 +119,7 @@ export const Wallets = ({ loginWallet, chainName }: WalletProps) => {
     return (
         <div className="connect-wallet-page">
             <div className="connect-wrapper">
-                <div className="using-wallets">
+                <div className="using-wallets m-8">
                     <div className="blue-head">Connect using Wallet</div>
                     <div className="wallet-text">
                         Connect with one of our available wallet providers or
@@ -127,7 +127,7 @@ export const Wallets = ({ loginWallet, chainName }: WalletProps) => {
                     </div>
 
                     <AllWallets scase={chainName} loginWallet={loginWallet} />
-                    <div className="wallets"></div>
+                    {/* <div className="wallets"></div> */}
                 </div>
             </div>
         </div>
