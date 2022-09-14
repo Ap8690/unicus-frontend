@@ -12,15 +12,17 @@ import searchIcon from "../../assets/svgs/searchIcon.svg";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { ChainContext } from "../../context/ChainContext";
 import { ACCESS_TOKEN } from "../../utils/constants";
-import { disConnectWallet, isMainStore, userInfo } from "../../utils/utils";
+import { disConnectWallet, isMainStore, getUserInfo } from "../../utils/utils";
 import { capitalize, getLocalStorage } from "../../utils/helpers";
 import NavMenu from "../menu/NavMenu/NavMenu";
 import { toast } from "react-toastify";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { getLocation } from "../../utils/helpers";
+import NestedMenu from "../NestedMenu/NestedMenu";
 
 const Navbar = ({ store }) => {
     const [search, setSearch] = useState("");
-    const { chain, setChain } = useContext(ChainContext);
+    const { chain, setChain, showChains, setShowChains } = useContext(ChainContext);
     const location = useLocation();
     const navigate = useNavigate();
     const [solidNav, setSolidNav] = useState(false);
@@ -71,7 +73,7 @@ const Navbar = ({ store }) => {
         navigate(`/search/${search}`);
     };
     useEffect(() => {
-        console.log("accessToken ",accessToken)
+        console.log("accessToken ", accessToken);
         function new_bg() {
             if (window.scrollY === 0) return setSolidNav(false);
             if (window.scrollY > 0) return setSolidNav(true);
@@ -102,17 +104,21 @@ const Navbar = ({ store }) => {
                             alt="unicus"
                         />
                     </Link>
-                    <div className="search-bar-box">
-                        <SearchBar
-                            handleGlobalSearch={handleGlobalSearch}
-                            search={search}
-                            setSearch={setSearch}
-                        />
-                    </div>
+                    {getLocation("/explore") && (
+                        <div className="search-bar-box">
+                            <SearchBar
+                                handleGlobalSearch={handleGlobalSearch}
+                                search={search}
+                                setSearch={setSearch}
+                            />
+                        </div>
+                    )}
                     <div className="nav-menu-icons">
                         <ProfileButton
                             accessToken={accessToken}
                             store={store}
+                            setShowChains={setShowChains}
+                            showChains={showChains}
                         />
                         <button
                             className="nav-menu-icon"
@@ -122,90 +128,64 @@ const Navbar = ({ store }) => {
                         </button>
                     </div>
                     {isMainStore() &&
-                    // (location.pathname === "/home" ||
-                    //     location.pathname === "/blog") ? (
-                    //     <div className="nav-links">
-                    //         <Link to={"/about-us"} className="nav-link">
-                    //             About
-                    //         </Link>
-                    //         <Link to={"/for-creator"} className="nav-link">
-                    //             For Creators
-                    //         </Link>
-                    //         <Link to={"/token"} className="nav-link">
-                    //             Token
-                    //         </Link>
-                    //         <Link to={"/blog"} className="nav-link">
-                    //             Blog
-                    //         </Link>
-                    //         {store && Object.keys(store).length !== 0 ? (
-                    //             <a
-                    //                 href={
-                    //                     store.domain && store.domain.length > 0
-                    //                         ? `http://${store.domain[0]}`
-                    //                         : ""
-                    //                 }
-                    //                 target="_blank"
-                    //                 rel="noreferrer"
-                    //             >
-                    //                 <span className="btn nav-link">
-                    //                     Go to My Store
-                    //                 </span>
-                    //             </a>
-                    //         ) : (
-                    //             isMainStore() && (
-                    //                 <Link
-                    //                     to={"/create-store"}
-                    //                     className="btn nav-link"
-                    //                 >
-                    //                     Create Store
-                    //                 </Link>
-                    //             )
-                    //         )}
-                    //         <Link to={"/launchpad"} className="btn nav-link">
-                    //             Launchpad
-                    //         </Link>
-                    //         <Link to={"/marketplace"} className="btn nav-link">
-                    //             Marketplace
-                    //         </Link>
-                    //     </div>
-                    // ) : (
+                    (location.pathname === "/home" ||
+                        location.pathname === "/blog") ? (
                         <div className="nav-links">
+                            <Link to={"/about-us"} className="nav-link">
+                                About
+                            </Link>
+                            <Link to={"/resources"} className="nav-link">
+                                Resources
+                            </Link>
+                            <Link to={"/explore"} className="nav-link">
+                                Explore
+                            </Link>
+                            <Link to={"/marketplace"} className="btn nav-link">
+                                Marketplace
+                            </Link>
+                            {store && Object.keys(store).length !== 0 ? (
+                                <a
+                                    href={
+                                        store.domain && store.domain.length > 0
+                                            ? `http://${store.domain[0]}`
+                                            : ""
+                                    }
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    <span className="btn nav-link">
+                                        Go to My Store
+                                    </span>
+                                </a>
+                            ) : (
+                                isMainStore() && (
+                                    <Link
+                                        to={"/create-store"}
+                                        className="btn nav-link"
+                                    >
+                                        Create Store
+                                    </Link>
+                                )
+                            )}
+                            {/* <Link to={"/launchpad"} className="btn nav-link">
+                                Launchpad
+                            </Link> */}
+                        </div>
+                    ) : (
+                        <div className="nav-links">
+                            <NestedMenu />
                             <Link to={`/explore/${chain}`} className="nav-link">
                                 Explore
                             </Link>
-                            <Menu
-                                anchorEl={anchorStats}
-                                open={openStats}
-                                onClose={handleCloseStats}
-                                MenuListProps={{
-                                    "aria-labelledby": "basic-button",
-                                }}
-                            >
-                                <MenuItem onClick={handleCloseStats}>
-                                    <Link
-                                        to={"/stats/ranking"}
-                                        className="menu-link"
-                                    >
-                                        Ranking
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem onClick={handleCloseStats}>
-                                    <Link
-                                        to={"/stats/activity"}
-                                        className="menu-link"
-                                    >
-                                        Activity
-                                    </Link>
-                                </MenuItem>
-                            </Menu>
-                            <button
+                           {!getUserInfo() && <button
                                 className="nav-link"
                                 onClick={handleClickChains}
                             >
                                 Chains
-                            </button>
+                            </button>}
 
-                            {getLocalStorage("walletChain") === "Tron" ? (
+                            {getUserInfo() ? 
+                            getLocalStorage("walletChain") === "Tron" ? (
                                 <Menu
                                     anchorEl={anchorChains}
                                     open={openChains}
@@ -302,15 +282,95 @@ const Navbar = ({ store }) => {
                                         Avalanche
                                     </MenuItem>
                                 </Menu>
-                            )}
+                            ) : 
+                            <Menu
+                                    anchorEl={anchorChains}
+                                    open={openChains}
+                                    onClose={() => handleCloseChains("")}
+                                    MenuListProps={{
+                                        "aria-labelledby": "basic-button",
+                                    }}
+                                >
+                            <MenuItem
+                                        onClick={() =>
+                                            handleCloseChains("ethereum")
+                                        }
+                                        selected={chain === "ethereum"}
+                                    >
+                                        Ethereum
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={() =>
+                                            handleCloseChains("polygon")
+                                        }
+                                        selected={chain === "polygon"}
+                                    >
+                                        Polygon
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={() =>
+                                            handleCloseChains("binance")
+                                        }
+                                        selected={chain === "binance"}
+                                    >
+                                        Binance
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={() =>
+                                            handleCloseChains("avalanche")
+                                        }
+                                        selected={chain === "avalanche"}
+                                    >
+                                        Avalanche
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={() =>
+                                            handleCloseChains("solana")
+                                        }
+                                        selected={chain === "solana"}
+                                    >
+                                        Solana
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={() =>
+                                            handleCloseChains("near")
+                                        }
+                                        selected={chain === "near"}
+                                    >
+                                        Near
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={() =>
+                                            handleCloseChains("tron")
+                                        }
+                                        selected={chain === "tron"}
+                                    >
+                                        Tron
+                                    </MenuItem>
+                                </Menu>
+                                
+                                }
 
-                            <Link to={"/create-nft"} className="nav-link">
+                            {/* <Link to={"/create-nft"} className="nav-link">
                                 Create NFT
-                            </Link>
-                            <ProfileButton
-                                accessToken={accessToken}
-                                store={store}
-                            />
+                            </Link> */}
+                            {!Cookies.get(ACCESS_TOKEN) ? (
+                                <button
+                                    onClick={
+                                        () => setShowChains(!showChains)
+                                    }
+                                    className="btn nav-link"
+                                >
+                                    Connect Wallet
+                                </button>
+                            ) : (
+                                <Link
+                                    to={"/marketplace"}
+                                    className="btn nav-link"
+                                >
+                                    Marketplace
+                                </Link>
+                            )}
                             {isMainStore() &&
                             store &&
                             Object.keys(store).length !== 0 ? (
@@ -339,36 +399,21 @@ const Navbar = ({ store }) => {
                                 )
                             )}
 
-                            {!Cookies.get(ACCESS_TOKEN) ? (
-                                <button
-                                    onClick={
-                                        () => navigate(`/connect-wallet`)
-                                        // navigate(
-                                        //     `/connect-wallet${location.pathname}`
-                                        // )
-                                    }
-                                    className="btn nav-link"
-                                >
-                                    Connect Wallet
-                                </button>
-                            ) : (
-                                <Link
-                                    to={"/marketplace"}
-                                    className="btn nav-link"
-                                >
-                                    Marketplace
-                                </Link>
-                            )}
+                            <ProfileButton
+                                accessToken={accessToken}
+                                store={store}
+                                setShowChains={setShowChains}
+                                showChains={showChains}
+                            />
                         </div>
-                    // )
-                    }
+                    )}
                 </div>
             </nav>
         </>
     );
 };
 
-const ProfileButton = ({ accessToken, store }) => {
+const ProfileButton = ({ accessToken, store,setShowChains,showChains }) => {
     const [anchorProfile, setAnchorProfile] = useState<null | HTMLElement>(
         null
     );
@@ -377,16 +422,15 @@ const ProfileButton = ({ accessToken, store }) => {
     const navigate = useNavigate();
     const { disconnect } = useWallet();
 
-
-    const handleDisconnect =async () => {
-        disConnectWallet()
-        await disconnect()
-    }
+    const handleDisconnect = async () => {
+        disConnectWallet();
+        await disconnect();
+    };
 
     const handleClickProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
         accessToken
             ? setAnchorProfile(event.currentTarget)
-            : navigate(`/connect-wallet`);
+            : setShowChains(!showChains)
     };
     const handleCloseProfile = () => {
         setAnchorProfile(null);
@@ -422,7 +466,7 @@ const ProfileButton = ({ accessToken, store }) => {
                 </MenuItem>
                 {!isMainStore() &&
                     store.general &&
-                    store.general.user === userInfo._id && (
+                    store.general.user === getUserInfo()._id && (
                         <MenuItem onClick={handleCloseProfile}>
                             <Link to={"/store/settings"} className="menu-link">
                                 My Store
@@ -430,12 +474,11 @@ const ProfileButton = ({ accessToken, store }) => {
                         </MenuItem>
                     )}
                 <MenuItem onClick={() => handleDisconnect()}>
-                    <Link
-                        to={"/connect-wallet/marketplace"}
+                    <p
                         className="menu-link"
                     >
                         Logout
-                    </Link>
+                    </p>
                 </MenuItem>
             </Menu>
         </>

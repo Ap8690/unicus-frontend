@@ -5,7 +5,6 @@ import uuid from "react-uuid";
 import ImageVideo from "../../components/Image-Video/Image-Video"
 
 export const ExploreElement = ({ element }) => {
-    console.log("element: ", element);
     return (
         <Link
             to={{

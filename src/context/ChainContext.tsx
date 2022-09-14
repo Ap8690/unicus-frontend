@@ -3,18 +3,25 @@ import {ChainIdUsingWalletName,getChainName} from "../utils/utils"
 
 export type ChainContextType = {
 	chain: string | null
-	setChain: (value: string) => void;
+	setChain: (value: string) => void
+  showChains?: boolean
+  setShowChains?: (value: boolean) => void
 }
 export const ChainContext = createContext<ChainContextType | null>(null)
-
+ 
 export const ChainProvider = ({children}) => {
   const [chain, setChain] = useState('ethereum')
+  const [showChains,setShowChains] = useState(false)
   
   useEffect(() => {
-    setChain(getChainName(ChainIdUsingWalletName(localStorage.getItem("walletChain"))))
+    setChain(getChainName(localStorage.getItem("walletChain")))
   },[localStorage.getItem("walletChain")])
+
+  useEffect(() => {
+    console.log("CHAIN CURRENT: ",chain);
+  },[chain])
   return(
-      <ChainContext.Provider value={{ chain, setChain }}>
+      <ChainContext.Provider value={{ chain, setChain, showChains, setShowChains }}>
           {children}
       </ChainContext.Provider>
   )

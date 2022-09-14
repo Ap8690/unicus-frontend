@@ -34,7 +34,6 @@ const MarketPlaceFeatured = ({ chain, title }) => {
       setLoading(false)
     })
     .catch((err) => {
-      console.log(err);
       setLoading(false)
     });
   },[chain])

@@ -105,7 +105,9 @@ export let nearWalletConnection: any;
 export let web3 = new Web3(Web3.givenProvider);
 
 //@ts-ignore
-export let tronWeb = window.tronWeb ? window.tronWeb
+export let tronWeb = window.tronWeb
+//@ts-ignore
+    ? window.tronWeb
     : new TronWeb({ fullNode, solidityNode, eventServer, privateKey });
 
 interface requestAccountsResponse {
@@ -312,7 +314,7 @@ export const SwitchNetwork = async (network: any) => {
         });
     } catch (error: any) {
         if (error?.code.toString() === "4902") {
-            console.log(chainParams[network])
+            console.log(chainParams[network]);
             try {
                 const metaMaskProvider: any = await getMetamaskProvider();
                 await metaMaskProvider.request({
@@ -321,15 +323,13 @@ export const SwitchNetwork = async (network: any) => {
                 });
                 await SwitchNetwork(network);
             } catch (addError: any) {
-                throw new Error(addError)
+                throw new Error(addError);
             }
-        }
-        else { 
-            throw new Error(error)
+        } else {
+            throw new Error(error);
         }
     }
 };
-
 
 export const createSignature = async (address: string, message: any) => {
     return await web3.eth.sign(web3.eth.accounts.hashMessage(message), address);
@@ -629,7 +629,8 @@ export const getChainSymbol = (chain: any) => {
 
 // Returns CHAIN ID
 export const getChainId = (chain: any) => {
-    switch (chain.toString()) {
+    console.log("getChainId: ", chain);
+    switch (chain?.toString().toLowerCase()) {
         case "ethereum":
             return ethChain;
         case "binance":
@@ -645,13 +646,13 @@ export const getChainId = (chain: any) => {
         case "solana":
             return solonaChain;
         default:
-            return 0;
+            return null;
     }
 };
 
 // Returns CHAIN Name
 export const getChainName = (chain: any) => {
-    switch (chain?.toString()) {
+    switch (chain?.toString().toLowerCase()) {
         case ethChain:
             return "ethereum";
         case bscChain:
@@ -673,18 +674,23 @@ export const getChainName = (chain: any) => {
 
 // Return Chain Name Using wallet name
 export const ChainIdUsingWalletName = (chainName: any) => {
-    console.log("chainName: ", chainName);
-    switch (chainName) {
-        case "Metamask":
+    switch (chainName.toLowerCase()) {
+        case "ethereum":
             return ethChain;
-        case "Near":
+        case "binance":
+            return bscChain;
+        case "polygon":
+            return polygonChain;
+        case "avalanche":
+            return avalancheChain;
+        case "near":
             return nearChain;
-        case "Tron":
+        case "tron":
             return tronChain;
-        case "Solana":
+        case "solana":
             return solonaChain;
         default:
-            return bscChain;
+            return null;
     }
 };
 export const selectNetwork = (chain: string) => {

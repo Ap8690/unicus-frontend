@@ -1,10 +1,15 @@
-// Images
+import {useContext} from 'react'
 import { useNavigate } from "react-router-dom";
 import marketPlaceImage from "../../assets/images/marketPlaceMain.png";
-import banner from "../../assets/images/marketPlaceMainBanner.png";
+import {getUserInfo} from "../../utils/utils"
+import {ChainContext} from "../../context/ChainContext"
 
 const MarketPlaceMain = ({ saleStats, storeTitle, noStats, noBanner = false }) => {
+  const {setShowChains} = useContext(ChainContext)
   let navigate = useNavigate();
+  const handleNavigateCreateNft = () => {
+    getUserInfo() ? navigate("/create-nft") : setShowChains(true)
+  }
   return (
     <div className="market-place-main">
       <div className="market">
@@ -18,7 +23,7 @@ const MarketPlaceMain = ({ saleStats, storeTitle, noStats, noBanner = false }) =
           </p>
           <div className="market-place-main-button-holder">
             <button onClick={() => navigate("/explore")} className="btn nav-link">Explore Now</button>
-            <button onClick={() => navigate("/create-nft")} className="create">Create</button>
+            <button onClick={handleNavigateCreateNft} className="create">Create</button>
           </div>
           {!noStats &&
             <div className="market-place-main-stats">
@@ -39,9 +44,9 @@ const MarketPlaceMain = ({ saleStats, storeTitle, noStats, noBanner = false }) =
         </div>
         <img src={marketPlaceImage} alt="Market Place Main" />
       </div>
-      {!noBanner && <div className="market-place-banner">
+      {/* {!noBanner && <div className="market-place-banner">
         <img src={banner} alt="Banner" />
-      </div>}
+      </div>} */}
     </div>
   );
 };

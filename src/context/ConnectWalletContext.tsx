@@ -41,23 +41,11 @@ export const WalletConnectionProvider = ({ children }) => {
     const [fullLoading,setFullLoading] = useState(false)
     const [chainConnected,setChainConnected] = useState('')
     const [walletModal,setWalletModal] = useState<boolean>(false)
-    const {chain,setChain} = useContext(ChainContext)
+    const {setShowChains,setChain} = useContext(ChainContext)
     const [solana,setSolana] = useState(false)
-    const [solWallet, setSolWallet] = useState(wallet)
-    const [solPublicKey,setSolPublicKey] = useState(publicKey)
-    const network = WalletAdapterNetwork.Devnet;
-
-    // const setSolAttributes = async() =>{
-    //     const { wallet, connect, select, publicKey } = useWallet();
-    //     setSolWallet(wallet)
-    //     setSolPublicKey(publicKey)
-    // }
 
     useEffect(()=>{
         console.log(solana,"chain")
-        // if(solana === true){
-            // logInSolana()
-        // }
         const name:any = "Phantom"
         select(name)
     },[])
@@ -90,11 +78,6 @@ export const WalletConnectionProvider = ({ children }) => {
         
     }
 
-    // useEffect(()=>{
-
-    // })
-
-    //@ts-ignore
     const loginWallet = async (walletAddress: string) => {
         try {
             setFullLoading(true)
@@ -107,7 +90,6 @@ export const WalletConnectionProvider = ({ children }) => {
                     message = data.message;
                     walletNetwork="Metamask"
                     // convert the chain to selected chain
-                    setChain(ethChain)
                     break;
                 }
                 case "cb": {
@@ -117,7 +99,6 @@ export const WalletConnectionProvider = ({ children }) => {
                     message = data.message;
                     walletNetwork="Metamask"
                     // convert the chain to selected chain
-                    setChain(ethChain)
                     break;
                 }
                 case "wc": {
@@ -126,8 +107,6 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data.token;
                     message = data.message;
                     walletNetwork="Metamask"
-                    // convert the chain to selected chain
-                    setChain(ethChain)
                     break;
                 }
                 case "mew": {
@@ -137,7 +116,6 @@ export const WalletConnectionProvider = ({ children }) => {
                     message = data.message;
                     walletNetwork="Metamask"
                     // convert the chain to selected chain
-                    setChain(ethChain)
                     break;
                 }
                 case "tron": {
@@ -193,7 +171,7 @@ export const WalletConnectionProvider = ({ children }) => {
                 localStorage.setItem("walletConnected",address)
                 let walletChain = null;
                 if(walletAddress === "meta" || walletAddress === "cb" || walletAddress === 'wc' || walletAddress === 'mew') {
-                    walletChain = "Metamask"
+                    walletChain = localStorage.getItem("chainName")
                 }
                 else if(walletAddress === "tron") {
                     walletChain = "Tron"
@@ -204,14 +182,14 @@ export const WalletConnectionProvider = ({ children }) => {
                 else if(walletAddress === "sol") {
                     walletChain = "Solana"
                 }
+                // Wallet name is stored
                 localStorage.setItem("walletChain",walletChain);
+                // Address of wallet
                 setChainConnected(walletAddress)
                 setFullLoading(false)
                 setWalletModal(false)
-                // if(redirect)
-                //     navigate(`/${redirect["*"]}`, { replace: true });
-                if (window.location.pathname.includes('connect-wallet'))
-                    navigate(`/marketplace`)
+                setShowChains(false)
+                
             } else {
                 if (walletAddress !== "near") {
                     toast.error("Wallet connection failed");

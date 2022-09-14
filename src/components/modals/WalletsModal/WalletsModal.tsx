@@ -1,11 +1,13 @@
 import Dialog from "@mui/material/Dialog";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import "../PlaceBid/PlaceBid";
+import "./ChainModal.scss"
 import { Wallets } from "../../../pages/ConnectWallet/ConnectWallet";
 import { useContext } from "react";
 import { ConnectWalletContext } from "../../../context/ConnectWalletContext";
 import {getChainName} from "../../../utils/utils"
 import Loader from "../../Loading/Loader"
+import {Transition} from "../../Animation/Transition/Transition";
 
 const WalletsModal = ({ open, setOpen,chainName }): JSX.Element => {
     const handleClose = () => {
@@ -16,6 +18,7 @@ const WalletsModal = ({ open, setOpen,chainName }): JSX.Element => {
         <Dialog
             onClose={handleClose}
             open={open}
+            TransitionComponent={Transition}
             PaperProps={{
                 sx: {
                     padding: 0,
@@ -26,8 +29,13 @@ const WalletsModal = ({ open, setOpen,chainName }): JSX.Element => {
                 },
             }}
         >
-            <div className="place-bid-dialog !max-h-[none]">
-                <CloseRoundedIcon className="absolute top-4 right-4 text-white cursor-pointer" onClick={handleClose} />
+            <div className="dialog-title">
+                Select Chain
+                <button onClick={handleClose}>
+                    <CloseRoundedIcon />
+                </button>
+            </div>
+            <div className="place-bid-dialog">
                 {fullLoading ? <Loader/> :<Wallets loginWallet={loginWallet} chainName={getChainName(chainName)}/>}
             </div>
         </Dialog>
