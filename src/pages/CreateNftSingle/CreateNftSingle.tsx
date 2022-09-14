@@ -149,9 +149,6 @@ const CreateNftSingle = () => {
         stats: "Stats show up underneath your item, are clickable, and can be filtered in your collection's sidebar.",
     };
 
-    const handleChange = (event: any) => {
-        setChain(event.target.value);
-    };
     const handleCategoryChange = (event: any) => {
         setCategory(event.target.value);
     };
@@ -761,8 +758,6 @@ const CreateNftSingle = () => {
         
     }, []);
 
-    console.log(chain,"chain")
-
     return (
         <>
             {modals.map((e: any, i) => (
@@ -874,122 +869,7 @@ const CreateNftSingle = () => {
                                 />
                             </div>
                             <div className="blockchain">
-                                <div className="field-title">Blockchain</div>
-                                <div className="select-chain">
-                                    <FormControl
-                                        variant="standard"
-                                        sx={{
-                                            m: 0,
-                                            minWidth: 120,
-                                            width: "100%",
-                                        }}
-                                    >
-                                        {localStorage.getItem("walletChain") ===
-                                        "Metamask" ? (
-                                            <Select
-                                                labelId="chain-select-label"
-                                                id="chain-select"
-                                                value={chain}
-                                                onChange={handleChange}
-                                                label="Chain"
-                                                // disabled={true}
-                                            >
-                                                <MenuItem value={ethChain}>
-                                                    Ethereum
-                                                </MenuItem>
-                                                <MenuItem value={polygonChain}>
-                                                    Polygon
-                                                </MenuItem>
-                                                <MenuItem value={bscChain}>
-                                                    Binance
-                                                </MenuItem>
-                                                <MenuItem
-                                                    value={avalancheChain}
-                                                >
-                                                    Avalanche
-                                                </MenuItem>
-                                            </Select>
-                                        ) : localStorage.getItem(
-                                              "walletChain"
-                                          ) === "Tron" ? (
-                                            <Select
-                                                labelId="chain-select-label"
-                                                id="chain-select"
-                                                value={chain}
-                                                onChange={handleChange}
-                                                label="Chain"
-                                                // disabled={true}
-                                            >
-                                                <MenuItem value={tronChain}>
-                                                    Tron
-                                                </MenuItem>
-                                            </Select>
-                                        ) : localStorage.getItem(
-                                              "walletChain"
-                                          ) === "Near" ? (
-                                            <Select
-                                                labelId="chain-select-label"
-                                                id="chain-select"
-                                                value={chain}
-                                                onChange={handleChange}
-                                                label="Chain"
-                                                // disabled={true}
-                                            >
-                                                <MenuItem value={nearChain}>
-                                                    Near
-                                                </MenuItem>
-                                            </Select>
-                                        ) : localStorage.getItem(
-                                              "walletChain"
-                                          ) === "Solana" ? (
-                                            <Select
-                                                labelId="chain-select-label"
-                                                id="chain-select"
-                                                value={chain}
-                                                onChange={handleChange}
-                                                label="Chain"
-                                                // disabled={true}
-                                            >
-                                                <MenuItem value={solonaChain}>
-                                                    Solana
-                                                </MenuItem>
-                                            </Select>
-                                        ) : (
-                                            <Select
-                                                labelId="chain-select-label"
-                                                id="chain-select"
-                                                value={chain}
-                                                onChange={handleChange}
-                                                label="Chain"
-                                                // disabled={true}
-                                            >
-                                                <MenuItem value={ethChain}>
-                                                    Ethereum
-                                                </MenuItem>
-                                                <MenuItem value={polygonChain}>
-                                                    Polygon
-                                                </MenuItem>
-                                                <MenuItem value={bscChain}>
-                                                    Binance
-                                                </MenuItem>
-                                                <MenuItem
-                                                    value={avalancheChain}
-                                                >
-                                                    Avalanche
-                                                </MenuItem>
-                                                <MenuItem value={tronChain}>
-                                                    Tron
-                                                </MenuItem>
-                                                <MenuItem value={nearChain}>
-                                                    Near
-                                                </MenuItem>
-                                                <MenuItem value={solonaChain}>
-                                                    Solana
-                                                </MenuItem>
-                                            </Select>
-                                        )}
-                                    </FormControl>
-                                </div>
+                                
                                 {chain === ethChain && (
                                     <>
                                         <div className="field-title">

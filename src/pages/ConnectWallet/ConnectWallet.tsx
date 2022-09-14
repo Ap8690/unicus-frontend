@@ -21,21 +21,18 @@ import PageLoader from "../../components/Loading/PageLoader";
 import ChainModal from "../../components/modals/WalletsModal/ChainModal";
 import WalletsModal from "../../components/modals/WalletsModal/WalletsModal";
 import { ChainContext } from "../../context/ChainContext";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 type AuthType = Readonly<{
     wallet?: WalletConnection;
 }>;
 
 const ConnectWallet: React.FC<AuthType> = () => {
-    const { chain, setChain } = useContext(ChainContext);
+    const { chain } = useContext(ChainContext);
     const navigate = useNavigate();
     let redirect = useParams();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [walletModal, setWalletModal] = useState(false);
-    const { wallet } = useWallet();
-    const { loginWallet, fullLoading } = useContext(ConnectWalletContext);
+    const { fullLoading } = useContext(ConnectWalletContext);
     useEffect(() => {
         const message = "";
         const urlParams = new URLSearchParams(window.location.search);
@@ -70,7 +67,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
                 <PageLoader info={""} />
             ) : (
                 <div className="connect-wrapper h-[90vh] flex justify-center items-center flex-col">
-                    <div className="using-email">
+                    {/* <div className="using-email">
                         <div className="blue-head">Connect using Email</div>
                         <button
                             className="large-btn-outline"
@@ -78,8 +75,8 @@ const ConnectWallet: React.FC<AuthType> = () => {
                         >
                             Login
                         </button>
-                    </div>
-                    <div className="using-wallets mt-10">
+                    </div> */}
+                    <div className="using-wallets my-4">
                         <div className="blue-head">Connect using Wallet</div>
                         <div className="wallet-text mb-[20px]">
                             Connect with one of our available wallet providers
@@ -127,7 +124,7 @@ export const Wallets = ({ loginWallet, chainName }: WalletProps) => {
                     </div>
 
                     <AllWallets scase={chainName} loginWallet={loginWallet} />
-                    <div className="wallets"></div>
+                    {/* <div className="wallets"></div> */}
                 </div>
             </div>
         </div>

@@ -35,7 +35,7 @@ const Explore = () => {
     const [metadata, setmetadata] = useState<any>([]);
     const query = useQuery();
     const searchQuery = query.get("search");
-    const { chain, setChain } = useContext(ChainContext);
+    const { chain } = useContext(ChainContext);
     const filters = [
         "all",
         "funny",
@@ -47,9 +47,7 @@ const Explore = () => {
         "music",
         "metaverse",
     ];
-
     const { chainNetwork } = useParams();
-
     // States
     const [currentFilter, setCurrentFilter] = useState(searchQuery || "all");
     const [displayElements, setDisplayItems] = useState([]);
@@ -67,7 +65,6 @@ const Explore = () => {
             getMarketplaceNfts(skip, getChainId(chain), sortBy, currentFilter)
                 .then((res: any) => {
                     setDisplayItems(res.data.data);
-                    console.log(res.data.data);
                     setLoading(false);
                     query.delete("search");
                     document.body.scrollTop = 0;
@@ -150,7 +147,7 @@ const Explore = () => {
                 <link rel="canonical" href={window.location.href} />
             </Helmet>
             <BlueBackground />
-            <h1 className="explore-heading">Explore Collections</h1>
+            <h1 className="explore-heading">Explore Assets</h1>
             <ExploreFilters
                 filters={filters}
                 setCurrentFilter={setCurrentFilter}
