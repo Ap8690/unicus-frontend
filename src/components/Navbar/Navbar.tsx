@@ -122,7 +122,7 @@ const Navbar = ({ store }) => {
                             <MenuRoundedIcon />
                         </button>
                     </div>
-                    {!isMainStore() &&
+                    {isMainStore() &&
                     (location.pathname === "/home" ||
                         location.pathname === "/blog") ? (
                         <div className="nav-links">
