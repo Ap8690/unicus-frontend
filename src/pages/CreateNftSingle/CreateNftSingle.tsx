@@ -118,7 +118,7 @@ const CreateNftSingle = () => {
         "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
     );
     const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
-        "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
+        "8GZNDXBNypG9D98YfAZRe2pyQG4P5Pi6d3AM5yJ3CnTF"
     );
     //sol Nft mint
     const [properties, setProperties] = useState([
@@ -248,7 +248,7 @@ const CreateNftSingle = () => {
 
     const mintSolana = async (title: any, description: any, fileUrl: any) => {
         if (!anWallet) {
-            return toast.error("Solana wallet not detected!");
+            throw new Error("Solana wallet not detected!");
         }
         const provider = new anchor.AnchorProvider(connection, anWallet, {
             commitment: "processed",
@@ -503,7 +503,7 @@ const CreateNftSingle = () => {
                     );
                     console.log(mintKey,"mintKey")
                     nftObj.tokenId = mintKey;
-                    nftObj.contractAddress = "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
+                    nftObj.contractAddress = SOL_MINT_NFT_PROGRAM_ID.toBase58()
                     await createNft(nftObj);
                     navigate("/profile/created");
                 } else if (chain === tronChain) {
