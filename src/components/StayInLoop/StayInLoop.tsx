@@ -15,7 +15,7 @@ const StayInLoop = () => {
         </span>
         <form className="inputs">
           <InputBordered placeholder={"Email"} />
-          <button className="btn">Subscribe</button>
+          <button className="btn w-[40px]">Subscribe</button>
         </form>
       </div>
       <img src={messageImg} alt="stay in touch" />

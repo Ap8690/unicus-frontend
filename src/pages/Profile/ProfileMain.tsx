@@ -151,7 +151,7 @@ const Profile = (): ReactJSXElement => {
         getNfts();
         getUserProfile();
         if (!getAccessToken()) {
-            navigate("/connect-wallet/profile");
+            navigate("/explore");
         }
         window.scrollTo(0, 0);
     }, []);
