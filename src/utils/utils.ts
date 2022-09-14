@@ -93,6 +93,7 @@ export const getUserInfo = () => {
     const userInfo: any = Cookies.get("userInfo")
         ? JSON.parse(Cookies.get("userInfo"))
         : "";
+        console.log("userInfo: ", userInfo);
     return userInfo;
 };
 
@@ -571,16 +572,19 @@ export const connToSol = async (
     }
 };
 export const disConnectWallet = async () => {
-    localStorage.clear();
 
     Cookies.remove(ACCESS_TOKEN, { domain: cookieDomain, expires: 30 });
     Cookies.remove("userInfo", { domain: cookieDomain, expires: 30 });
     // walletConnectorProvider.disconnect();
     walletLink.disconnect();
-    const { config, walletConnection, keyStore, networkId } = await initContract();
+    if(localStorage.getItem("chainName") === 'near') {
+        const { walletConnection } = await initContract();
     if (walletConnection.isSignedIn()) {
         walletConnection.signOut();
     }
+    }
+    localStorage.clear();
+
 };
 
 export const getUserWallet = async (network: any) => {
