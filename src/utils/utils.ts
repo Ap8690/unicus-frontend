@@ -575,10 +575,9 @@ export const disConnectWallet = async () => {
 
     Cookies.remove(ACCESS_TOKEN, { domain: cookieDomain, expires: 30 });
     Cookies.remove("userInfo", { domain: cookieDomain, expires: 30 });
-    walletConnectorProvider.disconnect();
+    // walletConnectorProvider.disconnect();
     walletLink.disconnect();
-    const { config, walletConnection, keyStore, networkId } =
-        await initContract();
+    const { config, walletConnection, keyStore, networkId } = await initContract();
     if (walletConnection.isSignedIn()) {
         walletConnection.signOut();
     }
