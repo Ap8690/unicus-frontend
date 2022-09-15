@@ -11,6 +11,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config";
+import {AssetList} from "../../utils/AssetList";
+import {getChainId} from "../../utils/utils";
 
 const StoreHomepage = () => {
     const [recentCreated, setRecentCreated] = useState([]);
@@ -25,21 +27,6 @@ const StoreHomepage = () => {
         auctions: "99k",
     };
     const {chain} = useContext(ChainContext)
-    const categories = [
-        "All",
-        "Funny",
-        "Art",
-        "Nature",
-        "Animal",
-        "Sports",
-        "Photography",
-        "Music",
-        "Metaverse",
-    ];
-
-    useEffect(() => {
-        init();
-    }, []);
 
     const init = async () => {
         await axios
@@ -53,7 +40,7 @@ const StoreHomepage = () => {
             });
         await axios
             .get(
-                `${BASE_URL}/auction/getAllExplore/0/0/${encodeURIComponent(
+                `${BASE_URL}/auction/getAllExplore/0/${getChainId(chain)}/${encodeURIComponent(
                     JSON.stringify([["createdAt", -1]])
                 )}`
             )
@@ -66,7 +53,7 @@ const StoreHomepage = () => {
                 setLoadingAvailableSale(false)
             });
         await axios
-            .get(`${BASE_URL}/auction/getRecentPurchased/0`)
+            .get(`${BASE_URL}/auction/getRecentPurchased/${getChainId(chain)}`)
             .then((res: any) => {
                 setRecentPurchased(res.data.data);
                 setLoadingPurchased(false)
@@ -77,6 +64,9 @@ const StoreHomepage = () => {
             });
     };
 
+    useEffect(() => {
+        init();
+    }, []);
     return (
         <section className="market-place">
             <BlueBackground />
@@ -89,7 +79,7 @@ const StoreHomepage = () => {
             <StoreSwiper list={recentCreated} title={"Recently created"} loading={loadingRecent} />
             <StoreSwiper list={recentPurchased} title={"Recently purchased"} loading={loadingPurchased} />
             <StoreSwiper list={availableSale} title={"Availbale for sale"} loading={loadingAvailableSale} />
-            <MarketPlaceDiscover chain={chain} categories={categories} />
+            {/* <MarketPlaceDiscover chain={chain} categories={categories} /> */}
             <StayInLoop />
         </section>
     );

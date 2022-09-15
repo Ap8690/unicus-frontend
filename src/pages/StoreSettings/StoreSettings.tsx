@@ -6,12 +6,18 @@ import GeneralSettings from "./GeneralSettings/GeneralSettings"
 import AdvancedSettings from "./AdvancedSettings/AdvancedSettings"
 import AppearanceSettings from "./AppearanceSettings/AppearanceSettings"
 import Support from "./Support/Support"
+import {getAccessToken} from "../../services/api/supplier"
+import {Navigate} from 'react-router-dom'
 
 
 const StoreSettings = () => {
     const [currentSetting, setCurrentSetting] = useState("general")
     const handleSettingChange = (newSetting: any) => {
         setCurrentSetting(newSetting)
+    }
+
+    if(!getAccessToken()) {
+      return <Navigate to='/explore' />
     }
     return (
       <div className="store-settings-page">
