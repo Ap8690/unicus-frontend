@@ -160,6 +160,9 @@ const Navbar = ({ store }) => {
                             <Link to={`/explore/${chain}`} className="nav-link">
                                 Explore
                             </Link>
+                            <Link to={`/create-nft`} className="nav-link">
+                                Tokenize Asset
+                            </Link>
                            {/* {!getUserInfo() && <button
                                 className="nav-link"
                                 onClick={handleClickChains}
@@ -404,8 +407,13 @@ const ProfileButton = ({ accessToken, store,setShowChains,showChains }) => {
     const { disconnect } = useWallet();
 
     const handleDisconnect = async () => {
-        await disConnectWallet();
+        try {
+            await disConnectWallet();
         await disconnect();
+        }
+        catch(err) {
+            console.log(err)
+        }
     };
 
     const handleClickProfile = (event: React.MouseEvent<HTMLButtonElement>) => {

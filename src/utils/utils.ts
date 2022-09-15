@@ -93,7 +93,7 @@ export const getUserInfo = () => {
     const userInfo: any = Cookies.get("userInfo")
         ? JSON.parse(Cookies.get("userInfo"))
         : "";
-        console.log("userInfo: ", userInfo);
+    console.log("userInfo: ", userInfo);
     return userInfo;
 };
 
@@ -464,7 +464,6 @@ export const connToTron = async () => {
 //     }
 // };
 
-
 export async function createNearSignature(
     keyStore: any,
     networkId: any,
@@ -499,7 +498,7 @@ export const connectNear = async () => {
         await sendMeta(walletConnection, config);
     }
     nearWalletConnection = walletConnection;
-    console.log(walletConnection.isSignedIn(),"is")
+    console.log(walletConnection.isSignedIn(), "is");
     localStorage.setItem("walletChain", "Near");
     accountId = walletConnection.account().accountId;
     const data = await createNearSignature(keyStore, networkId, accountId);
@@ -621,19 +620,17 @@ export const connToSol = async (
     }
 };
 export const disConnectWallet = async () => {
-
     Cookies.remove(ACCESS_TOKEN, { domain: cookieDomain, expires: 30 });
     Cookies.remove("userInfo", { domain: cookieDomain, expires: 30 });
     // walletConnectorProvider.disconnect();
     walletLink.disconnect();
-    if(localStorage.getItem("chainName") === 'near') {
+    if (localStorage.getItem("chainName") === "near") {
         const { walletConnection } = await initContract();
-    if (walletConnection.isSignedIn()) {
-        walletConnection.signOut();
-    }
+        if (walletConnection.isSignedIn()) {
+            walletConnection.signOut();
+        }
     }
     localStorage.clear();
-
 };
 
 export const getUserWallet = async (network: any) => {
