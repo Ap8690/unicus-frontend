@@ -188,7 +188,7 @@ export const WalletConnectionProvider = ({ children }) => {
                 setFullLoading(false)
                 setWalletModal(false)
                 setShowChains(false)
-                
+                navigate('/explore')
             } else {
                 if (walletAddress !== "near") {
                     toast.error("Wallet connection failed");

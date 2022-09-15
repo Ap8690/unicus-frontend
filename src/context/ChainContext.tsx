@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import {ChainIdUsingWalletName,getChainName} from "../utils/utils"
+import {getChainName} from "../utils/utils"
 
 export type ChainContextType = {
 	chain: string | null

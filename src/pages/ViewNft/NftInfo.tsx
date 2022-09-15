@@ -23,6 +23,7 @@ import {
     removeSale,
     sendStorageDeposit,
     tronWeb,
+    getChainName
 } from "../../utils/utils";
 import {
     buyItemApi,
@@ -39,7 +40,7 @@ import { nearChain, solonaChain, tronChain } from "../../config";
 import axios from "axios";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import { decodeParams, getDecimal } from "../../utils/helpers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import Input from "../../components/Input/Input";
 import FormControl from "@mui/material/FormControl";
@@ -69,7 +70,8 @@ import dayjs, { Dayjs } from "dayjs";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import {getRemainingSeconds} from '../../utils/date'
+import { getRemainingSeconds } from "../../utils/date";
+import { ChainContext } from "../../context/ChainContext";
 
 const NftInfo = ({
     filters,
@@ -85,6 +87,8 @@ const NftInfo = ({
     pageChain,
 }) => {
     let userInfo = getUserInfo();
+    const {chain} = useParams()
+    const {setChain} = useContext(ChainContext)
     const { fullLoading, setChainConnected, setWalletModal, walletModal } =
         useContext(ConnectWalletContext);
     const [startBid, setStartBid] = useState<any>(
@@ -502,30 +506,29 @@ const NftInfo = ({
         // }
 
         // try {
-            const tx = program.transaction.bid(new anchor.BN(price), {
-                accounts: {
-                    auction: auctionAccount,
-                    mintKey: mintKey,
-                    creator: auction.creator,
-                    bidder: anWallet.publicKey,
-                    refundReceiver: auction.refundReceiver,
-                    systemProgram: anchor.web3.SystemProgram.programId,
-                    tokenProgram: TOKEN_PROGRAM_ID,
-                    associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-                },
-            });
+        const tx = program.transaction.bid(new anchor.BN(price), {
+            accounts: {
+                auction: auctionAccount,
+                mintKey: mintKey,
+                creator: auction.creator,
+                bidder: anWallet.publicKey,
+                refundReceiver: auction.refundReceiver,
+                systemProgram: anchor.web3.SystemProgram.programId,
+                tokenProgram: TOKEN_PROGRAM_ID,
+                associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+            },
+        });
 
-            const signature = await sendTransaction(tx, connection);
-            const latestBlockhash = await connection.getLatestBlockhash();
+        const signature = await sendTransaction(tx, connection);
+        const latestBlockhash = await connection.getLatestBlockhash();
 
-            await connection.confirmTransaction({
-                blockhash: latestBlockhash.blockhash,
-                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-                signature: signature,
-            });
+        await connection.confirmTransaction({
+            blockhash: latestBlockhash.blockhash,
+            lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+            signature: signature,
+        });
 
-
-            return auction.mintKey;
+        return auction.mintKey;
         // } catch (err) {
         //     console.log(err);
         //     return false;
@@ -566,7 +569,7 @@ const NftInfo = ({
             auction.refundReceiver
         );
 
-           try {
+        try {
             let tx = new anchor.web3.Transaction().add(
                 createAssociatedTokenAccountInstruction(
                     provider.wallet.publicKey,
@@ -584,37 +587,36 @@ const NftInfo = ({
                 lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
                 signature: signature,
             });
-           } catch (error) {
-             console.log(error)
-           }
-        
-             const tx = program.transaction.auctionResolve({
-                accounts: {
-                    auction: auctionAccount,
-                    auctionTokenAccount: auctionTokenAccount,
-                    mintKey: mintKey,
-                    creator: auction.creator,
-                    refundReceiver: auction.refundReceiver,
-                    refundReceiverTokenAccount: refundReceiverTokenAccount,
-                    systemProgram: anchor.web3.SystemProgram.programId,
-                    tokenProgram: TOKEN_PROGRAM_ID,
-                    associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-                },
-            });
+        } catch (error) {
+            console.log(error);
+        }
 
-              const signature = await sendTransaction(tx, connection);
-              const latestBlockhash = await connection.getLatestBlockhash();
+        const tx = program.transaction.auctionResolve({
+            accounts: {
+                auction: auctionAccount,
+                auctionTokenAccount: auctionTokenAccount,
+                mintKey: mintKey,
+                creator: auction.creator,
+                refundReceiver: auction.refundReceiver,
+                refundReceiverTokenAccount: refundReceiverTokenAccount,
+                systemProgram: anchor.web3.SystemProgram.programId,
+                tokenProgram: TOKEN_PROGRAM_ID,
+                associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+            },
+        });
 
-            await connection.confirmTransaction({
-                blockhash: latestBlockhash.blockhash,
-                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-                signature: signature,
-            });
+        const signature = await sendTransaction(tx, connection);
+        const latestBlockhash = await connection.getLatestBlockhash();
 
-            console.log("Create Auction Success!", auction);
+        await connection.confirmTransaction({
+            blockhash: latestBlockhash.blockhash,
+            lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+            signature: signature,
+        });
 
-            return auction.mintKey;
-       
+        console.log("Create Auction Success!", auction);
+
+        return auction.mintKey;
     };
 
     const cancelAuctionSol = async (key: any) => {
@@ -896,7 +898,6 @@ const NftInfo = ({
 
                 return;
             } else if (nft.chain.toString() === solonaChain) {
-           
                 const aucMintKey = await createAuctionSol(
                     nft.tokenId,
                     startBid,
@@ -904,7 +905,9 @@ const NftInfo = ({
                     Math.ceil(
                         new Date().setSeconds(
                             new Date().getSeconds() //+ obj.duration
-                        ) / 1000 + 600
+                        ) /
+                            1000 +
+                            600
                     )
                 );
                 obj.auctionId = aucMintKey;
@@ -1084,11 +1087,13 @@ const NftInfo = ({
             //     setVisible
             // );
             let address: String = localStorage.getItem("walletConnected");
-            
+
             if (
-                auction.lastBid? (auction.lastBid / getDecimal(nft.chain.toString()) >=
-                Number(bid)):  (auction.startBid / getDecimal(nft.chain.toString()) >=
-                Number(bid))
+                auction.lastBid
+                    ? auction.lastBid / getDecimal(nft.chain.toString()) >=
+                      Number(bid)
+                    : auction.startBid / getDecimal(nft.chain.toString()) >=
+                      Number(bid)
             ) {
                 setNftLoading(false);
                 toast.error(
@@ -1103,7 +1108,7 @@ const NftInfo = ({
                 return;
             } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await bidAuctionSol(auction.auctionId, bid);
-                if(aucMintKey){
+                if (aucMintKey) {
                     await placeBidApi(
                         auction,
                         aucMintKey,
@@ -1446,9 +1451,9 @@ const NftInfo = ({
         if (isChainConnected(pageChain)) setChainConnected(pageChain);
     };
     const handleDateChange = (e: Dayjs | null) => {
-        const remainingSeconds:any  = getRemainingSeconds(e['$d'])
-        setNewTime(e['$d']);
-        setDuration(remainingSeconds)
+        const remainingSeconds: any = getRemainingSeconds(e["$d"]);
+        setNewTime(e["$d"]);
+        setDuration(remainingSeconds);
     };
     useEffect(() => {
         (async () => {
@@ -1840,35 +1845,48 @@ const NftInfo = ({
                         </div>
                     </div>
                     <div className="btn-box">
-                        {getUserInfo()._id &&
-                        getUserInfo()._id === nft.owner &&
-                        Number(nft.nftStatus) === 1 ? (
-                            <div style={{ width: "100%", display: "flex" }}>
-                                <button
-                                    className="btn mr-2"
-                                    onClick={() => {
-                                        setType(0);
-                                        setPopUpShow(true);
-                                    }}
-                                >
-                                    Create Sale
-                                </button>
+                        {getUserInfo() ? (
+                            getUserInfo()._id &&
+                            getUserInfo()._id === nft.owner &&
+                            Number(nft.nftStatus) === 1 ? (
+                                <div style={{ width: "100%", display: "flex" }}>
+                                    <button
+                                        className="btn mr-2"
+                                        onClick={() => {
+                                            setType(0);
+                                            setPopUpShow(true);
+                                        }}
+                                    >
+                                        Create Sale
+                                    </button>
+                                    <button
+                                        className="btn"
+                                        onClick={() => {
+                                            setType(1);
+                                            setPopUpShow(true);
+                                        }}
+                                    >
+                                        Start Auction
+                                    </button>
+                                </div>
+                            ) : (
                                 <button
                                     className="btn"
-                                    onClick={() => {
-                                        setType(1);
-                                        setPopUpShow(true);
-                                    }}
+                                    onClick={() => handleButtonClick()}
                                 >
-                                    Start Auction
+                                    {getButtonName()}
                                 </button>
-                            </div>
+                            )
                         ) : (
                             <button
                                 className="btn"
-                                onClick={() => handleButtonClick()}
+                                onClick={() => {
+                                    localStorage.setItem('CHAIN',chain) 
+                                    setChain(getChainName(chain))   
+                                    setWalletModal(true)
+                                }}
                             >
-                                {getButtonName()}
+                                Connect Wallet
                             </button>
                         )}
                     </div>

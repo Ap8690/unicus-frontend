@@ -668,6 +668,7 @@ export const getChainSymbol = (chain: any) => {
 
 // Returns CHAIN ID
 export const getChainId = (chain: any) => {
+    console.log("UTILS getChainId: ", getChainId,chain);
     switch (chain?.toString().toLowerCase()) {
         case "ethereum":
             return ethChain;
@@ -1015,8 +1016,8 @@ export const getStoreName = () => {
 };
 
 export const isMainStore = () => {
-    console.log("UNICUS_STORE: ", UNICUS_STORE);
-    console.log("window.location.host: ", window.location.host);
+    // console.log("UNICUS_STORE: ", UNICUS_STORE);
+    // console.log("window.location.host: ", window.location.host);
     return (window.location.host === UNICUS_STORE);
 };
 export interface WalletsPopupProps {
