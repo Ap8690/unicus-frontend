@@ -577,7 +577,8 @@ export const connToSol = async (
     //     throw new Error("Please install Phantom Wallet");
     // }
     if("solana" in window) {
-        console.log(window?.solana)
+        const w= window as any;
+        console.log(w?.solana)
     }
     const provider: any = await getProvider(wallet);
     console.log("provider: ", provider);
