@@ -19,11 +19,13 @@ import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
 import FullBlurLoading from "../../components/Loading/FullBlurLoading"
 
+const chains =['Ethereum', 'Binance', 'Polygon', 'Avalanche', 'Tron', 'Near', 'Solana']
+
 const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
     //@ts-ignore
     const [generals, setGeneral] = useState<IGeneral>({})
     const [country, setCountry] = useState({country: "US"})
-
+    const [chainName, setChainName] = useState('Ethereum')
     const [open, setOpen] = useState(false)
     const options = useMemo(() => countryList().getData(), [])
     const inputFile = useRef(null)
@@ -49,13 +51,6 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
             logoUrl: "",
         })
     }, [userInfo])
-
-    // useEffect(() => {
-    //   if (Object.keys(store).length !== 0) {
-    //     history("/",{replace:true})
-    //     return
-    //   }
-    // }, [store])
 
     const getImageUrl = async (e: any) => {
         //uploading to cloudinary
@@ -146,6 +141,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
         }
         setLoading(false)
     }
+
     useEffect(() => {
         if (!getAccessToken()) {
             history("/connect-wallet/create-store")
@@ -225,6 +221,26 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
                         />
                     </div>
                     <div className="form-input">
+                        <label htmlFor="country">Select Chain</label>
+                        <FormControl
+                            variant="standard"
+                            sx={{ m: 0, minWidth: 120, width: "100%" }}
+                        >
+                            <Select
+                                labelId="chain-select-label"
+                                id="chain-select"
+                                value={chainName}
+                                onChange={(e) => setChainName(e.target.value)}
+                            >
+                                {chains.map((curr:any) => (
+                                    <MenuItem key={uuid()} value={curr}>
+                                        {curr}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </div>
+                    <div className="form-input">
                         <label htmlFor="country">Country</label>
                         <FormControl
                             variant="standard"
@@ -243,9 +259,8 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
                                 ))}
                             </Select>
                         </FormControl>
-
                     </div>
-                    <button className="btn" type="submit">
+                    <button className="btn mt-4" type="submit">
                         Create Store
                     </button>
                 </form>

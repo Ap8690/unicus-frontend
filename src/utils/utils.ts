@@ -573,10 +573,14 @@ export const connToSol = async (
     // const { solana } = window;
 
     // @ts-ignore
-    if (!window?.solana || !window?.solana.isPhantom) {
-        throw new Error("Please install Phantom Wallet");
+    // if (!window?.solana) {
+    //     throw new Error("Please install Phantom Wallet");
+    // }
+    if("solana" in window) {
+        console.log(window?.solana)
     }
     const provider: any = await getProvider(wallet);
+    console.log("provider: ", provider);
 
     if (provider?.publicKey) {
         const sm = await sign_solana_message();
