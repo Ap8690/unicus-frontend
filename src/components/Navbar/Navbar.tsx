@@ -76,6 +76,8 @@ const Navbar = ({ store }) => {
                 search={search}
                 setSearch={setSearch}
                 store={store}
+                setShowChains={setShowChains}
+                showChains={showChains}
             />
             <nav className={solidNav ? "solid-nav" : ""}>
                 <div className={`navbar`}>

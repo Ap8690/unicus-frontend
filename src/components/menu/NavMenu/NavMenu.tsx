@@ -5,40 +5,53 @@ import "./navmenu.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "../../../utils/constants";
+import { getUserInfo } from "../../../utils/utils";
 import { Link } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const toggleDrawer = () => {
-    setOpen(false);
-  };
+const NavMenu = ({
+    open,
+    setOpen,
+    search,
+    setSearch,
+    store,
+    setShowChains,
+    showChains,
+}) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const toggleDrawer = () => {
+        setOpen(false);
+    };
 
-  const handleChain = (e: any) => {
-    const { name } = e.target;
-    navigate(`/explore/${name}`);
-    toggleDrawer();
-  };
-  return (
-    <Drawer
-      anchor={"right"}
-      open={open}
-      onClose={toggleDrawer}
-      PaperProps={{
-        className: "menuPaperComponent navMenuComponent",
-      }}
-    >
-      <div className="search-close">
-        <SearchBar handleGlobalSearch={null} search={search} setSearch={setSearch} />
-        <button onClick={toggleDrawer}>
-          <CloseRoundedIcon />
-        </button>
-      </div>
-      {/* {location.pathname === "/home" || location.pathname === "/blog" ? (
+    const handleChain = (e: any) => {
+        const { name } = e.target;
+        navigate(`/explore/${name}`);
+        toggleDrawer();
+    };
+    return (
+        <Drawer
+            anchor={"right"}
+            open={open}
+            onClose={toggleDrawer}
+            PaperProps={{
+                className: "menuPaperComponent navMenuComponent",
+            }}
+        >
+            <div className="search-close">
+                <SearchBar
+                    handleGlobalSearch={null}
+                    search={search}
+                    setSearch={setSearch}
+                />
+                <button onClick={toggleDrawer}>
+                    <CloseRoundedIcon />
+                </button>
+            </div>
+            {/* {location.pathname === "/home" || location.pathname === "/blog" ? (
         <div className="nav-links">
           <Link to={"/about"} className="nav-link main" onClick={toggleDrawer}>
             About
@@ -95,12 +108,16 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
           </Link>
         </div>
       ) : ( */}
-        <div className="nav-links main">
-          <Link to={"/explore"} className="nav-link" onClick={toggleDrawer}>
-            Explore
-          </Link>
+            <div className="nav-links main">
+                <Link
+                    to={"/explore"}
+                    className="nav-link"
+                    onClick={toggleDrawer}
+                >
+                    Explore
+                </Link>
 
-          {/* <Accordion disableGutters className="menu-accordion">
+                {/* <Accordion disableGutters className="menu-accordion">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon className="expandIcon" />}
               aria-controls="Stats"
@@ -125,105 +142,133 @@ const NavMenu = ({ open, setOpen, search, setSearch, store }) => {
               </Link>
             </AccordionDetails>
           </Accordion> */}
-          <Accordion disableGutters className="menu-accordion">
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon className="expandIcon" />}
-              aria-controls="chains"
-              className="summary main"
-            >
-              Chains
-            </AccordionSummary>
-            <AccordionDetails className="accordion-menu">
-              <button
-                className="menu-link"
-                name="ethereum"
-                onClick={handleChain}
-              >
-                Ethereum
-              </button>
-              <button
-                className="menu-link"
-                name="polygon"
-                onClick={handleChain}
-              >
-                Polygon
-              </button>
-              <button
-                className="menu-link"
-                name="binance"
-                onClick={handleChain}
-              >
-                Binance
-              </button>
-              <button
-                className="menu-link"
-                name="binance"
-                onClick={handleChain}
-              >
-                Avalanche
-              </button>
-              <button className="menu-link" name="tron" onClick={handleChain}>
-                Tron
-              </button>
-              <button className="menu-link" name="near" onClick={handleChain}>
-                Near
-              </button>
-              <button className="menu-link" name="solana" onClick={handleChain}>
-                Solana
-              </button>
-            </AccordionDetails>
-          </Accordion>
-          <Link
-            to={"/create-nft"}
-            className="nav-link main"
-            onClick={toggleDrawer}
-          >
-            Create NFT
-          </Link>
-          {store && Object.keys(store).length !== 0 ? (
-            <a
-              href={
-                store.domain && store.domain.length > 0
-                  ? `http://${store.domain[0]}`
-                  : ""
-              }
-              target="_blank"
-              rel="noreferrer"
-              onClick={toggleDrawer}
-              className="btn nav-link"
-            >
-              Go to My Store
-            </a>
-          ) : (
-            <Link
-              to={"/create-store"}
-              className="btn nav-link"
-              onClick={toggleDrawer}
-            >
-              Create Store
-            </Link>
-          )}
-          {!Cookies.get(ACCESS_TOKEN) ? (
-            <Link
-            to={`/connect-wallet${location.pathname}`}
-            className="btn nav-link"
-            onClick={toggleDrawer}
-            >
-            {"Connect Wallet"}
-          </Link>
-          ) : (
-            <Link
-            to={`/marketplace`}
-            className="btn nav-link"
-            onClick={toggleDrawer}
-            >
-            {"Marketplace"}
-          </Link>
-            )}
-        </div>
-      {/* )} */}
-    </Drawer>
-  );
+                <Accordion disableGutters className="menu-accordion">
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon className="expandIcon" />}
+                        aria-controls="chains"
+                        className="summary main"
+                    >
+                        Chains
+                    </AccordionSummary>
+                    <AccordionDetails className="accordion-menu">
+                        <button
+                            className="menu-link"
+                            name="ethereum"
+                            onClick={handleChain}
+                        >
+                            Ethereum
+                        </button>
+                        <button
+                            className="menu-link"
+                            name="polygon"
+                            onClick={handleChain}
+                        >
+                            Polygon
+                        </button>
+                        <button
+                            className="menu-link"
+                            name="binance"
+                            onClick={handleChain}
+                        >
+                            Binance
+                        </button>
+                        <button
+                            className="menu-link"
+                            name="binance"
+                            onClick={handleChain}
+                        >
+                            Avalanche
+                        </button>
+                        <button
+                            className="menu-link"
+                            name="tron"
+                            onClick={handleChain}
+                        >
+                            Tron
+                        </button>
+                        <button
+                            className="menu-link"
+                            name="near"
+                            onClick={handleChain}
+                        >
+                            Near
+                        </button>
+                        <button
+                            className="menu-link"
+                            name="solana"
+                            onClick={handleChain}
+                        >
+                            Solana
+                        </button>
+                    </AccordionDetails>
+                </Accordion>
+                <Link
+                    to={"/create-nft"}
+                    className="nav-link main"
+                    onClick={toggleDrawer}
+                >
+                    Create NFT
+                </Link>
+                {store && Object.keys(store).length !== 0 ? (
+                    <a
+                        href={
+                            store.domain && store.domain.length > 0
+                                ? `http://${store.domain[0]}`
+                                : ""
+                        }
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={toggleDrawer}
+                        className="btn nav-link"
+                    >
+                        Go to My Store
+                    </a>
+                ) : (
+                    <Link
+                        to={"/create-store"}
+                        className="btn nav-link"
+                        onClick={toggleDrawer}
+                    >
+                        Create Store
+                    </Link>
+                )}
+
+                {!getUserInfo() ? (
+                    <button
+                        onClick={() => setShowChains(!showChains)}
+                        className="btn nav-link"
+                    >
+                        Select Chain
+                    </button>
+                ) : (
+                    <Link to={"/marketplace"} className="btn nav-link">
+                        Marketplace
+                    </Link>
+                )}
+
+                {!Cookies.get(ACCESS_TOKEN) ? (
+                    <button
+                        onClick={() => {
+                            setOpen(false);
+                            setShowChains(!showChains);
+                        }}
+                        className="btn nav-link"
+                    >
+                        Select Chain
+                    </button>
+                ) : (
+                    <Link
+                        to={`/marketplace`}
+                        className="btn nav-link"
+                        onClick={toggleDrawer}
+                    >
+                        {"Marketplace"}
+                    </Link>
+                )}
+            </div>
+            {/* )} */}
+        </Drawer>
+    );
 };
 
 export default NavMenu;

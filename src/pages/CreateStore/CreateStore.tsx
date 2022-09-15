@@ -148,7 +148,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
 
     useEffect(() => {
         if (!getAccessToken()) {
-            history("/connect-wallet/create-store")
+            history("/explore")
         }
 
     }, [])
