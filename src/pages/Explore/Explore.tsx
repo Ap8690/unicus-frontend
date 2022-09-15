@@ -22,13 +22,15 @@ import {
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getChainId } from "../../utils/utils";
+import { createNearSignature, getChainId } from "../../utils/utils";
 import { cookieDomain } from "../../config";
 import NftSkeletonLoader from "../../components/Loading/SkeletonLoading/NftSkeletonLoader";
 import { ChainContext } from "../../context/ChainContext";
 import { useQuery } from "../../Hooks/useQuery";
 import { Helmet } from "react-helmet";
 import {UserContext} from "../../context/UserContext"
+import { toast } from "react-toastify";
+import { initContract } from "../../utils/helpers";
 const Explore = () => {
     // HardCoded
     const {filter,setFilter} = useContext(UserContext);
@@ -37,6 +39,7 @@ const Explore = () => {
     const [metadata, setmetadata] = useState<any>([]);
     const query = useQuery();
     const searchQuery = query.get("search");
+    const nearLoginQuery = query.get("near-login")
     console.log("searchQuery: ", searchQuery);
     const { chain } = useContext(ChainContext);
     const filters = [
@@ -145,6 +148,23 @@ const Explore = () => {
         }
         window.scrollTo(0, 0);
     }, [chain]);
+
+    async function nearLogin() {
+        try {
+            const { config, walletConnection, keyStore, networkId } = await initContract();
+            const data = await createNearSignature(walletConnection, keyStore, networkId)
+            console.log(data,"data")
+        } catch (error) {
+            toast.error("Error:"+ error?.message)
+        }
+    }
+
+    useEffect(()=>{
+        console.log(typeof nearLoginQuery,"query")
+        if(nearLoginQuery === "success"){
+            nearLogin()
+        }
+    },[])
 
     return (
         <section className={!skiploading ? "market_place explore" : "explore"}>

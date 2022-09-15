@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "name": "unicus_js",
+  "name": "unicus_ts",
   "instructions": [
     {
       "name": "mintNft",
@@ -293,7 +293,7 @@
         },
         {
           "name": "creator",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -567,5 +567,8 @@
       "name": "MetadataCreateFailed",
       "msg": "Metadata account create failed!"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "F4iPTU4aJZLAvZNHiNSbCtZc6AhMbeu67PhMhQcxE4q4"
+  }
 }

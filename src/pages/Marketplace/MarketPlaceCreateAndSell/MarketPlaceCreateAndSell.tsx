@@ -48,8 +48,8 @@ const MarketPlaceCreateAndSell = () => {
   return (
     <div className="market-place-create-and-sell">
       <div className="left">
-        <h2 className="heading">Create And Sell your NFTs</h2>
-        <Link to="/create-nft" className="btn nav-link">Create</Link>
+        <h2 className="heading">Create And Sell your Asset</h2>
+        <Link to="/create-nft" className="btn nav-link">Tokenize Asset</Link>
       </div>
       <div className="right">
         {elements.map((element:any) => (
