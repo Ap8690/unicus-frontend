@@ -40,7 +40,7 @@ import EditProfile from "./pages/EditProfile/EditProfile";
 import GlobalSearch from "./pages/GlobalSearch/GlobalSearch";
 import "swiper/css";
 import "swiper/css/navigation";
-import "swiper/css/pagination";
+import "swiper/css/free-mode";
 // import NFTById from "./components/NFTById/NFTById"
 import { UserProvider } from "./context/UserContext";
 import { TransactionProvider } from "./context/Web3Context";
