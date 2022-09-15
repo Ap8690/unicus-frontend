@@ -668,7 +668,6 @@ export const getChainSymbol = (chain: any) => {
 
 // Returns CHAIN ID
 export const getChainId = (chain: any) => {
-    console.log("UTILS getChainId: ", getChainId,chain);
     switch (chain?.toString().toLowerCase()) {
         case "ethereum":
             return ethChain;

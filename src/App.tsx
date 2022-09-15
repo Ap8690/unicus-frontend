@@ -34,7 +34,7 @@ import StoreSettings from "./pages/StoreSettings/StoreSettings";
 import Cookies from "js-cookie";
 import { getStoreApi, getStoreByUser } from "./services/api/supplier";
 import { ACCESS_TOKEN, defaultPrivacyText } from "./utils/constants";
-import { isMainStore } from "./utils/utils";
+import { isMainStore, getUserInfo } from "./utils/utils";
 import PrivacyPolicy from "./pages/UsefulLinks/PrivacyPolicy";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import GlobalSearch from "./pages/GlobalSearch/GlobalSearch";
@@ -56,7 +56,7 @@ require("@solana/wallet-adapter-react-ui/styles.css");
 const App = () => {
     const { chain, showChains, setShowChains } = useContext(ChainContext);
     const { walletModal, setWalletModal } = useContext(ConnectWalletContext);
-
+    const userInfo = getUserInfo()
     //@ts-ignore
     const [store, setStore] = useState<IStore>({});
     const [userStore, setUserStore] = useState<any>();
@@ -66,14 +66,14 @@ const App = () => {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
-        console.log("isMainStore ",isMainStore)
+        console.log("isMainStore ",isMainStore())
         if (isMainStore()) {
             getStoreForUser();
         } else {
             init();
             setLogin();
         }
-    }, [accessToken]);
+    }, [userInfo]);
 
     useEffect(() => {
         if (store && store.appearance && store.appearance.storeLoader) {
@@ -205,10 +205,8 @@ const App = () => {
                                                     <PrivacyPolicy
                                                         title={"Privacy Policy"}
                                                         text={
-                                                            store.advance
-                                                                .privacyPolicy &&
-                                                            store.advance
-                                                                .privacyPolicy !==
+                                                            store.advance &&
+                                                            store.advance.privacyPolicy !==
                                                                 ""
                                                                 ? store.advance
                                                                       .privacyPolicy
@@ -279,7 +277,7 @@ const App = () => {
                                 {isMainStore() && (
                                     <Route
                                         path="/create-store"
-                                        element={<CreateStore />}
+                                        element={<CreateStore userStore={userStore}/>}
                                     />
                                 )}
                                 <Route path="/all-nfts" element={<AllNFTs />} />
