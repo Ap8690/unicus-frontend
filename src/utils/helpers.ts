@@ -7,6 +7,7 @@ import {ethers} from 'ethers'
 const { keyStores, connect, transactions, WalletConnection } = nearAPI;
 
 export async function initContract() {
+  console.log({keyStores, connect, transactions, WalletConnection },"mearfkdjfj")
   const config = {
     networkId: "testnet",
     keyStore: new keyStores.BrowserLocalStorageKeyStore(),
@@ -16,9 +17,9 @@ export async function initContract() {
     exploreUrl: "https://explorer.testnet.near.org",
     headers: {},
   };
-  const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
-  const near = await nearAPI.connect(config);
-  const walletConnection = new nearAPI.WalletConnection(near, "unicus");
+  const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+  const near = await connect(config);
+  const walletConnection = new WalletConnection(near, "unicus");
 
   return { config, walletConnection , keyStore, networkId: config.networkId };
 }

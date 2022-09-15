@@ -108,9 +108,7 @@ const NftInfo = ({
         return wallet;
     };
     const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
-        // "EJ16q9rhttCaukJP89WZyKs7dnEBTmzAixLLqCV8gUUs"
-        // "8GZNDXBNypG9D98YfAZRe2pyQG4P5Pi6d3AM5yJ3CnTF",
-        "F4iPTU4aJZLAvZNHiNSbCtZc6AhMbeu67PhMhQcxE4q4"
+        "HSXgP9hfYGZJmEDwqfc8Xade4sStns6orebqz4ovw53f"
     );
 
     useEffect(() => {
