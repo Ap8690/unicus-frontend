@@ -151,9 +151,15 @@ const Explore = () => {
     async function nearLogin() {
         try {
             const { config, walletConnection, keyStore, networkId } = await initContract();
-            const data = await createNearSignature(walletConnection, keyStore, networkId)
+            // let nearWalletConnection = walletConnection;
+            console.log(walletConnection.isSignedIn(),"is")
+            // localStorage.setItem("walletChain", "Near");
+            let accountId = walletConnection.account().accountId;
+            console.log(accountId,walletConnection.account(),"account object")
+            const data = await createNearSignature(keyStore, networkId, accountId)
             console.log(data,"data")
         } catch (error) {
+            console.log(error)
             toast.error("Error:"+ error?.message)
         }
     }

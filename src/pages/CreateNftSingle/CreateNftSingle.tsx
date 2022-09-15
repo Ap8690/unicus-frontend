@@ -106,7 +106,7 @@ const CreateNftSingle = () => {
         "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
     );
     const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
-        "F4iPTU4aJZLAvZNHiNSbCtZc6AhMbeu67PhMhQcxE4q4"
+        "HSXgP9hfYGZJmEDwqfc8Xade4sStns6orebqz4ovw53f"
     );
     //sol Nft mint
     const [properties, setProperties] = useState([
