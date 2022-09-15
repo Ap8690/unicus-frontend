@@ -31,6 +31,7 @@ const NestedMenu = ({chain}) => {
             </button>
             <Menu anchorEl={anchorEl} open={open} onClose={() =>setAnchorEl(null)}>
                 <NestedMenuItem style={{paddingLeft: '8px'}} label="Collectibles" parentMenuOpen={open}>
+                    <MenuItem onClick={() =>handleClose('All')}>All NFTs</MenuItem>
                     <MenuItem onClick={() =>handleClose('Art')}>Art</MenuItem>
                     <MenuItem onClick={() =>handleClose('NFT Collection')}>
                         NFT Collection
