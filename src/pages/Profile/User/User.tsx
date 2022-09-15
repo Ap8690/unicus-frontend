@@ -181,8 +181,8 @@ const User = ({ user }): ReactJSXElement => {
                             </a>
                         )}
                         {user?.linkedIn && (
-                            <a target="_blank" href={user?.linkedIn} className="h-[24px]">
-                                <img src={linkedin} alt="linkedin"  className="h-[24px]" />
+                            <a target="_blank" href={user?.linkedIn} className="h-[18px]">
+                                <img src={linkedin} alt="linkedin"  className="h-[18px]" />
                             </a>
                         )}
                     </div>

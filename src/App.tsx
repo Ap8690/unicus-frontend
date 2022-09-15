@@ -192,7 +192,7 @@ const App = () => {
                                     path="/reset-password/:token/:email"
                                     element={<Explore />}
                                 />
-                                {isMainStore() &&
+                                {!isMainStore() &&
                                     Object.keys(store).length > 0 && (
                                         <>
                                             <Route
