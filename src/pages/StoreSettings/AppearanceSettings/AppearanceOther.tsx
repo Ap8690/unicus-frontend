@@ -28,8 +28,6 @@ const AppearanceOther = (appearance: IAppearance) => {
    useEffect(() => {
      setAppearance(appearance);
      setFooter(appearance.showFooter);
-     console.log("app", appearance.storeLoader);
-
      if (!appearance.storeLoader) {
        setAppearance({ ...appearance, storeLoader: "" });
      }

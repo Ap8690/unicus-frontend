@@ -22,7 +22,6 @@ export const getUserId = () => {
 }
 
 export async function getFeaturedNft(number: number,chain: any) {
-  console.log("chain: ", chain);
   return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}/${getChainId(chain)}`,
   axiosConfig());
 }
@@ -253,7 +252,6 @@ export async function changePasswordApi(
 }
 
 export async function addWalletAdd(userWallet: string) {
-  console.log(getAccessToken(),"axxew tokwen")
   return await axios.get(
     `${BASE_URL}/users/addWallet/${userWallet}`,
     axiosConfig()

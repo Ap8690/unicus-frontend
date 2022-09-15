@@ -138,14 +138,11 @@ export const connectWallet = async (
             const res: requestAccountsResponse = await tronLink.request({
                 method: "tron_requestAccounts",
             });
-            console.log("res: ", res);
             if (res?.code === 4001) {
                 toast.error("Rejected the authorization!");
             }
             await tronWeb.trx.sign("This has to be signed!");
-            console.log("this one has to be signed");
             address = await tronWeb.defaultAddress.base58;
-            console.log("address: ", address);
         } else if (network.toString() === solonaChain) {
             address = await connToSol(publicKey, wallet, connect, setVisible);
         } else {
@@ -314,7 +311,6 @@ export const SwitchNetwork = async (network: any) => {
         });
     } catch (error: any) {
         if (error?.code.toString() === "4902") {
-            console.log(chainParams[network]);
             try {
                 const metaMaskProvider: any = await getMetamaskProvider();
                 await metaMaskProvider.request({
@@ -367,7 +363,6 @@ export const connToWalletConnector = async () => {
     try {
         const message = new Date().getTime().toString();
         const accounts = await walletConnectorProvider.enable();
-        console.log("accounts: ", accounts);
         web3 = new Web3(walletConnectorProvider);
         localStorage.setItem("walletType", "WalletConnect");
         const token = await createSignature(accounts[0], message);
@@ -472,11 +467,8 @@ export async function createNearSignature(
     const msg = Buffer.from(timestamp);
 
     const signer = new nearAPI.InMemorySigner(keyStore);
-    console.log("signer: ", signer);
     const sign = await signer.signMessage(msg, accountId, networkId);
-    console.log("sign: ", sign);
     const publicKey = await signer.getPublicKey(accountId, networkId);
-    console.log("publicKey: ", publicKey);
     return {
         signature: sign.signature,
         message: timestamp,
@@ -497,7 +489,6 @@ export const connectNear = async () => {
         await sendMeta(walletConnection, config);
     }
     nearWalletConnection = walletConnection;
-    console.log(walletConnection.isSignedIn(), "is");
     localStorage.setItem("walletChain", "Near");
     accountId = walletConnection.account().accountId;
     const data = await createNearSignature(keyStore, networkId, accountId);
@@ -515,7 +506,6 @@ export const connectNear = async () => {
 
 export const sign_solana_message = async () => {
     const message_for_backend = new Date().getTime().toString();
-    console.log("message_for_backend: ", message_for_backend);
     // @ts-ignore
     const { signature, publicKey } = await window?.solana.signMessage(
         new TextEncoder().encode(message_for_backend),
@@ -583,13 +573,12 @@ export const connToSol = async (
     // const { solana } = window;
 
     // @ts-ignore
-    if (!window?.solana || !window?.isPhantom) {
+    if (!window?.solana || !window?.solana.isPhantom) {
         throw new Error("Please install Phantom Wallet");
     }
     const provider: any = await getProvider(wallet);
 
     if (provider?.publicKey) {
-        console.log("IN public key");
         const sm = await sign_solana_message();
         return {
             account: provider?.publicKey.toBase58(),
@@ -604,7 +593,6 @@ export const connToSol = async (
     await connect();
     if (wallet.adapter.publicKey) {
         const address = await wallet.adapter.publicKey.toBase58();
-        console.log("address: ", address);
         const sm = await sign_solana_message();
         return {
             account: address,
@@ -675,7 +663,6 @@ export const getChainSymbol = (chain: any) => {
 
 // Returns CHAIN ID
 export const getChainId = (chain: any) => {
-    console.log("getChainId: ", chain);
     switch (chain?.toString().toLowerCase()) {
         case "ethereum":
             return ethChain;
@@ -1043,7 +1030,6 @@ export function getRPCErrorMessage(err: any) {
         var close = err.stack.lastIndexOf("}");
         var j_s = err.stack.substring(open, close + 1);
         var j = JSON.parse(j_s);
-        console.log(j, "j");
         errorMessageToShow = j?.message
             ? j?.message
             : j?.originalError?.message;

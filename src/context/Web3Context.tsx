@@ -21,7 +21,6 @@ export const TransactionProvider = ({children}) => {
         }
         setLoading(false)
     } catch (error) {
-        console.error("Unable to connect Metamask Wallet ", error)
         setLoading(false)
     }
   }

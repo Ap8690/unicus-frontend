@@ -20,7 +20,6 @@ const GlobalSearch = (props: any) => {
         axios.get(`${BASE_URL}/users/globalSearch/${search}`)
         .then((res: any) => {
           
-            console.log(res.data)
             setartists(res.data.users)
             setnfts(res.data.nfts)
             setloaded(true)

@@ -40,7 +40,6 @@ const Explore = () => {
     const query = useQuery();
     const searchQuery = query.get("search");
     const nearLoginQuery = query.get("near-login")
-    console.log("searchQuery: ", searchQuery);
     const { chain } = useContext(ChainContext);
     const filters = [
         "All",
@@ -160,7 +159,7 @@ const Explore = () => {
     }
 
     useEffect(()=>{
-        console.log(typeof nearLoginQuery,"query")
+
         if(nearLoginQuery === "success"){
             nearLogin()
         }

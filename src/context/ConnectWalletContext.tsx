@@ -45,7 +45,6 @@ export const WalletConnectionProvider = ({ children }) => {
     const [solana,setSolana] = useState(false)
 
     useEffect(()=>{
-        console.log(solana,"chain")
         const name:any = "Phantom"
         select(name)
     },[])
@@ -61,12 +60,10 @@ export const WalletConnectionProvider = ({ children }) => {
             const walletNetwork="Solana"
             const res = await walletLogin(publicKey.toBase58(),token,walletNetwork,message);
             toast.success("Login successful");
-            console.log("res.data.accessToken: ", res.data.accessToken);
             Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
                 domain: cookieDomain,
                 expires: 30,
             });
-            console.log("JSON.stringify(res.data.user): ", JSON.stringify(res.data.user));
             Cookies.set("userInfo", JSON.stringify(res.data.user), {
                 domain: cookieDomain,
                 expires: 30,

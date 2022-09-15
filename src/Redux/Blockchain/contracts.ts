@@ -182,8 +182,6 @@ const getContracts = (walletType: string, networkID: string) => {
 }
 
 export async function setNotification(tx: string) {
-  console.log("notify started", tx);
-  
   toast(
     `Transaction sent successfully! Waiting for confirmation. Click here to view on Tronscan`,
     {
@@ -200,8 +198,6 @@ export async function setNotification(tx: string) {
   );
   return await awaitTx(tx)
     .then((res: any) => {
-      console.log("tx-res", res);
-
       if (res.receipt.result === "SUCCESS") {
         toast.dismiss(tx);
         toast("Transaction confirmed successfully", {
@@ -217,8 +213,6 @@ export async function setNotification(tx: string) {
       }
     })
     .catch((err) => {
-      console.log("trx-err", err);
-      
       toast.dismiss(tx);
       toast.error(err);
       return false;

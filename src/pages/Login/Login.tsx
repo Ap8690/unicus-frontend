@@ -29,9 +29,6 @@ const Login = ({}) => {
         } else {
             emailLogin(email, password)
                 .then(async (res: any) => {
-                    console.log("res: ", res);
-                    console.log("in",cookieDomain)
-                    
                     Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
                       domain: cookieDomain,
                       expires: 30,

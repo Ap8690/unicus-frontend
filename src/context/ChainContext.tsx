@@ -18,9 +18,6 @@ export const ChainProvider = ({children}) => {
       setChain(getChainName(localStorage.getItem("walletChain")))
   },[localStorage.getItem("walletChain")])
 
-  useEffect(() => {
-    console.log("CHAIN CURRENT: ",chain);
-  },[chain])
   return(
       <ChainContext.Provider value={{ chain, setChain, showChains, setShowChains }}>
           {children}

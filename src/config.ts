@@ -42,4 +42,3 @@ env_uri === "local"
 : env_uri === "demo"
 ? "demo.unicus.one"
 : "unicus.one"
-console.log("cookieDomain: ", cookieDomain);

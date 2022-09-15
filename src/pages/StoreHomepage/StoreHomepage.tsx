@@ -45,7 +45,6 @@ const StoreHomepage = () => {
         await axios
             .get(`${BASE_URL}/nft/getRecent/0`)
             .then((res) => {
-                console.log("recent", res.data.nfts);
                 setRecentCreated(res.data.nfts);
                 setLoadingRecent(false)
             })
@@ -59,7 +58,6 @@ const StoreHomepage = () => {
                 )}`
             )
             .then((res: any) => {
-                console.log("available", res.data.data);
                 setAvailableSale(res.data.data);
                 setLoadingAvailableSale(false)
             })
@@ -70,7 +68,6 @@ const StoreHomepage = () => {
         await axios
             .get(`${BASE_URL}/auction/getRecentPurchased/0`)
             .then((res: any) => {
-                console.log("recent purchased", res.data.data);
                 setRecentPurchased(res.data.data);
                 setLoadingPurchased(false)
             })

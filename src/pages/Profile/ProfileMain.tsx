@@ -94,7 +94,6 @@ const Profile = (): ReactJSXElement => {
         setTableLoading(true)
         try {
             const res = await getNftByUserId();
-            console.log("res nfts", res);
             setorDisplayCreated(res.data.nfts);
             setorDisplayListing(res.data.auctions);
             setDisplayCreated(res.data.nfts);
@@ -109,7 +108,6 @@ const Profile = (): ReactJSXElement => {
     const getUserProfile = async () => {
         try {
             setLoading(true);
-            console.log("BASE_URL: ", BASE_URL);
             const res = await axios.get(`${BASE_URL}/users/getUserProfile`, {
                 headers: {
                     Authorization: "Bearer " + `${accessToken}`,

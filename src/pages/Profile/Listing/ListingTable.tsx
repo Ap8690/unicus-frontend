@@ -10,9 +10,7 @@ import { Skeleton } from "@mui/material";
 // Element of data of activity table
 const TableData = ({ activity, link }) => {
     let navigate = useNavigate();
-    useEffect(()=>{
-        console.log(activity)
-    },[activity])
+
     return (
         <tr
             className="table-data cursor-pointer pb-6"

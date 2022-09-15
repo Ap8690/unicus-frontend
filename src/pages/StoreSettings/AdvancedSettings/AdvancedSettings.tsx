@@ -16,7 +16,6 @@ const AdvancedSettings = () => {
 
   const post = async () => {
     const res = await axios.get(`${BASE_URL}/advance`);
-    console.log("resultAdvance", res.data.result);
     setAdvance(res.data.result);
   };
   return (

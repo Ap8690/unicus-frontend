@@ -13,7 +13,6 @@ const GeneralSettings = () => {
   const [general, setGeneral] = useState<IGeneral>({});
   const post = async () => {
     const res = await axios.get(`${BASE_URL}/general`);
-    console.log("resultGen", res.data);
     setGeneral(res.data.result);
   };
   useEffect(() => {

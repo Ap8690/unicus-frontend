@@ -24,7 +24,6 @@ import { toast } from "react-toastify";
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 
 const User = ({ user }): ReactJSXElement => {
-    console.log("user: ", user);
     const navigate = useNavigate();
 
     const [userImage, setUserImage] = useState<any>(

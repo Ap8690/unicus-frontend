@@ -75,7 +75,6 @@ import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 
 const CreateNftSingle = () => {
     // let chain_name = ChainIdUsingWalletName(localStorage.getItem("walletChain"))
-    console.log("AssetList ",AssetList)
     const [name, setName] = useState("");
     const [extLink, setExtlink] = useState("");
     const [description, setDescription] = useState("");
@@ -334,7 +333,6 @@ const CreateNftSingle = () => {
             // const metaplex = new Metaplex(connection);
             //Fetch all nfts of by owner
             //the returned NFTs may be Metadatas
-            console.log(mintKey,'mintkeyhodshf')
             // const myNfts = await metaplex.nfts().findByMint(mintKey.publicKey)
             //     .run();
             return mintKey.publicKey.toBase58();
@@ -377,7 +375,6 @@ const CreateNftSingle = () => {
         try {
             setAddNFTModalOpen(false);
             //@ts-ignore
-            console.log(Cookies.get("ACCESS_TOKEN"));
             if (!window.ethereum) {
                 setNftLoading(false);
                 setMetamaskNotFound(true);
@@ -443,7 +440,6 @@ const CreateNftSingle = () => {
                 if (!user) {
                     user = JSON.parse(localStorage.getItem("userInfo"));
                 }
-                console.log(user, "user");
                 const nftObj = {
                     name,
                     royalty,
@@ -491,7 +487,6 @@ const CreateNftSingle = () => {
                     setNftLoading(true);
                     toast.info("Minting The Asset");
                     const createNFT = getCreateNftContract(chain, contractType);
-                    console.log("createNFT ", address);
                     let res: any;
                     if (contractType === "721") {
                         res = await createNFT.methods
@@ -627,7 +622,6 @@ const CreateNftSingle = () => {
                 JSON.parse(localStorage.getItem("fileSrc")),
                 "newUpload"
             );
-            console.log("URL Create Object Url: ", URL.createObjectURL(file));
             setFileSrc(file);
         } catch (err) {
             console.log(err);

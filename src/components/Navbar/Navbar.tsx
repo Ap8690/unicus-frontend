@@ -56,7 +56,6 @@ const Navbar = ({ store }) => {
                                         
     }
     useEffect(() => {
-        console.log("accessToken ", accessToken);
         function new_bg() {
             if (window.scrollY === 0) return setSolidNav(false);
             if (window.scrollY > 0) return setSolidNav(true);

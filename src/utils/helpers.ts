@@ -67,7 +67,6 @@ const ADDRESS_PREFIX = "41";
 
 export async function decodeParams(types:any, output:any, ignoreMethodHash:any) {
 
-    console.log(types,"types")
     if (!output || typeof output === 'boolean') {
         ignoreMethodHash = output;
         output = types;

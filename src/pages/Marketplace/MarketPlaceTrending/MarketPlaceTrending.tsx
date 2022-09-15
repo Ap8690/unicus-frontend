@@ -27,7 +27,6 @@ const MarketPlaceTrending = ({ chain }) => {
       setLoading(false)
       console.log(err);
     });
-    console.log(category);
   }, [category,chain]);
 
 

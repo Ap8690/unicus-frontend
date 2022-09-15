@@ -24,12 +24,8 @@ const ViewNft = () => {
 
     async function fetchItem() {
         try {
-            console.log(chain, contractAddress, nftId);
             setNftLoading(true);
             const res = await getNftById(chain, contractAddress, nftId);
-            const resData = await res.data.nft;
-            console.log(resData,res.data, "res");
-
             setNft(res.data.nft);
             setNftStates(res.data.nftStates);
             setAuction(res.data.auction);
@@ -37,7 +33,6 @@ const ViewNft = () => {
             setBids(res.data.bids)
             setCreator(res.data.user);
             if (res.data.nft.collectionName && res.data.nft.collectionName !== "undefined") {
-                console.log("resData.collectionName: ", res.data.nft.collectionName);
                 const col = await getNftByCollection(res.data.nft.collectionName);
                 setNftByCollection(col.data.nft);
             }
