@@ -3,14 +3,9 @@ import SearchBar from "../../SearchBar/SearchBar";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import "./navmenu.scss";
 import { useLocation, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-import { ACCESS_TOKEN } from "../../../utils/constants";
 import { getUserInfo } from "../../../utils/utils";
 import { Link } from "react-router-dom";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import NestedMenu from "../../NestedMenu/NestedMenu";
 
 const NavMenu = ({
     open,
@@ -20,6 +15,7 @@ const NavMenu = ({
     store,
     setShowChains,
     showChains,
+    chain
 }) => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -51,64 +47,8 @@ const NavMenu = ({
                     <CloseRoundedIcon />
                 </button>
             </div>
-            {/* {location.pathname === "/home" || location.pathname === "/blog" ? (
-        <div className="nav-links">
-          <Link to={"/about"} className="nav-link main" onClick={toggleDrawer}>
-            About
-          </Link>
-          <Link
-            to={"/for-creator"}
-            className="nav-link main"
-            onClick={toggleDrawer}
-          >
-            For Creators
-          </Link>
-          <Link to={"/token"} className="nav-link main" onClick={toggleDrawer}>
-            Token
-          </Link>
-          <Link to={"/blog"} className="nav-link main" onClick={toggleDrawer}>
-            Blog
-          </Link>
-          {store && Object.keys(store).length !== 0 ? (
-            <a
-              href={
-                store.domain && store.domain.length > 0
-                  ? `http://${store.domain[0]}`
-                  : ""
-              }
-              target="_blank"
-              rel="noreferrer"
-              className="btn nav-link"
-              onClick={toggleDrawer}
-            >
-              Go to My Store
-            </a>
-          ) : (
-            <Link
-              to={"/create-store"}
-              className="btn nav-link"
-              onClick={toggleDrawer}
-            >
-              Create Store
-            </Link>
-          )}
-          <Link
-            to={"/launchpad"}
-            className="btn nav-link"
-            onClick={toggleDrawer}
-          >
-            Launchpad
-          </Link>
-          <Link
-            to={"/marketplace"}
-            className="btn nav-link"
-            onClick={toggleDrawer}
-          >
-            Marketplace
-          </Link>
-        </div>
-      ) : ( */}
             <div className="nav-links main">
+                <NestedMenu chain={chain}/>
                 <Link
                     to={"/explore"}
                     className="nav-link"
@@ -117,97 +57,12 @@ const NavMenu = ({
                     Explore
                 </Link>
 
-                {/* <Accordion disableGutters className="menu-accordion">
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon className="expandIcon" />}
-              aria-controls="Stats"
-              className="summary main"
-            >
-              Stats
-            </AccordionSummary>
-            <AccordionDetails className="accordion-menu">
-              <Link
-                to={"/stats/ranking"}
-                className="menu-link"
-                onClick={toggleDrawer}
-              >
-                Ranking
-              </Link>
-              <Link
-                to={"/stats/activity"}
-                className="menu-link"
-                onClick={toggleDrawer}
-              >
-                Activity
-              </Link>
-            </AccordionDetails>
-          </Accordion> */}
-                <Accordion disableGutters className="menu-accordion">
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon className="expandIcon" />}
-                        aria-controls="chains"
-                        className="summary main"
-                    >
-                        Chains
-                    </AccordionSummary>
-                    <AccordionDetails className="accordion-menu">
-                        <button
-                            className="menu-link"
-                            name="ethereum"
-                            onClick={handleChain}
-                        >
-                            Ethereum
-                        </button>
-                        <button
-                            className="menu-link"
-                            name="polygon"
-                            onClick={handleChain}
-                        >
-                            Polygon
-                        </button>
-                        <button
-                            className="menu-link"
-                            name="binance"
-                            onClick={handleChain}
-                        >
-                            Binance
-                        </button>
-                        <button
-                            className="menu-link"
-                            name="binance"
-                            onClick={handleChain}
-                        >
-                            Avalanche
-                        </button>
-                        <button
-                            className="menu-link"
-                            name="tron"
-                            onClick={handleChain}
-                        >
-                            Tron
-                        </button>
-                        <button
-                            className="menu-link"
-                            name="near"
-                            onClick={handleChain}
-                        >
-                            Near
-                        </button>
-                        <button
-                            className="menu-link"
-                            name="solana"
-                            onClick={handleChain}
-                        >
-                            Solana
-                        </button>
-                    </AccordionDetails>
-                </Accordion>
                 <Link
                     to={"/create-nft"}
                     className="nav-link main"
                     onClick={toggleDrawer}
                 >
-                    Create NFT
+                    Tokenize Asset
                 </Link>
                 {store && Object.keys(store).length !== 0 ? (
                     <a
@@ -245,28 +100,7 @@ const NavMenu = ({
                         Marketplace
                     </Link>
                 )}
-
-                {!Cookies.get(ACCESS_TOKEN) ? (
-                    <button
-                        onClick={() => {
-                            setOpen(false);
-                            setShowChains(!showChains);
-                        }}
-                        className="btn nav-link"
-                    >
-                        Select Chain
-                    </button>
-                ) : (
-                    <Link
-                        to={`/marketplace`}
-                        className="btn nav-link"
-                        onClick={toggleDrawer}
-                    >
-                        {"Marketplace"}
-                    </Link>
-                )}
             </div>
-            {/* )} */}
         </Drawer>
     );
 };

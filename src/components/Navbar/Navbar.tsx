@@ -78,13 +78,14 @@ const Navbar = ({ store }) => {
                 store={store}
                 setShowChains={setShowChains}
                 showChains={showChains}
+                chain={chain}
             />
             <nav className={solidNav ? "solid-nav" : ""}>
                 <div className={`navbar`}>
                     <Link to={"/home"} className="brand-link">
                         <img
                             src={unicusLogo}
-                            className="navbar-brand"
+                            className={window.location.pathname.includes('explore') ? "navbar-brand logo--fix": "navbar-brand"}
                             alt="unicus"
                         />
                     </Link>
@@ -151,9 +152,6 @@ const Navbar = ({ store }) => {
                                     </button>
                                 )
                             )}
-                            {/* <Link to={"/launchpad"} className="btn nav-link">
-                                Launchpad
-                            </Link> */}
                         </div>
                     ) : (
                         <div className="nav-links">
@@ -164,183 +162,6 @@ const Navbar = ({ store }) => {
                             <Link to={`/create-nft`} className="nav-link">
                                 Tokenize Asset
                             </Link>
-                           {/* {!getUserInfo() && <button
-                                className="nav-link"
-                                onClick={handleClickChains}
-                            >
-                                Chains
-                            </button>} */}
-
-                            {getUserInfo() ? 
-                            getLocalStorage("walletChain") === "Tron" ? (
-                                <Menu
-                                    anchorEl={anchorChains}
-                                    open={openChains}
-                                    onClose={() => handleCloseChains("")}
-                                    MenuListProps={{
-                                        "aria-labelledby": "basic-button",
-                                    }}
-                                >
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("tron")
-                                        }
-                                        selected={chain === "tron"}
-                                    >
-                                        Tron
-                                    </MenuItem>
-                                </Menu>
-                            ) : getLocalStorage("walletChain") === "Near" ? (
-                                <Menu
-                                    anchorEl={anchorChains}
-                                    open={openChains}
-                                    onClose={() => handleCloseChains("")}
-                                    MenuListProps={{
-                                        "aria-labelledby": "basic-button",
-                                    }}
-                                >
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("near")
-                                        }
-                                        selected={chain === "near"}
-                                    >
-                                        Near
-                                    </MenuItem>
-                                </Menu>
-                            ) : getLocalStorage("walletChain") === "Solana" ? (
-                                <Menu
-                                    anchorEl={anchorChains}
-                                    open={openChains}
-                                    onClose={() => handleCloseChains("")}
-                                    MenuListProps={{
-                                        "aria-labelledby": "basic-button",
-                                    }}
-                                >
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("solana")
-                                        }
-                                        selected={chain === "solana"}
-                                    >
-                                        Solana
-                                    </MenuItem>
-                                </Menu>
-                            ) : (
-                                <Menu
-                                    anchorEl={anchorChains}
-                                    open={openChains}
-                                    onClose={() => handleCloseChains("")}
-                                    MenuListProps={{
-                                        "aria-labelledby": "basic-button",
-                                    }}
-                                >
-                                    {" "}
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("ethereum")
-                                        }
-                                        selected={chain === "ethereum"}
-                                    >
-                                        Ethereum
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("polygon")
-                                        }
-                                        selected={chain === "polygon"}
-                                    >
-                                        Polygon
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("binance")
-                                        }
-                                        selected={chain === "binance"}
-                                    >
-                                        Binance
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("avalanche")
-                                        }
-                                        selected={chain === "avalanche"}
-                                    >
-                                        Avalanche
-                                    </MenuItem>
-                                </Menu>
-                            ) : 
-                            <Menu
-                                    anchorEl={anchorChains}
-                                    open={openChains}
-                                    onClose={() => handleCloseChains("")}
-                                    MenuListProps={{
-                                        "aria-labelledby": "basic-button",
-                                    }}
-                                >
-                            <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("ethereum")
-                                        }
-                                        selected={chain === "ethereum"}
-                                    >
-                                        Ethereum
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("polygon")
-                                        }
-                                        selected={chain === "polygon"}
-                                    >
-                                        Polygon
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("binance")
-                                        }
-                                        selected={chain === "binance"}
-                                    >
-                                        Binance
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("avalanche")
-                                        }
-                                        selected={chain === "avalanche"}
-                                    >
-                                        Avalanche
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("solana")
-                                        }
-                                        selected={chain === "solana"}
-                                    >
-                                        Solana
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("near")
-                                        }
-                                        selected={chain === "near"}
-                                    >
-                                        Near
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() =>
-                                            handleCloseChains("tron")
-                                        }
-                                        selected={chain === "tron"}
-                                    >
-                                        Tron
-                                    </MenuItem>
-                                </Menu>
-                                
-                                }
-
-                            {/* <Link to={"/create-nft"} className="nav-link">
-                                Create NFT
-                            </Link> */}
                             {!getUserInfo() ? (
                                 <button
                                     onClick={
