@@ -66,8 +66,8 @@ const EditProfile = (props: any) => {
     }, [])
 
     return (
-        <div className="md:mt-[70px] px-8 pb-12 screen7:pt-0 screen18:px-12 screen3:px-8 w-full">
-            <div className="w-full pt-12">
+        <div className="md:mt-[70px] px-8 pb-12 screen7:pt-0 screen18:px-12 screen3:px-8 w-full max-w-[1290px]">
+            <div className="w-full pt-12"> 
                 <div className="editPage-info flex gap-8 screen11:flex-col">
                     <div className="relative felx items-center screen11:flex-col screen11:ml-0 min-w-[200px] editPage-main-image">
                         <div className="w-32 h-32 relative rounded-full overflow-hidden">
@@ -386,7 +386,7 @@ const GeneralSettings = ({ resUser }) => {
                 <Loader />
             ) : (
                 <div className="flex gap-8 edit-userInfo">
-                <div className="flex flex-col gap-4 w-[300px] min-w-[300px] edit-details">
+                <div className="flex flex-col gap-4 w-full min-w-[300px] edit-details">
                     <Input
                         title="Username"
                         placeholder="Enter your name"
@@ -428,7 +428,7 @@ const GeneralSettings = ({ resUser }) => {
                     <div>
                         <div>Profile Image</div>
                         <div className="flex gap-4 items-center mt-2">
-                            <div className="w-[120px] h-[120px] rounded-lg bg-[#ffffff22]">
+                            <div className="w-[190px] h-[120px] rounded-lg bg-[#ffffff22]">
                                 {profileImg && <img src={profileImg} alt='' className="w-full h-full object-cover"/>}
                             </div>
                             <div className="flex flex-col gap-3 ">

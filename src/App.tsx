@@ -66,6 +66,7 @@ const App = () => {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
+        console.log("isMainStore ",isMainStore)
         if (isMainStore()) {
             getStoreForUser();
         } else {

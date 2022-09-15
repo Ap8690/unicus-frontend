@@ -98,7 +98,11 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
             if (!validator.isEmail(generals.email)) {
                 throw new Error("Invalid Email")
             }
-            let res = await createStore(generals)
+            const obj = {
+                ...generals,
+                chainName
+            }
+            let res = await createStore(obj)
             setLoading(false)
             if (res) {
                 toast.success("Store Created")
