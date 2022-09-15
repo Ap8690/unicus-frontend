@@ -37,8 +37,9 @@ export const UNICUS_STORE: string | undefined =
         : "marketplace.unicus.one"
 
 export const cookieDomain: string | undefined =
-    env_uri === "local"
-        ? "localhost"
-        : env_uri === "demo"
-        ? "demo.unicus.one"
-        : "unicus.one"
+env_uri === "local"
+? "localhost"
+: env_uri === "demo"
+? "demo.unicus.one"
+: "unicus.one"
+console.log("cookieDomain: ", cookieDomain);

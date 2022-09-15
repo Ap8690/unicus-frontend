@@ -93,7 +93,6 @@ export const getUserInfo = () => {
     const userInfo: any = Cookies.get("userInfo")
         ? JSON.parse(Cookies.get("userInfo"))
         : "";
-    console.log("userInfo: ", userInfo);
     return userInfo;
 };
 
@@ -582,14 +581,12 @@ export const connToSol = async (
     setVisible: any
 ) => {
     // const { solana } = window;
-    // let connection = new Connection(clusterApiUrl('testnet'));
-    // console.log("connection: ", connection);
+
     // @ts-ignore
-    if (!solana || !solana?.isPhantom) {
+    if (!window?.solana || !window?.isPhantom) {
         throw new Error("Please install Phantom Wallet");
     }
     const provider: any = await getProvider(wallet);
-    console.log("provider: ", provider);
 
     if (provider?.publicKey) {
         console.log("IN public key");
