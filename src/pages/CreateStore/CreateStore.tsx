@@ -13,7 +13,7 @@ import countryList from "react-select-country-list"
 import validator from "validator"
 import { useNavigate, Navigate } from "react-router-dom"
 import uuid from "react-uuid"
-import { getUserInfo } from "../../utils/utils"
+import { getUserInfo, userInfo } from "../../utils/utils"
 import Select from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
@@ -22,7 +22,7 @@ import FullBlurLoading from "../../components/Loading/FullBlurLoading"
 const chains =['Ethereum', 'Binance', 'Polygon', 'Avalanche', 'Tron', 'Near', 'Solana']
 
 const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
-    let userInfo = getUserInfo()
+
     //@ts-ignore
     const [generals, setGeneral] = useState<IGeneral>({})
     const [country, setCountry] = useState({country: "US"})
@@ -276,6 +276,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
 const CreateStore = ({userStore}: any): ReactJSXElement => {
     const [loadingImage, setLoadingImage] = useState(false)
     if(!getAccessToken() || userStore?.domain[0]) {
+        console.log("NAVIGATE")
         return <Navigate to="/explore" />
     }
     return (

@@ -73,7 +73,7 @@ const App = () => {
             init();
             setLogin();
         }
-    }, [userInfo]);
+    }, [localStorage.getItem('userInfo')]);
 
     useEffect(() => {
         if (store && store.appearance && store.appearance.storeLoader) {
