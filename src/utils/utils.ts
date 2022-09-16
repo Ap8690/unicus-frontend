@@ -556,6 +556,7 @@ export async function getProvider(wallet: any) {
     /* create the provider and return it to the caller */
     /* network set to local network for now */
     const network = window.location.origin
+    console.log("solana network: ", network);
     const opts: any = {
         preflightCommitment: "processed",
     };
