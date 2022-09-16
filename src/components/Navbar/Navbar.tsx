@@ -154,7 +154,7 @@ const Navbar = ({ store }) => {
                                     onClick={() => setShowChains(!showChains)}
                                     className="btn nav-link"
                                 >
-                                    Tokenize Asset
+                                    Tokenise Asset
                                 </button>
                             ) : location.pathname.includes("create-nft") ? (
                                 <Link
@@ -168,7 +168,7 @@ const Navbar = ({ store }) => {
                                     onClick={handleRedirectToTokenzie}
                                     className="btn nav-link"
                                 >
-                                    Tokenize Asset
+                                    Tokenise Asset
                                 </button>
                             )}
 

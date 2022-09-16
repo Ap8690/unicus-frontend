@@ -22,9 +22,9 @@ import { Helmet } from "react-helmet";
 const MarketPlace = () => {
     const { chain } = useContext(ChainContext);
     const saleStats = {
-        artworks: "37k",
-        artists: "27k",
-        auctions: "99k",
+        artworks: "1000+",
+        artists: "10+",
+        auctions: "8",
     };
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -40,7 +40,7 @@ const MarketPlace = () => {
             <MarketPlaceMain
                 saleStats={saleStats}
                 noStats={false}
-                storeTitle={"Create, Sell & Collect Your Own Creative NFT"}
+                storeTitle={"Tokenise, List and Trade your Assets in form of NFTs, in a pure Decentralised Manner"}
             />
             <MarketPlaceFeatured chain={chain} title={"Featured Assets"} />
             <MarketPlaceTrending chain={chain} />

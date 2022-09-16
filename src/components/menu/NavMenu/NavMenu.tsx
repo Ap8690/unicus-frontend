@@ -72,7 +72,7 @@ const NavMenu = ({
                             onClick={() => setShowChains(!showChains)}
                             className="btn nav-link"
                         >
-                            Tokenize Asset
+                            Tokenise Asset
                         </button>
                     ) : location.pathname.includes("create-nft") ? (
                         <Link to={"/marketplace"} className="btn nav-link">
@@ -86,7 +86,7 @@ const NavMenu = ({
                             }}
                             className="btn nav-link"
                         >
-                            Tokenize Asset
+                            Tokenise Asset
                         </button>
                     )}
                 </div>

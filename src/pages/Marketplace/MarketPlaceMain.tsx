@@ -18,25 +18,24 @@ const MarketPlaceMain = ({ saleStats, storeTitle, noStats, noBanner = false }) =
             {storeTitle}
           </h2>
           <p className="market-place-main-intro">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi aliquid
-            autem ad quia sint provident ut voluptas ea, facere molestiae vitae
+            Your Go-To Platform to Tokenise Valuable Assets with Multi-Chain options across various Business and Collectible Categories and Trade/Auction them seamlessly with complete decentralisation
           </p>
           <div className="market-place-main-button-holder">
             <button onClick={() => navigate("/explore")} className="btn nav-link">Explore Now</button>
-            <button onClick={handleNavigateCreateNft} className="create">Tokenize Asset</button>
+            <button onClick={handleNavigateCreateNft} className="create">Tokenise Asset</button>
           </div>
           {!noStats &&
             <div className="market-place-main-stats">
               <div className="market-place-main-stat">
-                <p className="stat-number">{saleStats.artworks}+</p>
+                <p className="stat-number nowrap">{saleStats.artworks}</p>
                 Artworks
               </div>
               <div className="market-place-main-stat">
-                <p className="stat-number">{saleStats.artists}+</p>
+                <p className="stat-number nowrap">{saleStats.artists}</p>
                 Artists
               </div>
               <div className="market-place-main-stat">
-                <p className="stat-number">{saleStats.auctions}+</p>
+                <p className="stat-number nowrap">{saleStats.auctions}</p>
                 Auctions
               </div>
             </div>
@@ -44,9 +43,6 @@ const MarketPlaceMain = ({ saleStats, storeTitle, noStats, noBanner = false }) =
         </div>
         <img src={marketPlaceImage} alt="Market Place Main" />
       </div>
-      {/* {!noBanner && <div className="market-place-banner">
-        <img src={banner} alt="Banner" />
-      </div>} */}
     </div>
   );
 };

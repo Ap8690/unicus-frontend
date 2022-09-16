@@ -23,33 +23,33 @@ const MarketPlaceCreateAndSell = () => {
     {
       name: "Wallet",
       image: mpWallet,
-      heading: "Set up your wallet",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor ornare ut lobortis sit erat morbi.",
+      heading: "Connect with Unicus",
+      text: "Download a Web3.0 Wallet like Metamask, Quickly create an account and connect with our platform, or use your existing wallet to connect.",
     },
     {
       name: "Create",
       image: mpCreate,
-      heading: "Create your collection",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor ornare ut lobortis sit erat morbi.",
+      heading: "Choose your network and category",
+      text: "Select the network of your choice from the 8 options, and your Business category before we start the tokenisation process.",
     },
     {
       name: "Add",
       image: mpAdd,
-      heading: "Add your NFTs",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor ornare ut lobortis sit erat morbi.",
+      heading: "Tokenise the Asset",
+      text: "Fill up the form with required details for tokenising your asset, and allow Unicus to get it done for you within few second.",
     },
     {
       name: "List",
       image: mpList,
-      heading: "List them for sale",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor ornare ut lobortis sit erat morbi.",
+      heading: "Trade or Auction your Asset",
+      text: "Now you can list your NFTs (Tokenised Assets) for Sale or Auction on our platform.",
     },
   ];
   return (
     <div className="market-place-create-and-sell">
       <div className="left">
-        <h2 className="heading">Create And Sell your Asset</h2>
-        <Link to="/create-nft" className="btn nav-link">Tokenize Asset</Link>
+        <h2 className="heading">Tokenise & Trade your asset</h2>
+        <Link to="/create-nft" className="btn nav-link">Tokenise Asset</Link>
       </div>
       <div className="right">
         {elements.map((element:any) => (
