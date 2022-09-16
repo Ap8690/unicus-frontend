@@ -334,7 +334,7 @@ export const createSignature = async (address: string, message: any) => {
 
 export const connToMetaMask = async () => {
     const chain = localStorage.getItem("chainName");
-    await SwitchNetwork(getChainId(chain));
+    await SwitchNetwork(localStorage.getItem("CHAIN"));
     const message = new Date().getTime().toString();
     const metaMaskProvider: any = await getMetamaskProvider();
     await metaMaskProvider.request({

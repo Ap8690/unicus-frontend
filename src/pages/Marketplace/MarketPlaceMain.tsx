@@ -21,7 +21,7 @@ const MarketPlaceMain = ({ saleStats, storeTitle, noStats, noBanner = false }) =
             Your Go-To Platform to Tokenise Valuable Assets with Multi-Chain options across various Business and Collectible Categories and Trade/Auction them seamlessly with complete decentralisation
           </p>
           <div className="market-place-main-button-holder">
-            <button onClick={() => navigate("/explore")} className="btn nav-link">Explore Now</button>
+            <button onClick={() => navigate("/explore")} className="btn nav-link">Get in Touch</button>
             <button onClick={handleNavigateCreateNft} className="create">Tokenise Asset</button>
           </div>
           {!noStats &&

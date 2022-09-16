@@ -318,7 +318,7 @@ const App = () => {
                             <WalletsModal
                                 open={walletModal}
                                 setOpen={setWalletModal}
-                                chainName={chain?.toLowerCase()}
+                                chainName={localStorage.getItem("CHAIN")}
                             />
                             <CategoriesModal 
                                 open={showCategory}

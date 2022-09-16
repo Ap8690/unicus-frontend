@@ -142,7 +142,7 @@ const Navbar = ({ store }) => {
                             </Link>
                             <NestedMenu chain={chain} />
                             <Link to={"/marketplace"} className="btn nav-link">
-                                Marketplace
+                            Enter App
                             </Link>
                             <div className="chainLogo">
                                 <ChainLogo />
@@ -163,7 +163,7 @@ const Navbar = ({ store }) => {
                                     to={"/marketplace"}
                                     className="btn nav-link"
                                 >
-                                    Marketplace
+                                    Enter App
                                 </Link>
                             ) : (
                                 <button
