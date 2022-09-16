@@ -142,6 +142,9 @@ const Navbar = ({ store }) => {
                             <Link to={"/marketplace"} className="btn nav-link">
                                 Marketplace
                             </Link>
+                            <div className="chainLogo">
+                                <ChainLogo />
+                            </div>
                         </div>
                     ) : (
                         <div className="nav-links">
@@ -180,11 +183,12 @@ const Navbar = ({ store }) => {
                                     }
                                 />
                             )}
-                        </div>
-                    )}
-                    <div className="chainLogo">
+                            <div className="chainLogo">
                         <ChainLogo />
                     </div>
+                        </div>
+                    )}
+                    
                 </div>
             </nav>
         </>
