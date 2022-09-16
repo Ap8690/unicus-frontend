@@ -113,6 +113,7 @@ const Navbar = ({ store }) => {
                         </div>
                     )}
                     <div className="nav-menu-icons">
+                        <ChainLogo />
                         <ProfileButton
                             accessToken={accessToken}
                             store={store}
@@ -181,8 +182,9 @@ const Navbar = ({ store }) => {
                             )}
                         </div>
                     )}
-
-                    {/* <ChainLogo /> */}
+                    <div className="chainLogo">
+                        <ChainLogo />
+                    </div>
                 </div>
             </nav>
         </>
