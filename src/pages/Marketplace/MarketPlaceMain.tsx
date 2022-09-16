@@ -28,14 +28,17 @@ const MarketPlaceMain = ({ saleStats, storeTitle, noStats, noBanner = false }) =
             <div className="market-place-main-stats">
               <div className="market-place-main-stat">
                 <p className="stat-number nowrap">{saleStats.artworks}</p>
+                Assets<br/>
                 Artworks
               </div>
               <div className="market-place-main-stat">
                 <p className="stat-number nowrap">{saleStats.artists}</p>
+                Categories<br/>
                 Artists
               </div>
               <div className="market-place-main-stat">
                 <p className="stat-number nowrap">{saleStats.auctions}</p>
+                Networks<br/>
                 Auctions
               </div>
             </div>
