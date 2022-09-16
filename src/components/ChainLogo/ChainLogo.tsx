@@ -25,19 +25,19 @@ const ChainLogo = () => {
     const chainMessage = `You are on ${capitalize(chain)} Chain`
     switch (chain?.toLowerCase()) {
         case "ethereum":
-            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px] ml-4" src={Ethereum} alt="Ethereum" /></Tooltip>;
+            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px]" src={Ethereum} alt="Ethereum" /></Tooltip>;
         case "binance":
-            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px] ml-4" src={Binance} alt="Binance" /></Tooltip>;
+            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px]" src={Binance} alt="Binance" /></Tooltip>;
         case "polygon":
-            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px] ml-4" src={Polygon} alt="Polygon" /></Tooltip>;
+            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px]" src={Polygon} alt="Polygon" /></Tooltip>;
         case "avalanche":
-            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px] ml-4" src={Avalanche} alt="Avalanche" /></Tooltip>;
+            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px]" src={Avalanche} alt="Avalanche" /></Tooltip>;
         case "tron":
-            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px] ml-4" src={Tron} alt="Tron" /></Tooltip>;
+            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px]" src={Tron} alt="Tron" /></Tooltip>;
         case "near":
-            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px] ml-4" src={Near} alt="Near" /></Tooltip>;
+            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px]" src={Near} alt="Near" /></Tooltip>;
         case "solana":
-            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px] ml-4" src={Solana} alt="Solana" /></Tooltip>;
+            return <Tooltip componentsProps={tooltipStyle} title={chainMessage}><img className="cursor-pointer h-[30px]" src={Solana} alt="Solana" /></Tooltip>;
         default:
             return null;
     }

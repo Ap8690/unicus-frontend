@@ -1,12 +1,11 @@
 import Dialog from "@mui/material/Dialog";
-import binanceLogo from "../../../assets/svgs/binanceLogo.svg";
-import ethereumLogo from "../../../assets/svgs/ethereum.svg";
-// import nearLogo from "../../../assets/svgs/near-protocol-near-logo.svg"
-import ploygonLogo from "../../../assets/svgs/polygon-matic-logo.svg";
-import solanaLogo from "../../../assets/svgs/solana-sol-logo.svg";
-import tronLogo from "../../../assets/svgs/tron-trx-logo.svg";
-import nearLogo from "../../../assets/svgs/nearLogo.svg";
-import avalancheLogo from "../../../assets/svgs/avalanche.svg";
+import binanceLogo from "../../../assets/blockchain-logo/binanceLogo.svg";
+import ethereumLogo from "../../../assets/blockchain-logo/ethereumLogo.svg";
+import ploygonLogo from "../../../assets/blockchain-logo/polygonLogo.svg";
+import solanaLogo from "../../../assets/blockchain-logo/solanaLogo.svg";
+import tronLogo from "../../../assets/blockchain-logo/tronLogo.svg";
+import nearLogo from "../../../assets/blockchain-logo/nearLogo.svg";
+import avalancheLogo from "../../../assets/blockchain-logo/avalancheLogo.svg";
 import { getChainId } from "../../../utils/utils";
 import "./ChainModal.scss";
 import { useContext } from "react";

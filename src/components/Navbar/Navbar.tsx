@@ -184,11 +184,10 @@ const Navbar = ({ store }) => {
                                 />
                             )}
                             <div className="chainLogo">
-                        <ChainLogo />
-                    </div>
+                                <ChainLogo />
+                            </div>
                         </div>
                     )}
-                    
                 </div>
             </nav>
         </>
