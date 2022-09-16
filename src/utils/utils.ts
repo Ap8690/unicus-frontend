@@ -67,8 +67,9 @@ import BN from "bn.js";
 import { createNFTAddressA } from "../Redux/Blockchain/Avalanche/createNFT";
 import { marketPlaceAddressA } from "../Redux/Blockchain/Avalanche/marketPlace";
 import { auctionAddressA } from "../Redux/Blockchain/Avalanche/auction";
-import Web3Token from "web3-token";
 import { WalletConnection } from "near-api-js";
+
+
 const {
     utils: {
         format: { parseNearAmount },
@@ -554,7 +555,7 @@ export const sign_solana_message = async () => {
 export async function getProvider(wallet: any) {
     /* create the provider and return it to the caller */
     /* network set to local network for now */
-    const network = "http://localhost:3000";
+    const network = window.location.origin
     const opts: any = {
         preflightCommitment: "processed",
     };

@@ -4,6 +4,7 @@ import "./index.scss";
 import App from "./App";
 import { ChainProvider } from "./context/ChainContext";
 import { WalletConnectionProvider } from "./context/ConnectWalletContext";
+import { StoreProvider } from "./context/StoreContext";
 import { BrowserRouter } from "react-router-dom";
 import { clusterApiUrl } from "@solana/web3.js";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
@@ -24,15 +25,17 @@ const NewApp = () => {
         [network]
     );
     return (
-        <ConnectionProvider endpoint={endpoint}>
-            <WalletProvider wallets={wallets}>
-                <ChainProvider>
-                    <WalletConnectionProvider>
-                        <App />
-                    </WalletConnectionProvider>
-                </ChainProvider>
-            </WalletProvider>
-        </ConnectionProvider>
+        <StoreProvider>
+            <ConnectionProvider endpoint={endpoint}>
+                <WalletProvider wallets={wallets}>
+                    <ChainProvider>
+                        <WalletConnectionProvider>
+                            <App />
+                        </WalletConnectionProvider>
+                    </ChainProvider>
+                </WalletProvider>
+            </ConnectionProvider>
+        </StoreProvider>
     );
 };
 

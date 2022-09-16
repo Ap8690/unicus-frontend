@@ -45,6 +45,7 @@ import "swiper/css/pagination";
 import { UserProvider } from "./context/UserContext";
 import { TransactionProvider } from "./context/Web3Context";
 import { ConnectWalletContext } from "./context/ConnectWalletContext";
+import { StoreContext } from "./context/StoreContext";
 // redux integration
 import { Provider } from "react-redux";
 import { rstore } from "./Redux/Store";
@@ -56,9 +57,9 @@ require("@solana/wallet-adapter-react-ui/styles.css");
 const App = () => {
     const { chain, showChains, setShowChains } = useContext(ChainContext);
     const { walletModal, setWalletModal } = useContext(ConnectWalletContext);
-    const userInfo = getUserInfo()
+    const userInfo = getUserInfo();
     //@ts-ignore
-    const [store, setStore] = useState<IStore>({});
+    const {store, setStore} = useContext(StoreContext);
     const [userStore, setUserStore] = useState<any>();
     const [accessToken, setAccessToken] = useState("");
     const [showStore, setShowStore] = useState(true);
@@ -66,14 +67,14 @@ const App = () => {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
-        console.log("isMainStore ",isMainStore())
+        console.log("isMainStore ", isMainStore());
         if (isMainStore()) {
             getStoreForUser();
         } else {
             init();
             setLogin();
         }
-    }, [localStorage.getItem('userInfo')]);
+    }, [localStorage.getItem("userInfo")]);
 
     useEffect(() => {
         if (store && store.appearance && store.appearance.storeLoader) {
@@ -148,7 +149,9 @@ const App = () => {
                                 ) : (
                                     <Route
                                         path="/home"
-                                        element={<StoreHomepage />}
+                                        element={
+                                            <StoreHomepage store={store} />
+                                        }
                                     />
                                 )}
                                 <Route path="/login" element={<Login />} />
@@ -206,7 +209,8 @@ const App = () => {
                                                         title={"Privacy Policy"}
                                                         text={
                                                             store.advance &&
-                                                            store.advance.privacyPolicy !==
+                                                            store.advance
+                                                                .privacyPolicy !==
                                                                 ""
                                                                 ? store.advance
                                                                       .privacyPolicy
@@ -277,7 +281,11 @@ const App = () => {
                                 {isMainStore() && (
                                     <Route
                                         path="/create-store"
-                                        element={<CreateStore userStore={userStore}/>}
+                                        element={
+                                            <CreateStore
+                                                userStore={userStore}
+                                            />
+                                        }
                                     />
                                 )}
                                 <Route path="/all-nfts" element={<AllNFTs />} />

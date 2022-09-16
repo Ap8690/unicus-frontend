@@ -39,7 +39,7 @@ const Element = ({ element, currentType }) => {
         <img src={element.cloudinaryUrl} alt={element.name} /></div>
       <h2 className="name">{element.name}</h2>
       <p className="seller-name">
-        {element.sellerInfo}{" "}
+        {element?.sellerInfo.length<10 ? element?.sellerInfo : element?.sellerInfo.slice(0,4) + "..." + element?.sellerInfo.slice(-6)}{" "}
         {element.ifVerified ? <img src={verified} alt="Verified" /> : null}
       </p>
       <div className="info">

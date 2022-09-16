@@ -1,14 +1,14 @@
 // Library
 import { useState } from "react";
 import uuid from "react-uuid";
-
+import { AssetList } from "../../../utils/AssetList";
 // Images
 import arrowLeft from "../../../assets/svgs/arrowLeft.svg";
 import arrowRight from "../../../assets/svgs/arrowRight.svg";
 import chevronDownBlue from "../../../assets/svgs/chevronDownBlue.svg";
 
 // Helper function
-const getNameForHeading = (category) => {
+const getNameForHeading = (category:any) => {
   if (category.toLowerCase() === "all") {
     return "all categories";
   } else {
@@ -80,7 +80,7 @@ const MarketPlaceTrendingNavigator = ({
                     }
               }
             >
-              {categories.map((ct:any) => (
+              {AssetList.map((ct:any) => (
                 <Category
                   category={ct}
                   currentCategory={category}

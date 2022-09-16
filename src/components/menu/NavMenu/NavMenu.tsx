@@ -49,13 +49,13 @@ const NavMenu = ({
             </div>
             <div className="nav-links main">
                 <NestedMenu chain={chain}/>
-                <Link
+                {/* <Link
                     to={"/explore"}
                     className="nav-link"
                     onClick={toggleDrawer}
                 >
                     Explore
-                </Link>
+                </Link> */}
 
                 <Link
                     to={"/create-nft"}

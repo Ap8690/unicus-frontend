@@ -156,12 +156,12 @@ const Navbar = ({ store }) => {
                     ) : (
                         <div className="nav-links">
                             <NestedMenu chain={chain}/>
-                            <Link to={`/explore/${chain}`} className="nav-link">
+                            {/* <Link to={`/explore/${chain}`} className="nav-link">
                                 Explore
-                            </Link>
-                            <Link to={`/create-nft`} className="nav-link">
+                            </Link> */}
+                            {/* <Link to={`/create-nft`} className="nav-link">
                                 Tokenize Asset
-                            </Link>
+                            </Link> */}
                             {!getUserInfo() ? (
                                 <button
                                     onClick={
@@ -169,7 +169,7 @@ const Navbar = ({ store }) => {
                                     }
                                     className="btn nav-link"
                                 >
-                                    Select Chain
+                                    Tokenize Asset
                                 </button>
                             ) : (
                                 <Link
