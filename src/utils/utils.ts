@@ -694,7 +694,7 @@ export const getChainId = (chain: any) => {
 
 // Returns CHAIN Name
 export const getChainName = (chain: any) => {
-    switch (chain?.toString().toLowerCase()) {
+    switch (chain?.toString()) {
         case ethChain:
             return "ethereum";
         case bscChain:

@@ -188,6 +188,9 @@ export const WalletConnectionProvider = ({ children }) => {
                 setFullLoading(false)
                 setWalletModal(false)
                 setShowChains(false)
+                if(sessionStorage.getItem("redirect_after_login")) {
+                    return navigate(sessionStorage.getItem("redirect_after_login"))
+                }
                 navigate('/explore')
             } else {
                 if (walletAddress !== "near") {

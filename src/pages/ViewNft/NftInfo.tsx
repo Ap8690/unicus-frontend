@@ -23,7 +23,7 @@ import {
     removeSale,
     sendStorageDeposit,
     tronWeb,
-    getChainName
+    getChainName,
 } from "../../utils/utils";
 import {
     buyItemApi,
@@ -40,7 +40,7 @@ import { nearChain, solonaChain, tronChain } from "../../config";
 import axios from "axios";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import { decodeParams, getDecimal } from "../../utils/helpers";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PlaceBid from "../../components/modals/PlaceBid/PlaceBid";
 import Input from "../../components/Input/Input";
 import FormControl from "@mui/material/FormControl";
@@ -87,10 +87,11 @@ const NftInfo = ({
     pageChain,
 }) => {
     let userInfo = getUserInfo();
-    const {chain} = useParams()
-    const {setChain} = useContext(ChainContext)
-    const { fullLoading, setChainConnected, setWalletModal, walletModal } =
+    // const { chain } = useParams();
+    const { setChain } = useContext(ChainContext);
+    const { chainConnected, setChainConnected, setWalletModal, walletModal } =
         useContext(ConnectWalletContext);
+    const [chainChangeMessage, setChainChangeMessage] = useState("");
     const [startBid, setStartBid] = useState<any>(
         auction ? auction.startBid : 0.0
     );
@@ -1446,7 +1447,17 @@ const NftInfo = ({
     };
 
     const checkChain = () => {
-        if (isChainConnected(pageChain)) setChainConnected(pageChain);
+        if (isChainConnected(pageChain)) {
+            setChainConnected(pageChain)
+            setChainChangeMessage('')
+        }
+        else {
+            // setChainChangeMessage(
+            //     `You are on ${getChainName(pageChain)}, Please switch to ${getChainName(
+            //         pageChain
+            //     )}`
+            // );
+        }
     };
     const handleDateChange = (e: Dayjs | null) => {
         const remainingSeconds: any = getRemainingSeconds(e["$d"]);
@@ -1602,7 +1613,7 @@ const NftInfo = ({
         if (localStorage.getItem("walletConnected")) {
             checkChain();
         }
-    }, [fullLoading]);
+    }, [localStorage.getItem("walletConnected")]);
 
     return (
         <>
@@ -1843,7 +1854,7 @@ const NftInfo = ({
                         </div>
                     </div>
                     <div className="btn-box">
-                        {getUserInfo() ? (
+                        {chainConnected ? (
                             getUserInfo()._id &&
                             getUserInfo()._id === nft.owner &&
                             Number(nft.nftStatus) === 1 ? (
@@ -1879,15 +1890,16 @@ const NftInfo = ({
                             <button
                                 className="btn"
                                 onClick={() => {
-                                    localStorage.setItem('CHAIN',chain) 
-                                    setChain(getChainName(chain))   
-                                    setWalletModal(true)
+                                    localStorage.setItem("CHAIN", pageChain);
+                                    setChain(getChainName(pageChain));
+                                    setWalletModal(true);
                                 }}
                             >
                                 Connect Wallet
                             </button>
                         )}
                     </div>
+                    {chainChangeMessage && <span>{chainChangeMessage}</span>}
                     <span className="service-fee">Service fees 2%</span>
                 </div>
             </div>

@@ -56,11 +56,13 @@ const Navbar = ({ store }) => {
         else setShowChains(true);
     };
     const handleRedirectToTokenzie = () => {
-        // if(sessionStorage.getItem("CATEGORY")) {
-        //     navigate('/create-nft')
-        //     return
-        // }
-        setShowCategory(true);
+        if(!getUserInfo()) {
+            setShowChains(!showChains)
+            sessionStorage.setItem("redirect_after_login","/create-nft")
+            return
+        }
+        setShowCategory(true)
+        sessionStorage.setItem("redirect_after_login","/create-nft")
     };
 
     useEffect(() => {
@@ -151,7 +153,7 @@ const Navbar = ({ store }) => {
                             <NestedMenu chain={chain} />
                             {!getUserInfo() ? (
                                 <button
-                                    onClick={() => setShowChains(!showChains)}
+                                    onClick={handleRedirectToTokenzie}
                                     className="btn nav-link"
                                 >
                                     Tokenise Asset

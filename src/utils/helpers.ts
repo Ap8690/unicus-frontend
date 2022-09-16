@@ -90,9 +90,19 @@ export async function decodeParams(types:any, output:any, ignoreMethodHash:any) 
  
 // check on nft page is wallet connected with the desired chain
 export const isChainConnected = (pageChain:any) => {
+  console.log("pageChain: ", pageChain);
   let chainName = null
-  if(pageChain === polygonChain || pageChain === bscChain || pageChain === ethChain || pageChain === avalancheChain) {
-    chainName = "Metamask"
+  if(pageChain === polygonChain) {
+    chainName = "Polygon"
+  }
+  else if(pageChain === bscChain) {
+    chainName = "Binance"
+  }
+  else if(pageChain === ethChain) {
+    chainName = "Ethereum"
+  }
+  else if(pageChain === avalancheChain) {
+    chainName = "Avalanche"
   }
   else if(pageChain === tronChain) {
     chainName = "Tron"
@@ -107,7 +117,6 @@ export const isChainConnected = (pageChain:any) => {
   // pageChain will be Chain Id
   // Below will give chain name 
   let connectedChain: any = localStorage.getItem("walletChain") || 0
-  
   return connectedChain === chainName
 }
 
