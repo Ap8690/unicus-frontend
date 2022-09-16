@@ -3,7 +3,7 @@ import SearchBar from "../../SearchBar/SearchBar";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import "./navmenu.scss";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getUserInfo } from "../../../utils/utils";
+import { getUserInfo, isMainStore } from "../../../utils/utils";
 import { Link } from "react-router-dom";
 import NestedMenu from "../../NestedMenu/NestedMenu";
 
@@ -15,7 +15,9 @@ const NavMenu = ({
     store,
     setShowChains,
     showChains,
-    chain
+    chain,
+    handleRedirectToTokenzie,
+    handleGlobalSearch
 }) => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -39,7 +41,7 @@ const NavMenu = ({
         >
             <div className="search-close">
                 <SearchBar
-                    handleGlobalSearch={null}
+                    handleGlobalSearch={handleGlobalSearch}
                     search={search}
                     setSearch={setSearch}
                 />
@@ -47,60 +49,48 @@ const NavMenu = ({
                     <CloseRoundedIcon />
                 </button>
             </div>
-            <div className="nav-links main">
-                <NestedMenu chain={chain}/>
-                {/* <Link
-                    to={"/explore"}
-                    className="nav-link"
-                    onClick={toggleDrawer}
-                >
-                    Explore
-                </Link> */}
 
-                <Link
-                    to={"/create-nft"}
-                    className="nav-link main"
-                    onClick={toggleDrawer}
-                >
-                    Tokenize Asset
-                </Link>
-                {store && Object.keys(store).length !== 0 ? (
-                    <a
-                        href={
-                            store.domain && store.domain.length > 0
-                                ? `http://${store.domain[0]}`
-                                : ""
-                        }
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={toggleDrawer}
-                        className="btn nav-link"
-                    >
-                        Go to My Store
-                    </a>
-                ) : (
-                    <Link
-                        to={"/create-store"}
-                        className="btn nav-link"
-                        onClick={toggleDrawer}
-                    >
-                        Create Store
+            {isMainStore() &&
+            (location.pathname === "/home" || location.pathname === "/blog") ? (
+                <div className="nav-links main">
+                    <Link to={"/about-us"} className="nav-link">
+                        About
                     </Link>
-                )}
-
-                {!getUserInfo() ? (
-                    <button
-                        onClick={() => setShowChains(!showChains)}
-                        className="btn nav-link"
-                    >
-                        Select Chain
-                    </button>
-                ) : (
+                    <Link to={"/resources"} className="nav-link">
+                        Resources
+                    </Link>
+                    <NestedMenu chain={chain} />
                     <Link to={"/marketplace"} className="btn nav-link">
                         Marketplace
                     </Link>
-                )}
-            </div>
+                </div>
+            ) : (
+                <div className="nav-links main">
+                    <NestedMenu chain={chain} />
+                    {!getUserInfo() ? (
+                        <button
+                            onClick={() => setShowChains(!showChains)}
+                            className="btn nav-link"
+                        >
+                            Tokenize Asset
+                        </button>
+                    ) : location.pathname.includes("create-nft") ? (
+                        <Link to={"/marketplace"} className="btn nav-link">
+                            Marketplace
+                        </Link>
+                    ) : (
+                        <button
+                            onClick={() => {
+                                handleRedirectToTokenzie();
+                                toggleDrawer();
+                            }}
+                            className="btn nav-link"
+                        >
+                            Tokenize Asset
+                        </button>
+                    )}
+                </div>
+            )}
         </Drawer>
     );
 };

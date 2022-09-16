@@ -19,10 +19,12 @@ import { toast } from "react-toastify";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { getLocation } from "../../utils/helpers";
 import NestedMenu from "../NestedMenu/NestedMenu";
+import ChainLogo from "../../components/ChainLogo/ChainLogo";
 
 const Navbar = ({ store }) => {
     const [search, setSearch] = useState("");
-    const { chain, setChain, showChains, setShowChains } = useContext(ChainContext);
+    const { chain, setChain, showChains, setShowChains, setShowCategory } =
+        useContext(ChainContext);
     const location = useLocation();
     const navigate = useNavigate();
     const [solidNav, setSolidNav] = useState(false);
@@ -35,7 +37,6 @@ const Navbar = ({ store }) => {
     const openChains = Boolean(anchorChains);
     const accessToken = Cookies.get(ACCESS_TOKEN);
 
-    
     const handleCloseChains = (chain: any) => {
         setAnchorChains(null);
         if (chain !== "") {
@@ -51,10 +52,17 @@ const Navbar = ({ store }) => {
         navigate(`/search/${search}`);
     };
     const handleAuthenticateClick = () => {
-        if(getUserInfo()) navigate("/create-store")
-        else setShowChains(true)
-                                        
-    }
+        if (getUserInfo()) navigate("/create-store");
+        else setShowChains(true);
+    };
+    const handleRedirectToTokenzie = () => {
+        // if(sessionStorage.getItem("CATEGORY")) {
+        //     navigate('/create-nft')
+        //     return
+        // }
+        setShowCategory(true);
+    };
+
     useEffect(() => {
         function new_bg() {
             if (window.scrollY === 0) return setSolidNav(false);
@@ -79,13 +87,19 @@ const Navbar = ({ store }) => {
                 setShowChains={setShowChains}
                 showChains={showChains}
                 chain={chain}
+                handleGlobalSearch={handleGlobalSearch}
+                handleRedirectToTokenzie={handleRedirectToTokenzie}
             />
             <nav className={solidNav ? "solid-nav" : ""}>
                 <div className={`navbar`}>
                     <Link to={"/home"} className="brand-link">
                         <img
                             src={unicusLogo}
-                            className={window.location.pathname.includes('explore') ? "navbar-brand logo--fix": "navbar-brand"}
+                            className={
+                                window.location.pathname.includes("explore")
+                                    ? "navbar-brand logo--fix"
+                                    : "navbar-brand"
+                            }
                             alt="unicus"
                         />
                     </Link>
@@ -104,6 +118,7 @@ const Navbar = ({ store }) => {
                             store={store}
                             setShowChains={setShowChains}
                             showChains={showChains}
+                            handleAuthenticateClick={handleAuthenticateClick}
                         />
                         <button
                             className="nav-menu-icon"
@@ -122,104 +137,65 @@ const Navbar = ({ store }) => {
                             <Link to={"/resources"} className="nav-link">
                                 Resources
                             </Link>
-                            <Link to={"/explore"} className="nav-link">
-                                Explore
-                            </Link>
+                            <NestedMenu chain={chain} />
                             <Link to={"/marketplace"} className="btn nav-link">
                                 Marketplace
                             </Link>
-                            {store && Object.keys(store).length !== 0 ? (
-                                <a
-                                    href={
-                                        store.domain && store.domain.length > 0
-                                            ? `http://${store.domain[0]}`
-                                            : ""
-                                    }
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    <span className="btn nav-link">
-                                        Go to My Store
-                                    </span>
-                                </a>
-                            ) : (
-                                isMainStore() && (
-                                    <button
-                                        onClick={handleAuthenticateClick}
-                                        className="btn nav-link"
-                                    >
-                                        Create Store
-                                    </button>
-                                )
-                            )}
                         </div>
                     ) : (
                         <div className="nav-links">
-                            <NestedMenu chain={chain}/>
-                            {/* <Link to={`/explore/${chain}`} className="nav-link">
-                                Explore
-                            </Link> */}
-                            {/* <Link to={`/create-nft`} className="nav-link">
-                                Tokenize Asset
-                            </Link> */}
+                            <NestedMenu chain={chain} />
                             {!getUserInfo() ? (
                                 <button
-                                    onClick={
-                                        () => setShowChains(!showChains)
-                                    }
+                                    onClick={() => setShowChains(!showChains)}
                                     className="btn nav-link"
                                 >
                                     Tokenize Asset
                                 </button>
-                            ) : (
+                            ) : location.pathname.includes("create-nft") ? (
                                 <Link
                                     to={"/marketplace"}
                                     className="btn nav-link"
                                 >
                                     Marketplace
                                 </Link>
-                            )}
-                            {isMainStore() &&
-                            store &&
-                            Object.keys(store).length !== 0 ? (
-                                <a
-                                    href={
-                                        store.domain && store.domain.length > 0
-                                            ? `http://${store.domain[0]}`
-                                            : ""
-                                    }
-                                    target="_blank"
-                                >
-                                    <button className="btn nav-link">
-                                        Go to My Store
-                                    </button>
-                                </a>
                             ) : (
-                                isMainStore() && (
-                                    <button
-                                        onClick={handleAuthenticateClick}
-                                        className="btn nav-link"
-                                    >
-                                        Create Store
-                                    </button>
-                                )
+                                <button
+                                    onClick={handleRedirectToTokenzie}
+                                    className="btn nav-link"
+                                >
+                                    Tokenize Asset
+                                </button>
                             )}
 
-                            {getUserInfo() && <ProfileButton
-                                accessToken={accessToken}
-                                store={store}
-                                setShowChains={setShowChains}
-                                showChains={showChains}
-                            />}
+                            {getUserInfo() && (
+                                <ProfileButton
+                                    accessToken={accessToken}
+                                    store={store}
+                                    setShowChains={setShowChains}
+                                    showChains={showChains}
+                                    handleAuthenticateClick={
+                                        handleAuthenticateClick
+                                    }
+                                />
+                            )}
                         </div>
                     )}
+
+                    {/* <ChainLogo /> */}
                 </div>
             </nav>
         </>
     );
 };
 
-const ProfileButton = ({ accessToken, store,setShowChains,showChains }) => {
+const ProfileButton = ({
+    accessToken,
+    store,
+    setShowChains,
+    showChains,
+    handleAuthenticateClick,
+}) => {
     const [anchorProfile, setAnchorProfile] = useState<null | HTMLElement>(
         null
     );
@@ -231,17 +207,16 @@ const ProfileButton = ({ accessToken, store,setShowChains,showChains }) => {
     const handleDisconnect = async () => {
         try {
             await disConnectWallet();
-        await disconnect();
-        }
-        catch(err) {
-            console.log(err)
+            await disconnect();
+        } catch (err) {
+            console.log(err);
         }
     };
 
     const handleClickProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
         accessToken
             ? setAnchorProfile(event.currentTarget)
-            : setShowChains(!showChains)
+            : setShowChains(!showChains);
     };
     const handleCloseProfile = () => {
         setAnchorProfile(null);
@@ -267,7 +242,7 @@ const ProfileButton = ({ accessToken, store,setShowChains,showChains }) => {
                 </MenuItem>
                 <MenuItem onClick={handleCloseProfile}>
                     <Link to={"/profile/created"} className="menu-link">
-                        My NFTs
+                        My Assets
                     </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseProfile}>
@@ -275,6 +250,31 @@ const ProfileButton = ({ accessToken, store,setShowChains,showChains }) => {
                         My Listings
                     </Link>
                 </MenuItem>
+                {isMainStore() && store && Object.keys(store).length !== 0 ? (
+                    <MenuItem onClick={handleCloseProfile}>
+                        <a
+                            href={
+                                store.domain && store.domain.length > 0
+                                    ? `http://${store.domain[0]}`
+                                    : ""
+                            }
+                            target="_blank"
+                        >
+                            <button>Go to My Store</button>
+                        </a>
+                    </MenuItem>
+                ) : (
+                    isMainStore() && (
+                        <MenuItem onClick={handleCloseProfile}>
+                            <button
+                                onClick={handleAuthenticateClick}
+                                // className="btn nav-link"
+                            >
+                                Create Store
+                            </button>
+                        </MenuItem>
+                    )
+                )}
                 {!isMainStore() &&
                     store.general &&
                     store.general.user === getUserInfo()._id && (
@@ -285,11 +285,7 @@ const ProfileButton = ({ accessToken, store,setShowChains,showChains }) => {
                         </MenuItem>
                     )}
                 <MenuItem onClick={() => handleDisconnect()}>
-                    <p
-                        className="menu-link"
-                    >
-                        Logout
-                    </p>
+                    <p className="menu-link">Logout</p>
                 </MenuItem>
             </Menu>
         </>

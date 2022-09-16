@@ -27,7 +27,7 @@ type AuthType = Readonly<{
 }>;
 
 const ConnectWallet: React.FC<AuthType> = () => {
-    const { chain } = useContext(ChainContext);
+    const { chain,setShowCategory } = useContext(ChainContext);
     const navigate = useNavigate();
     let redirect = useParams();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,6 +91,7 @@ const ConnectWallet: React.FC<AuthType> = () => {
                         open={isModalOpen}
                         setOpen={setIsModalOpen}
                         setWalletModal={setWalletModal}
+                        setShowCategory={setShowCategory}
                     />
                     <WalletsModal
                         open={walletModal}

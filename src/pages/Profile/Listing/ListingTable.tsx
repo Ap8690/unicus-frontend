@@ -143,7 +143,7 @@ const Table = ({ rows, columns, loading }) => {
                         ))
                     ) : (
                         <tr>
-                            <td>No NFTs Found</td>
+                            <td>No Assets Found</td>
                         </tr>
                     )}
                 </tbody>

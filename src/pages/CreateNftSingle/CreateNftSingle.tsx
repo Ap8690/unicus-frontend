@@ -72,13 +72,15 @@ import uuid from "react-uuid";
 import { decodeParams } from "../../utils/helpers";
 import Cookies from "js-cookie";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
+import { ChainContext } from "../../context/ChainContext";
 
 const CreateNftSingle = () => {
     // let chain_name = ChainIdUsingWalletName(localStorage.getItem("walletChain"))
     const [name, setName] = useState("");
     const [extLink, setExtlink] = useState("");
     const [description, setDescription] = useState("");
-    const [category, setCategory] = useState("art");
+    // const [category, setCategory] = useState("art");
+
     const [price, setPrice] = useState("0.00");
     const [chain, setChain] = useState(ethChain);
     const [contractType, setContractType] = useState("721");
@@ -99,6 +101,8 @@ const CreateNftSingle = () => {
     const inputFile = useRef(null);
     const navigate = useNavigate();
     const { fullLoading } = useContext(ConnectWalletContext);
+    const { category,setCategory } = useContext(ChainContext);
+
     const { connection } = useConnection();
     const { sendTransaction } = useWallet();
     const anWallet = useAnchorWallet();
@@ -332,7 +336,7 @@ const CreateNftSingle = () => {
             });
             // const metaplex = new Metaplex(connection);
             //Fetch all nfts of by owner
-            //the returned NFTs may be Metadatas
+            //the returned Assets may be Metadatas
             // const myNfts = await metaplex.nfts().findByMint(mintKey.publicKey)
             //     .run();
             return mintKey.publicKey.toBase58();
@@ -640,9 +644,9 @@ const CreateNftSingle = () => {
         if (localStorage.getItem("description")) {
             setDescription(JSON.parse(localStorage.getItem("description")));
         }
-        if (localStorage.getItem("category")) {
-            setCategory(JSON.parse(localStorage.getItem("category")));
-        }
+        // if (localStorage.getItem("category")) {
+        //     setCategory(JSON.parse(localStorage.getItem("category")));
+        // }
         if (localStorage.getItem("CHAIN")) {
             setChain(JSON.parse(localStorage.getItem("CHAIN")));
         }
@@ -750,7 +754,7 @@ const CreateNftSingle = () => {
             ) : (
                 <div className="create-nft-single-page">
                     <div className="head">
-                        <div className="blue-head">Tokenize Asset</div>
+                        <div className="blue-head capitalize">Tokenize {category}</div>
                         <div className="head-text">
                             Image, Video, Audio, or 3D Model. File types
                             supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV,
@@ -881,35 +885,7 @@ const CreateNftSingle = () => {
                                         </div>
                                     </>
                                 )}
-                                <div className="field-title">Category</div>
-                                <div className="select-chain">
-                                    <FormControl
-                                        variant="standard"
-                                        sx={{
-                                            m: 0,
-                                            minWidth: 120,
-                                            width: "100%",
-                                        }}
-                                    >
-                                        <Select
-                                            labelId="category-select-label"
-                                            id="chain-select"
-                                            defaultValue="art"
-                                            value={category}
-                                            onChange={handleCategoryChange}
-                                            label="Category"
-                                        >
-                                            {
-                                                AssetList.map((asset: any) => {
-                                                   return  <MenuItem key={uuid()} value={asset.toLowerCase()}>
-                                                        {asset}
-                                                    </MenuItem>
-                                                })
-                                            }
-                                            
-                                        </Select>
-                                    </FormControl>
-                                </div>
+                                
                                 <div className="set-price">
                                     {contractType === "1155" && (
                                         <Input

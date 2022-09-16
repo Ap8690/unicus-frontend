@@ -39,7 +39,7 @@ const alertBox = {
     alignItems: 'center',
 }
  
-const ChainModal = ({ open, setOpen, setWalletModal }) => {
+const ChainModal = ({ open, setOpen, setWalletModal, setShowCategory }) => {
     const { chain, setChain } = useContext(ChainContext);
     const handleClose = () => {
         setOpen(false);
@@ -48,7 +48,7 @@ const ChainModal = ({ open, setOpen, setWalletModal }) => {
     const handleChain = (chain: any) => {
         console.log("Chain Handle")
         setOpen(false);
-        setWalletModal(true);
+        setShowCategory(true);
         setChain(chain?.toLowerCase());
         chain = getChainId(chain?.toLowerCase());
         localStorage.setItem("CHAIN", chain);

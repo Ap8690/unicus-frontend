@@ -93,7 +93,7 @@ const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType, loading 
           />
         </SwiperSlide>
       ))}
-    </Swiper> : <div className="min-h-[300px] text-xl font-bold flex justify-center items-center">No Nfts Found</div>
+    </Swiper> : <div className="min-h-[300px] text-xl font-bold flex justify-center items-center">No Assets Found</div>
 
   ))
 };

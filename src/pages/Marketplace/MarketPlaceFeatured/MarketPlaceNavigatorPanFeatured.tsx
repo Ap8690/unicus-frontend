@@ -62,7 +62,7 @@ const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll, loading }) => {
         </Swiper>
     ) : (
         <div className="min-h-[300px] text-xl font-bold flex justify-center items-center">
-            No Nfts Found
+            No Assets Found
         </div>
     );
 };

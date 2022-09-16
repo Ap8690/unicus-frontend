@@ -45,7 +45,7 @@ const MarketPlaceTrending = ({ chain }) => {
         list={trendingNfts}
         currentScroll={currentScroll}
         loading={loading}
-      />: <div className="min-h-[300px] text-xl font-bold flex justify-center items-center">No Nfts Found</div>}
+      />: <div className="min-h-[300px] text-xl font-bold flex justify-center items-center">No Assets Found</div>}
       {/* <BottomNavigationMarker currentPage={currentScroll} length={length} /> */}
     </div>
   );

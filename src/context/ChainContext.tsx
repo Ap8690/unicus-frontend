@@ -1,26 +1,47 @@
 import { createContext, useEffect, useState } from "react";
-import {getChainName} from "../utils/utils"
+import { getChainName } from "../utils/utils";
 
 export type ChainContextType = {
-	chain: string | null
-	setChain: (value: string) => void
-  showChains?: boolean
-  setShowChains?: (value: boolean) => void
-}
-export const ChainContext = createContext<ChainContextType | null>(null)
- 
-export const ChainProvider = ({children}) => {
-  const [chain, setChain] = useState('all')
-  const [showChains,setShowChains] = useState(false)
-  
-  useEffect(() => {
-    if(localStorage.getItem("walletChain"))
-      setChain(getChainName(localStorage.getItem("walletChain")))
-  },[localStorage.getItem("walletChain")])
+    chain: string | null;
+    setChain: (value: string) => void;
+    showChains?: boolean;
+    setShowChains?: (value: boolean) => void;
+    showCategory?: boolean;
+    setShowCategory?: (value: boolean) => void;
+    category?: string | null;
+    setCategory?: (value: string) => void;
+};
+export const ChainContext = createContext<ChainContextType | null>(null);
 
-  return(
-      <ChainContext.Provider value={{ chain, setChain, showChains, setShowChains }}>
-          {children}
-      </ChainContext.Provider>
-  )
-}
+export const ChainProvider = ({ children }) => {
+    const [chain, setChain] = useState("all");
+    const [showChains, setShowChains] = useState(false);
+    const [category, setCategory] = useState("");
+    const [showCategory, setShowCategory] = useState(false);
+
+    useEffect(() => {
+        if (localStorage.getItem("walletChain"))
+            setChain(getChainName(localStorage.getItem("walletChain")));
+    }, [localStorage.getItem("walletChain")]);
+    useEffect(() => {
+        if (sessionStorage.getItem("CATEGORY")) {
+            setCategory(sessionStorage.getItem("CATEGORY"));
+        }
+    }, [sessionStorage.getItem("CATEGORY")]);
+    return (
+        <ChainContext.Provider
+            value={{
+                chain,
+                setChain,
+                showChains,
+                setShowChains,
+                showCategory,
+                setShowCategory,
+                category,
+                setCategory,
+            }}
+        >
+            {children}
+        </ChainContext.Provider>
+    );
+};

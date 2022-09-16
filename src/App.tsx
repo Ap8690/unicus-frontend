@@ -51,11 +51,12 @@ import { Provider } from "react-redux";
 import { rstore } from "./Redux/Store";
 import ChainModal from "./components/modals/WalletsModal/ChainModal";
 import WalletsModal from "./components/modals/WalletsModal/WalletsModal";
+import CategoriesModal from "./components/modals/Categories/Categories";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 const App = () => {
-    const { chain, showChains, setShowChains } = useContext(ChainContext);
+    const { chain, showChains, setShowChains, showCategory,setShowCategory } = useContext(ChainContext);
     const { walletModal, setWalletModal } = useContext(ConnectWalletContext);
     const userInfo = getUserInfo();
     //@ts-ignore
@@ -75,13 +76,11 @@ const App = () => {
             setLogin();
         }
     }, [localStorage.getItem("userInfo")]);
-
     useEffect(() => {
         if (store && store.appearance && store.appearance.storeLoader) {
             localStorage.setItem("storeLoader", store.appearance.storeLoader);
         }
     }, [store]);
-
     const init = async () => {
         try {
             setLoading(true);
@@ -314,11 +313,17 @@ const App = () => {
                                 open={showChains}
                                 setOpen={setShowChains}
                                 setWalletModal={setWalletModal}
+                                setShowCategory={setShowCategory}
                             />
                             <WalletsModal
                                 open={walletModal}
                                 setOpen={setWalletModal}
                                 chainName={chain?.toLowerCase()}
+                            />
+                            <CategoriesModal 
+                                open={showCategory}
+                                setOpen={setShowCategory}
+                                setWalletModal={setWalletModal}
                             />
                             <Footer />
                         </div>
