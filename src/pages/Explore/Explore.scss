@@ -5,7 +5,7 @@
 .explore {
   position: relative;
   max-width: 1290px;
-  width: 90%;
+  width: 100%;
   padding: 6rem 2rem;
   padding-bottom: 25rem;
 
@@ -16,6 +16,17 @@
     background-clip: text;
     color: transparent;
   }
+  .bottom-filter-border{
+    // left: 0;
+    right: 0;
+    width: 100%;
+    min-width: 100%;
+    height: 4px;
+    position: absolute;
+    bottom: 0px;
+    background-color: rgba(255, 255, 255, 0.2);
+    z-index: 10;
+  }
   .explore-filters {
     @include fn.flex(center, flex-start);
     gap: 2rem;
@@ -23,20 +34,12 @@
     // border-bottom: solid 4px rgba(255, 255, 255, 0.2);
     font-size: fonts.$font-size-2xl;
     // padding: 20px 0;
-    overflow-x: scroll;
     position: relative;
-    overflow-y: hidden;
-    &::after{
-      content: '';
-      // left: 0;
-      right: 0;
-      width: 100%;
-      min-width: 100%;
-      height: 4px;
-      position: sticky;
-      bottom: 0;
-      top: 100%;
-      background-color: rgba(255, 255, 255, 0.2);
+    .swiper-slide{
+      width: auto;
+    }
+    .swiper-wrapper{
+      min-width: fit-content;
     }
     .explore-filter {
       white-space: nowrap;
@@ -54,6 +57,7 @@
       background: colors.$gradient-blue;
       opacity: 0;
       transition: 0.3s ease-in-out;
+      z-index: 15;
     }
     .explore-filter.active::after {
       opacity: 1;
@@ -131,6 +135,7 @@
 }
 @media screen and (max-width: 768px) {
   .explore{
+  padding: 2rem;
     .explore-elements{
       grid-template-columns: repeat(1, 1fr);
     }

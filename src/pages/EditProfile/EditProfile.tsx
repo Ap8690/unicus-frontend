@@ -1,4 +1,5 @@
 import userImg from "../../assets/images/userImage.png"
+import backgroundImg from "../../assets/images/favouritedImage.png"
 import {
     updateProfileBg,
     updateProfilePic,
@@ -10,6 +11,7 @@ import facebookImg from "../../assets/svgs/profileFacebook.svg"
 import discord from "../../assets/images/discord.svg"
 import linkedin from "../../assets/images/linkedin.png"
 import { useEffect, useRef, useState } from "react"
+import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 // import Input from "../../components/Input/Input"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
@@ -31,12 +33,18 @@ import Input from "../../components/Input/Input"
 import Cookies from "js-cookie"
 import { cookieDomain } from "../../config"
 import validator from "validator"
+import CircularProgress from '@mui/material/CircularProgress';
 
 const EditProfile = (props: any) => {
     const [active, setActive] = useState("general")
     const [anchorEl, setAnchorEl] = useState(null)
+    const [loading, setLoading] = useState(false)
     const [user, setUser] = useState<any>()
     const open = Boolean(anchorEl)
+    const [profileImg, setProfileImg] = useState(null)
+    const [bannerImg, setBannerImg] = useState(null)
+    const profilePicFile = useRef(null);
+    const bannerPicFile = useRef(null);
     const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget)
     }
@@ -45,6 +53,81 @@ const EditProfile = (props: any) => {
     }
     let navigate = useNavigate()
     const accessToken = getAccessToken()
+    const uploadImage = (inputFile: any) => {
+        // `current` points to the mounted file input element
+        inputFile.current.click();
+    };
+
+    const uploadUserImage = async (e: any) => {
+        try {
+            setLoading(true);
+            let cloudinaryFormData = new FormData();
+            cloudinaryFormData.append("file", e.target.files[0]);
+            cloudinaryFormData.append("upload_preset", `Unicus___User`);
+            cloudinaryFormData.append("public_id", uuid());
+            const cloudinaryRes = await fetch(
+                "https://api.cloudinary.com/v1_1/dhmglymaz/image/upload/",
+                {
+                    method: "POST",
+                    body: cloudinaryFormData,
+                }
+            );
+            const JSONdata = await cloudinaryRes.json();
+            setProfileImg(JSONdata.url);
+            // now sendig cloudinary url to backend server
+            const res = await updateProfilePic(JSONdata.url);
+
+            if (res && res.data && res.data.user) {
+                localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+                Cookies.set("userInfo", JSON.stringify(res.data.user), {
+                    domain: cookieDomain,
+                    expires: 30,
+                });
+            }
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            toast.error(err?.response.data || "Image upload error");
+            console.log("Cloudinary User Image Upload Error ->", err);
+        }
+    };
+
+    // PORTFOLIO TO HEADER IMAGE
+    const uploadBackgroundImage = async (e: any) => {
+        try {
+            setLoading(true);
+            //set loading true
+            let cloudinaryFormData = new FormData();
+            cloudinaryFormData.append("file", e.target.files[0]);
+            cloudinaryFormData.append("upload_preset", `Unicus___User`);
+            cloudinaryFormData.append("public_id", uuid());
+
+            const cloudinaryRes = await fetch(
+                "https://api.cloudinary.com/v1_1/dhmglymaz/image/upload/",
+                {
+                    method: "POST",
+                    body: cloudinaryFormData,
+                }
+            );
+            const JSONdata = await cloudinaryRes.json();
+
+            setBannerImg(JSONdata.url);
+            // sending to backend
+            const res = await updateProfileBg(JSONdata.url);
+            if (res && res.data && res.data.user) {
+                localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+                Cookies.set("userInfo", JSON.stringify(res.data.user), {
+                    domain: cookieDomain,
+                    expires: 30,
+                });
+            }
+            setLoading(false);
+        } catch (err) {
+            console.log("Cloudinary User Image Upload Error ->", err);
+            setLoading(false);
+            toast.error(err?.response.data || "Image upload error");
+        }
+    };
     const getUserProfile = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/users/getUserProfile`, {
@@ -67,10 +150,30 @@ const EditProfile = (props: any) => {
 
     return (
         <div className="md:mt-[70px] px-8 pb-12 screen7:pt-0 screen18:px-12 screen3:px-8 w-full max-w-[1290px]">
+            <div className="user-background-image-edit relative" onClick={() => uploadImage(bannerPicFile)}>
+                <img src={backgroundImg} className="w-100 object-cover" alt="edit-banner" />
+                {loading 
+                    ? <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-100 transition-all cursor-pointer">
+                        <CircularProgress className="opacity-60" color="inherit" />
+                    </div>
+                    : <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-0 hover:opacity-100 transition-all cursor-pointer">
+                        <CameraAltRoundedIcon className="opacity-60" />
+                    </div>
+                }
+                <input
+                    type="file"
+                    id="file"
+                    ref={bannerPicFile}
+                    accept="image/jpeg, image/png , image/svg+xml"
+                    onChange={(e) => uploadBackgroundImage(e)}
+                    className="d-none"
+                    disabled={loading}
+                />
+            </div>
             <div className="w-full pt-12"> 
                 <div className="editPage-info flex gap-8 screen11:flex-col">
                     <div className="relative felx items-center screen11:flex-col screen11:ml-0 min-w-[200px] editPage-main-image">
-                        <div className="w-32 h-32 relative rounded-full overflow-hidden">
+                        <div className="w-32 h-32 relative rounded-full overflow-hidden" onClick={() => uploadImage(profilePicFile)} >
                             <img
                                 src={
                                     user && user.profileUrl
@@ -78,7 +181,24 @@ const EditProfile = (props: any) => {
                                         : userImg
                                 }
                                 alt="user"
-                                className="h-full w-full object-cover"
+                                className="h-full w-full object-cover relative z-10"
+                            />
+                            {loading 
+                                ? <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-100 transition-all cursor-pointer">
+                                    <CircularProgress className="opacity-60" color="inherit" />
+                                </div>
+                                : <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-0 hover:opacity-100 transition-all cursor-pointer">
+                                    <CameraAltRoundedIcon className="opacity-60" />
+                                </div>
+                            }
+                            <input
+                                type="file"
+                                id="file"
+                                ref={profilePicFile}
+                                accept="image/jpeg, image/png , image/svg+xml"
+                                onChange={(e) => uploadUserImage(e)}
+                                className="d-none"
+                                disabled={loading}
                             />
                         </div>
                     </div>
@@ -281,84 +401,7 @@ const GeneralSettings = ({ resUser }) => {
         setEmail(resUser?.email)
         setBio(resUser?.bio)
     }
-    const profilePicFile = useRef(null);
-    const bannerPicFile = useRef(null);
-
-    const uploadImage = (inputFile: any) => {
-        // `current` points to the mounted file input element
-        inputFile.current.click();
-    };
-
-    const uploadUserImage = async (e: any) => {
-        try {
-            setLoading(true);
-            let cloudinaryFormData = new FormData();
-            cloudinaryFormData.append("file", e.target.files[0]);
-            cloudinaryFormData.append("upload_preset", `Unicus___User`);
-            cloudinaryFormData.append("public_id", uuid());
-            const cloudinaryRes = await fetch(
-                "https://api.cloudinary.com/v1_1/dhmglymaz/image/upload/",
-                {
-                    method: "POST",
-                    body: cloudinaryFormData,
-                }
-            );
-            const JSONdata = await cloudinaryRes.json();
-            setProfileImg(JSONdata.url);
-            // now sendig cloudinary url to backend server
-            const res = await updateProfilePic(JSONdata.url);
-
-            if (res && res.data && res.data.user) {
-                localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-                Cookies.set("userInfo", JSON.stringify(res.data.user), {
-                    domain: cookieDomain,
-                    expires: 30,
-                });
-            }
-            setLoading(false);
-        } catch (err) {
-            setLoading(false);
-            toast.error(err?.response.data || "Image upload error");
-            console.log("Cloudinary User Image Upload Error ->", err);
-        }
-    };
-
-    // PORTFOLIO TO HEADER IMAGE
-    const uploadBackgroundImage = async (e: any) => {
-        try {
-            setLoading(true);
-            //set loading true
-            let cloudinaryFormData = new FormData();
-            cloudinaryFormData.append("file", e.target.files[0]);
-            cloudinaryFormData.append("upload_preset", `Unicus___User`);
-            cloudinaryFormData.append("public_id", uuid());
-
-            const cloudinaryRes = await fetch(
-                "https://api.cloudinary.com/v1_1/dhmglymaz/image/upload/",
-                {
-                    method: "POST",
-                    body: cloudinaryFormData,
-                }
-            );
-            const JSONdata = await cloudinaryRes.json();
-
-            setBannerImg(JSONdata.url);
-            // sending to backend
-            const res = await updateProfileBg(JSONdata.url);
-            if (res && res.data && res.data.user) {
-                localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-                Cookies.set("userInfo", JSON.stringify(res.data.user), {
-                    domain: cookieDomain,
-                    expires: 30,
-                });
-            }
-            setLoading(false);
-        } catch (err) {
-            console.log("Cloudinary User Image Upload Error ->", err);
-            setLoading(false);
-            toast.error(err?.response.data || "Image upload error");
-        }
-    };
+    
     const updateUserProfile = async () => {
         try {
             if (!(username?.length > 0) && !(bio?.length > 0))
@@ -424,7 +467,7 @@ const GeneralSettings = ({ resUser }) => {
                         </button>
                     </div>
                 </div>
-                <div className="flex flex-col gap-4 w-full">
+                {/* <div className="flex flex-col gap-4 w-full">
                     <div>
                         <div>Profile Image</div>
                         <div className="flex gap-4 items-center mt-2">
@@ -476,7 +519,7 @@ const GeneralSettings = ({ resUser }) => {
                         </div>
                     </div>
                     
-                </div>
+                </div> */}
                 </div>
             )}
         </>
