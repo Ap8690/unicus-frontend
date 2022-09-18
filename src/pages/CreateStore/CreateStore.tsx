@@ -104,11 +104,13 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
                 chainName
             }
             let res = await createStore(obj)
-            setLoading(false)
+            
             if (res) {
+                console.log("res: ", res);
                 toast.success("Store Created")
                 setTimeout(function () {
                     toast("Redirecting to your store")
+                    setLoading(false)
                 }, 1000)
                 setTimeout(function () {
                     history("/")
@@ -274,8 +276,9 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
     )
 }
 const CreateStore = ({userStore}: any): ReactJSXElement => {
+    console.log("userStore: ", userStore);
     const [loadingImage, setLoadingImage] = useState(false)
-    if(!getAccessToken() || userStore?.domain[0]) {
+    if(!getAccessToken() || (userStore && Object.keys(userStore).length === 0 && userStore?.domain[0])) {
         console.log("NAVIGATE")
         return <Navigate to="/explore" />
     }

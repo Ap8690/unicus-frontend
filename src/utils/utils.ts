@@ -348,16 +348,13 @@ export const connToMetaMask = async () => {
 };
 
 export const connToCoinbase = async () => {
-    try {
         const message = new Date().getTime().toString();
         const accounts = await ethereumCoinbase.enable();
         web3 = new Web3(ethereumCoinbase);
         localStorage.setItem("walletType", "Coinbase");
         const token = await createSignature(accounts[0], message);
         return { account: accounts[0], token: token, message: message };
-    } catch (error: any) {
-        console.error(error?.message);
-    }
+   
 };
 
 export const connToWalletConnector = async () => {
@@ -572,16 +569,7 @@ export const connToSol = async (
     connect: any,
     setVisible: any
 ) => {
-    // const { solana } = window;
-
-    // @ts-ignore
-    // if (!window?.solana) {
-    //     throw new Error("Please install Phantom Wallet");
-    // }
-    if("solana" in window) {
-        const w= window as any;
-        console.log(w?.solana)
-    }
+  
     const provider: any = await getProvider(wallet);
     console.log("provider: ", provider);
 

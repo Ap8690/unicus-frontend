@@ -22,7 +22,7 @@ const ChainCard = ({ chainName, chainLogo, handleChain }) => {
             className="box py-4 rounded-2xl hover:border hover:border-white border border-black cursor-pointer flex justify-center items-center overflow-hidden w-full"
         >
             <button className="wallet-logo flex items-center justify-center flex-col">
-                <img className="h-8" src={chainLogo} alt="MetaMask" />
+                <img className="h-8 mb-1" src={chainLogo} alt="MetaMask" />
                 <span className="text-white font-medium text-[20px]">
                     {chainName}
                 </span>

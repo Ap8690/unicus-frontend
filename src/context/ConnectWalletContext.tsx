@@ -34,6 +34,9 @@ export type ConnectWalletContextType = {
     setChainConnected: (value: any) => void;
     walletModal?: boolean;
     setWalletModal?: (value: boolean) => void;
+    openInstall?:boolean;
+    setOpenInstall?: (value: boolean) => void;
+    walletInstall?: string;
 };
 export const ConnectWalletContext =
     createContext<ConnectWalletContextType | null>(null);
@@ -44,9 +47,11 @@ export const WalletConnectionProvider = ({ children }) => {
     const { wallet, connect, select, publicKey } = useWallet();
     const { setVisible } = useWalletModal();
     const [fullLoading, setFullLoading] = useState(false);
+    const [openInstall, setOpenInstall] = useState(false);
     const [chainConnected, setChainConnected] = useState("");
     const [walletModal, setWalletModal] = useState<boolean>(false);
     const { setShowChains, setChain } = useContext(ChainContext);
+    const [walletInstall,setWalletInstall] = useState('meatamask')
 
     useEffect(() => {
         const name: any = "Phantom";
@@ -59,6 +64,11 @@ export const WalletConnectionProvider = ({ children }) => {
             let address: any, token: any, walletNetwork: any, message: any;
             switch (walletAddress) {
                 case "meta": {
+                    if(!window?.ethereum) {
+                        setWalletInstall("metamask")
+                        setWalletModal(false)
+                        return setOpenInstall(true)
+                    }
                     const data = await connToMetaMask();
                     address = data.account;
                     token = data.token;
@@ -94,6 +104,11 @@ export const WalletConnectionProvider = ({ children }) => {
                     break;
                 }
                 case "tron": {
+                    if (!((window as any)?.tronWeb)) {
+                        setWalletInstall("tron")
+                        setWalletModal(false)
+                        return setOpenInstall(true)
+                    }
                     const data = await connToTron();
                     address = data.account;
                     token = data.token;
@@ -103,6 +118,11 @@ export const WalletConnectionProvider = ({ children }) => {
                     break;
                 }
                 case "sol": {
+                    if (!((window as any)?.solana)) {
+                        setWalletInstall("phantom")
+                        setWalletModal(false)
+                        return setOpenInstall(true)
+                    }
                     const name: any = "Phantom";
                     select(name);
                     const data = await connToSol(
@@ -203,6 +223,9 @@ export const WalletConnectionProvider = ({ children }) => {
                 setChainConnected,
                 walletModal,
                 setWalletModal,
+                walletInstall,
+                openInstall,
+                setOpenInstall
             }}
         >
             {children}

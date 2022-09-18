@@ -52,12 +52,13 @@ import { rstore } from "./Redux/Store";
 import ChainModal from "./components/modals/WalletsModal/ChainModal";
 import WalletsModal from "./components/modals/WalletsModal/WalletsModal";
 import CategoriesModal from "./components/modals/Categories/Categories";
+import InstalWallet from "./components/modals/InstallWallet/InstallWallet";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 const App = () => {
     const { chain, showChains, setShowChains, showCategory,setShowCategory } = useContext(ChainContext);
-    const { walletModal, setWalletModal } = useContext(ConnectWalletContext);
+    const { walletModal, setWalletModal,setOpenInstall, openInstall, walletInstall } = useContext(ConnectWalletContext);
     const userInfo = getUserInfo();
     //@ts-ignore
     const {store, setStore} = useContext(StoreContext);
@@ -195,7 +196,7 @@ const App = () => {
                                     element={<Explore />}
                                 />
                                 {!isMainStore() &&
-                                    Object.keys(store).length > 0 && (
+                                    Object.keys(userStore).length !== 0 && (
                                         <>
                                             <Route
                                                 path="/store/settings"
@@ -324,6 +325,9 @@ const App = () => {
                                 open={showCategory}
                                 setOpen={setShowCategory}
                                 setWalletModal={setWalletModal}
+                            />
+                            <InstalWallet 
+                                open={openInstall} setOpen={setOpenInstall} wallet={walletInstall}
                             />
                             <Footer />
                         </div>
