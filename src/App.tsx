@@ -195,8 +195,8 @@ const App = () => {
                                     path="/reset-password/:token/:email"
                                     element={<Explore />}
                                 />
-                                {!isMainStore() &&
-                                    Object.keys(userStore).length !== 0 && (
+                                {!isMainStore() && store &&
+                                    Object.keys(store).length > 0 && (
                                         <>
                                             <Route
                                                 path="/store/settings"
