@@ -115,6 +115,7 @@ const App = () => {
         try {
             if (Cookies.get(ACCESS_TOKEN)) {
                 const res = await getStoreByUser();
+                console.log("Store data: ", res.data);
                 if (res.data.store) {
                     setUserStore(res.data.store);
                 }

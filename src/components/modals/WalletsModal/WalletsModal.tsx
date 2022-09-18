@@ -38,7 +38,7 @@ const WalletsModal = ({ open, setOpen,chainName }): JSX.Element => {
                 </button>
             </div>
             <div className="place-bid-dialog">
-                {fullLoading ? <Loader/> :<Wallets loginWallet={loginWallet} chainName={getChainName(chainName)}/>}
+                {fullLoading ? <Loader/> : <Wallets loginWallet={loginWallet} chainName={getChainName(chainName)}/>}
             </div>
         </Dialog>
     );

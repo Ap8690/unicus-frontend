@@ -56,6 +56,13 @@ const Navbar = ({ store }) => {
         else setShowChains(true);
     };
     const handleRedirectToTokenzie = () => {
+        // if(!isMainStore()) {
+        //     sessionStorage.setItem("redirect_after_login","/create-nft")
+        //     setShowCategory(true)
+
+        //     return
+        // }
+
         if(!getUserInfo()) {
             setShowChains(!showChains)
             sessionStorage.setItem("redirect_after_login","/create-nft")
@@ -282,7 +289,7 @@ const ProfileButton = ({
                         </MenuItem>
                     )
                 )}
-                {!isMainStore() &&
+                {!isMainStore() && store && 
                     store.general &&
                     store.general.user === getUserInfo()._id && (
                         <MenuItem onClick={handleCloseProfile}>

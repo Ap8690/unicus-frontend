@@ -22,7 +22,7 @@ import FullBlurLoading from "../../components/Loading/FullBlurLoading"
 const chains =['Ethereum', 'Binance', 'Polygon', 'Avalanche', 'Tron', 'Near', 'Solana']
 
 const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
-
+    let navigate = useNavigate()
     //@ts-ignore
     const [generals, setGeneral] = useState<IGeneral>({})
     const [country, setCountry] = useState({country: "US"})
@@ -30,7 +30,6 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
     const [open, setOpen] = useState(false)
     const options = useMemo(() => countryList().getData(), [])
     const inputFile = useRef(null)
-    const history = useNavigate()
     const uploadImage = () => {
         // `current` points to the mounted file input element
         inputFile.current.click()
@@ -107,18 +106,15 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
             
             if (res) {
                 console.log("res: ", res);
+                const redirectUrl = `http://${res.data.createStore.domain[0]}/store/settings`
+                console.log("redirectUrl: ", redirectUrl);
                 toast.success("Store Created")
                 setTimeout(function () {
                     toast("Redirecting to your store")
                     setLoading(false)
+                    window.open(redirectUrl,'_blank')
+                    navigate("/home")
                 }, 1000)
-                setTimeout(function () {
-                    history("/")
-                    window.open(
-                        `http://${res.data.createStore.domain[0]}/store/settings`
-                    )
-                    window.location.reload()
-                }, 3000)
             } else {
                 throw new Error("Store creation failed!")
             }
@@ -151,7 +147,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
 
     useEffect(() => {
         if (!getAccessToken()) {
-            history("/explore")
+            navigate("/explore")
         }
 
     }, [])
@@ -278,7 +274,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
 const CreateStore = ({userStore}: any): ReactJSXElement => {
     console.log("userStore: ", userStore);
     const [loadingImage, setLoadingImage] = useState(false)
-    if(!getAccessToken() || (userStore && Object.keys(userStore).length === 0 && userStore?.domain[0])) {
+    if(!getAccessToken() || (userStore && Object.keys(userStore).length === 0 && userStore?.domain && userStore?.domain[0])) {
         console.log("NAVIGATE")
         return <Navigate to="/explore" />
     }
