@@ -134,38 +134,36 @@ export const getLocation = (path: string) => {
 // iterate through the store object and return the enabled store
 export const getEnabledStore = (storeData: any) => {
     let enabledObj: any = {};
-    if (Object.keys(storeData).length !== 0)
-        Object.entries(storeData).forEach((item: any) => {
-          console.log("item: ", item);
-            if (item?.showEth && item?.showEth.enabled) {
-                console.log("key: ", item.showEth);
-                enabledObj = { ...enabledObj, showEth: true };
-            }
-            if (item?.showPoly && item?.showPoly.enabled) {
-                console.log("key: ", item.showPoly);
-                enabledObj = { ...enabledObj, showPoly: true };
-            }
-            if (item?.showAva && item?.showAva.enabled) {
-                console.log("key: ", item.showAva);
-                enabledObj = { ...enabledObj, showAva: true };
-            }
-            if (item?.showBinanace && item?.showBinanace.enabled) {
-                console.log("key: ", item.showBinanace);
-                enabledObj = { ...enabledObj, showBinanace: true };
-            }
-            if (item?.showNear && item?.showNear.enabled) {
-                console.log("key: ", item.showNear);
-                enabledObj = { ...enabledObj, showNear: true };
-            }
-            if (item?.showSolana && item?.showSolana.enabled) {
-                console.log("key: ", item.showSolana);
-                enabledObj = { ...enabledObj, showSolana: true };
-            }
-            if (item?.showTron && item?.showTron.enabled) {
-                console.log("key: ", item.showTron);
-                enabledObj = { ...enabledObj, showTron: true };
-            }
-        });
+    if (Object.keys(storeData).length !== 0) {
+        if (storeData?.showEth && storeData?.showEth.enabled) {
+            console.log("key: ", storeData.showEth);
+            enabledObj = { ...enabledObj, showEth: true };
+        }
+        if (storeData?.showPoly && storeData?.showPoly.enabled) {
+            console.log("key: ", storeData.showPoly);
+            enabledObj = { ...enabledObj, showPoly: true };
+        }
+        if (storeData?.showAva && storeData?.showAva.enabled) {
+            console.log("key: ", storeData.showAva);
+            enabledObj = { ...enabledObj, showAva: true };
+        }
+        if (storeData?.showBinanace && storeData?.showBinanace.enabled) {
+            console.log("key: ", storeData.showBinanace);
+            enabledObj = { ...enabledObj, showBinanace: true };
+        }
+        if (storeData?.showNear && storeData?.showNear.enabled) {
+            console.log("key: ", storeData.showNear);
+            enabledObj = { ...enabledObj, showNear: true };
+        }
+        if (storeData?.showSolana && storeData?.showSolana.enabled) {
+            console.log("key: ", storeData.showSolana);
+            enabledObj = { ...enabledObj, showSolana: true };
+        }
+        if (storeData?.showTron && storeData?.showTron.enabled) {
+            console.log("key: ", storeData.showTron);
+            enabledObj = { ...enabledObj, showTron: true };
+        }
+    }
     if (enabledObj["showEth"]) {
         return "ethereum";
     }
