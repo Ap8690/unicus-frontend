@@ -27,37 +27,37 @@ const  AdvancedSupported = () => {
       <div className="switch-box">
         <IOSSwitch
           defaultChecked
-          checked={store?.advance.showSolana.enabled ? eth : false}
+          checked={store?.advance.showEth.enabled ? eth : false}
           onChange={(e: any) => setEth(e.target.checked)}
           disabled={!store?.advance.showEth.enabled}
         />
         <div className="terms">
-          <span className="large-text">Ethereum (Mainnet)</span>
-          <span>This Network Cannot be disabled</span>
+          <span className="large-text">Ethereum</span>
+          <span>This Network Cannot be {store?.advance.showEth.enabled ? "disabled" : "enabled"}</span>
         </div>
       </div>
       <div className="switch-box">
         <IOSSwitch
           defaultChecked
-          checked={store?.advance.showSolana.enabled ? polygon : false}
+          checked={store?.advance.showPoly.enabled ? polygon : false}
           onChange={(e: any) => setPolygon(e.target.checked)}
           disabled={!store?.advance.showPoly.enabled}
         />
         <div className="terms">
-          <span className="large-text">Polygon (Mainnet)</span>
-          <span>This Network Cannot be disabled</span>
+          <span className="large-text">Polygon</span>
+          <span>This Network Cannot be {store?.advance.showPoly.enabled ? "disabled" : "enabled"}</span>
         </div>
       </div>
       <div className="switch-box">
         <IOSSwitch
           defaultChecked
-          checked={store?.advance.showSolana.enabled ? bsc : false}
+          checked={store?.advance.showBinance.enabled ? bsc : false}
           onChange={(e: any) => setBsc(e.target.checked)}
           disabled={!store?.advance.showBinance.enabled}
         />
         <div className="terms">
-          <span className="large-text">Binance Smart Chain (Mainnet)</span>
-          <span>This Network Cannot be disabled</span>
+          <span className="large-text">Binance Smart Chain </span>
+          <span>This Network Cannot be {store?.advance.showBinance.enabled ? "disabled" : "enabled"}</span>
         </div>
       </div>
       <div className="switch-box">
@@ -68,8 +68,8 @@ const  AdvancedSupported = () => {
           disabled={!store?.advance.showSolana.enabled}
         />
         <div className="terms">
-          <span className="large-text">Solana(Mainnet)</span>
-          <span>This Network Cannot be disabled</span>
+          <span className="large-text">Solana</span>
+          <span>This Network Cannot be {store?.advance.showSolana.enabled ? "disabled" : "enabled"}</span>
         </div>
       </div>
       <div className="switch-box">
@@ -80,8 +80,8 @@ const  AdvancedSupported = () => {
           disabled={!store?.advance.showTron.enabled}
         />
         <div className="terms">
-          <span className="large-text">Tron (Mainnet)</span>
-          <span>This Network Cannot be disabled</span>
+          <span className="large-text">Tron </span>
+          <span>This Network Cannot be {store?.advance.showTron.enabled ? "disabled" : "enabled"}</span>
         </div>
       </div>
       <div className="switch-box">
@@ -93,7 +93,7 @@ const  AdvancedSupported = () => {
         />
         <div className="terms">
           <span className="large-text">Near </span>
-          <span>This Network Cannot be disabled</span>
+          <span>This Network Cannot be {store?.advance.showNear.enabled ? "disabled" : "enabled"}</span>
         </div>
       </div>
       <div className="switch-box">
@@ -105,7 +105,7 @@ const  AdvancedSupported = () => {
         />
         <div className="terms">
           <span className="large-text">Avalanche</span>
-          <span>This Network Cannot be disabled</span>
+          <span>This Network Cannot be {store?.advance.showAva.enabled ? "disabled" : "enabled"}</span>
         </div>
       </div>
     
