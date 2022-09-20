@@ -9,6 +9,7 @@ import Support from "./Support/Support";
 import { getAccessToken } from "../../services/api/supplier";
 import { Navigate } from "react-router-dom";
 import {StoreContext} from "../../context/StoreContext";
+import PageLoader from "../../components/Loading/PageLoader";
 
 const StoreSettings = () => {
     const {store} = useContext(StoreContext);
@@ -24,6 +25,7 @@ const StoreSettings = () => {
         <div className="store-settings-page">
             <div className="store-settings">
                 <h1 className="blue-head">My Store</h1>
+                {store && Object.keys(store).length !== 0 ? 
                 <div className="settings">
                     <SettingsMenu
                         currentSetting={currentSetting}
@@ -36,7 +38,7 @@ const StoreSettings = () => {
                     {currentSetting === "advanced" && <AdvancedSettings />}
                     {currentSetting === "appearance" && <AppearanceSettings />}
                     {currentSetting === "support" && <Support />}
-                </div>
+                </div> : <PageLoader/>}
             </div>
         </div>
     );
