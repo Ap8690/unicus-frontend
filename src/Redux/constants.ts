@@ -23,3 +23,8 @@ export const GET_COUNTDOWN: string = 'GET_COUNTDOWN'
 export const GET_NETWORK_ID: string = 'GET_NETWORK_ID'
 export const GET_ASSET_DATA: string = 'GET_ASSET_DATA'
 export const PROVIDER: string = 'PROVIDER'
+
+
+// STORE
+export const GET_USER_STORE: string = 'GET_USER_STORE'
+export const GET_USER_STORE_FAIL: string = 'GET_USER_STORE_FAIL'

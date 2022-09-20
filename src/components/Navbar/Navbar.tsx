@@ -12,12 +12,12 @@ import searchIcon from "../../assets/svgs/searchIcon.svg";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { ChainContext } from "../../context/ChainContext";
 import { ACCESS_TOKEN } from "../../utils/constants";
-import { disConnectWallet, isMainStore, getUserInfo } from "../../utils/utils";
+import { disConnectWallet, isMainStore, getUserInfo, getChainId } from "../../utils/utils";
 import { capitalize, getLocalStorage } from "../../utils/helpers";
 import NavMenu from "../menu/NavMenu/NavMenu";
 import { toast } from "react-toastify";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { getLocation } from "../../utils/helpers";
+import { getLocation, getEnabledStore } from "../../utils/helpers";
 import NestedMenu from "../NestedMenu/NestedMenu";
 import ChainLogo from "../../components/ChainLogo/ChainLogo";
 
@@ -56,12 +56,14 @@ const Navbar = ({ store }) => {
         else setShowChains(true);
     };
     const handleRedirectToTokenzie = () => {
-        // if(!isMainStore()) {
-        //     sessionStorage.setItem("redirect_after_login","/create-nft")
-        //     setShowCategory(true)
-
-        //     return
-        // }
+        if(!isMainStore()) {
+            sessionStorage.setItem("redirect_after_login","/create-nft")
+            setShowCategory(true)
+            let storeEnabled = getEnabledStore(store.advance)
+            let nchain:any = getChainId(storeEnabled); // pass enabled chain for storefront
+            localStorage.setItem("CHAIN", nchain); // store enabled chain
+            return 
+        } 
 
         if(!getUserInfo()) {
             setShowChains(!showChains)

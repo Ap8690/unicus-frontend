@@ -45,10 +45,8 @@ const ChainModal = ({ open, setOpen, setWalletModal, setShowCategory }) => {
     };
     const { setVisible } = useWalletModal();
     const handleChain = (chain: any) => {
-        console.log("handleChain: ", chain);
         setOpen(false);
         setShowCategory(true);
-        // setChain(chain?.toLowerCase());
         chain = getChainId(chain?.toLowerCase());
         localStorage.setItem("CHAIN", chain);
     };

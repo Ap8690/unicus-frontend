@@ -126,3 +126,39 @@ export const getLocalStorage = (item: any) => {
 export const getLocation = (path: string) => {
   return window.location.pathname.includes(path)
 }
+
+// iterate through the store object and return the enabled store
+export const getEnabledStore = (storeData: any) => {
+  let enabledObj:any = {}
+  if(Object.keys(storeData).length !== 0)  
+    Object.entries(storeData).forEach(([key,value]:any) => {
+      console.log('ITEM : ',key,value)
+      if(key == 'showEth' || key == 'showPoly' || key == 'showAva' || key == 'showBinance' || key == 'showNear' || key == 'showSolana' || key == 'showTron') {
+        if(key?.enabled) {
+          enabledObj = {...enabledObj, key:value}
+        }
+      }
+    })
+    if(enabledObj['showEth']) {
+      return "ethereum"
+    }
+    if(enabledObj['showPoly']) {
+      return "polygon"
+    }
+    if(enabledObj['showAva']) {
+      return "avalanche"
+    }
+    if(enabledObj['showBinance']) {
+      return "binance"
+    }
+    if(enabledObj['showNear']) {
+      return "near"
+    }
+    if(enabledObj['showSolana']) {
+      return "solana"
+    }
+    if(enabledObj['showTron']) {
+      return "tron"
+    }
+  return false
+}
