@@ -10,10 +10,10 @@ const AdvancedSettings = () => {
   //@ts-ignore
   const [advance, setAdvance] = useState<IAdvance>({});
 
-  const post = async () => {
+  const getAdvanceSettings = async () => {
     try{
       const res = await axios.get(`${BASE_URL}/advance`);
-    setAdvance(res.data.result);
+      setAdvance(res.data.result);
     }
     catch(err){
       console.log(err)
@@ -21,7 +21,7 @@ const AdvancedSettings = () => {
   };
   
   useEffect(() => {
-    post()
+    getAdvanceSettings()
   }, [])
   return (
     <div className="generalSettings advance">

@@ -8,7 +8,7 @@ import {saveAdvanceInfo} from "../../../services/api/supplier";
 
 const AdvancedCustom = (advance: IAdvance) => {
   //@ts-ignore
-  const [advances, setAdvance] = useState<IAdvance>({});
+  const [advances, setAdvance] = useState<IAdvance>(advance);
   
   const handleSave = async () => {
     try {
@@ -16,13 +16,13 @@ const AdvancedCustom = (advance: IAdvance) => {
       if (res) {
         toast.success("Saved Changes");
       } else {
-        throw "Failed";
+        throw new Error("Failed");
       }
     } catch (err) {
       console.log("err", err);
-      if (err.response) {
+      if (err?.response) {
         return toast.error(err.response.data.err);
-      } else {
+      } else if(err?.message) {
         return toast.error(err.message);
       }
       return toast.error(err)
@@ -38,7 +38,7 @@ const AdvancedCustom = (advance: IAdvance) => {
           className="input-box"
           title="Privacy policy"
           placeholder="Enter Privacy policy"
-          set={advances.privacyPolicy}
+          state={advances.privacyPolicy}
           setState={(e:any) => setAdvance({ ...advances, privacyPolicy: e })}
           multi
         />
@@ -46,21 +46,21 @@ const AdvancedCustom = (advance: IAdvance) => {
           className="input-box"
           title="Terms & Conditions"
           placeholder="Enter Terms & Conditions"
-          set={advances.terms}
+          state={advances.terms}
           setState={(e:any) => setAdvance({ ...advances, terms: e })}
           multi
         />
         <Input
           title="About Us"
           placeholder="Enter About Us"
-          set={advances.aboutUs}
+          state={advances.aboutUs}
           setState={(e:any) => setAdvance({ ...advances, aboutUs: e })}
           multi
         />
         <Input
           title="Creators"
           placeholder="Enter Creators"
-          set={advances.creators}
+          state={advances.creators}
           setState={(e:any) => setAdvance({ ...advances, creators: e })}
           multi
         />
