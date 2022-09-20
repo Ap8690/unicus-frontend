@@ -191,7 +191,9 @@ export async function saveAdvance(advance: IAdvance) {
 export async function saveAppearance(appearance: IAppearance) {
   return await axios.post(`${BASE_URL}/appearance`, appearance, axiosConfig());
 }
-
+export async function saveAdvanceInfo(advances:any) {
+  return await axios.post(`${BASE_URL}/advance`, advances, axiosConfig());
+}
 export async function getStoreByUser(){
   return await axios.get(`${BASE_URL}/store/getStoreByUser`, axiosConfig());
 }

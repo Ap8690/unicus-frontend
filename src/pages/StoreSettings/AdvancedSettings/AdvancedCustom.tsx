@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Input from "../../../components/Input/Input"
 import { BASE_URL } from "../../../config";
 import { IAdvance } from "../../../models/Advance";
+import {saveAdvanceInfo} from "../../../services/api/supplier";
 
 const AdvancedCustom = (advance: IAdvance) => {
   //@ts-ignore
@@ -11,7 +12,7 @@ const AdvancedCustom = (advance: IAdvance) => {
   
   const handleSave = async () => {
     try {
-      const res = await axios.post(`${BASE_URL}/advance`, advances);
+      const res = await saveAdvanceInfo(advances);
       if (res) {
         toast.success("Saved Changes");
       } else {
@@ -20,10 +21,11 @@ const AdvancedCustom = (advance: IAdvance) => {
     } catch (err) {
       console.log("err", err);
       if (err.response) {
-        toast.error(err.response.data.err);
+        return toast.error(err.response.data.err);
       } else {
-        toast.error(err.message);
+        return toast.error(err.message);
       }
+      return toast.error(err)
     }
   };
   return (
@@ -37,7 +39,7 @@ const AdvancedCustom = (advance: IAdvance) => {
           title="Privacy policy"
           placeholder="Enter Privacy policy"
           set={advances.privacyPolicy}
-          setState={(e) => setAdvance({ ...advances, privacyPolicy: e })}
+          setState={(e:any) => setAdvance({ ...advances, privacyPolicy: e })}
           multi
         />
         <Input
@@ -45,21 +47,21 @@ const AdvancedCustom = (advance: IAdvance) => {
           title="Terms & Conditions"
           placeholder="Enter Terms & Conditions"
           set={advances.terms}
-          setState={(e) => setAdvance({ ...advances, terms: e })}
+          setState={(e:any) => setAdvance({ ...advances, terms: e })}
           multi
         />
         <Input
           title="About Us"
           placeholder="Enter About Us"
           set={advances.aboutUs}
-          setState={(e) => setAdvance({ ...advances, aboutUs: e })}
+          setState={(e:any) => setAdvance({ ...advances, aboutUs: e })}
           multi
         />
         <Input
           title="Creators"
           placeholder="Enter Creators"
           set={advances.creators}
-          setState={(e) => setAdvance({ ...advances, creators: e })}
+          setState={(e:any) => setAdvance({ ...advances, creators: e })}
           multi
         />
       </div>
