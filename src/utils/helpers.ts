@@ -1,62 +1,67 @@
-import * as nearAPI from "near-api-js"
-import BN from "bn.js"
-import { nearChain, solonaChain,ethChain, bscChain,tronChain,avalancheChain, polygonChain } from "../config"
-import {ethers} from 'ethers'
-
+import * as nearAPI from "near-api-js";
+import BN from "bn.js";
+import {
+    nearChain,
+    solonaChain,
+    ethChain,
+    bscChain,
+    tronChain,
+    avalancheChain,
+    polygonChain,
+} from "../config";
+import { ethers } from "ethers";
 
 const { keyStores, connect, transactions, WalletConnection } = nearAPI;
 
 export async function initContract() {
-  console.log({keyStores, connect, transactions, WalletConnection },"mearfkdjfj")
-  const config = {
-    networkId: "testnet",
-    keyStore: new keyStores.BrowserLocalStorageKeyStore(),
-    nodeUrl: "https://rpc.testnet.near.org",
-    walletUrl: "https://wallet.testnet.near.org",
-    helperUrl: "https://helper.testnet.near.org",
-    exploreUrl: "https://explorer.testnet.near.org",
-    headers: {},
-  };
-  const keyStore = new keyStores.BrowserLocalStorageKeyStore();
-  const near = await connect(config);
-  const walletConnection = new WalletConnection(near, "unicus");
+    console.log(
+        { keyStores, connect, transactions, WalletConnection },
+        "mearfkdjfj"
+    );
+    const config = {
+        networkId: "testnet",
+        keyStore: new keyStores.BrowserLocalStorageKeyStore(),
+        nodeUrl: "https://rpc.testnet.near.org",
+        walletUrl: "https://wallet.testnet.near.org",
+        helperUrl: "https://helper.testnet.near.org",
+        exploreUrl: "https://explorer.testnet.near.org",
+        headers: {},
+    };
+    const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+    const near = await connect(config);
+    const walletConnection = new WalletConnection(near, "unicus");
 
-  return { config, walletConnection , keyStore, networkId: config.networkId };
+    return { config, walletConnection, keyStore, networkId: config.networkId };
 }
 
-export const sendMeta = async (walletConnection:any,nearConfig:any ) => {
-  return await walletConnection.account().functionCall({
-    contractId: "nft-contract.boomboom.testnet",
-    methodName: "new_default_meta",
-    args: {
-      owner_id: "nft-contract.boomboom.testnet",
-    },
-    attachedDeposit: new BN(0),
-    walletMeta: "",
-    walletCallbackUrl: "",
-  });
+export const sendMeta = async (walletConnection: any, nearConfig: any) => {
+    return await walletConnection.account().functionCall({
+        contractId: "nft-contract.boomboom.testnet",
+        methodName: "new_default_meta",
+        args: {
+            owner_id: "nft-contract.boomboom.testnet",
+        },
+        attachedDeposit: new BN(0),
+        walletMeta: "",
+        walletCallbackUrl: "",
+    });
 };
 
-export const getDecimal=(chain: any)=>{
-  if(chain.toString()== nearChain){
-    return 10**24
-  }else if(chain.toString() == solonaChain){
-    return 1000000000
-  }
-  else if(chain.toString() == tronChain){
-    return 1000000
-  }
-    else{
-    return 10**18
-  }
+export const getDecimal = (chain: any) => {
+    if (chain.toString() == nearChain) {
+        return 10 ** 24;
+    } else if (chain.toString() == solonaChain) {
+        return 1000000000;
+    } else if (chain.toString() == tronChain) {
+        return 1000000;
+    } else {
+        return 10 ** 18;
+    }
+};
 
-}
-
-export function capitalize(s: string)
-{
+export function capitalize(s: string) {
     return s && s[0].toUpperCase() + s.slice(1);
 }
-
 
 const AbiCoder = ethers.utils.AbiCoder;
 const ADDRESS_PREFIX_REGEX = /^(41)/;
@@ -66,99 +71,120 @@ const ADDRESS_PREFIX = "41";
 //output: Data before decoding
 //ignoreMethodHash：Decode the function return value, fill falseMethodHash with false, if decode the data field in the gettransactionbyid result, fill ignoreMethodHash with true
 
-export async function decodeParams(types:any, output:any, ignoreMethodHash:any) {
-
-    if (!output || typeof output === 'boolean') {
+export async function decodeParams(
+    types: any,
+    output: any,
+    ignoreMethodHash: any
+) {
+    if (!output || typeof output === "boolean") {
         ignoreMethodHash = output;
         output = types;
     }
 
-    if (ignoreMethodHash && output.replace(/^0x/, '').length % 64 === 8)
-        output = '0x' + output.replace(/^0x/, '').substring(8);
+    if (ignoreMethodHash && output.replace(/^0x/, "").length % 64 === 8)
+        output = "0x" + output.replace(/^0x/, "").substring(8);
 
     const abiCoder = new AbiCoder();
 
-    if (output.replace(/^0x/, '').length % 64)
-        throw new Error('The encoded string is not valid. Its length must be a multiple of 64.');
+    if (output.replace(/^0x/, "").length % 64)
+        throw new Error(
+            "The encoded string is not valid. Its length must be a multiple of 64."
+        );
     return abiCoder.decode(types, output).reduce((obj, arg, index) => {
-        if (types[index] == 'address')
+        if (types[index] == "address")
             arg = ADDRESS_PREFIX + arg.substr(2).toLowerCase();
         obj.push(arg);
         return obj;
     }, []);
 }
- 
-// check on nft page is wallet connected with the desired chain
-export const isChainConnected = (pageChain:any) => {
-  console.log("pageChain: ", pageChain);
-  let chainName = null
-  if(pageChain === polygonChain) {
-    chainName = "Polygon"
-  }
-  else if(pageChain === bscChain) {
-    chainName = "Binance"
-  }
-  else if(pageChain === ethChain) {
-    chainName = "Ethereum"
-  }
-  else if(pageChain === avalancheChain) {
-    chainName = "Avalanche"
-  }
-  else if(pageChain === tronChain) {
-    chainName = "Tron"
-  }
-  else if(pageChain === solonaChain) {
-    chainName = "Solana"
-  }
-  else if(pageChain === nearChain) {
-    chainName = "Near"
-  }
 
-  // pageChain will be Chain Id
-  // Below will give chain name 
-  let connectedChain: any = localStorage.getItem("walletChain") || 0
-  return connectedChain === chainName
-}
+// check on nft page is wallet connected with the desired chain
+export const isChainConnected = (pageChain: any) => {
+    console.log("pageChain: ", pageChain);
+    let chainName = null;
+    if (pageChain === polygonChain) {
+        chainName = "Polygon";
+    } else if (pageChain === bscChain) {
+        chainName = "Binance";
+    } else if (pageChain === ethChain) {
+        chainName = "Ethereum";
+    } else if (pageChain === avalancheChain) {
+        chainName = "Avalanche";
+    } else if (pageChain === tronChain) {
+        chainName = "Tron";
+    } else if (pageChain === solonaChain) {
+        chainName = "Solana";
+    } else if (pageChain === nearChain) {
+        chainName = "Near";
+    }
+
+    // pageChain will be Chain Id
+    // Below will give chain name
+    let connectedChain: any = localStorage.getItem("walletChain") || 0;
+    return connectedChain === chainName;
+};
 
 export const getLocalStorage = (item: any) => {
-  return localStorage.getItem(item) ? localStorage.getItem(item) : null
-}
+    return localStorage.getItem(item) ? localStorage.getItem(item) : null;
+};
 export const getLocation = (path: string) => {
-  return window.location.pathname.includes(path)
-}
+    return window.location.pathname.includes(path);
+};
 
 // iterate through the store object and return the enabled store
 export const getEnabledStore = (storeData: any) => {
-  let enabledObj:any = {}
-  if(Object.keys(storeData).length !== 0)  
-    Object.entries(storeData).forEach(([key,value]:any) => {
-      if(key == 'showEth' || key == 'showPoly' || key == 'showAva' || key == 'showBinance' || key == 'showNear' || key == 'showSolana' || key == 'showTron') {
-        if(Boolean(key?.enabled)) {
-          console.log("key: ", key);
-          enabledObj = {...enabledObj, key:value}
-        }
-      }
-    })
-    if(enabledObj['showEth']) {
-      return "ethereum"
+    let enabledObj: any = {};
+    if (Object.keys(storeData).length !== 0)
+        Object.entries(storeData).forEach((item: any) => {
+            if (item?.showEth && item?.showEth.enabled) {
+                console.log("key: ", item.showEth);
+                enabledObj = { ...enabledObj, showEth: true };
+            }
+            if (item?.showPoly && item?.showPoly.enabled) {
+                console.log("key: ", item.showPoly);
+                enabledObj = { ...enabledObj, showPoly: true };
+            }
+            if (item?.showAva && item?.showAva.enabled) {
+                console.log("key: ", item.showAva);
+                enabledObj = { ...enabledObj, showAva: true };
+            }
+            if (item?.showBinanace && item?.showBinanace.enabled) {
+                console.log("key: ", item.showBinanace);
+                enabledObj = { ...enabledObj, showBinanace: true };
+            }
+            if (item?.showNear && item?.showNear.enabled) {
+                console.log("key: ", item.showNear);
+                enabledObj = { ...enabledObj, showNear: true };
+            }
+            if (item?.showSolana && item?.showSolana.enabled) {
+                console.log("key: ", item.showSolana);
+                enabledObj = { ...enabledObj, showSolana: true };
+            }
+            if (item?.showTron && item?.showTron.enabled) {
+                console.log("key: ", item.showTron);
+                enabledObj = { ...enabledObj, showTron: true };
+            }
+        });
+    if (enabledObj["showEth"]) {
+        return "ethereum";
     }
-    if(enabledObj['showPoly']) {
-      return "polygon"
+    if (enabledObj["showPoly"]) {
+        return "polygon";
     }
-    if(enabledObj['showAva']) {
-      return "avalanche"
+    if (enabledObj["showAva"]) {
+        return "avalanche";
     }
-    if(enabledObj['showBinance']) {
-      return "binance"
+    if (enabledObj["showBinance"]) {
+        return "binance";
     }
-    if(enabledObj['showNear']) {
-      return "near"
+    if (enabledObj["showNear"]) {
+        return "near";
     }
-    if(enabledObj['showSolana']) {
-      return "solana"
+    if (enabledObj["showSolana"]) {
+        return "solana";
     }
-    if(enabledObj['showTron']) {
-      return "tron"
+    if (enabledObj["showTron"]) {
+        return "tron";
     }
-  return false
-}
+    return false;
+};
