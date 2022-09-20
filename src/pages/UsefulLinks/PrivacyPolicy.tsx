@@ -5,7 +5,7 @@ const PrivacyPolicy = (props:any) => {
   
   return (
     <div>
-      <div className="my-store-cont mt-5 px-5">
+      <div className="my-store-cont mt-5 px-5 min-h-full">
         <div>
           <div>
             <div>
