@@ -12,6 +12,7 @@ import { FormControl, MenuItem, Select } from "@mui/material";
 import { axiosConfig, saveGenerals } from "../../../services/api/supplier";
 
 const GeneralNameAndLogo = (general: IGeneral) => {
+  console.log("general: ", general);
   //@ts-ignore
   const [generals, setGeneral] = useState<IGeneral>({});
   const [storeName, setStoreName] = useState("");
@@ -26,9 +27,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
     // `current` points to the mounted file input element
     inputFile.current.click();
   };
-  useEffect(() => {
-    setGeneral(general);
-  }, [general]);
+  
 
   const getImageUrl = async (e: any) => {
     //uploading to cloudinary
@@ -57,14 +56,14 @@ const GeneralNameAndLogo = (general: IGeneral) => {
     setLoadingImage(false);
   };
 
-  const handleStoreName = (e) => {
+  const handleStoreName = (e:any) => {
     setGeneral({ ...generals, storeName: e });
   };
 
-  const handleEmail = (e) => {
+  const handleEmail = (e:any) => {
     setGeneral({ ...generals, email: e });
   };
-  const handleCountry = (e) => {
+  const handleCountry = (e:any) => {
     setGeneral({ ...generals, country: e });
   };
   const handleSave = async () => {
@@ -75,7 +74,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
       } else {
         throw "Failed";
       }
-    } catch (err) {
+    } catch (err:any) {
       console.log("err", err);
       if (err.response) {
         toast.error(err.response.data.err);
@@ -84,7 +83,13 @@ const GeneralNameAndLogo = (general: IGeneral) => {
       }
     }
   };
-
+  useEffect(() => {
+    setGeneral(general);
+  }, [general]);
+  useEffect(() => {
+    if(Object.keys(general).length !== 0)
+    setGeneral(general)
+  },[])
   return (
     <div className="general-name-logo">
       <div className="create-store-form">

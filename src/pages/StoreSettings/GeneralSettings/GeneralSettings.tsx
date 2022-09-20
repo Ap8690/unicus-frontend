@@ -1,13 +1,14 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { BASE_URL } from "../../../config"
 import { IGeneral } from "../../../models/General"
 import GeneralBasic from "./GeneralBasic"
 import GeneralContact from "./GeneralContact"
 import GeneralNameAndLogo from "./GeneralNameAndLogo"
 import GeneralSocial from "./GeneralSocial"
-
+import {StoreContext} from "../../../context/StoreContext"
 const GeneralSettings = () => {
+  const {store} = useContext(StoreContext)
   const [currentFilter, setCurrentFilter] = useState("nameLogo");
   //@ts-ignore
   const [general, setGeneral] = useState<IGeneral>({});
