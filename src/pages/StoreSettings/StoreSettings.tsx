@@ -8,8 +8,10 @@ import AppearanceSettings from "./AppearanceSettings/AppearanceSettings";
 import Support from "./Support/Support";
 import { getAccessToken } from "../../services/api/supplier";
 import { Navigate } from "react-router-dom";
+import {StoreContext} from "../../context/StoreContext";
 
 const StoreSettings = () => {
+    const {store} = useContext(StoreContext);
     const [currentSetting, setCurrentSetting] = useState("general");
     const handleSettingChange = (newSetting: any) => {
         setCurrentSetting(newSetting);
@@ -28,6 +30,7 @@ const StoreSettings = () => {
                         handleSettingChange={handleSettingChange}
                         storeName={"Store Name"}
                         storeImg={emptyImg}
+                        store={store}
                     />
                     {currentSetting === "general" && <GeneralSettings />}
                     {currentSetting === "advanced" && <AdvancedSettings />}

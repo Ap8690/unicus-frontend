@@ -6,7 +6,7 @@ import { IAppearance } from "../../../models/Appearance";
 import AppearanceOther from "./AppearanceOther"
 
 const AppearanceSettings = () => {
-  const [currentFilter, setCurrentFilter] = useState("header");
+  const [currentFilter, setCurrentFilter] = useState("other");
   //@ts-ignore
   const [appearance, setAppearance] = useState<IAppearance>({});
   useEffect(() => {

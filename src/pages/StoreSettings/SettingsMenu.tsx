@@ -9,12 +9,13 @@ const SettingsMenu = ({
     currentSetting,
     storeName,
     storeImg,
+    store
 }) => {
     return (
         <div className="settings-menu">
             <div className="store-info">
-                <img src={storeImg} alt="" />
-                <span>{storeName}</span>
+                <img src={store?.general.logoUrl ? store?.general.logoUrl : storeImg} alt="" />
+                <span>{store?.general.storeName ? store?.general.storeName : storeName}</span>
             </div>
             <button
                 onClick={()=>handleSettingChange('general')}

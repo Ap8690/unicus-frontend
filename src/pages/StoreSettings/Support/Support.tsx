@@ -8,7 +8,7 @@ const Support = () => {
         <Col lg={12}>
           <h3>Support</h3>
           <p className="mt-5">
-            For any queries, please contact us at support@unicus.com
+            For any queries, please contact us at info@unicus.com
           </p>
           <p>For Premium Support, please upgrade your plan.</p>
         </Col>

@@ -94,11 +94,11 @@ const GeneralNameAndLogo = (general: IGeneral) => {
     <div className="general-name-logo">
       <div className="create-store-form">
         <div className="form-input">
-          <label htmlFor="store-name">Store Name</label>
+          <label htmlFor="store-name">{generals?.storeName ? generals.storeName :"Store Name"}</label>
           <Input
             type="text"
             id="store-name"
-            set={generals.storeName}
+            state={generals.storeName}
             setState={
               handleStoreName
             }
