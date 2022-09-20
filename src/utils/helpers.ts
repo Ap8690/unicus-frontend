@@ -133,6 +133,7 @@ export const getLocation = (path: string) => {
 
 // iterate through the store object and return the enabled store
 export const getEnabledStore = (storeData: any) => {
+  console.log("storeData: ", storeData);
     let enabledObj: any = {};
     if (Object.keys(storeData).length !== 0)
         Object.entries(storeData).forEach((item: any) => {
