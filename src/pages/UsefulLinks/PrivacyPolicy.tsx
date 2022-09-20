@@ -9,7 +9,7 @@ const PrivacyPolicy = (props:any) => {
         <div>
           <div>
             <div>
-              <h1 className="paraTitle" style={{ float: "left", marginTop: "70px", marginLeft:"25px" }}>
+              <h1 className="paraTitle">
                 {props.title}
               </h1>
             </div>

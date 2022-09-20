@@ -64,7 +64,7 @@ const Footer = () => {
       </h3>
       <nav className="footer-nav-bar">
         <div className="footer-nav-links">
-          <Link to={"/about"} className="footer-nav-link">
+          <Link to={"/about-us"} className="footer-nav-link">
             About
           </Link>
           <Link to={"/for-creator"} className="footer-nav-link">
