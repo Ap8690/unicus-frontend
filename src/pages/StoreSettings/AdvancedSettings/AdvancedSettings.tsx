@@ -10,14 +10,19 @@ const AdvancedSettings = () => {
   //@ts-ignore
   const [advance, setAdvance] = useState<IAdvance>({});
 
-  useEffect(() => {
-    post();
-  }, []);
-
   const post = async () => {
-    const res = await axios.get(`${BASE_URL}/advance`);
+    try{
+      const res = await axios.get(`${BASE_URL}/advance`);
     setAdvance(res.data.result);
+    }
+    catch(err){
+      console.log(err)
+    }
   };
+  
+  useEffect(() => {
+    post()
+  }, [])
   return (
     <div className="generalSettings advance">
       <h2>Advance Settings</h2>
@@ -37,7 +42,7 @@ const AdvancedSettings = () => {
           </button>
         </div>
         {currentFilter === "supportedNetworks" && (
-          <AdvancedSupported {...advance} />
+          <AdvancedSupported />
         )}
         {currentFilter === "custom" && <AdvancedCustom {...advance} />}
       </div>

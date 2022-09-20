@@ -114,7 +114,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
           <Input
             type="email"
             id="email"
-            set={generals.email}
+            state={generals.email}
             setState={
               handleEmail
             }

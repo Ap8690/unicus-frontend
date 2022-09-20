@@ -11,6 +11,22 @@ export interface IAdvance {
     enabled: boolean;
     assetsMinted: boolean;
   };
+  showAva: {
+    enabled: boolean;
+    assetsMinted: boolean;
+  };
+  showTron: {
+    enabled: boolean;
+    assetsMinted: boolean;
+  };
+  showNear: {
+    enabled: boolean;
+    assetsMinted: boolean;
+  };
+  showSolana: {
+    enabled: boolean;
+    assetsMinted: boolean;
+  };
   showCronos: boolean;
   showSellerKyc: boolean;
   showBuyerKyc: boolean;
