@@ -60,7 +60,9 @@ const Navbar = ({ store }) => {
             sessionStorage.setItem("redirect_after_login","/create-nft")
             setShowCategory(true)
             let storeEnabled = getEnabledStore(store.advance)
+            console.log("storeEnabled: ", storeEnabled);
             let nchain:any = getChainId(storeEnabled); // pass enabled chain for storefront
+            console.log("nchain: ", nchain);
             localStorage.setItem("CHAIN", nchain); // store enabled chain
             return 
         } 
