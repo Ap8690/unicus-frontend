@@ -200,8 +200,8 @@ const GeneralSocial = () => {
                             placeholder={`Enter ${social.title} url`}
                             state={social.link}
                             item={"socialLinks"}
-                            setState={(e: any) =>
-                                handleSocialLink(social.title, e.target.value)
+                            setState={
+                                handleSocialLink
                             }
                         />
                     ))}
