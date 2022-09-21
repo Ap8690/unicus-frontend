@@ -158,8 +158,8 @@ const GeneralSocial = () => {
             setLoading(false);
         }
     };
-    const handleSocialLink = (title: any, link: any) => {
-        setSocialLinks({ ...socialLinks, [title]: link });
+    const handleSocialLink = (title: any, e: any) => {
+        setSocialLinks({ ...socialLinks, [title]: e.targe.value });
     };
     const handleSave = async () => {
         try {
