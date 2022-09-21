@@ -25,22 +25,23 @@ import {
 import { axiosConfig } from "../../../services/api/supplier";
 import uuid from "react-uuid";
 import PageLoader from "../../../components/Loading/PageLoader";
+import "../../../components/Input/Input";
 
 const GeneralSocial = () => {
     const [socialLinks, setSocialLinks] = useState<ISocialLinks>({
-      facebook:"",
-      twitter: "",
-      instagram: "",
-      discord: "",
-      pinterest: "",
-      reddit: "",
-      behance: "",
-      telegram: "",
-      linkedIn:"",
-      portfolio: "",
-      youtube:"",
-      dribble:"",
-      stackoverflow: "",
+        facebook: "",
+        twitter: "",
+        instagram: "",
+        discord: "",
+        pinterest: "",
+        reddit: "",
+        behance: "",
+        telegram: "",
+        linkedIn: "",
+        portfolio: "",
+        youtube: "",
+        dribble: "",
+        stackoverflow: "",
     });
     const [loading, setLoading] = useState(false);
     const size = "2.5em";
@@ -159,7 +160,7 @@ const GeneralSocial = () => {
         }
     };
     const handleSocialLink = (title: any, e: any) => {
-      console.log("e: ", e);
+        console.log("e: ", e);
         setSocialLinks({ ...socialLinks, [title]: e });
     };
     const handleSave = async () => {
@@ -190,27 +191,38 @@ const GeneralSocial = () => {
 
     return (
         <>
-           { loading ? <PageLoader /> :
-            <div className="general-social">
-                <div className="socialInputs">
-                    {socials.map((social) => (
-                        <Input
-                            key={uuid()}
-                            title={social.title.toUpperCase()}
-                            placeholder={`Enter ${social.title} url`}
-                            state={social.link}
-                            item={"socialLinks"}
-                            name={social.title}
-                            setState={
-                                handleSocialLink
-                            }
-                        />
-                    ))}
+            {loading ? (
+                <PageLoader />
+            ) : (
+                <div className="general-social">
+                    <div className="socialInputs">
+                        {socials.map((social) => (
+                            <div className="input-box">
+                                {social.title && (
+                                    <span className="title">
+                                        {social.title.toUpperCase()}
+                                    </span>
+                                )}
+
+                                <input
+                                    type={"text"}
+                                    onChange={(e: any) =>
+                                        handleSocialLink(
+                                            social.title,
+                                            e.target.value
+                                        )
+                                    }
+                                    value={social.link}
+                                    placeholder={`Enter ${social.title} url`}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    <button className="btn" onClick={handleSave}>
+                        Save Changes
+                    </button>
                 </div>
-                <button className="btn" onClick={handleSave}>
-                    Save Changes
-                </button>
-            </div>}
+            )}
         </>
     );
 };
