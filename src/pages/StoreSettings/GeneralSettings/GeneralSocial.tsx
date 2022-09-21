@@ -27,8 +27,21 @@ import uuid from "react-uuid";
 import PageLoader from "../../../components/Loading/PageLoader";
 
 const GeneralSocial = () => {
-    //@ts-ignore
-    const [socialLinks, setSocialLinks] = useState<ISocialLinks>({});
+    const [socialLinks, setSocialLinks] = useState<ISocialLinks>({
+      facebook:"",
+      twitter: "",
+      instagram: "",
+      discord: "",
+      pinterest: "",
+      reddit: "",
+      behance: "",
+      telegram: "",
+      linkedIn:"",
+      portfolio: "",
+      youtube:"",
+      dribble:"",
+      stackoverflow: "",
+    });
     const [loading, setLoading] = useState(false);
     const size = "2.5em";
     const socials = [
@@ -157,7 +170,7 @@ const GeneralSocial = () => {
                 axiosConfig()
             );
             if (res) {
-                toast.success("Saved Changes");
+                toast.success("Social links have been updated!");
             } else {
                 throw "Failed";
             }
