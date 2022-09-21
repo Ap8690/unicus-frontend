@@ -22,7 +22,7 @@ const StoreSettings = () => {
         return <Navigate to="/explore" />;
     }
     return (
-        <div className="store-settings-page">
+        <div className="store-settings-page"> 
             <div className="store-settings">
                 <h1 className="blue-head">My Store</h1>
                 {store && Object.keys(store).length !== 0 ? 

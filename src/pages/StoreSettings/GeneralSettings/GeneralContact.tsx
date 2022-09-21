@@ -8,16 +8,23 @@ import { IOSSwitch } from "./GeneralBasic"
 const GeneralContact = (general: IGeneral) => {
   const [contactNumber, setContactNumber] = useState("");
   const [email, setEmail] = useState("");
+  const [contactAddress,setContactAddress] = useState("");
   const [enableContact, setEnableContact] = useState(true);
   //@ts-ignore
   const [generals, setGeneral] = useState<IGeneral>({});
   
-  useEffect(() => {
-    setGeneral(general);
-  }, [general]);
-
-  const handleChange = (title, e) => {
+  
+  const handleChange = (title:any, e:any) => {
     setGeneral({ ...generals, [title]: e });
+    if(title === "phone") {
+      setContactNumber(e)
+    }
+    else if(title === "contactEmail") {
+      setEmail(e)
+    }
+    else if(title === "address") {
+      setContactAddress(e)
+    }
   };
   const handleSave = async () => {
     try {
@@ -36,6 +43,13 @@ const GeneralContact = (general: IGeneral) => {
       }
     }
   };
+
+  useEffect(() => {
+    setGeneral(general);
+  }, [general]);
+  useEffect(() => {
+    setGeneral(general);
+  }, []);
   return (
     <div className="general-contact">
       <Input
@@ -43,19 +57,19 @@ const GeneralContact = (general: IGeneral) => {
         placeholder="Enter Contact Number"
         state={contactNumber}
         number
-        setState={(e) => handleChange("phone", e)}
+        setState={(e:any) => handleChange("phone", e)}
       />
       <Input
         title="Email"
         placeholder="Enter Email"
         state={email}
-        setState={(e) => handleChange("contactEmail", e)}
+        setState={(e:any) => handleChange("contactEmail", e)}
       />
       <Input
         title="Address"
         placeholder="Enter Address"
-        state={email}
-        setState={(e) => handleChange("address", e)}
+        state={contactAddress}
+        setState={(e:any) => handleChange("address", e)}
         multi
       />
       {/* <div className="title-tog">Toggle Settings</div>

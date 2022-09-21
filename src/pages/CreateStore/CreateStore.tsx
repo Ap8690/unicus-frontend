@@ -106,7 +106,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
             
             if (res) {
                 console.log("res: ", res);
-                const redirectUrl = `http://${res.data.createStore.domain[0]}/store/settings`
+                const redirectUrl = `http://${res.data.createStore.domain[0]}`
                 console.log("redirectUrl: ", redirectUrl);
                 toast.success("Store Created")
                 setTimeout(function () {
