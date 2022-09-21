@@ -201,7 +201,7 @@ const GeneralSocial = () => {
                             state={social.link}
                             item={"socialLinks"}
                             setState={(e: any) =>
-                                handleSocialLink(social.title, e)
+                                handleSocialLink(social.title, e.target.value)
                             }
                         />
                     ))}
