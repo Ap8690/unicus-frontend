@@ -9,6 +9,10 @@ const Input = (props:any) => {
     if(props.title?.includes('Royalty') && (e.target.value >99 || e.target.value < 0) ) {
       return 
     }
+    if(props?.item === 'socialLinks') {
+      props.setState(e)
+      return 
+    }
     props.setState(e.target.value);
   };
   

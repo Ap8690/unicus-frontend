@@ -160,7 +160,7 @@ const GeneralSocial = () => {
     };
     const handleSocialLink = (title: any, e: any) => {
       console.log("e: ", e);
-        setSocialLinks({ ...socialLinks, [title]: e.target.value });
+        setSocialLinks({ ...socialLinks, [title]: e });
     };
     const handleSave = async () => {
         try {
@@ -199,6 +199,7 @@ const GeneralSocial = () => {
                             title={social.title.toUpperCase()}
                             placeholder={`Enter ${social.title} url`}
                             state={social.link}
+                            item={"socialLinks"}
                             setState={(e: any) =>
                                 handleSocialLink(social.title, e)
                             }
