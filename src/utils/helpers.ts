@@ -100,7 +100,6 @@ export async function decodeParams(
 
 // check on nft page is wallet connected with the desired chain
 export const isChainConnected = (pageChain: any) => {
-    console.log("pageChain: ", pageChain);
     let chainName = null;
     if (pageChain === polygonChain) {
         chainName = "Polygon";
@@ -136,31 +135,24 @@ export const getEnabledStore = (storeData: any) => {
     let enabledObj: any = {};
     if (Object.keys(storeData).length !== 0) {
         if (storeData?.showEth && storeData?.showEth.enabled) {
-            console.log("key: ", storeData.showEth);
             enabledObj = { ...enabledObj, showEth: true };
         }
         if (storeData?.showPoly && storeData?.showPoly.enabled) {
-            console.log("key: ", storeData.showPoly);
             enabledObj = { ...enabledObj, showPoly: true };
         }
         if (storeData?.showAva && storeData?.showAva.enabled) {
-            console.log("key: ", storeData.showAva);
             enabledObj = { ...enabledObj, showAva: true };
         }
         if (storeData?.showBinanace && storeData?.showBinanace.enabled) {
-            console.log("key: ", storeData.showBinanace);
             enabledObj = { ...enabledObj, showBinanace: true };
         }
         if (storeData?.showNear && storeData?.showNear.enabled) {
-            console.log("key: ", storeData.showNear);
             enabledObj = { ...enabledObj, showNear: true };
         }
         if (storeData?.showSolana && storeData?.showSolana.enabled) {
-            console.log("key: ", storeData.showSolana);
             enabledObj = { ...enabledObj, showSolana: true };
         }
         if (storeData?.showTron && storeData?.showTron.enabled) {
-            console.log("key: ", storeData.showTron);
             enabledObj = { ...enabledObj, showTron: true };
         }
     }

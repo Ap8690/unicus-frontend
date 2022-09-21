@@ -7,11 +7,9 @@ import Stats from "../../Stats/Stats"
 
 const AddProperties = ({ onClose, open, type, inputs, setInputs, description }) => {
   const handleClose = () => {
-    console.log("CLOSE ")
     onClose()
   }
   const handleSave = () => {
-    console.log("CLOSE ")
     onClose()
   }
   return (

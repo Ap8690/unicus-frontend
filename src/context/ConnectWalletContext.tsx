@@ -191,7 +191,6 @@ export const WalletConnectionProvider = ({ children }) => {
                 setWalletModal(false);
                 setShowChains(false);
                 setChain(getChainName(localStorage.getItem("CHAIN")));
-                console.log("getChainName(localStorage.getItem): ", getChainName(localStorage.getItem("CHAIN")));
                 if (sessionStorage.getItem("redirect_after_login")) {
                     return navigate(
                         sessionStorage.getItem("redirect_after_login")

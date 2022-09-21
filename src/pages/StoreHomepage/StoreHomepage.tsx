@@ -15,7 +15,6 @@ import {AssetList} from "../../utils/AssetList";
 import {getChainId} from "../../utils/utils";
 
 const StoreHomepage = ({store}:any) => {
-    console.log("store: ", store);
     const [recentCreated, setRecentCreated] = useState([]);
     const [availableSale, setAvailableSale] = useState([]);
     const [recentPurchased, setRecentPurchased] = useState([]);

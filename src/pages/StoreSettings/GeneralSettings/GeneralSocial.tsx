@@ -159,7 +159,8 @@ const GeneralSocial = () => {
         }
     };
     const handleSocialLink = (title: any, e: any) => {
-        setSocialLinks({ ...socialLinks, [title]: e.targe.value });
+      console.log("e: ", e);
+        setSocialLinks({ ...socialLinks, [title]: e.target.value });
     };
     const handleSave = async () => {
         try {

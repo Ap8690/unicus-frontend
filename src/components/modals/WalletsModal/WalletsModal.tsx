@@ -10,7 +10,6 @@ import Loader from "../../Loading/Loader"
 import {Transition} from "../../Animation/Transition/Transition";
 
 const WalletsModal = ({ open, setOpen,chainName }): JSX.Element => {
-    console.log("WalletsModal chainName: ", chainName);
     const handleClose = () => {
         
         setOpen(false);

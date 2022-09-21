@@ -12,7 +12,6 @@ import { FormControl, MenuItem, Select } from "@mui/material";
 import { axiosConfig, saveGenerals } from "../../../services/api/supplier";
 
 const GeneralNameAndLogo = (general: IGeneral) => {
-  console.log("general: ", general);
   //@ts-ignore
   const [generals, setGeneral] = useState<IGeneral>({});
   const [storeName, setStoreName] = useState("");

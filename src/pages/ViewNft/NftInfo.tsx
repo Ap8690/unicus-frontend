@@ -391,8 +391,6 @@ const NftInfo = ({
             commitment: "processed",
         });
         anchor.setProvider(provider);
-        console.log(provider, "provider");
-
         program = new Program(
             //@ts-ignore
             SolMintNftIdl,
@@ -612,8 +610,6 @@ const NftInfo = ({
             lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
             signature: signature,
         });
-
-        console.log("Create Auction Success!", auction);
 
         return auction.mintKey;
     };
@@ -871,8 +867,6 @@ const NftInfo = ({
             setNftLoading(true);
 
             let address: String = localStorage.getItem("walletConnected");
-            console.log("create auction", address, auction);
-
             let obj = {
                 nftId: nft._id,
                 sellerInfo: userInfo.username,

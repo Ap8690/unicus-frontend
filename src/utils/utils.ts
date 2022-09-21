@@ -553,7 +553,6 @@ export async function getProvider(wallet: any) {
     /* create the provider and return it to the caller */
     /* network set to local network for now */
     const network = window.location.origin
-    console.log("solana network: ", network);
     const opts: any = {
         preflightCommitment: "processed",
     };
@@ -571,7 +570,6 @@ export const connToSol = async (
 ) => {
   
     const provider: any = await getProvider(wallet);
-    console.log("provider: ", provider);
 
     if (provider?.publicKey) {
         const sm = await sign_solana_message();

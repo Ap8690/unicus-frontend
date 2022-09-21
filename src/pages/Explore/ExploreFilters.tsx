@@ -20,7 +20,6 @@ const Filter = ({ filter, currentFilter, setCurrentFilter }) => {
 };
 
 const ExploreFilters = ({ filters, currentFilter, setCurrentFilter }) => {
-    console.log("currentFilter: ", currentFilter);
     return (
         <div className="relative">
             <div className="explore-filters relative !overflow-hidden flex justify-between z-20">
