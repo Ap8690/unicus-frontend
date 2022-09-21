@@ -53,6 +53,7 @@ import ChainModal from "./components/modals/WalletsModal/ChainModal";
 import WalletsModal from "./components/modals/WalletsModal/WalletsModal";
 import CategoriesModal from "./components/modals/Categories/Categories";
 import InstalWallet from "./components/modals/InstallWallet/InstallWallet";
+import {UNICUS_STORE} from "./config";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 
@@ -97,6 +98,7 @@ const App = () => {
         } catch (err: any) {
             console.log("STORE FETCH ERROR: ", err);
             setLoading(false);
+            window.open(UNICUS_STORE)
         }
     };
     const setLogin = () => {
