@@ -10,7 +10,7 @@ const Input = (props:any) => {
       return 
     }
     if(props?.item === 'socialLinks') {
-      props.setState(props.title,e.target.value)
+      props.setState(props.name,e.target.value)
       return 
     }
     props.setState(e.target.value);
