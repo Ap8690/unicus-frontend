@@ -99,6 +99,7 @@ const App = () => {
             console.log("STORE FETCH ERROR: ", err);
             setLoading(false);
             window.open(UNICUS_STORE)
+            console.log("UNICUS_STORE: ", UNICUS_STORE);
         }
     };
     const setLogin = () => {
