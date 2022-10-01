@@ -145,6 +145,7 @@ export const WalletConnectionProvider = ({ children }) => {
                     address = data.account;
                     token = data.token;
                     message = data.message;
+                    localStorage.setItem("wallet","Sender")
                     // setChain(nearChain)
                     break;
                 }

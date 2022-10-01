@@ -110,7 +110,7 @@ const CreateNftSingle = () => {
         "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
     );
     const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
-        "HSXgP9hfYGZJmEDwqfc8Xade4sStns6orebqz4ovw53f"
+        "AvrGQ538bsHRfqJpyfEZumVxLfde3GcBw4AH4JLT3Wyu"
     );
     //sol Nft mint
     const [properties, setProperties] = useState([
@@ -388,7 +388,7 @@ const CreateNftSingle = () => {
                 return toast.error("Please enter a valid external link");
             }
             //@ts-expect-error
-            if (chain === tronChain && !window.tronWeb) {
+            if (chain.toString() === tronChain && !window.tronWeb) {
                 toast.error("Tron wallet not detected!");
                 setNftLoading(false);
                 setMetamaskNotFound(true);
@@ -462,21 +462,68 @@ const CreateNftSingle = () => {
                     tokenId,
                     tags: properties,
                 };
-                if (chain === nearChain) {
-                    nftObj.tokenId = uuid();
-                    localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
-                    if (!nftObj.tokenId) {
+                if (chain.toString() === nearChain) {
+                    const wallet = localStorage.getItem("wallet")
+                    if(wallet === "Sender"){
+                        nftObj.tokenId = uuid();
+                        localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
+                        if (!nftObj.tokenId) {
+                            return;
+                        }
+                        // @ts-ignore
+                        const accountId =  window.near.getAccountId();
+                        const tx = {
+                            receiverId: "nft.subauction.testnet",
+                            actions: [
+                              {
+                                methodName: 'nft_mint',
+                                args: {
+                                  token_id: `${nftObj.tokenId}`,
+                                  metadata: {
+                                    title: `${nftObj.name}`,
+                                    description: `${description}`,
+                                    media: `${imageUrl}`,
+                                    reference: `${tokenUri}`,
+                                  //extra: `${extLink}`,
+                                     },
+                                  receiver_id: accountId,
+                                   },
+                                gas: "200000000000000",
+                                deposit: parseNearAmount('1'),
+                            }]
+                          }
+                        // @ts-ignore
+                        const res = await window.near.signAndSendTransaction(tx)
+                        // let functionCallResult = await nearWalletConnection
+                        // .account()
+                        // .functionCall();
+                        console.log(res)
+                        if(res?.response?.error){
+                            throw new Error("Nft not minted!")
+                        }
+                        toast.success("Asset Minted");
+                        nftObj.contractAddress = "nft.subauction.testnet"
+                        await createNft(nftObj);
+                        navigate("/profile/created");
+                    }
+                    else{
+                        nftObj.tokenId = uuid();
+                        localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
+                        if (!nftObj.tokenId) {
+                            return;
+                        }
+                        await mintAssetToNft(
+                            nftObj.tokenId,
+                            name,
+                            description,
+                            tokenUri,
+                            imageUrl
+                        );
                         return;
                     }
-                    await mintAssetToNft(
-                        nftObj.tokenId,
-                        name,
-                        description,
-                        tokenUri,
-                        imageUrl
-                    );
-                    return;
-                } else if (chain === solonaChain) {
+                    
+                } else if (chain.toString() === solonaChain) {
+                    console.log(chain,"chain")
                     const mintKey = await mintSolana(
                         name,
                         description,
@@ -487,7 +534,7 @@ const CreateNftSingle = () => {
                     nftObj.contractAddress = SOL_MINT_NFT_PROGRAM_ID.toBase58()
                     await createNft(nftObj);
                     navigate("/profile/created");
-                } else if (chain === tronChain) {
+                } else if (chain.toString() === tronChain) {
                     setNftLoading(true);
                     toast.info("Minting The Asset");
                     const createNFT = getCreateNftContract(chain, contractType);

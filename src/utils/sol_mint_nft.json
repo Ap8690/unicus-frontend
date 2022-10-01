@@ -251,6 +251,11 @@
           "isSigner": false
         },
         {
+          "name": "creatorTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "refundReceiver",
           "isMut": true,
           "isSigner": false
@@ -547,6 +552,9 @@
             "name": "AuctionEnded"
           },
           {
+            "name": "AuctionStartTimePassed"
+          },
+          {
             "name": "AuctionNotEnded"
           },
           {
@@ -569,6 +577,6 @@
     }
   ],
   "metadata": {
-    "address": "HSXgP9hfYGZJmEDwqfc8Xade4sStns6orebqz4ovw53f"
+    "address": "AvrGQ538bsHRfqJpyfEZumVxLfde3GcBw4AH4JLT3Wyu"
   }
 }

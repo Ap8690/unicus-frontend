@@ -34,6 +34,34 @@ export async function initContract() {
     return { config, walletConnection, keyStore, networkId: config.networkId };
 }
 
+export async function initNear(accessKey: any) {
+    console.log(
+        { keyStores, connect, transactions, WalletConnection },
+        "mearfkdjfj"
+    );
+    const config = {
+        networkId: "testnet",
+        keyStore: new keyStores.BrowserLocalStorageKeyStore(),
+        nodeUrl: "https://rpc.testnet.near.org",
+        walletUrl: "https://wallet.testnet.near.org",
+        helperUrl: "https://helper.testnet.near.org",
+        exploreUrl: "https://explorer.testnet.near.org",
+        headers: {},
+    };
+    // const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+    // const near = await connect(config);
+    // @ts-ignore
+    const accountId = window.near.getAccountId();
+    const keyStore = new nearAPI.keyStores.InMemoryKeyStore();
+    const keyPair = nearAPI.KeyPair.fromString(accessKey.secretKey);
+    await keyStore.setKey('testnet', accountId, keyPair);
+    const near = await nearAPI.connect(Object.assign({ deps: { keyStore } }, config));
+    const walletConnection = new WalletConnection(near, "unicus");
+
+
+    return { config, walletConnection, keyStore, networkId: config.networkId };
+}
+
 export const sendMeta = async (walletConnection: any, nearConfig: any) => {
     return await walletConnection.account().functionCall({
         contractId: "nft-contract.boomboom.testnet",

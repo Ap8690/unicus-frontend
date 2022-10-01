@@ -56,6 +56,7 @@ import {
     getAssociatedTokenAddress,
     createAssociatedTokenAccountInstruction,
     TOKEN_PROGRAM_ID,
+    getOrCreateAssociatedTokenAccount,
 } from "@solana/spl-token";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { Program } from "@project-serum/anchor";
@@ -104,7 +105,8 @@ const NftInfo = ({
     const [popUpShowBid, setPopUpShowBid] = useState(false);
 
     const { connection } = useConnection();
-    const { wallet, connect, publicKey, sendTransaction } = useWallet();
+    const {connect, publicKey, sendTransaction } = useWallet();
+    const wallet = useWallet();
     const anWallet = useAnchorWallet();
     const { setVisible } = useWalletModal();
     let provider: any;
@@ -113,7 +115,7 @@ const NftInfo = ({
         return wallet;
     };
     const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
-        "HSXgP9hfYGZJmEDwqfc8Xade4sStns6orebqz4ovw53f"
+        "AvrGQ538bsHRfqJpyfEZumVxLfde3GcBw4AH4JLT3Wyu"
     );
 
     useEffect(() => {
@@ -561,31 +563,42 @@ const NftInfo = ({
             true
         );
 
+        let creatorTokenAccount = await getAssociatedTokenAddress(
+            mintKey,
+            auction.creator
+        );
         let refundReceiverTokenAccount = await getAssociatedTokenAddress(
             mintKey,
             auction.refundReceiver
         );
 
-        try {
-            let tx = new anchor.web3.Transaction().add(
-                createAssociatedTokenAccountInstruction(
-                    provider.wallet.publicKey,
-                    refundReceiverTokenAccount,
-                    auction.refundReceiver,
-                    mintKey
-                )
-            );
+        const associatedAccountInfo = await connection.getAccountInfo(refundReceiverTokenAccount);
 
-            let signature = await sendTransaction(tx, connection);
-            let latestBlockhash = await connection.getLatestBlockhash();
+        // if(associatedAccountInfo = null)
 
-            await connection.confirmTransaction({
-                blockhash: latestBlockhash.blockhash,
-                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-                signature: signature,
-            });
-        } catch (error) {
-            console.log(error);
+        if (!associatedAccountInfo) {
+
+            try {
+                    let tx = new anchor.web3.Transaction().add(
+                        createAssociatedTokenAccountInstruction(
+                            provider.wallet.publicKey,
+                            refundReceiverTokenAccount,
+                            auction.refundReceiver,
+                            mintKey
+                        )
+                    );
+
+                    let signature = await sendTransaction(tx, connection);
+                    let latestBlockhash = await connection.getLatestBlockhash();
+
+                    await connection.confirmTransaction({
+                        blockhash: latestBlockhash.blockhash,
+                        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+                        signature: signature,
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
         }
 
         const tx = program.transaction.auctionResolve({
@@ -594,6 +607,7 @@ const NftInfo = ({
                 auctionTokenAccount: auctionTokenAccount,
                 mintKey: mintKey,
                 creator: auction.creator,
+                creatorTokenAccount: creatorTokenAccount,   /// extra account field
                 refundReceiver: auction.refundReceiver,
                 refundReceiverTokenAccount: refundReceiverTokenAccount,
                 systemProgram: anchor.web3.SystemProgram.programId,
@@ -873,7 +887,7 @@ const NftInfo = ({
                 auctionId: "",
                 startBid: Number(startBid) * getDecimal(nft.chain),
                 auctionType: "Auction",
-                duration: Number(duration) * 86400,
+                duration: Number(duration) * 86400+600,
                 auctionHash: "",
                 tokenId: nft.tokenId,
                 chain: nft.chain,
@@ -894,7 +908,7 @@ const NftInfo = ({
                 const aucMintKey = await createAuctionSol(
                     nft.tokenId,
                     startBid,
-                    Math.ceil(new Date().getTime() / 1000),
+                    Math.ceil(new Date().getTime() / 1000)+300,
                     Math.ceil(
                         new Date().setSeconds(
                             new Date().getSeconds() //+ obj.duration
@@ -1310,6 +1324,7 @@ const NftInfo = ({
                 }
             }
         } catch (e) {
+            console.log(e)
             setNftLoading(false);
             getRPCErrorMessage(e);
         }

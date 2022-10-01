@@ -50,7 +50,7 @@ import { createNFTAddressP } from "../Redux/Blockchain/Polygon/createNFT";
 import { marketPlaceAddressP } from "../Redux/Blockchain/Polygon/marketPlace";
 import { addWalletAdd } from "../services/api/supplier";
 import { ACCESS_TOKEN } from "./constants";
-import { initContract, sendMeta } from "./helpers";
+import { initContract, initNear, sendMeta } from "./helpers";
 import * as nearAPI from "near-api-js";
 
 import {
@@ -475,20 +475,27 @@ export async function createNearSignature(
 }
 
 export const connectNear = async () => {
-    const { config, walletConnection, keyStore, networkId } =
-        await initContract();
-    let accountId: any;
-    if (!walletConnection.isSignedIn()) {
-        // await walletConnection.requestSignIn(
-        //     {
-        //         contractId: "nft.subauction.testnet",
-        //     }
-        // );
-        await sendMeta(walletConnection, config);
+    // @ts-ignore
+    if (typeof window.near === 'undefined' && !window?.near?.isSender) {
+        window.open('https://sender.org/', '_blank');
+        throw new Error("Please intall sender wallet!")
     }
+    
+    let accountId: any;
+    // @ts-ignore
+    const creds = await window.near.requestSignIn({
+        contractId: "guest-book.testnet", // contract requesting access
+    });
+    console.log(creds,"creds")
+    // await sendMeta(walletConnection, config);
+    
+    const { config, walletConnection, keyStore, networkId } =
+        await initNear(creds?.accessKey);
     nearWalletConnection = walletConnection;
+    nearWalletConnection = walletConnection
     localStorage.setItem("walletChain", "Near");
-    accountId = walletConnection.account().accountId;
+    // @ts-ignore
+    accountId =  window.near.getAccountId();
     const data = await createNearSignature(keyStore, networkId, accountId);
     // let p = new nearAPI
     // const pk = await PublicKey.from(data.publicKey).data;
