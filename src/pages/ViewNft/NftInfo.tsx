@@ -24,6 +24,8 @@ import {
     sendStorageDeposit,
     tronWeb,
     getChainName,
+    nearWalletConnection,
+    getMinimumStorage,
 } from "../../utils/utils";
 import {
     buyItemApi,
@@ -73,6 +75,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { getRemainingSeconds } from "../../utils/date";
 import { ChainContext } from "../../context/ChainContext";
+import { parseNearAmount } from "near-api-js/lib/utils/format";
 
 const NftInfo = ({
     filters,
@@ -738,6 +741,43 @@ const NftInfo = ({
                 return;
             }
             if (nft.chain.toString() === nearChain) {
+                const wallet = localStorage.getItem("wallet")
+                if(wallet === "Sender"){
+                    obj.auctionId = nft.tokenId;
+                    const minimum = await getMinimumStorage();
+                    let tx = {
+                        receiverId: "market_auct.subauction.testnet",
+                        actions: [
+                          {
+                            methodName: 'storage_deposit',
+                            args: {},
+                            deposit: minimum,
+                        }]
+                      }
+                    // @ts-ignore
+                    const storageTx = await window.near.signAndSendTransaction(tx)
+                    console.log(storageTx,"dhfij")
+                    let sale_conditions = {
+                        sale_conditions: parseNearAmount(obj.startBid.toString()), // set asset price in ui
+                    };
+                    tx = {
+                        receiverId: "nft.subauction.testnet",
+                        actions: [
+                          {
+                            methodName: 'nft_approve',
+                            args: {
+                                token_id: obj.tokenId,
+                                account_id: "market_auct.subauction.testnet",
+                                msg: JSON.stringify(sale_conditions),
+                            },
+                            deposit: parseNearAmount('1'),
+                        }]
+                      }
+                    // @ts-ignore
+                    const res = await window.near.signAndSendTransaction(tx)
+                    console.log(res,"response")
+                }
+                else{
                 obj.auctionId = nft.tokenId;
                 localStorage.setItem("nearAction", "Sale");
                 localStorage.setItem("nearSellObj", JSON.stringify(obj));
@@ -745,6 +785,7 @@ const NftInfo = ({
                 console.log(res, "near res");
 
                 return;
+                }
             } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await createSaleSol(nft.tokenId, startBid);
                 obj.auctionId = aucMintKey;

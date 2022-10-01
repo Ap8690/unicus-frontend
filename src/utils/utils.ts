@@ -978,7 +978,7 @@ export const processPurchase = async (token_id: any) => {
     });
 };
 
-const getMinimumStorage = async () => {
+export const getMinimumStorage = async () => {
     let minimum_balance = await nearWalletConnection
         .account()
         .viewFunction(
