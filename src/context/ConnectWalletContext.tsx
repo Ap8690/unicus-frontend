@@ -187,7 +187,7 @@ export const WalletConnectionProvider = ({ children }) => {
                 // Wallet name is stored
                 localStorage.setItem("walletChain", getChainName(localStorage.getItem("CHAIN")));
                 // Address of wallet
-                setChainConnected(walletAddress);
+                setChainConnected(getChainName(localStorage.getItem("CHAIN")));
                 setFullLoading(false);
                 setWalletModal(false);
                 setShowChains(false);
@@ -212,6 +212,12 @@ export const WalletConnectionProvider = ({ children }) => {
             setFullLoading(false);
         }
     };
+
+    useEffect(()=>{
+        if(localStorage.getItem('walletChain')){
+            setChainConnected(localStorage.getItem('walletChain'))
+        }
+    },[])
 
     return (
         <ConnectWalletContext.Provider

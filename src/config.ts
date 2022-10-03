@@ -22,6 +22,10 @@ export const solonaChain: string | undefined =
 export const nearChain: string | undefined = env_uri === "prod" ? "7700" : "7766"
 export const avalancheChain: string | undefined =
     env_uri === "prod" ? "43114" : "43113"
+export const shardeumChain: string | undefined =
+env_uri === "prod" ? "8080" : "8080"
+export const telosChain: string | undefined =
+env_uri === "prod" ? "40" : "41"
 
 export const UNICUS_STORE: string | undefined =
     env_uri === "local"

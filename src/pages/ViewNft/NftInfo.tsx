@@ -26,6 +26,7 @@ import {
     getChainName,
     nearWalletConnection,
     getMinimumStorage,
+    trimString,
 } from "../../utils/utils";
 import {
     buyItemApi,
@@ -756,10 +757,10 @@ const NftInfo = ({
                       }
                     // @ts-ignore
                     const storageTx = await window.near.signAndSendTransaction(tx)
-                    console.log(storageTx,"dhfij")
-                    let sale_conditions = {
-                        sale_conditions: parseNearAmount(obj.startBid.toString()), // set asset price in ui
-                    };
+                    console.log(storageTx,"dhfij",parseNearAmount(obj.startBid.toString()))
+                    // // let sale_conditions = {
+                    //     const sale_conditions: parseNearAmount(obj.startBid.toString()), // set asset price in ui
+                    // // };
                     tx = {
                         receiverId: "nft.subauction.testnet",
                         actions: [
@@ -768,14 +769,23 @@ const NftInfo = ({
                             args: {
                                 token_id: obj.tokenId,
                                 account_id: "market_auct.subauction.testnet",
-                                msg: JSON.stringify(sale_conditions),
+                                msg: JSON.stringify({sale_conditions : parseNearAmount((Number(obj.startBid)/getDecimal(nft.chain)).toString())}),
                             },
-                            deposit: parseNearAmount('1'),
+                            deposit: parseNearAmount('0.01'),
                         }]
                       }
                     // @ts-ignore
                     const res = await window.near.signAndSendTransaction(tx)
                     console.log(res,"response")
+                    if(res?.error){
+                        throw new Error("User Rejected The Transaction!")
+                    }
+                    if(res?.response?.error){
+                        throw new Error("Sale not created!")
+                    }
+                    else{
+                        obj.auctionHash = res.response[0].transaction.hash;
+                    }
                 }
                 else{
                 obj.auctionId = nft.tokenId;
@@ -939,12 +949,67 @@ const NftInfo = ({
             };
 
             if (nft.chain.toString() === nearChain) {
-                obj.auctionId = nft.tokenId;
-                localStorage.setItem("nearAction", "Auction");
-                localStorage.setItem("nearAuctionObj", JSON.stringify(obj));
-                await sendStorageDeposit();
+                const wallet = localStorage.getItem("wallet")
+                if(wallet === "Sender"){
+                    obj.auctionId = nft.tokenId;
+                    const minimum = await getMinimumStorage();
+                    let tx = {
+                        receiverId: "market_auct.subauction.testnet",
+                        actions: [
+                          {
+                            methodName: 'storage_deposit',
+                            args: {},
+                            deposit: minimum,
+                        }]
+                      }
+                    // @ts-ignore
+                    const storageTx = await window.near.signAndSendTransaction(tx)
+                    console.log(storageTx,"dhfij",parseNearAmount(obj.startBid.toString()))
 
-                return;
+                    tx = {
+                        receiverId: "nft.subauction.testnet",
+                        actions: [
+                          {
+                            methodName: 'approve_nft_auction',
+                            args: {
+                                auction_token: obj.tokenId,
+                                account_id: "market_auct.subauction.testnet",
+                                start_time:  Math.ceil(new Date().getTime() / 1000), // Time in seconds (as type u64)
+                                end_time: Math.ceil(
+                                    new Date().setSeconds(
+                                        new Date().getSeconds() //+ obj.duration
+                                    ) /
+                                        1000 +
+                                        600
+                                ), // Time in seconds (as type u64)
+                                msg: JSON.stringify({sale_conditions : parseNearAmount((Number(obj.startBid)/getDecimal(nft.chain)).toString())}),
+                            },
+                            deposit: parseNearAmount('0.01'),
+                        }]
+                      }
+                    // @ts-ignore
+                    const res = await window.near.signAndSendTransaction(tx)
+                    console.log(res,"response")
+                    if(res?.error){
+                        throw new Error("User Rejected The Transaction!")
+                    }
+                    if(res?.response?.error){
+                        throw new Error("Auction not created!")
+                    }
+                    else{
+                        obj.auctionHash = res.response[0].transaction.hash;
+                        await createAuctionApi(obj);
+                        setNftLoading(false);
+                        toast.success("Auction created");
+                    }
+                }
+                else{
+                    obj.auctionId = nft.tokenId;
+                    localStorage.setItem("nearAction", "Auction");
+                    localStorage.setItem("nearAuctionObj", JSON.stringify(obj));
+                    await sendStorageDeposit();
+                    return;
+                }
             } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await createAuctionSol(
                     nft.tokenId,
@@ -1054,11 +1119,49 @@ const NftInfo = ({
             let address: String = localStorage.getItem("walletConnected");
             let transactionHash: any;
             if (nft.chain.toString() === nearChain) {
-                await offerPrice(
-                    nft.tokenId,
-                    Number(auction.startBid) / getDecimal(nft.chain)
-                );
-                return;
+                const wallet = localStorage.getItem("wallet")
+                if(wallet === "Sender"){
+                    const tx = {
+                        receiverId: "market_auct.subauction.testnet",
+                        actions: [
+                          {
+                            methodName: 'offer',
+                            args: {
+                                token_id: nft.tokenId,
+                                nft_contract_id: "nft.subauction.testnet",
+                            },
+                            gas: "200000000000000",
+                            deposit: parseNearAmount((Number(auction.startBid) / getDecimal(nft.chain)).toString())
+                        }]
+                      }
+                    // @ts-ignore
+                    const res = await window.near.signAndSendTransaction(tx)
+                    console.log(res,"response")
+                    if(res?.error){
+                        throw new Error("User Rejected The Transaction!")
+                    }
+                    if(res?.response?.error){
+                        throw new Error("Sale not ended!")
+                    }
+                    else{
+                        await buyItemApi(
+                            auction,
+                            res.response[0].transaction.hash,
+                            creator.name,
+                            creator.id
+                        );
+                        toast.success("Bought Item");
+                        setNftLoading(false);
+                        navigate("/profile/created");
+                    }
+                }
+                else{
+                    await offerPrice(
+                        nft.tokenId,
+                        Number(auction.startBid) / getDecimal(nft.chain)
+                    );
+                    return;
+                }
             } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await sellOrderSol(auction.auctionId);
                 transactionHash = aucMintKey;
@@ -1151,9 +1254,47 @@ const NftInfo = ({
             }
 
             if (nft.chain.toString() === nearChain) {
-                localStorage.setItem("nearBid", bid.toString());
-                offerBid(nft.tokenId, Number(bid));
-                return;
+                const wallet = localStorage.getItem("wallet")
+                if(wallet === "Sender"){
+                    const tx = {
+                        receiverId: "market_auct.subauction.testnet",
+                        actions: [
+                          {
+                            methodName: 'offer_bid',
+                            args: {
+                                token_id: nft.tokenId,
+                                nft_contract_id: "nft.subauction.testnet",
+                            },
+                            gas: "200000000000000",
+                            deposit: parseNearAmount(bid.toString())
+                        }]
+                      }
+                    // @ts-ignore
+                    const res = await window.near.signAndSendTransaction(tx)
+                    console.log(res,"response")
+                    if(res?.error){
+                        throw new Error("User Rejected The Transaction!")
+                    }
+                    if(res?.response?.error){
+                        throw new Error("Bid Not Placecd!")
+                    }
+                    else{
+                        await placeBidApi(
+                            auction,
+                            res.response[0].transaction.hash,
+                            (Number(bid) * getDecimal(nft.chain)).toFixed(0),
+                            creator.name,
+                            creator.email
+                        );
+                        toast("Bid placed Successful");
+                        setNftLoading(false);
+                    }
+                }
+                else{
+                    localStorage.setItem("nearBid", bid.toString());
+                    offerBid(nft.tokenId, Number(bid));
+                    return;
+                }
             } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await bidAuctionSol(auction.auctionId, bid);
                 if (aucMintKey) {
@@ -1243,8 +1384,40 @@ const NftInfo = ({
             // );
             let address: String = localStorage.getItem("walletConnected");
             if (nft.chain.toString() === nearChain) {
-                removeSale(nft.tokenId);
-                return;
+                const wallet = localStorage.getItem("wallet")
+                if(wallet === "Sender"){
+                    const tx = {
+                        receiverId: "market_auct.subauction.testnet",
+                        actions: [
+                          {
+                            methodName: 'remove_sale',
+                            args: {
+                                token_id: nft.tokenId,
+                                nft_contract_id: "nft.subauction.testnet",
+                            },
+                            gas: "200000000000000",
+                            deposit: "1"
+                        }]
+                      }
+                    // @ts-ignore
+                    const res = await window.near.signAndSendTransaction(tx)
+                    console.log(res,"response")
+                    if(res?.error){
+                        throw new Error("User Rejected The Transaction!")
+                    }
+                    if(res?.response?.error){
+                        throw new Error("Sale not ended!")
+                    }
+                    else{
+                        await endSaleApi(auction, res.response[0].transaction.hash, creator.name);
+                        toast.success("Sale Ended");
+                        setNftLoading(false);
+                    }
+                }
+                else{
+                    removeSale(nft.tokenId);
+                    return;
+                }
             } else if (Number(nft.chain) === Number(solonaChain)) {
                 const aucMintKey = await removeSaleSol(auction.auctionId);
                 if (aucMintKey) {
@@ -1310,10 +1483,44 @@ const NftInfo = ({
             //   toast.error("Auction is ongoing. Try cancelling.");
             //   return console.log("Auction Not ended Yet");
             // }
+            console.log(auction)
 
             let address: String = localStorage.getItem("walletConnected");
             if (auction.chain.toString() === nearChain) {
-                processPurchase(nft.tokenId);
+                const wallet = localStorage.getItem("wallet")
+                if(wallet === "Sender"){
+                    const tx = {
+                        receiverId: "market_auct.subauction.testnet",
+                        actions: [
+                          {
+                            methodName: 'process_auction_purchase',
+                            args: {
+                                token_id: nft.tokenId,
+                                nft_contract_id: "nft.subauction.testnet",
+                            },
+                            gas: "200000000000000",
+                            deposit: auction.lostBid,
+                        }]
+                      }
+                    // @ts-ignore
+                    const res = await window.near.signAndSendTransaction(tx)
+                    console.log(res,"response")
+                    if(res?.error){
+                        throw new Error("User Rejected The Transaction!")
+                    }
+                    if(res?.response?.error){
+                        throw new Error("Auction Not Ended!")
+                    }
+                    else{
+                        await endSaleApi(auction, res.response[0].transaction.hash, creator.name);
+                        toast.success("Auction Ended!");
+                        setNftLoading(false);
+                    }
+                }
+                else{
+                    processPurchase(nft.tokenId);
+                    return;
+                }
             } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await auctionResolveSol(auction.auctionId);
                 if (aucMintKey) {
@@ -1377,7 +1584,40 @@ const NftInfo = ({
 
             let address: String = localStorage.getItem("walletConnected");
             if (auction.chain.toString() === nearChain) {
-                removeAuction(nft.tokenId);
+                const wallet = localStorage.getItem("wallet")
+                if(wallet === "Sender"){
+                    const tx = {
+                        receiverId: "market_auct.subauction.testnet",
+                        actions: [
+                          {
+                            methodName: 'remove_auction',
+                            args: {
+                                token_id: nft.tokenId,
+                                nft_contract_id: "nft.subauction.testnet",
+                            },
+                            gas: "200000000000000",
+                            deposit: "1"
+                        }]
+                      }
+                    // @ts-ignore
+                    const res = await window.near.signAndSendTransaction(tx)
+                    console.log(res,"response")
+                    if(res?.error){
+                        throw new Error("User Rejected The Transaction!")
+                    }
+                    if(res?.response?.error){
+                        throw new Error("Auction not Cancelled!")
+                    }
+                    else{
+                        await cancelAuctionApi(auction, res.response[0].transaction.hash, creator.name);
+                        toast.success("Auction Cancelled");
+                        setNftLoading(false);
+                    }
+                }
+                else{
+                    removeAuction(nft.tokenId);
+                    return;
+                }
             } else if (nft.chain.toString() === solonaChain) {
                 const aucMintKey = await cancelAuctionSol(auction.auctionId);
                 if (aucMintKey) {
@@ -1836,7 +2076,7 @@ const NftInfo = ({
                             alt="creator"
                             className="user-img"
                         />
-                        <span>{creator?.username}</span>
+                        <span>{trimString(creator?.username)}</span>
                     </div>
                 </div>
                 <div className="more-info">
@@ -1972,8 +2212,8 @@ const History = ({ data }) => {
                         <div className="msg">
                             {history.state} {getCompleteDate(history.date)}
                         </div>
-                        <div className="info">From {history.from}</div>
-                        <div className="info">To {history.to}</div>
+                        <div className="info">From {trimString(history.from)}</div>
+                        <div className="info">To {trimString(history.to)}</div>
                     </div>
                 </div>
             ))}

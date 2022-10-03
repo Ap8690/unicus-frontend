@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { cookieDomain } from "../../../config";
 import { toast } from "react-toastify";
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import { trimString } from "../../../utils/utils";
 
 const User = ({ user }): ReactJSXElement => {
     const navigate = useNavigate();
@@ -147,7 +148,7 @@ const User = ({ user }): ReactJSXElement => {
                 </div>
                 <div className="user-info">
                     <h3 className="user-name custom-border-bottom">
-                        {user?.username.length>30 ? user?.username.slice(0,8) + '...' + user?.username.slice(-6) : user?.username}
+                        {trimString(user?.username)}
                     </h3>
                     <h5 className="text-[16px] custom-border-bottom">
                         {user?.bio}

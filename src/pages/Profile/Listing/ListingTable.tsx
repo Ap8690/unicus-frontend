@@ -2,11 +2,12 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import ethereum from "../../../assets/svgs/ethereum.svg";
 import DefaultModal from "../../../components/modals/DefaultModal/DefaultModal";
 import { bscChain, ethChain, tronChain } from "../../../config";
-import { getChainSymbol } from "../../../utils/utils";
+import { getChainLogo, getChainSymbol } from "../../../utils/utils";
 import { getCompleteDate } from "../../../utils/date";
 import uuid from "react-uuid";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@mui/material";
+import { getDecimal } from "../../../utils/helpers";
 // Element of data of activity table
 const TableData = ({ activity, link }) => {
     let navigate = useNavigate();
@@ -58,10 +59,10 @@ const TableData = ({ activity, link }) => {
             </td>
             {activity.startBid ? (
                 <>
-                    <td className="table-data-price">
-                        <span className="eth-price">
-                            <img src={ethereum} alt="Ethereum" />
-                            {activity.startBid / 10 ** 18}
+                    <td className="table-data-price ">
+                        <span className="eth-price ">
+                            <img className="w-[30px]" src={getChainLogo(activity.chain)} alt="Ethereum" />
+                           <span className="flex justify-center items-center">{activity.startBid / getDecimal(activity.chain)}</span>
                         </span>
                         {/* <span className="dollar-price">${activity.priceDollar}</span> */}
                     </td>

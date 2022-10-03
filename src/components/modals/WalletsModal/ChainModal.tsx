@@ -3,6 +3,8 @@ import binanceLogo from "../../../assets/blockchain-logo/binanceLogo.svg";
 import ethereumLogo from "../../../assets/blockchain-logo/ethereumLogo.svg";
 import ploygonLogo from "../../../assets/blockchain-logo/polygonLogo.svg";
 import solanaLogo from "../../../assets/blockchain-logo/solanaLogo.svg";
+import shardumLogo from "../../../assets/blockchain-logo/shardumLogo.jpeg";
+import telosLogo from "../../../assets/blockchain-logo/telosLogo.png";
 import tronLogo from "../../../assets/blockchain-logo/tronLogo.svg";
 import nearLogo from "../../../assets/blockchain-logo/nearLogo.svg";
 import avalancheLogo from "../../../assets/blockchain-logo/avalancheLogo.svg";
@@ -91,6 +93,16 @@ const ChainModal = ({ open, setOpen, setWalletModal, setShowCategory }) => {
                     handleChain={handleChain}
                     chainName={"Polygon"}
                     chainLogo={ploygonLogo}
+                />
+                <ChainCard
+                    handleChain={handleChain}
+                    chainName={"Shardeum"}
+                    chainLogo={shardumLogo}
+                />
+                <ChainCard
+                    handleChain={handleChain}
+                    chainName={"Telos"}
+                    chainLogo={telosLogo}
                 />
                 <ChainCard
                     handleChain={handleChain}

@@ -17,6 +17,8 @@ import {
     solonaChain,
     cookieDomain,
     avalancheChain,
+    shardeumChain,
+    telosChain,
 } from "../config";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { IStore } from "../models/Store";
@@ -68,6 +70,22 @@ import { createNFTAddressA } from "../Redux/Blockchain/Avalanche/createNFT";
 import { marketPlaceAddressA } from "../Redux/Blockchain/Avalanche/marketPlace";
 import { auctionAddressA } from "../Redux/Blockchain/Avalanche/auction";
 import { WalletConnection } from "near-api-js";
+import { marketPlaceAddressS } from "../Redux/Blockchain/Sharduem/marketPlace";
+import { auctionAddressS } from "../Redux/Blockchain/Sharduem/auction";
+import { createNFTAddressS } from "../Redux/Blockchain/Sharduem/createNFT";
+import { createNFTAddressTelos } from "../Redux/Blockchain/Telos/createNFT";
+import { marketPlaceAbiTelos, marketPlaceAddressTelos } from "../Redux/Blockchain/Telos/marketplace";
+import { auctionAddressTelos } from "../Redux/Blockchain/Telos/auction";
+
+import binanceLogo from "../assets/blockchain-logo/binanceLogo.svg";
+import ethereumLogo from "../assets/blockchain-logo/ethereumLogo.svg";
+import ploygonLogo from "../assets/blockchain-logo/polygonLogo.svg";
+import solanaLogo from "../assets/blockchain-logo/solanaLogo.svg";
+import shardumLogo from "../assets/blockchain-logo/shardumLogo.jpeg";
+import telosLogo from "../assets/blockchain-logo/telosLogo.png";
+import tronLogo from "../assets/blockchain-logo/tronLogo.svg";
+import nearLogo from "../assets/blockchain-logo/nearLogo.svg";
+import avalancheLogo from "../assets/blockchain-logo/avalancheLogo.svg";
 
 
 const {
@@ -242,7 +260,7 @@ const chainParams = {
             blockExplorerUrls: ["https://testnet.bscscan.com/"],
         },
     ],
-    //binance testnet
+    //binance mainnet
     "56": [
         {
             chainId: "0x38",
@@ -284,6 +302,34 @@ const chainParams = {
             blockExplorerUrls: ["https://etherscan.io"],
         },
     ],
+     // Sharduem Liberty 2.0
+    "8081": [
+        {
+            chainId: "0x1F91",
+            rpcUrls: ["https://liberty20.shardeum.org/"],
+            chainName: "Shardeum Liberty 2.0",
+            nativeCurrency: {
+                name: "SHM",
+                symbol: "SHM", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://explorer.liberty20.shardeum.org/"],
+        },
+    ],
+    // Sharduem Liberty 1.4
+    "8080": [
+        {
+            chainId: "0x1F90",
+            rpcUrls: ["https://liberty10.shardeum.org/"],
+            chainName: "Shardeum Liberty 1.4",
+            nativeCurrency: {
+                name: "SHM",
+                symbol: "SHM", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://explorer.liberty10.shardeum.org/"],
+        },
+    ],
     // Avalanche testnet
     "43113": [
         {
@@ -296,6 +342,32 @@ const chainParams = {
                 decimals: 18,
             },
             blockExplorerUrls: ["https://testnet.snowtrace.io"],
+        },
+    ],
+    "40": [
+        {
+            chainId: "0x28",
+            rpcUrls: ["https://mainnet.telos.net/evm"],
+            chainName: "Telos Mainnet",
+            nativeCurrency: {
+                name: "TLOS",
+                symbol: "TLOS", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://www.teloscan.io/"],
+        },
+    ],
+    "41": [
+        {
+            chainId: "0x29",
+            rpcUrls: ["https://testnet.telos.net/evm"],
+            chainName: "Telos Testnet",
+            nativeCurrency: {
+                name: "TLOS",
+                symbol: "TLOS", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://testnet.telos.net/v2/explore/"],
         },
     ],
 };
@@ -311,6 +383,7 @@ export const SwitchNetwork = async (network: any) => {
             ],
         });
     } catch (error: any) {
+        console.log(network,"network")
         if (error?.code.toString() === "4902") {
             try {
                 const metaMaskProvider: any = await getMetamaskProvider();
@@ -653,6 +726,10 @@ export const getChainSymbol = (chain: any) => {
             ? "TRX"
             : chain.toString() === avalancheChain
             ? "AVAX"
+            : chain.toString() === shardeumChain
+            ? "SHM"
+            : chain.toString() === telosChain
+            ? "TLOS"
             : chain.toString() === nearChain
             ? "NEAR"
             : chain.toString() === solonaChain
@@ -672,6 +749,10 @@ export const getChainId = (chain: any) => {
             return polygonChain;
         case "avalanche":
             return avalancheChain;
+        case "shardeum":
+            return shardeumChain;
+        case "telos":
+            return telosChain;
         case "near":
             return nearChain;
         case "tron":
@@ -696,12 +777,42 @@ export const getChainName = (chain: any) => {
             return "polygon";
         case avalancheChain:
             return "avalanche";
+        case shardeumChain:
+            return "shardeum";
+        case telosChain:
+            return "telos";
         case nearChain:
             return "near";
         case tronChain:
             return "tron";
         case solonaChain:
             return "solana";
+        default:
+            return chain;
+    }
+};
+
+// Returns CHAIN Name
+export const getChainLogo = (chain: any) => {
+    switch (chain?.toString()) {
+        case ethChain:
+            return ethereumLogo;
+        case bscChain:
+            return binanceLogo;
+        case polygonChain:
+            return ploygonLogo;
+        case avalancheChain:
+            return avalancheLogo;
+        case shardeumChain:
+            return shardumLogo;
+        case telosChain:
+            return telosLogo;
+        case nearChain:
+            return nearLogo;
+        case tronChain:
+            return tronLogo;
+        case solonaChain:
+            return solanaLogo;
         default:
             return chain;
     }
@@ -718,6 +829,10 @@ export const ChainIdUsingWalletName = (chainName: any) => {
             return polygonChain;
         case "avalanche":
             return avalancheChain;
+        case "shardeum":
+            return shardeumChain;
+        case "telos":
+            return telosChain;
         case "near":
             return nearChain;
         case "tron":
@@ -740,6 +855,10 @@ export const selectNetwork = (chain: string) => {
             ? "TRX"
             : chain.toString() === avalancheChain
             ? "Avalanche"
+            : chain.toString() === shardeumChain
+            ? "Shardeum"
+            : chain.toString() === telosChain
+            ? "Telos"
             : "Matic";
     SwitchNetwork(chain);
     toast(`Your are now on ${type} chain`, {
@@ -770,6 +889,10 @@ export const getCreateNftContractAddress = (chain: any, contractType: any) => {
                 return createNFTAddressP;
             case avalancheChain:
                 return createNFTAddressA;
+            case shardeumChain:
+                return createNFTAddressS;
+            case telosChain:
+                return createNFTAddressTelos;
             case tronChain:
                 return createNFTAddressT;
             case nearChain:
@@ -801,6 +924,10 @@ export const getMarketPlaceContractAddress = (
             return marketPlaceAddressT;
         case avalancheChain:
             return marketPlaceAddressA;
+        case shardeumChain:
+            return marketPlaceAddressS;
+        case telosChain:
+            return marketPlaceAddressTelos;
         default:
             return contractType === "721"
                 ? "0x424bb7731c056a52b45cbd613ef08c69c628735f"
@@ -824,7 +951,10 @@ export const getAuctionContractAddress = (
             return auctionAddressT;
         case avalancheChain:
             return auctionAddressA;
-
+        case shardeumChain:
+            return auctionAddressS;
+        case telosChain:
+            return auctionAddressTelos;
         default:
             return contractType === "1155"
                 ? auctionAddressE1155
@@ -1042,4 +1172,8 @@ export function getRPCErrorMessage(err: any) {
             ? err.message
             : err
     );
+}
+
+export const  trimString = (trimString: string) =>{
+   return trimString.length>30 ? trimString.slice(0,8) + '...' + trimString.slice(-6) : trimString
 }
