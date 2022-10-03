@@ -1499,7 +1499,7 @@ const NftInfo = ({
                                 nft_contract_id: "nft.subauction.testnet",
                             },
                             gas: "200000000000000",
-                            deposit: auction.lostBid,
+                            deposit: "0",
                         }]
                       }
                     // @ts-ignore
