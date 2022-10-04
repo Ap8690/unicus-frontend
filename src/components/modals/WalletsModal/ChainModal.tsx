@@ -16,12 +16,13 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import {Transition} from "../../Animation/Transition/Transition";
 import Alert from '@mui/material/Alert';
+import {background} from "../modalBackground"
 
 const ChainCard = ({ chainName, chainLogo, handleChain }) => {
     return (
         <div
             onClick={() => handleChain(chainName)}
-            className="box py-4 rounded-2xl hover:border hover:border-white border border-black cursor-pointer flex justify-center items-center overflow-hidden w-full"
+            className="box py-4 rounded-2xl hover:border hover:border-white border border-[#1D1F25] bg-[#1D1F25] cursor-pointer flex justify-center items-center overflow-hidden w-full"
         >
             <button className="wallet-logo flex items-center justify-center flex-col">
                 <img className="h-8 mb-1" src={chainLogo} alt="MetaMask" />
@@ -57,15 +58,7 @@ const ChainModal = ({ open, setOpen, setWalletModal, setShowCategory }) => {
             onClose={handleClose}
             open={open}
             TransitionComponent={Transition}
-            PaperProps={{
-                sx: {
-                    padding: 0,
-                    background: "black",
-                    width: "600px",
-                    borderRadius: "16px",
-                    filter: "drop-shadow(0 0 5px #333)",
-                },
-            }}
+            PaperProps={background}
         >
             <div className="dialog-title">
                 Select Chain
