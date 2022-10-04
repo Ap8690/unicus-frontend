@@ -116,6 +116,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
                 }, 1000)
             } else {
                 throw new Error("Store creation failed!")
+                
             }
         } catch (err) {
             console.log("err", err.response.data.err)
