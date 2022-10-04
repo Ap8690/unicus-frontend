@@ -4,7 +4,8 @@ import { useState } from 'react'
 import Input from '../../components/Input/Input'
 import { Link, useNavigate } from 'react-router-dom'
 import { emailRegister } from '../../services/api/supplier'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast';
+
 import { Helmet } from "react-helmet";
 
 const Register = () => {

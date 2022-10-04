@@ -15,7 +15,7 @@ import { ACCESS_TOKEN } from "../../utils/constants";
 import { disConnectWallet, isMainStore, getUserInfo, getChainId } from "../../utils/utils";
 import { capitalize, getLocalStorage } from "../../utils/helpers";
 import NavMenu from "../menu/NavMenu/NavMenu";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
 import { useWallet } from "@solana/wallet-adapter-react";
 import { getLocation, getEnabledStore } from "../../utils/helpers";
 import NestedMenu from "../NestedMenu/NestedMenu";
@@ -43,7 +43,7 @@ const Navbar = ({ store }) => {
             setChain(chain);
             toast.dismiss();
             if (chain !== "all")
-                toast.info(`You are on ${capitalize(chain)} network`);
+                toast.success(`You are on ${capitalize(chain)} network`);
         }
     };
 

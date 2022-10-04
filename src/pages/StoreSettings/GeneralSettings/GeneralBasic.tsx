@@ -2,7 +2,8 @@ import Switch from "@mui/material/Switch"
 import { styled } from "@mui/material/styles"
 import { useEffect, useState } from "react"
 import { IGeneral } from "../../../models/General";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import { saveGenerals } from "../../../services/api/supplier";
 
 const GeneralBasic = (general: IGeneral) => {

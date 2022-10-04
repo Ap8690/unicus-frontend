@@ -38,7 +38,8 @@ import {
 } from "../../services/api/supplier";
 import { useContext, useEffect, useState } from "react";
 import web3 from "../../web3";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import { nearChain, solonaChain, tronChain } from "../../config";
 import axios from "axios";
 import { setNotification } from "../../Redux/Blockchain/contracts";

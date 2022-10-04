@@ -20,7 +20,8 @@ import {
 } from "../../../services/api/supplier";
 import { useNavigate } from "react-router-dom";
 import { cookieDomain } from "../../../config";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import { trimString } from "../../../utils/utils";
 

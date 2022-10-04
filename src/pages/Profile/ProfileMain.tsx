@@ -23,7 +23,8 @@ import "./ProfileMain.scss";
 import axios from "axios";
 import { BASE_URL } from "../../config";
 import { getAccessToken, getNftByUserId } from "../../services/api/supplier";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import { Helmet } from "react-helmet";
 import PageLoader from "../../components/Loading/PageLoader"
 // Generics

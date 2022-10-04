@@ -29,7 +29,8 @@ import { ChainContext } from "../../context/ChainContext";
 import { useQuery } from "../../Hooks/useQuery";
 import { Helmet } from "react-helmet";
 import {UserContext} from "../../context/UserContext"
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import { initContract } from "../../utils/helpers";
 const Explore = () => {
     // HardCoded

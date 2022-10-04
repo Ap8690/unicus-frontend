@@ -2,7 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import {
     connectNear,
     connToCoinbase,

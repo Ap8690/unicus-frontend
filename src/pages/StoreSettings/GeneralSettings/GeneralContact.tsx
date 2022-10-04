@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import Input from "../../../components/Input/Input";
 import { IGeneral } from "../../../models/General";
 import { saveGenerals } from "../../../services/api/supplier";

@@ -3,7 +3,8 @@ import { IOSSwitch } from "../GeneralSettings/GeneralBasic"
 import uploadImg from "../../../assets/svgs/uploadImage.svg"
 import { IAppearance } from "../../../models/Appearance";
 import axios from "axios";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import { BASE_URL } from "../../../config";
 import uuid from "react-uuid";
 import { CircularProgress } from "@mui/material";

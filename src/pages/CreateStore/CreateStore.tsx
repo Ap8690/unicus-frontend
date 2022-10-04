@@ -7,7 +7,8 @@ import "./CreateStore.scss"
 import BlueBackground from "../../components/BlueBackground/BlueBackground"
 // Images
 import placeHolder from "../../assets/svgs/uploadImage.svg"
-import { toast } from "react-toastify"
+import toast from 'react-hot-toast';
+
 import { createStore, getAccessToken } from "../../services/api/supplier"
 import countryList from "react-select-country-list"
 import validator from "validator"

@@ -20,7 +20,8 @@ import axios from "axios"
 import "./editprofile.scss"
 import Loader from "../../components/Loading/Loader"
 
-import { toast } from "react-toastify"
+import toast from 'react-hot-toast';
+
 import { useNavigate } from "react-router-dom"
 import { BASE_URL } from "../../config"
 import {

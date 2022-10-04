@@ -14,7 +14,8 @@ import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import AddProperties from "../../components/modals/Add Properties/AddProperties";
 import axios from "axios";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import {
     tronChain,
     bscChain,
@@ -199,7 +200,7 @@ const CreateNftSingle = () => {
     useEffect(() => {
         if (!getAccessToken()) {
             navigate("/explore");
-            toast.warn("Please Login!");
+            toast.error("Please Login!");
         }
     }, []);
 
@@ -423,7 +424,7 @@ const CreateNftSingle = () => {
             formData.append("attributes", JSON.stringify(properties));
 
             try {
-                toast.info("Uploading the metadata...");
+                toast.success("Uploading the metadata...");
                 const response: any = await uploadToPinata(formData);
                 if (!response) {
                     setdefaultErrorMessage("Network Error");
@@ -536,7 +537,7 @@ const CreateNftSingle = () => {
                     navigate("/profile/created");
                 } else if (chain.toString() === tronChain) {
                     setNftLoading(true);
-                    toast.info("Minting The Asset");
+                    toast.success("Minting The Asset");
                     const createNFT = getCreateNftContract(chain, contractType);
                     let res: any;
                     if (contractType === "721") {
@@ -591,7 +592,7 @@ const CreateNftSingle = () => {
                     navigate("/profile/created");
                 } else {
                     setNftLoading(true);
-                    toast.info("Minting The Asset");
+                    toast.success("Minting The Asset");
                     const gasPrice = await web3.eth.getGasPrice();
                     const createNFT = getCreateNftContract(chain, contractType);
 

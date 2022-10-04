@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import TronWeb from "tronweb";
 import Web3 from "web3";
 import {

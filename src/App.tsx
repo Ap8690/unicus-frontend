@@ -4,8 +4,7 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { ChainContext } from "./context/ChainContext";
 
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 // Components
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
@@ -145,7 +144,7 @@ const App = () => {
                 <TransactionProvider>
                     <div className="App">
                         <Navbar store={isMainStore() ? userStore : store} />
-                        <ToastContainer limit={3} />
+                        <Toaster/>
                         <ScrollToTop />
                         <Routes>
                             {isMainStore() ? (

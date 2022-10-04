@@ -1,7 +1,8 @@
 // import { CircularProgress } from "@mui/material";
 // import axios from "axios";
 // import { useState, useRef, useEffect } from "react";
-// import { toast } from "react-toastify";
+// import toast from 'react-hot-toast';
+
 // import { BASE_URL } from "../../../config";
 // import { IAppearance } from "../../../models/Appearance";
 // import { IOSSwitch } from "../GeneralSettings/GeneralBasic";

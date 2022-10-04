@@ -4,7 +4,8 @@ import uploadImg from "../../../assets/svgs/uploadImage.svg"
 import { IGeneral } from "../../../models/General";
 import axios from "axios";
 import countryList from "react-select-country-list";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import { BASE_URL } from "../../../config";
 import uuid from "react-uuid";
 import { Form } from "react-bootstrap";
