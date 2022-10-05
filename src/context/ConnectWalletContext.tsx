@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import toast from 'react-hot-toast';
@@ -44,6 +44,7 @@ export const ConnectWalletContext =
 
 export const WalletConnectionProvider = ({ children }) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const redirect = useParams();
     const { wallet, connect, select, publicKey } = useWallet();
     const { setVisible } = useWalletModal();
@@ -194,11 +195,13 @@ export const WalletConnectionProvider = ({ children }) => {
                 setShowChains(false);
                 setChain(getChainName(localStorage.getItem("CHAIN")));
                 if (sessionStorage.getItem("redirect_after_login")) {
-                    return navigate(
+                    navigate(
                         sessionStorage.getItem("redirect_after_login")
                     );
+                    sessionStorage.removeItem("redirect_after_login");
+                    return 
                 }
-                navigate("/explore");
+                else if(!location.pathname.includes("/nft")) navigate("/explore");
             } else {
                 if (walletAddress !== "near") {
                     toast.error("Wallet connection failed");

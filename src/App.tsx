@@ -144,7 +144,7 @@ const App = () => {
                 <TransactionProvider>
                     <div className="App">
                         <Navbar store={isMainStore() ? userStore : store} />
-                        <Toaster/>
+                        
                         <ScrollToTop />
                         <Routes>
                             {isMainStore() ? (
@@ -323,6 +323,7 @@ const App = () => {
                         />
                         <Footer />
                     </div>
+                    <Toaster/>
                 </TransactionProvider>
             </UserProvider>
         </WalletModalProvider>

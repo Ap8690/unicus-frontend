@@ -93,7 +93,6 @@ const CreateNftSingle = () => {
     const [openStats, setOpenStats] = useState(false);
     const [openLevels, setOpenLevels] = useState(false);
     const [fileSrc, setFileSrc] = useState<any>();
-    const [AddNFTModalOpen, setAddNFTModalOpen] = useState<boolean>(false);
     const [nftModalMessage, setNftModalMessage] = useState("");
     const [nftLoading, setNftLoading] = useState<boolean>(false);
     const [MetamaskNotFound, setMetamaskNotFound] = useState(false);
@@ -378,7 +377,6 @@ const CreateNftSingle = () => {
     };
     const cryptoPayment = async () => {
         try {
-            setAddNFTModalOpen(false);
             //@ts-ignore
             if (!window.ethereum) {
                 setNftLoading(false);
@@ -585,11 +583,12 @@ const CreateNftSingle = () => {
                         tranIsSuccess = true;
                         nftObj.tokenId = tokenId;
                     }
-                    setNftLoading(false);
-                    toast.success("Asset Minted");
+                    
+                    toast.success("Asset Minted!");
                     console.log(nftObj, "nftObj");
                     await createNft(nftObj);
                     navigate("/profile/created");
+                    setNftLoading(false);
                 } else {
                     setNftLoading(true);
                     toast.success("Minting The Asset");

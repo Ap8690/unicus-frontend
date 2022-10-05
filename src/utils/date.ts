@@ -41,5 +41,10 @@ export const getCompleteDate = (newDate: any) => {
 export const getRemainingSeconds = (date: any) => {
   var date1 = moment(date);
   var date2 = moment();
-  return (date1.diff(date2) / 1000).toFixed(0)
+  return (Number(date1.diff(date2)) / 1000).toFixed(0)
+}
+export const getTomorrowDate:any = () => {
+  let result = new Date();
+  result.setDate(result.getDate() + 1);
+  return result;
 }
