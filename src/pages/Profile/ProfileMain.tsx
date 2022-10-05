@@ -78,9 +78,9 @@ const Profile = (): ReactJSXElement => {
         },
     ];
 
-    const createdColumns = ["Item", "Chain", "Created"];
-    const listingColumns = ["Item", "Unit Price", "Status", "Created"];
-    const offersColumns = ["Item", "Latest Bid", "Chain", "Created"];
+    const createdColumns = ["Item", "Chain","Provenance" ,"Date"];
+    const listingColumns = ["Item", "Unit Price", "Status", "Date"];
+    const offersColumns = ["Item", "Latest Bid", "Chain", "Date"];
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
     const [ordisplayListing, setorDisplayListing] = useState([]);

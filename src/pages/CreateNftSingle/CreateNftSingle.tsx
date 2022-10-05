@@ -15,6 +15,7 @@ import Switch from "@mui/material/Switch";
 import AddProperties from "../../components/modals/Add Properties/AddProperties";
 import axios from "axios";
 import toast from 'react-hot-toast';
+import {AssetCategory} from "../../utils/AssetCategory"
 
 import {
     tronChain,
@@ -76,12 +77,16 @@ import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 import { ChainContext } from "../../context/ChainContext";
 
 const CreateNftSingle = () => {
+    const supportedImg = ["jpg", "jpeg", "png", "svg", "gif"];
+    const supportedVid = ["mp4", "webm"];
+    const supportedAud = ["mp3", "wav", "ogg"];
+    const supported3d = ["gltf, glb"];
     // let chain_name = ChainIdUsingWalletName(localStorage.getItem("walletChain"))
     const [name, setName] = useState("");
     const [extLink, setExtlink] = useState("");
     const [description, setDescription] = useState("");
     // const [category, setCategory] = useState("art");
-
+    
     const [price, setPrice] = useState("0.00");
     const [chain, setChain] = useState(ethChain);
     const [contractType, setContractType] = useState("721");
@@ -102,7 +107,8 @@ const CreateNftSingle = () => {
     const navigate = useNavigate();
     const { fullLoading } = useContext(ConnectWalletContext);
     const { category,setCategory } = useContext(ChainContext);
-
+    console.log("category ",category)
+    
     const { connection } = useConnection();
     const { sendTransaction } = useWallet();
     const anWallet = useAnchorWallet();
@@ -163,6 +169,11 @@ const CreateNftSingle = () => {
     };
 
     const uploadFile = async (e: any) => {
+        if(category.toLowerCase() === "music" && !supportedVid.includes(
+            e.target.files[0].name.split(".").pop()
+        )) {
+            return toast.error("Please upload supported file types only!")
+        }
         setFileSrc(e.target.files[0]);
         try {
             const im = await getBase64(e.target.files[0]);
@@ -177,10 +188,7 @@ const CreateNftSingle = () => {
         }
         return true;
     };
-    const supportedImg = ["jpg", "jpeg", "png", "svg", "gif"];
-    const supportedVid = ["mp4", "webm"];
-    const supportedAud = ["mp3", "wav", "ogg"];
-    const supported3d = ["gltf, glb"];
+    
 
     const {
         utils: {
@@ -706,13 +714,13 @@ const CreateNftSingle = () => {
         if (localStorage.getItem("royalty")) {
             setRoyalty(JSON.parse(localStorage.getItem("royalty")));
         }
-        if (
-            localStorage.getItem("fileSrc") &&
-            Object.keys(JSON.parse(localStorage.getItem("fileSrc"))).length !==
-                0
-        ) {
-            convertToFile();
-        }
+        // if (
+        //     localStorage.getItem("fileSrc") &&
+        //     Object.keys(JSON.parse(localStorage.getItem("fileSrc"))).length !==
+        //         0
+        // ) {
+        //     convertToFile();
+        // }
         window.scrollTo(0, 0);
     }, []);
 
@@ -797,21 +805,21 @@ const CreateNftSingle = () => {
                 />
             ))}
             {nftLoading || fullLoading ? (
-                <PageLoader />
+                <PageLoader info={'Keep Patience.. Your awesome track is being tokenised on Blockchain'}/>
             ) : (
                 <div className="create-nft-single-page">
                     <div className="head">
                         <div className="blue-head capitalize">Tokenise {category}</div>
-                        <div className="head-text">
+                        {/* <div className="head-text">
                             Image, Video, Audio, or 3D Model. File types
                             supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV,
                             OGG, GLB, GLTF. Max size: 100 MB
-                        </div>
-                    </div>
-                    <div className="body">
+                        </div> */}
+                    </div> 
+                    {category && <div className="body">
                         <div className="input-fields">
                             <div className="upload-file">
-                                <div className="field-title">Upload File</div>
+                                <div className="field-title">{AssetCategory[category.toLowerCase()]['FieldTitle']}</div>
                                 <button
                                     className="field"
                                     onClick={() => inputFile?.current.click()}
@@ -868,27 +876,25 @@ const CreateNftSingle = () => {
                             <div className="basic-info">
                                 <div className="mt-2"></div>
                                 <Input
-                                    title="Name"
-                                    placeholder={"Item Name"}
+                                    title={AssetCategory[category.toLowerCase()]['AssetName']}
+                                    placeholder={AssetCategory[category.toLowerCase()]['AssetNamePlaceholder']}
                                     state={name}
                                     setState={setName}
                                 />
                                 <div className="mt-8"></div>
                                 <Input
-                                    title="External Link"
+                                    title={AssetCategory[category.toLowerCase()]['AssetLink']}
                                     placeholder={
-                                        "https://www.youtube.com/watch?v=Oz9zw7-_vhM"
+                                        "https://www.youtube.com/watch?_your_link..."
                                     }
                                     state={extLink}
                                     setState={setExtlink}
                                 />
                                 <div className="mt-8"></div>
                                 <Input
-                                    title="Description (Word limit 240)"
+                                    title={AssetCategory[category.toLowerCase()]['AssetInfo']}
                                     multi
-                                    placeholder={
-                                        "Provide a detailed description of your item."
-                                    }
+                                    placeholder={AssetCategory[category.toLowerCase()]['AssetInfoPlaceholder']}
                                     state={description}
                                     setState={setDescription}
                                 />
@@ -965,7 +971,7 @@ const CreateNftSingle = () => {
 
                                 <div className="select-collection">
                                     <Input
-                                        title={"Collection Name (optional)"}
+                                        title={AssetCategory[category.toLowerCase()]['AssetCollectionName']}
                                         placeholder="Collection#1"
                                         state={collection}
                                         setState={setCollection}
@@ -989,7 +995,7 @@ const CreateNftSingle = () => {
                                 className="btn create-btn"
                                 onClick={() => cryptoPayment()}
                             >
-                                Create
+                                {AssetCategory[category.toLowerCase()]['AssetButton']}
                             </button>
                         </div>
                         <div className="preview-field">
@@ -1063,7 +1069,7 @@ const CreateNftSingle = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>}
                 </div>
             )}
         </>

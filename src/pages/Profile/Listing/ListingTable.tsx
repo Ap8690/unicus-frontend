@@ -3,13 +3,14 @@ import ethereum from "../../../assets/svgs/ethereum.svg";
 import DefaultModal from "../../../components/modals/DefaultModal/DefaultModal";
 import { bscChain, ethChain, tronChain } from "../../../config";
 import { getChainLogo, getChainSymbol } from "../../../utils/utils";
-import { getCompleteDate } from "../../../utils/date";
+import { getCompleteDate, getSimpleDate } from "../../../utils/date";
 import uuid from "react-uuid";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@mui/material";
 import { getDecimal } from "../../../utils/helpers";
 // Element of data of activity table
 const TableData = ({ activity, link }) => {
+    console.log("activity: ", activity);
     let navigate = useNavigate();
 
     return (
@@ -44,8 +45,7 @@ const TableData = ({ activity, link }) => {
                     />
                 ) : (
                     <video
-                        autoPlay
-                        loop
+                    controls
                         className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md'
                     >
                         <source
@@ -67,16 +67,17 @@ const TableData = ({ activity, link }) => {
                         {/* <span className="dollar-price">${activity.priceDollar}</span> */}
                     </td>
                     <td className="table-data-fd">{activity.auctionType}</td>
-                    <td className="table-data-exp">{activity.createdAt}</td>
+                    <td className="table-data-exp">{activity.createdAt && getSimpleDate(activity.createdAt)}</td>
                 </>
             ) : (
                 <>
                     <td className="table-data-exp">
                         {getChainSymbol(activity.chain)}
                     </td>
+                    <td>{activity?.uploadedBy &&  (activity?.uploadedBy === JSON.parse(localStorage.getItem('userInfo'))?._id) ? "Minted" : "Purchased"}</td>
                     <td className="table-data-exp">
                         {activity?.createdAt &&
-                            getCompleteDate(activity.createdAt)}
+                            getSimpleDate(activity.createdAt)}
                     </td>
                 </>
             )}
@@ -114,14 +115,14 @@ const Table = ({ rows, columns, loading }) => {
                                     }}
                                 />
                             </td>
-                        {columns.map((item, i)=>{
+                        {columns.map((item:any, i:any)=>{
                             if(i === columns.length - 2) return
                             return(
                                 <td key={item+i}>
                                     <Skeleton
                                         sx={{
                                             bgcolor: "#66666666",
-                                            fontSize: "20px",
+                                            fontSize: "20px"
                                         }}
                                     />
                                 </td>

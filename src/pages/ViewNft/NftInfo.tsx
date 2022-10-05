@@ -2268,7 +2268,7 @@ const NftInfo = ({
                         )}
                     </div>
                     {chainChangeMessage && <span>{chainChangeMessage}</span>}
-                    <span className="service-fee">Service fees 2%</span>
+                    <span className="service-fee">Service fees 5%</span>
                     
                 </div>
                 

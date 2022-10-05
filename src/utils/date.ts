@@ -38,6 +38,10 @@ export const getCompleteDate = (newDate: any) => {
   return moment(new Date(newDate)).format('llll');
 };
 
+export const getSimpleDate = (newDate:any) => {
+  return moment(new Date(newDate)).format("MMM Do, YYYY")
+}
+
 export const getRemainingSeconds = (date: any) => {
   var date1 = moment(date);
   var date2 = moment();

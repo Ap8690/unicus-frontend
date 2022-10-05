@@ -252,7 +252,7 @@ const ProfileButton = ({
                 }}
             >
                 <MenuItem onClick={handleCloseProfile}>
-                    <Link to={"/profile"} className="menu-link" replace>
+                    <Link to={"/profile/created"} className="menu-link" replace>
                         Profile
                     </Link>
                 </MenuItem>
