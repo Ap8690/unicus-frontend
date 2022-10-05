@@ -60,7 +60,7 @@ const ViewNft = () => {
                 <div className="view-nft">
                     <Helmet>
                         <meta charSet="utf-8" />
-                        <title>UnicusOne - {nft.name}</title>
+                        <title>UnicusOne - {nft && nft?.name}</title>
                         <link rel="canonical" href={window.location.href} />
                     </Helmet>
                     <div className="nft">
