@@ -61,7 +61,7 @@ const TableData = ({ activity, link }) => {
                 <>
                     <td className="table-data-price ">
                         <span className="eth-price ">
-                            <img className="w-[30px]" src={getChainLogo(activity.chain)} alt="Ethereum" />
+                            <img className="w-[23px] mr-2" src={getChainLogo(activity.chain)} alt="Ethereum" />
                            <span className="flex justify-center items-center">{activity.startBid / getDecimal(activity.chain)}</span>
                         </span>
                         {/* <span className="dollar-price">${activity.priceDollar}</span> */}
