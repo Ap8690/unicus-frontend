@@ -92,7 +92,7 @@
 
     .nft-interactions {
         position: absolute;
-        bottom: 0;
+        
         width: 100%;
         display: flex;
         padding: 1rem;
@@ -451,4 +451,10 @@
 .date-picker {
     color:white;
     border: 0px ;
+}
+.add-boottom-0 {
+    bottom: 0;
+}
+.add-boottom-64 {
+    bottom: 64px;
 }

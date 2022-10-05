@@ -111,8 +111,8 @@ const NftImg = ({ img, likes, views, shares, nftType }) => {
                 <img src={img ? img : nftImg} alt="" className="nft-img" />
             ) : (
                 <video
-                    autoPlay
-                    loop
+                    
+                    controls
                     className="nft-img"
                 >
                     <source
@@ -121,7 +121,7 @@ const NftImg = ({ img, likes, views, shares, nftType }) => {
                     />
                 </video>
             )}
-            <div className="nft-interactions">
+            <div className={!nftType?.includes("video") ?"nft-interactions add-boottom-0" : "nft-interations add-boottom-64"}>
                 {/* <button>
                     {views} <img src={viewImg} alt="views" />
                 </button> */}

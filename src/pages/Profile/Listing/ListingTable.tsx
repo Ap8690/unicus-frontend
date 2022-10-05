@@ -26,8 +26,8 @@ const TableData = ({ activity, link }) => {
                     />
                 ) : (
                     <video
-                        autoPlay
-                        loop
+                        
+                        controls
                         className='w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md'
                     >
                         <source
