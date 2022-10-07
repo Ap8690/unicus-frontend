@@ -45,9 +45,6 @@ import { UserProvider } from "./context/UserContext";
 import { TransactionProvider } from "./context/Web3Context";
 import { ConnectWalletContext } from "./context/ConnectWalletContext";
 import { StoreContext } from "./context/StoreContext";
-// redux integration
-import { Provider } from "react-redux";
-import { rstore } from "./Redux/Store";
 import ChainModal from "./components/modals/WalletsModal/ChainModal";
 import WalletsModal from "./components/modals/WalletsModal/WalletsModal";
 import CategoriesModal from "./components/modals/Categories/Categories";

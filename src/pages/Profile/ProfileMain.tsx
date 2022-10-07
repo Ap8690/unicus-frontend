@@ -27,6 +27,7 @@ import toast from 'react-hot-toast';
 
 import { Helmet } from "react-helmet";
 import PageLoader from "../../components/Loading/PageLoader"
+
 // Generics
 type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 
@@ -87,14 +88,17 @@ const Profile = (): ReactJSXElement => {
     const [ordisplayCreated, setorDisplayCreated] = useState([]);
     const [displayListing, setDisplayListing] = useState([]);
     const [displayCreated, setDisplayCreated] = useState([]);
-    const [tableLoading, setTableLoading] = useState(true)
+    const [tableLoading, setTableLoading] = useState(true);
+    const [metadata,setMetadata] = useState<any>();
+    const [page,setPage] = useState(1);
     const navigate = useNavigate();
     const { profileState } = useParams();
 
     const getNfts = async () => {
         setTableLoading(true)
         try {
-            const res = await getNftByUserId();
+            const res = await getNftByUserId(page);
+            setMetadata(res.data.metadata)
             setorDisplayCreated(res.data.nfts);
             setorDisplayListing(res.data.auctions);
             setDisplayCreated(res.data.nfts);
@@ -114,6 +118,7 @@ const Profile = (): ReactJSXElement => {
                     Authorization: "Bearer " + `${accessToken}`,
                 },
             });
+            
             setUser(res.data.user);
             await getNfts();
             setLoading(false);
@@ -181,6 +186,13 @@ const Profile = (): ReactJSXElement => {
                             setSearch={setSearch}
                             columns={listingColumns}
                             loading={tableLoading}
+                            page={page}
+                            setPage={setPage}
+                            metadata={{
+                                limit: metadata.limit,
+                                skip: metadata.skip,
+                                total: metadata.totalNfts
+                            }}
                         />
                     )}
                     {profileState === "offers" && (
@@ -190,6 +202,13 @@ const Profile = (): ReactJSXElement => {
                             setSearch={setSearch}
                             columns={offersColumns}
                             loading={tableLoading}
+                            page={page}
+                            setPage={setPage}
+                            metadata={{
+                                limit: metadata.limit,
+                                skip: metadata.skip,
+                                total: metadata.totalAuctions
+                            }}
                         />
                     )}
                     {(profileState === "created" || !profileState) && (
@@ -199,6 +218,13 @@ const Profile = (): ReactJSXElement => {
                             setSearch={setSearch}
                             columns={createdColumns}
                             loading={tableLoading}
+                            page={page}
+                            setPage={setPage}
+                            metadata={{
+                                limit: metadata && metadata?.limit,
+                                skip: metadata && metadata?.skip,
+                                total: metadata && metadata?.totalNfts
+                            }}
                         />
                     )}
                 </div>

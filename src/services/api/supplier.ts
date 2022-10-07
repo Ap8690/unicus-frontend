@@ -61,10 +61,9 @@ export async function getNftById(chain: any, contractAddress: any, nftId: any) {
   );
 }
 
-export async function getNftByUserId() {
-  const _id = getUserId()
+export async function getNftByUserId(skip:any) {
   return await axios.get(
-    `${BASE_URL}/nft/getNFTByUserId/${_id}`,
+    `${BASE_URL}/nft/getNFTByUserId/${skip}`,
     axiosConfig()
   );
 }
