@@ -76,7 +76,7 @@ export async function uploadToPinata(formData: FormData) {
   );
 }
 
-export async function createNft(nftObj: {}) {
+export async function createNft(nftObj: any) {
   return await axios.post(`${BASE_URL}/nft/create`, nftObj, axiosConfig());
 }
 
@@ -284,25 +284,17 @@ export async function updateProfileSocial(instagram, facebook, twitter, discord,
     axiosConfig()
   );
 }
-export async function updateProfilePic(url:string) {
-  const _id = getUserId()
+export async function updateProfilePic(formData:any) {
   return await axios.post(
     `${BASE_URL}/users/update/profilePicture`,
-    {
-      userId: _id,
-      cloudinaryUrl: url,
-    },
+    formData,
     axiosConfig()
   );
 }
-export async function updateProfileBg(url: string) {
-  const _id = getUserId()
+export async function updateProfileBg(formData: any) {
   return await axios.post(
     `${BASE_URL}/users/update/backgroundPicture`,
-    {
-      userId: _id,
-      cloudinaryUrl: url,
-    },
+    formData,
     axiosConfig()
   );
 }
