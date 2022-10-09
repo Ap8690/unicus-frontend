@@ -451,32 +451,30 @@ const CreateNftSingle = () => {
                 if (!user) {
                     user = JSON.parse(localStorage.getItem("userInfo"));
                 }
-                const nftObj = {
-                    name,
-                    royalty,
-                    description,
-                    category,
-                    jsonIpfs: tokenUri,
-                    nftType: fileSrc.type,
-                    chain,
-                    contractAddress,
-                    owner: user._id,
-                    uploadedBy: user._id,
-                    mintedBy: user._id,
-                    mintedInfo: user.username,
-                    userInfo: user.username,
-                    cloudinaryUrl: fileSrc,
-                    tokenId,
-                    tags: properties,
-                };
+
+                let nftObj:any = new FormData();
+                nftObj.append('name',name)
+                nftObj.append('royalty',royalty)
+                nftObj.append('description',description)
+                nftObj.append('category',category)
+                nftObj.append('jsonIpfs',tokenUri)
+                nftObj.append('nftType',fileSrc.type)
+                nftObj.append('chain',chain)
+                nftObj.append('contractAddress',contractAddress)
+                nftObj.append('owner',user._id)
+                nftObj.append('uploadedBy',user._id)
+                nftObj.append('mintedBy',user._id)
+                nftObj.append('mintedInfo',user.username)
+                nftObj.append('userInfo',user.username)
+                nftObj.append('image',fileSrc)
+                nftObj.append('tags',properties)
+           
                 if (chain.toString() === nearChain) {
                     const wallet = localStorage.getItem("wallet")
                     if(wallet === "Sender"){
-                        nftObj.tokenId = uuid();
+                        nftObj.append('tokenId',uuid())
                         localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
-                        if (!nftObj.tokenId) {
-                            return;
-                        }
+                       
                         // @ts-ignore
                         const accountId =  window.near.getAccountId();
                         const tx = {
@@ -509,18 +507,20 @@ const CreateNftSingle = () => {
                             throw new Error("Nft not minted!")
                         }
                         toast.success("Asset Minted");
-                        nftObj.contractAddress = "nft.subauction.testnet"
+                        nftObj.append('contractAddress', "nft.subauction.testnet")
                         await createNft(nftObj);
                         navigate("/profile/created");
                     }
                     else{
-                        nftObj.tokenId = uuid();
+                        const uid = uuid()
+                        nftObj.append('tokenId',uid)
+
                         localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
-                        if (!nftObj.tokenId) {
-                            return;
-                        }
+                        // if (!nftObj.tokenId) {
+                        //     return;
+                        // }
                         await mintAssetToNft(
-                            nftObj.tokenId,
+                            uid,
                             name,
                             description,
                             tokenUri,
@@ -537,8 +537,9 @@ const CreateNftSingle = () => {
                         tokenUri
                     );
                     console.log(mintKey,"mintKey")
-                    nftObj.tokenId = mintKey;
-                    nftObj.contractAddress = SOL_MINT_NFT_PROGRAM_ID.toBase58()
+                    nftObj.append('tokenId',mintKey)
+                    nftObj.append('contractAddress',SOL_MINT_NFT_PROGRAM_ID.toBase58())
+
                     await createNft(nftObj);
                     navigate("/profile/created");
                 } else if (chain.toString() === tronChain) {
@@ -553,8 +554,8 @@ const CreateNftSingle = () => {
                                 from: address,
                             });
                         if (res?.transactionHash) {
-                            nftObj.tokenId =
-                                res.events.Minted.returnValues._NftId; //returnValues NFTId
+                        //returnValues NFTId
+                                nftObj.append('tokenId',res.events.Minted.returnValues._NftId)
                         }
                     } else if (contractType === "1155") {
                         res = await createNFT.methods
@@ -568,7 +569,8 @@ const CreateNftSingle = () => {
                                 from: address,
                             });
                         if (res?.transactionHash) {
-                            nftObj.tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
+                            nftObj.append('tokenId',res.events.Minted.returnValues._id)
+                             //returnValues NFTId
                         }
                     } else {
                         toast.error("Contract not found");
@@ -589,11 +591,10 @@ const CreateNftSingle = () => {
                         throw Error("Tron Transaction Failed");
                     } else {
                         tranIsSuccess = true;
-                        nftObj.tokenId = tokenId;
+                        nftObj.append('tokenId',tokenId)
                     }
                     
                     toast.success("Asset Minted!");
-                    console.log(nftObj, "nftObj");
                     await createNft(nftObj);
                     navigate("/profile/created");
                     setNftLoading(false);
@@ -619,8 +620,8 @@ const CreateNftSingle = () => {
                                 gasPrice: gasPrice,
                             });
                         if (res?.transactionHash) {
-                            nftObj.tokenId =
-                                res.events.Minted.returnValues._NftId; //returnValues NFTId
+                             //returnValues NFTId
+                                nftObj.append('tokenId',res.events.Minted.returnValues._NftId)
                         }
                     } else if (contractType === "1155") {
                         estimated = await createNFT.methods
@@ -646,7 +647,8 @@ const CreateNftSingle = () => {
                                 gasPrice: gasPrice,
                             });
                         if (res?.transactionHash) {
-                            nftObj.tokenId = res.events.Minted.returnValues._id; //returnValues NFTId
+                            //returnValues NFTId
+                            nftObj.append('tokenId',res.events.Minted.returnValues._id)
                         }
                     } else {
                         toast.error("Contract type is not ERC721 or ERC1155!");

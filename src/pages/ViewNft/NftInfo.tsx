@@ -80,7 +80,6 @@ import { getRemainingSeconds } from "../../utils/date";
 import { ChainContext } from "../../context/ChainContext";
 import { parseNearAmount } from "near-api-js/lib/utils/format";
 
-
 const NftInfo = ({
     filters,
     creator,
@@ -1757,7 +1756,7 @@ const NftInfo = ({
                         res.transactionHash,
                         creator.name
                     );
-                    
+
                     setNftLoading(false);
                 }
             }
@@ -2112,8 +2111,14 @@ const NftInfo = ({
             </PlaceBid>
             <div className="nft-info">
                 <h2>{nft.name}</h2>
-                <div className="nft-price">
-                    {auction && (
+                <div className="text-sm mb-4">
+                    #Token ID:{" "}
+                    <span className="ml-2 font-bold text-sm text-[#5d5fef]">
+                        {nft?.tokenId}
+                    </span>
+                </div>
+                {auction && (
+                    <div className="nft-price">
                         <span>
                             {auction?.lastBid && auction?.lastBid !== 0
                                 ? (
@@ -2124,8 +2129,8 @@ const NftInfo = ({
                                   ).toFixed(4)}{" "}
                             {getChainSymbol(nft.chain)}
                         </span>
-                    )}
-                </div>
+                    </div>
+                )}
                 <div className="nft-description">
                     <p>{nft.description}</p>
                 </div>
@@ -2220,7 +2225,7 @@ const NftInfo = ({
                             )}
                         </div>
                     </div>
-                    
+
                     <div className="btn-box">
                         {chainConnected ? (
                             getUserInfo()._id &&
@@ -2269,9 +2274,7 @@ const NftInfo = ({
                     </div>
                     {chainChangeMessage && <span>{chainChangeMessage}</span>}
                     <span className="service-fee">Service fees 5%</span>
-                    
                 </div>
-                
             </div>
 
             <WalletsModal
