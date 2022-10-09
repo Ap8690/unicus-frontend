@@ -12,7 +12,7 @@ import BlueBackground from "../../../components/BlueBackground/BlueBackground";
 import { useEffect, useState } from "react";
 
 const Listing = ({ list, search, setSearch, columns, loading, setPage, page, metadata }) => {
-  console.log("metadata: ", metadata);
+  //console.log("metadata: ", metadata);
   const [filteredList, setFilteredList] = useState(list);
 
  useEffect(() => {

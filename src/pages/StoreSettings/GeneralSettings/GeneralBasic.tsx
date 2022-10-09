@@ -26,7 +26,7 @@ const GeneralBasic = (general: IGeneral) => {
         throw "Failed";
       }
     } catch (err) {
-      console.log("err", err);
+      //console.log("err", err);
       if (err.response) {
         toast.error(err.response.data.err);
       } else {

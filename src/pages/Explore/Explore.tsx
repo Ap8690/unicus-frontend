@@ -78,7 +78,7 @@ const Explore = () => {
                     document.body.scrollTop = 0;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    //console.log(error);
                     setskiploading(false);
                     setLoading(false);
                 });
@@ -157,7 +157,7 @@ const Explore = () => {
             let accountId = walletConnection.account().accountId;
             const data = await createNearSignature(keyStore, networkId, accountId)
         } catch (error) {
-            console.log(error)
+            //console.log(error)
             toast.error("Error:"+ error?.message)
         }
     }

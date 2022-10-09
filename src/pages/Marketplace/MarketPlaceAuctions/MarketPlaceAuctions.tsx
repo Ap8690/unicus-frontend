@@ -23,7 +23,7 @@ const MarketPlaceAuctions = ({ chain }) => {
   useEffect(() => {
     getAuctions(10,currentType,chain)
     .then(res => {
-      console.log(res);
+      //console.log(res);
       setDisplayList(res?.data.nfts)
       setLoading(false)
     })

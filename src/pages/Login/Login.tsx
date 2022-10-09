@@ -52,7 +52,7 @@ const Login = ({}) => {
                     navigate("/home", {replace:true})
                 })
                 .catch((err) => {
-                    console.log(err.response.data);
+                    //console.log(err.response.data);
                     toast.error(err.response.data.msg)
                 })
         }

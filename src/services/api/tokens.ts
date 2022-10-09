@@ -31,7 +31,7 @@ export const connectWallet = async () => {
         toast.success("Welcome ")
         return loginResponse?.data.user;
     } catch (err) {
-        console.log(err);
+        //console.log(err);
     }
 };
 

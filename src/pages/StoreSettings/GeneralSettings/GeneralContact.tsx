@@ -33,7 +33,7 @@ const GeneralContact = (general: IGeneral) => {
             toast.success("Saved Changes");
             setLoading(false);
         } catch (err) {
-            console.log("err", err);
+            //console.log("err", err);
             if (err?.response) {
                 toast.error(err.response.data.err);
             } else if (err?.message) {

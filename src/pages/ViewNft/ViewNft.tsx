@@ -39,7 +39,7 @@ const ViewNft = () => {
             }
             setNftLoading(false);
         } catch (err) {
-            console.log("NFT FETCH", err);
+            //console.log("NFT FETCH", err);
             setNftLoading(false);
         }
     }
@@ -48,7 +48,7 @@ const ViewNft = () => {
         fetchItem();
         
         return () => {
-            console.log("This will be logged on unmount");
+            //console.log("This will be logged on unmount");
         };
     }, []);
 

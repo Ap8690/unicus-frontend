@@ -51,7 +51,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
 
       setGeneral({ ...generals, logoUrl: JSONdata.url });
     } catch (err) {
-      console.log("Cloudinary User Image Upload Error ->", err);
+      //console.log("Cloudinary User Image Upload Error ->", err);
     }
     setLoadingImage(false);
   };
@@ -75,7 +75,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
         throw "Failed";
       }
     } catch (err:any) {
-      console.log("err", err);
+      //console.log("err", err);
       if (err.response) {
         toast.error(err.response.data.err);
       } else {

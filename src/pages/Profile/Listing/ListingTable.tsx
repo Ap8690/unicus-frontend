@@ -12,7 +12,7 @@ import Pagination from "@mui/material/Pagination";
 
 // Element of data of activity table
 const TableData = ({ activity, link }) => {
-    console.log("activity: ", activity);
+    //console.log("activity: ", activity);
     let navigate = useNavigate();
 
     return (
@@ -103,7 +103,7 @@ const TableData = ({ activity, link }) => {
     );
 };
 const Table = ({ rows, columns, loading, page, setPage, metadata }) => {
-    console.log("metadata: ", metadata);
+    //console.log("metadata: ", metadata);
     return (
         <div className="table">
             <table>

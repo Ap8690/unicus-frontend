@@ -1,6 +1,6 @@
 
 const ImageVideo = ({ nftType, img }) => {
-    console.log("nftType: ", nftType);
+    //console.log("nftType: ", nftType);
     return (
         <div className="explore-element-item-image">
             {!(nftType?.includes("video")) ? (

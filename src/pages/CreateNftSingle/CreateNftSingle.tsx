@@ -107,7 +107,7 @@ const CreateNftSingle = () => {
     const navigate = useNavigate();
     const { fullLoading } = useContext(ConnectWalletContext);
     const { category,setCategory } = useContext(ChainContext);
-    console.log("category ",category)
+    //console.log("category ",category)
     
     const { connection } = useConnection();
     const { sendTransaction } = useWallet();
@@ -179,7 +179,7 @@ const CreateNftSingle = () => {
             const im = await getBase64(e.target.files[0]);
             localStorage.setItem("fileSrc", JSON.stringify(im));
         } catch (err) {
-            console.log(err);
+            //console.log(err);
         }
     };
     const validateUrl = (url: string) => {
@@ -378,9 +378,9 @@ const CreateNftSingle = () => {
             });
 
         if (functionCallResult) {
-            console.log("nft created: ", functionCallResult);
+            //console.log("nft created: ", functionCallResult);
         } else {
-            console.log("nft not created");
+            //console.log("nft not created");
         }
     };
     const cryptoPayment = async () => {
@@ -504,7 +504,7 @@ const CreateNftSingle = () => {
                         // let functionCallResult = await nearWalletConnection
                         // .account()
                         // .functionCall();
-                        console.log(res)
+                        //console.log(res)
                         if(res?.response?.error){
                             throw new Error("Nft not minted!")
                         }
@@ -530,13 +530,13 @@ const CreateNftSingle = () => {
                     }
                     
                 } else if (chain.toString() === solonaChain) {
-                    console.log(chain,"chain")
+                    //console.log(chain,"chain")
                     const mintKey = await mintSolana(
                         name,
                         description,
                         tokenUri
                     );
-                    console.log(mintKey,"mintKey")
+                    //console.log(mintKey,"mintKey")
                     nftObj.tokenId = mintKey;
                     nftObj.contractAddress = SOL_MINT_NFT_PROGRAM_ID.toBase58()
                     await createNft(nftObj);
@@ -593,7 +593,7 @@ const CreateNftSingle = () => {
                     }
                     
                     toast.success("Asset Minted!");
-                    console.log(nftObj, "nftObj");
+                    //console.log(nftObj, "nftObj");
                     await createNft(nftObj);
                     navigate("/profile/created");
                     setNftLoading(false);
@@ -660,7 +660,7 @@ const CreateNftSingle = () => {
                 }
             } catch (error) {
                 toast.error("Minting Failed");
-                console.log(error, error.message);
+                //console.log(error, error.message);
                 setdefaultErrorMessage(error);
                 setNftLoading(false);
                 toast.dismiss();
@@ -670,7 +670,7 @@ const CreateNftSingle = () => {
                 setdefaultErrorModal(true);
             }
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             setNftLoading(false);
         }
         setNftLoading(false);
@@ -683,7 +683,7 @@ const CreateNftSingle = () => {
             );
             setFileSrc(file);
         } catch (err) {
-            console.log(err);
+            //console.log(err);
         }
     };
     useEffect(() => {
@@ -774,7 +774,7 @@ const CreateNftSingle = () => {
                         setNftLoading(false);
                     })
                     .catch((e) => {
-                        console.log(e);
+                        //console.log(e);
                         setNftLoading(false);
                     });
             }

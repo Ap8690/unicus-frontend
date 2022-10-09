@@ -225,7 +225,7 @@ const ProfileButton = ({
             await disConnectWallet();
             await disconnect();
         } catch (err) {
-            console.log(err);
+            //console.log(err);
         }
     };
 

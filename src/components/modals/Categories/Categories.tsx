@@ -50,7 +50,7 @@ const assetColor = {
 }
 
 const CategoryCard = ({asset,handleCategory,category}) => {
-    console.log("asset: ", asset);
+    //console.log("asset: ", asset);
     const paperStyle = `${asset} box py-4 rounded-2xl category-paper hover:border hover:border-white border border-[#1D1F25] cursor-pointer flex justify-center items-center overflow-hidden w-full`
     return (
         <div

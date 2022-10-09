@@ -195,7 +195,7 @@ export const connectWallet = async (
 
         return address;
     } catch (e) {
-        console.log(e);
+        //console.log(e);
         toast.error(e?.message);
     }
 };
@@ -384,7 +384,7 @@ export const SwitchNetwork = async (network: any) => {
             ],
         });
     } catch (error: any) {
-        console.log(network,"network")
+        //console.log(network,"network")
         if (error?.code.toString() === "4902") {
             try {
                 const metaMaskProvider: any = await getMetamaskProvider();
@@ -490,19 +490,19 @@ export const connToTron = async () => {
 //     networkId: any
 // ) {
 //     nearWalletConnection = walletConnection;
-//     console.log(walletConnection.isSignedIn(), "is");
+//     //console.log(walletConnection.isSignedIn(), "is");
 //     localStorage.setItem("walletChain", "Near");
 //     let accountId = await walletConnection.account().accountId;
-//     console.log(accountId,"accountId")
+//     //console.log(accountId,"accountId")
 //     const timestamp = new Date().getTime().toString().toString();
 //     const msg = Buffer.from(timestamp);
 
 //     const signer = new nearAPI.InMemorySigner(keyStore);
-//     console.log("signer: ", signer);
+//     //console.log("signer: ", signer);
 //     const sign = await signer.signMessage(msg, accountId, networkId);
-//     console.log("sign: ", sign);
+//     //console.log("sign: ", sign);
 //     const publicKey = await signer.getPublicKey(accountId, networkId);
-//     console.log("publicKey: ", publicKey);
+//     //console.log("publicKey: ", publicKey);
 //     return {
 //         account: accountId,
 //         message: timestamp,
@@ -560,7 +560,7 @@ export const connectNear = async () => {
     const creds = await window.near.requestSignIn({
         contractId: "guest-book.testnet", // contract requesting access
     });
-    console.log(creds,"creds")
+    //console.log(creds,"creds")
     // await sendMeta(walletConnection, config);
     
     const { config, walletConnection, keyStore, networkId } =
@@ -616,10 +616,10 @@ export const sign_solana_message = async () => {
 //   // @ts-ignore
 //     const provider = getProvider();
 //     const resp = await provider.connect();
-//     console.log("resp: ", resp);
+//     //console.log("resp: ", resp);
 //       if (resp.publicKey) {
 //         const address = resp.publicKey.toBase58()
-//         console.log("address: ", address);
+//         //console.log("address: ", address);
 //         const sm = await sign_solana_message()
 //         return {
 //           account: address,
@@ -660,7 +660,7 @@ export const connToSol = async (
             token: sm.token,
         };
     }
-    // console.log("wallet: ", wallet);
+    // //console.log("wallet: ", wallet);
     // if (!wallet) {
     //     setVisible(true)
     // } else {
@@ -704,7 +704,7 @@ export const getUserWallet = async (network: any) => {
         }
         return accounts;
     } catch (e) {
-        console.log(e);
+        //console.log(e);
     }
 };
 
@@ -1013,7 +1013,7 @@ export const offerPrice = async (token_id: string, assetBid: any) => {
             gas: new BN("200000000000000"),
         });
     } catch (e) {
-        console.log(e);
+        //console.log(e);
     }
 };
 
@@ -1141,8 +1141,8 @@ export const getStoreName = () => {
 };
 
 export const isMainStore = () => {
-    // console.log("UNICUS_STORE: ", UNICUS_STORE);
-    // console.log("window.location.host: ", window.location.host);
+    // //console.log("UNICUS_STORE: ", UNICUS_STORE);
+    // //console.log("window.location.host: ", window.location.host);
     return (window.location.host === UNICUS_STORE);
 };
 export interface WalletsPopupProps {

@@ -25,7 +25,7 @@ const Register = () => {
     else {
       emailRegister(email, password, username)
         .then(async (res: any) => {
-          console.log("in");
+          //console.log("in");
 
           // Cookies.set("accessToken", res.data.accessToken, {
           //     domain: "unicus.one",
@@ -37,7 +37,7 @@ const Register = () => {
           navigate("/home", { replace: true });
         })
         .catch((err) => {
-          console.log(err.response.data);
+          //console.log(err.response.data);
           toast.error(err.response.data.msg);
         });
     }

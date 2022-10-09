@@ -62,6 +62,7 @@ const App = () => {
         setOpenInstall,
         openInstall,
         walletInstall,
+        validateSession
     } = useContext(ConnectWalletContext);
     const userInfo = getUserInfo();
     const { store, setStore } = useContext(StoreContext); // store data
@@ -71,7 +72,7 @@ const App = () => {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
-        console.log("isMainStore ", isMainStore());
+        //console.log("isMainStore ", isMainStore());
         if (isMainStore()) {
             getStoreForUser();
         } else {
@@ -92,10 +93,10 @@ const App = () => {
             localStorage.setItem("store", JSON.stringify(res.data.store));
             setLoading(false);
         } catch (err: any) {
-            console.log("STORE FETCH ERROR: ", err);
+            //console.log("STORE FETCH ERROR: ", err);
             setLoading(false);
             window.open(UNICUS_STORE)
-            console.log("UNICUS_STORE: ", UNICUS_STORE);
+            //console.log("UNICUS_STORE: ", UNICUS_STORE);
         }
     };
     const setLogin = () => {
@@ -104,10 +105,10 @@ const App = () => {
         if (cookieUser) {
             userInfo = JSON.parse(cookieUser);
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
-            console.log("Setting localstorage");
+            //console.log("Setting localstorage");
         } else {
             localStorage.removeItem("userInfo");
-            console.log("UnSetting localstorage");
+            //console.log("UnSetting localstorage");
         }
         const token = Cookies.get(ACCESS_TOKEN);
         if (token) {
@@ -118,7 +119,7 @@ const App = () => {
         try {
             if (Cookies.get(ACCESS_TOKEN)) {
                 const res = await getStoreByUser();
-                console.log("Store data: ", res.data);
+                //console.log("Store data: ", res.data);
                 if (res.data.store) {
                     setUserStore(res.data.store);
                 }
@@ -126,14 +127,16 @@ const App = () => {
                 setUserStore({});
             }
         } catch (err) {
-            console.log("err", err);
+            //console.log("err", err);
         }
     };
     useEffect(() => {
+        validateSession()
         if (location.pathname === "/") {
             navigate("/home", { replace: true });
         }
     }, []);
+
 
     return (
         <WalletModalProvider>

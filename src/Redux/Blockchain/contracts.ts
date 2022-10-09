@@ -76,7 +76,7 @@ export const getMetamaskProvider = async () => {
   try {
     return await detectEthereumProvider()
   } catch (error: any) {
-    console.log(error?.message)
+    //console.log(error?.message)
   }
 }
 
@@ -154,7 +154,7 @@ const getContracts = (walletType: string, networkID: string) => {
       auction = tronWeb.contract(auctionAbiT, auctionAddressT);
       }
       catch(err){
-        console.log(err);
+        //console.log(err);
       }
       break
 

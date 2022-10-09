@@ -38,10 +38,11 @@ const User = ({ user }): ReactJSXElement => {
     const profilePicFile = useRef(null);
     const bgPicFile = useRef(null);
 
-    const uploadImage = (inputFile: any) => {
-        // `current` points to the mounted file input element
-        inputFile.current.click();
-    };
+    // const uploadImage = (inputFile: any) => {
+    //     //console.log("Up inm")
+    //     // `current` points to the mounted file input element
+    //     inputFile?.current.click();
+    // };
     const uploadUserImage = async (e: any) => {
         try {
             setUploadLoading(true);
@@ -72,7 +73,7 @@ const User = ({ user }): ReactJSXElement => {
         } catch (err) {
             setUploadLoading(false);
             toast.error(err?.response.data || "Image upload error");
-            console.log("Cloudinary User Image Upload Error ->", err);
+            //console.log("Cloudinary User Image Upload Error ->", err);
         }
     };
 
@@ -107,7 +108,7 @@ const User = ({ user }): ReactJSXElement => {
             }
             setUploadLoading(false);
         } catch (err) {
-            console.log("Cloudinary User Image Upload Error ->", err);
+            //console.log("Cloudinary User Image Upload Error ->", err);
             setUploadLoading(false);
             toast.error(err?.response.data || "Image upload error");
         }
@@ -120,7 +121,7 @@ const User = ({ user }): ReactJSXElement => {
         <div className="user">
             <div
                 className="user-background-image"
-                onClick={() => uploadImage(bgPicFile)}
+                // onClick={() => uploadImage(bgPicFile)}
             >
                 <img className="w-100 object-cover" src={backgroundImage} alt="Background" />
                 {/* <input
@@ -135,7 +136,7 @@ const User = ({ user }): ReactJSXElement => {
             <div className="user-details">
                 <div
                     className="user-image custom-border-right"
-                    onClick={() => uploadImage(profilePicFile)}
+                    // onClick={() => uploadImage(profilePicFile)}
                 >
                     <img src={userImage} alt={user?.username} />
                     {/* <input

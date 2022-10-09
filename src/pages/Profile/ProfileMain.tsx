@@ -105,7 +105,7 @@ const Profile = (): ReactJSXElement => {
             setDisplayListing(res.data.auctions);
             setTableLoading(false)
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             toast.error(e);
             setTableLoading(false)
         }
@@ -124,7 +124,7 @@ const Profile = (): ReactJSXElement => {
             setLoading(false);
         } catch (err) {
             setLoading(false);
-            console.log(err);
+            //console.log(err);
         }
     };
     useEffect(() => {

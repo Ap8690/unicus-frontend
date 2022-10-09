@@ -25,7 +25,7 @@ const WalletAdd = () => {
         } catch (err) {
             toast.error(err?.response.data.err || "Wallet added failed!");
             setModalShow(false);
-            console.log("err: ", err);
+            //console.log("err: ", err);
         }
     };
     const onUpdateWalletAddress = async (event: any) => {

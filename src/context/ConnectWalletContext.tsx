@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 import {
     connectNear,
@@ -35,9 +35,10 @@ export type ConnectWalletContextType = {
     setChainConnected: (value: any) => void;
     walletModal?: boolean;
     setWalletModal?: (value: boolean) => void;
-    openInstall?:boolean;
+    openInstall?: boolean;
     setOpenInstall?: (value: boolean) => void;
     walletInstall?: string;
+    validateSession?: () => void;
 };
 export const ConnectWalletContext =
     createContext<ConnectWalletContextType | null>(null);
@@ -53,7 +54,7 @@ export const WalletConnectionProvider = ({ children }) => {
     const [chainConnected, setChainConnected] = useState("");
     const [walletModal, setWalletModal] = useState<boolean>(false);
     const { setShowChains, setChain } = useContext(ChainContext);
-    const [walletInstall,setWalletInstall] = useState('meatamask')
+    const [walletInstall, setWalletInstall] = useState("meatamask");
 
     useEffect(() => {
         const name: any = "Phantom";
@@ -66,10 +67,10 @@ export const WalletConnectionProvider = ({ children }) => {
             let address: any, token: any, walletNetwork: any, message: any;
             switch (walletAddress) {
                 case "meta": {
-                    if(!window?.ethereum) {
-                        setWalletInstall("metamask")
-                        setWalletModal(false)
-                        return setOpenInstall(true)
+                    if (!window?.ethereum) {
+                        setWalletInstall("metamask");
+                        setWalletModal(false);
+                        return setOpenInstall(true);
                     }
                     const data = await connToMetaMask();
                     address = data.account;
@@ -106,10 +107,10 @@ export const WalletConnectionProvider = ({ children }) => {
                     break;
                 }
                 case "tron": {
-                    if (!((window as any)?.tronWeb)) {
-                        setWalletInstall("tron")
-                        setWalletModal(false)
-                        return setOpenInstall(true)
+                    if (!(window as any)?.tronWeb) {
+                        setWalletInstall("tron");
+                        setWalletModal(false);
+                        return setOpenInstall(true);
                     }
                     const data = await connToTron();
                     address = data.account;
@@ -120,10 +121,10 @@ export const WalletConnectionProvider = ({ children }) => {
                     break;
                 }
                 case "sol": {
-                    if (!((window as any)?.solana)) {
-                        setWalletInstall("phantom")
-                        setWalletModal(false)
-                        return setOpenInstall(true)
+                    if (!(window as any)?.solana) {
+                        setWalletInstall("phantom");
+                        setWalletModal(false);
+                        return setOpenInstall(true);
                     }
                     const name: any = "Phantom";
                     select(name);
@@ -147,7 +148,7 @@ export const WalletConnectionProvider = ({ children }) => {
                     address = data.account;
                     token = data.token;
                     message = data.message;
-                    localStorage.setItem("wallet","Sender")
+                    localStorage.setItem("wallet", "Sender");
                     // setChain(nearChain)
                     break;
                 }
@@ -168,7 +169,10 @@ export const WalletConnectionProvider = ({ children }) => {
                     domain: cookieDomain,
                     expires: 30,
                 });
-
+                Cookies.set("expiry", res.data.exp, {
+                    domain: cookieDomain,
+                    expires: 30,
+                });
                 localStorage.setItem("userInfo", JSON.stringify(res.data.user));
                 localStorage.setItem("walletConnected", address);
                 let walletChain = null;
@@ -187,7 +191,10 @@ export const WalletConnectionProvider = ({ children }) => {
                     walletChain = "Solana";
                 }
                 // Wallet name is stored
-                localStorage.setItem("walletChain", getChainName(localStorage.getItem("CHAIN")));
+                localStorage.setItem(
+                    "walletChain",
+                    getChainName(localStorage.getItem("CHAIN"))
+                );
                 // Address of wallet
                 setChainConnected(getChainName(localStorage.getItem("CHAIN")));
                 setFullLoading(false);
@@ -195,33 +202,61 @@ export const WalletConnectionProvider = ({ children }) => {
                 setShowChains(false);
                 setChain(getChainName(localStorage.getItem("CHAIN")));
                 if (sessionStorage.getItem("redirect_after_login")) {
-                    navigate(
-                        sessionStorage.getItem("redirect_after_login")
-                    );
+                    navigate(sessionStorage.getItem("redirect_after_login"));
                     sessionStorage.removeItem("redirect_after_login");
-                    return 
-                }
-                else if(!location.pathname.includes("/nft")) navigate("/explore");
+                    return;
+                } else if (!location.pathname.includes("/nft"))
+                    navigate("/explore");
             } else {
                 if (walletAddress !== "near") {
                     toast.error("Wallet connection failed");
                 }
             }
         } catch (e) {
-            localStorage.setItem("error", e);
             toast.error(
                 e?.message || e || "Something went wrong, Please try again"
             );
-            console.log("ERROR", e);
+            //console.log("ERROR", e);
             setFullLoading(false);
         }
     };
-
-    useEffect(()=>{
-        if(localStorage.getItem('walletChain')){
-            setChainConnected(localStorage.getItem('walletChain'))
+    const clearCache = () => {
+        sessionStorage.clear();
+        localStorage.clear();
+        Cookies.remove(ACCESS_TOKEN, {
+            domain: cookieDomain,
+            expires: 30,
+        });
+        Cookies.remove("userInfo", {
+            domain: cookieDomain,
+            expires: 30,
+        });
+        Cookies.remove("expiry", {
+            domain: cookieDomain,
+            expires: 30,
+        });
+        setChainConnected("");
+        navigate("/");
+        window.location.reload();
+        toast.error("Session Timeout!");
+    };
+    const validateSession = () => {
+        if (Cookies.get(ACCESS_TOKEN) && !Cookies.get("expiry")) {
+            //clear cache
+            clearCache()
+        } else if (Cookies.get(ACCESS_TOKEN) && Cookies.get("expiry")) {
+            console.log(Cookies.get("expiry"));
+            if (Number(Cookies.get("expiry")) <= new Date().getTime()) {
+                clearCache()
+            }
         }
-    },[])
+    };
+
+    useEffect(() => {
+        if (localStorage.getItem("walletChain")) {
+            setChainConnected(localStorage.getItem("walletChain"));
+        }
+    }, []);
 
     return (
         <ConnectWalletContext.Provider
@@ -235,7 +270,8 @@ export const WalletConnectionProvider = ({ children }) => {
                 setWalletModal,
                 walletInstall,
                 openInstall,
-                setOpenInstall
+                validateSession,
+                setOpenInstall,
             }}
         >
             {children}

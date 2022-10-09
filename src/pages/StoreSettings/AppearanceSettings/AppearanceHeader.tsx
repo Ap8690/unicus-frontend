@@ -53,7 +53,7 @@
 
 //       setAppearance({ ...appearance, headerBg: JSONdata.url });
 //     } catch (err) {
-//       console.log("Cloudinary User Image Upload Error ->", err);
+//       //console.log("Cloudinary User Image Upload Error ->", err);
 //     }
 //     setLoadingImage(false);
 //   };
@@ -79,7 +79,7 @@
 
 //       setAppearance({ ...appearance, headerPic: JSONdata.url });
 //     } catch (err) {
-//       console.log("Cloudinary User Image Upload Error ->", err);
+//       //console.log("Cloudinary User Image Upload Error ->", err);
 //     }
 //     setLoadingImage(false);
 //   };
@@ -93,7 +93,7 @@
 //         throw "Failed";
 //       }
 //     } catch (err) {
-//       console.log("err", err);
+//       //console.log("err", err);
 //       if (err.response) {
 //         toast.error(err.response.data.err);
 //       } else {

@@ -22,7 +22,7 @@ const GeneralSettings = () => {
             setGeneral(res.data.result);
             setLoading(false);
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             setLoading(false);
         }
     };

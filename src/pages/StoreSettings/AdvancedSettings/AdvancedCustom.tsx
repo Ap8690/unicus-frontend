@@ -20,7 +20,7 @@ const AdvancedCustom = (advance: IAdvance) => {
         throw new Error("Failed");
       }
     } catch (err) {
-      console.log("err", err);
+      //console.log("err", err);
       if (err?.response) {
         return toast.error(err.response.data.err);
       } else if(err?.message) {

@@ -238,7 +238,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
         }
       }
     } catch (err) {
-      console.log(err);
+      //console.log(err);
     }
   };
 
@@ -293,7 +293,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
               // navigate("/my-tickets");
             })
             .catch((err) => {
-              console.log("err", err);
+              //console.log("err", err);
               const decreaseCounter = ticketLockedDecrement(
                 selectedTickets,
                 isLogin
@@ -310,7 +310,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
             });
         })
         .catch(function (error) {
-          console.log("err", error);
+          //console.log("err", error);
 
           const decreaseCounter = ticketLockedDecrement(
             selectedTickets,
@@ -325,7 +325,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
         });
     } else {
       //order is still active and payment has failed
-      console.log("failure");
+      //console.log("failure");
       setRenderComponent(false);
       setMessageModal(true);
       setShowFullLoading(false);
@@ -335,7 +335,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
   const cbf = async (data) => {
     // alert("order is paid. Call api to verify");
     const selectedTickets = JSON.parse(localStorage.getItem("selectedTickets"));
-    console.log("error", data);
+    //console.log("error", data);
     setRenderComponent(false);
     setMessageModal(true);
     setShowFullLoading(false);
@@ -356,7 +356,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
     parent.innerHTML = "";
     let cashfree = new cashfreeSandbox.Cashfree();
 
-    console.log("before Initialisation");
+    //console.log("before Initialisation");
     cashfree.initialiseDropin(parent, {
       orderToken: resultOrderToken,
       onSuccess: newcbs,
@@ -372,7 +372,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
         theme: "light", //(or dark)
       },
     });
-    console.log("after Initialisation");
+    //console.log("after Initialisation");
   };
   const createPay = async () => {
     const selectedTickets = JSON.parse(localStorage.getItem("selectedTickets"));
@@ -422,7 +422,7 @@ const PayNow = ({ isLogin, setSignIn }) => {
               renderDropin(result.orderToken);
             })
             .catch(async (err) => {
-              console.log(err);
+              //console.log(err);
               const decreaseCounter = await ticketLockedDecrement(
                 selectedTickets,
                 isLogin

@@ -89,7 +89,7 @@ const EditProfile = (props: any) => {
         } catch (err) {
             setLoading(false);
             toast.error(err?.response.data || "Image upload error");
-            console.log("Cloudinary User Image Upload Error ->", err);
+            //console.log("Cloudinary User Image Upload Error ->", err);
         }
     };
 
@@ -124,7 +124,7 @@ const EditProfile = (props: any) => {
             }
             setLoading(false);
         } catch (err) {
-            console.log("Cloudinary User Image Upload Error ->", err);
+            //console.log("Cloudinary User Image Upload Error ->", err);
             setLoading(false);
             toast.error(err?.response.data || "Image upload error");
         }
@@ -138,7 +138,7 @@ const EditProfile = (props: any) => {
             })
             setUser(res.data.user)
         } catch (err) {
-            console.log(err)
+            //console.log(err)
         }
     }
     const handleCancel = () => {
@@ -416,7 +416,7 @@ const GeneralSettings = ({ resUser }) => {
             navigate('/profile')
             setLoading(false)
         } catch (err) {
-            console.log(err)
+            //console.log(err)
             toast.error(err)
         }
     }
@@ -539,7 +539,7 @@ const ChangePassword = ({ handleCancel }) => {
                 position: "bottom-center",
             })
         } catch (err) {
-            console.log(err)
+            //console.log(err)
             toast.error(err)
         }
     }

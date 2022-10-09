@@ -55,7 +55,7 @@ const AppearanceOther = (appearance: IAppearance) => {
 
       setAppearance({ ...Appearance, storeLoader: JSONdata.url });
     } catch (err) {
-      console.log("Cloudinary User Image Upload Error ->", err);
+      //console.log("Cloudinary User Image Upload Error ->", err);
     }
     setLoadingImage(false);
   };
@@ -68,7 +68,7 @@ const AppearanceOther = (appearance: IAppearance) => {
         throw "Failed";
       }
     } catch (err) {
-      console.log("err", err);
+      //console.log("err", err);
       if (err.response) {
         toast.error(err.response.data.err);
       } else {

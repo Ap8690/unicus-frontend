@@ -161,7 +161,7 @@ const GeneralSocial = () => {
         }
     };
     const handleSocialLink = (title: any, e: any) => {
-        console.log("e: ", e);
+        //console.log("e: ", e);
         setSocialLinks({ ...socialLinks, [title]: e });
     };
     const handleSave = async () => {

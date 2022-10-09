@@ -15,12 +15,12 @@ const MarketPlaceFeatured = ({ chain, title }) => {
   useEffect(() => {
     getFeaturedNft(10,chain)
     .then((res) => {
-      console.log(res)
+      //console.log(res)
       setFeturedNft(res?.data.nfts);
       setLoading(false)
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
       setLoading(false)
     });
   },[])
