@@ -151,7 +151,7 @@ const Navbar = ({ store }) => {
                             </Link>
                             <NestedMenu chain={chain} />
                             <Link to={"/marketplace"} className="btn nav-link">
-                            Enter App
+                            {getUserInfo() ? "Marketplace" :"Enter App"}
                             </Link>
                             <div className="chainLogo">
                                 <ChainLogo />
