@@ -740,153 +740,29 @@ export const getNftContractAddress = (nft: any) => {
 };
 export const getChainSymbol = (chain: any) => {
     if (chain) {
-        return chain.toString() === bscChain()
-            ? "BSC"
-            : chain.toString() === polygonChain()
-            ? "MATIC"
-            : chain.toString() === tronChain()
-            ? "TRX"
-            : chain.toString() === avalancheChain()
-            ? "AVAX"
-            : chain.toString() === shardeumChain()
-            ? "SHM"
-            : chain.toString() === telosChain()
-            ? "TLOS"
-            : chain.toString() === nearChain()
-            ? "NEAR"
-            : chain.toString() === solonaChain()
-            ? "SOL"
-            : "ETH";
+        return chains[chain.toString()].chainSymbol;
     }
 };
 
 // Returns CHAIN ID
 export const getChainId = (chain: any) => {
     console.log("chain: ", chain);
-    switch (chain?.toString().toLowerCase()) {
-        case "ethereum":
-            return ethChain();
-        case "binance":
-            return bscChain();
-        case "polygon":
-            return polygonChain();
-        case "avalanche":
-            return avalancheChain();
-        case "shardeum":
-            return shardeumChain();
-        case "telos":
-            return telosChain();
-        case "near":
-            return nearChain();
-        case "tron":
-            return tronChain();
-        case "solana":
-            return solonaChain();
-        case "all":
-            return 0;
-        default:
-            return null;
+    for(const item in chains){
+        if(chains[item].chainName === chain){
+            console.log(chains[item].chainId,"fipudshfjdsbf")
+          return chains[item].chainId
+        }
     }
 };
 
 // Returns CHAIN Name
 export const getChainName = (chain: any) => {
-    switch (chain?.toString()) {
-        case ethChain():
-            return "ethereum";
-        case bscChain():
-            return "binance";
-        case polygonChain():
-            return "polygon";
-        case avalancheChain():
-            return "avalanche";
-        case shardeumChain():
-            return "shardeum";
-        case telosChain():
-            return "telos";
-        case nearChain():
-            return "near";
-        case tronChain():
-            return "tron";
-        case solonaChain():
-            return "solana";
-        default:
-            return chain;
-    }
+    return chains[chain?.toString()]?.chainName
 };
 
 // Returns CHAIN Name
 export const getChainLogo = (chain: any) => {
-    switch (chain?.toString()) {
-        case ethChain():
-            return ethereumLogo;
-        case bscChain():
-            return binanceLogo;
-        case polygonChain():
-            return ploygonLogo;
-        case avalancheChain():
-            return avalancheLogo;
-        case shardeumChain():
-            return shardumLogo;
-        case telosChain():
-            return telosLogo;
-        case nearChain():
-            return nearLogo;
-        case tronChain():
-            return tronLogo;
-        case solonaChain():
-            return solanaLogo;
-        default:
-            return chain;
-    }
-};
-
-// Return Chain Name Using wallet name
-export const ChainIdUsingWalletName = (chainName: any) => {
-    switch (chainName.toLowerCase()) {
-        case "ethereum":
-            return ethChain();
-        case "binance":
-            return bscChain();
-        case "polygon":
-            return polygonChain();
-        case "avalanche":
-            return avalancheChain();
-        case "shardeum":
-            return shardeumChain();
-        case "telos":
-            return telosChain();
-        case "near":
-            return nearChain();
-        case "tron":
-            return tronChain();
-        case "solana":
-            return solonaChain();
-        case "all":
-            return 0;
-        default:
-            return null;
-    }
-};
-export const selectNetwork = (chain: string) => {
-    const type =
-        chain.toString() === bscChain()
-            ? "Binance"
-            : chain.toString() === ethChain()
-            ? "ETH"
-            : chain.toString() === tronChain()
-            ? "TRX"
-            : chain.toString() === avalancheChain()
-            ? "Avalanche"
-            : chain.toString() === shardeumChain()
-            ? "Shardeum"
-            : chain.toString() === telosChain()
-            ? "Telos"
-            : "Matic";
-    SwitchNetwork(chain);
-    toast(`Your are now on ${type} chain`, {
-        className: "toast-custom",
-    });
+    return chains[chain.toString()]?.chainLogo
 };
 
 export const getCreateNftABI = () => {

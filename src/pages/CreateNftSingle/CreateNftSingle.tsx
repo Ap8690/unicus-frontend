@@ -38,7 +38,6 @@ import {
     tronWeb,
     userInfo,
     getWalletChain,
-    ChainIdUsingWalletName,
     SwitchNetwork,
 } from "../../utils/utils";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
@@ -82,7 +81,6 @@ const CreateNftSingle = () => {
     const supportedVid = ["mp4", "webm"];
     const supportedAud = ["mp3", "wav", "ogg"];
     const supported3d = ["gltf, glb"];
-    // let chain_name = ChainIdUsingWalletName(localStorage.getItem("walletChain"))
     const [name, setName] = useState("");
     const [extLink, setExtlink] = useState("");
     const [description, setDescription] = useState("");
