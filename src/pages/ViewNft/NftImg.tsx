@@ -107,7 +107,7 @@ const NftImg = ({ img, likes, views, shares, nftType }) => {
                         </div>
                 </div>
             </PlaceBid>
-            {!nftType?.includes("video") ? (
+            {nftType && !nftType?.includes("video") ? (
                 <img src={img ? img : nftImg} alt="" className="nft-img" />
             ) : (
                 <video
@@ -117,11 +117,11 @@ const NftImg = ({ img, likes, views, shares, nftType }) => {
                 >
                     <source
                         src={img ? img : nftImg}
-                        type={nftType}
+                        type={nftType && nftType}
                     />
                 </video>
             )}
-            <div className={!nftType?.includes("video") ?"nft-interactions add-boottom-0" : "nft-interations add-boottom-64"}>
+            <div className={nftType && !nftType?.includes("video") ?"nft-interactions add-boottom-0" : "nft-interations add-boottom-64"}>
                 {/* <button>
                     {views} <img src={viewImg} alt="views" />
                 </button> */}

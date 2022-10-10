@@ -14,7 +14,7 @@ export const ExploreElement = ({ element }) => {
             }}
         >
             <div className="explore-element">
-                <ImageVideo img={element.cloudinaryUrl} nftType={element.nftId.nftType} />
+                <ImageVideo img={element?.cloudinaryUrl} nftType={element && element?.nftId && element.nftId?.nftType} />
                 <div className="explore-element-name">{element.name}</div>
                 <div className="explore-element-price">
                     {element && element.lastBid > 0

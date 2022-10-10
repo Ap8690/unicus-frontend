@@ -98,15 +98,15 @@ export const AssetCategory: any = {
     },
     photography: {
         FieldTitle: "Upload File",
-        AssetName: "Asset Name",
+        AssetName: "Title of Photograph",
         AssetNamePlaceholder: "Please enter your asset name",
-        AssetLink: "Url of asset (if any)",
+        AssetLink: "URL of Photograph (if any)",
         AssetLinkPlaceholder: "Please enter url of your asset",
-        AssetInfo: "Asset Description",
+        AssetInfo: "Description of Photograph",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise ",
+        AssetButton: "Tokenise your Photograph",
     },
     "real estate": {
         FieldTitle: "Upload File",

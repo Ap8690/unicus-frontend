@@ -18,7 +18,7 @@ const TableData = ({ activity, link }) => {
         >
             <td className="table-data-item-name">
                 {activity.hasOwnProperty("nftId") ? (
-                    activity?.nftId.nftType?.match(/image/) ? (
+                   activity && activity?.nftId && activity?.nftId.nftType?.match(/image/) ? (
                         <img
                             src={activity.cloudinaryUrl}
                             alt={activity.name}
@@ -31,11 +31,11 @@ const TableData = ({ activity, link }) => {
                         >
                             <source
                                 src={activity.cloudinaryUrl}
-                                type={activity?.nftType}
+                                type={activity && activity?.nftType}
                             />
                         </video>
                     )
-                ) : activity.hasOwnProperty("nftType") &&
+                ) : activity && activity.hasOwnProperty("nftType") &&
                   activity?.nftType?.match(/image/) ? (
                     <img
                         src={activity.cloudinaryUrl}
@@ -49,7 +49,7 @@ const TableData = ({ activity, link }) => {
                     >
                         <source
                             src={activity.cloudinaryUrl}
-                            type={activity?.nftType}
+                            type={activity && activity?.nftType}
                         />
                     </video>
                 )}
