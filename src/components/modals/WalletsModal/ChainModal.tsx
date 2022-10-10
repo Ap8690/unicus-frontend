@@ -48,21 +48,13 @@ const Mainnet = ({ handleChain }) => {
                 chainName={"Binance"}
                 chainLogo={binanceLogo}
             />
-            <ChainCard
-                handleChain={handleChain}
-                chainName={"Avalanche"}
-                chainLogo={avalancheLogo}
-            />
+            
             <ChainCard
                 handleChain={handleChain}
                 chainName={"Polygon"}
                 chainLogo={ploygonLogo}
             />
-            <ChainCard
-                handleChain={handleChain}
-                chainName={"Tron"}
-                chainLogo={tronLogo}
-            />
+            
         </div>
     );
 };
