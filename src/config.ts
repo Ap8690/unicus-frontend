@@ -45,3 +45,8 @@ env_uri === "local"
 : env_uri === "demo"
 ? "demo.unicus.one"
 : "unicus.one"
+
+
+export const nearNftAddress = "nft-near.lobovh18.testnet"
+
+export const nearMarketAddress = "market-near.lobovh18.testnet"

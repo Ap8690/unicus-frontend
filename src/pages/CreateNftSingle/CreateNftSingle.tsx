@@ -23,6 +23,7 @@ import {
     nearChain,
     solonaChain,
     avalancheChain,
+    nearNftAddress,
 } from "../../config";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import {
@@ -352,7 +353,7 @@ const CreateNftSingle = () => {
         let functionCallResult = await nearWalletConnection
             .account()
             .functionCall({
-                contractId: "nft.subauction.testnet",
+                contractId: nearNftAddress,
                 methodName: "nft_mint",
                 args: {
                     token_id: `${tokenId}`,
@@ -473,7 +474,7 @@ const CreateNftSingle = () => {
                         // @ts-ignore
                         const accountId =  window.near.getAccountId();
                         const tx = {
-                            receiverId: "nft.subauction.testnet",
+                            receiverId: nearNftAddress,
                             actions: [
                               {
                                 methodName: 'nft_mint',
@@ -502,7 +503,7 @@ const CreateNftSingle = () => {
                             throw new Error("Nft not minted!")
                         }
                         toast.success("Asset Minted");
-                        nftObj.contractAddress = "nft.subauction.testnet"
+                        nftObj.contractAddress = nearNftAddress
                         await createNft(nftObj);
                         navigate("/profile/created");
                     }

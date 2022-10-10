@@ -39,7 +39,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import web3 from "../../web3";
 import { toast } from "react-toastify";
-import { nearChain, solonaChain, tronChain } from "../../config";
+import { nearChain, nearMarketAddress, nearNftAddress, solonaChain, tronChain } from "../../config";
 import axios from "axios";
 import { setNotification } from "../../Redux/Blockchain/contracts";
 import { decodeParams, getDecimal } from "../../utils/helpers";
@@ -747,7 +747,7 @@ const NftInfo = ({
                     obj.auctionId = nft.tokenId;
                     const minimum = await getMinimumStorage();
                     let tx = {
-                        receiverId: "market_auct.subauction.testnet",
+                        receiverId: nearMarketAddress,
                         actions: [
                           {
                             methodName: 'storage_deposit',
@@ -762,13 +762,13 @@ const NftInfo = ({
                     //     const sale_conditions: parseNearAmount(obj.startBid.toString()), // set asset price in ui
                     // // };
                     tx = {
-                        receiverId: "nft.subauction.testnet",
+                        receiverId: nearNftAddress,
                         actions: [
                           {
                             methodName: 'nft_approve',
                             args: {
                                 token_id: obj.tokenId,
-                                account_id: "market_auct.subauction.testnet",
+                                account_id: nearMarketAddress,
                                 msg: JSON.stringify({sale_conditions : parseNearAmount((Number(obj.startBid)/getDecimal(nft.chain)).toString())}),
                             },
                             deposit: parseNearAmount('0.01'),
@@ -938,7 +938,7 @@ const NftInfo = ({
                 auctionId: "",
                 startBid: Number(startBid) * getDecimal(nft.chain),
                 auctionType: "Auction",
-                duration: Number(duration) * 86400+600,
+                duration: Number(duration) * 86400+300,
                 auctionHash: "",
                 tokenId: nft.tokenId,
                 chain: nft.chain,
@@ -949,12 +949,16 @@ const NftInfo = ({
             };
 
             if (nft.chain.toString() === nearChain) {
+                console.log(new Date().setSeconds(
+                    new Date().getSeconds() + obj.duration
+                ) /
+                    1000 ,"secs")
                 const wallet = localStorage.getItem("wallet")
                 if(wallet === "Sender"){
                     obj.auctionId = nft.tokenId;
                     const minimum = await getMinimumStorage();
                     let tx = {
-                        receiverId: "market_auct.subauction.testnet",
+                        receiverId: nearMarketAddress,
                         actions: [
                           {
                             methodName: 'storage_deposit',
@@ -967,20 +971,19 @@ const NftInfo = ({
                     console.log(storageTx,"dhfij",parseNearAmount(obj.startBid.toString()))
 
                     tx = {
-                        receiverId: "nft.subauction.testnet",
+                        receiverId: nearNftAddress,
                         actions: [
                           {
                             methodName: 'approve_nft_auction',
                             args: {
                                 auction_token: obj.tokenId,
-                                account_id: "market_auct.subauction.testnet",
+                                account_id: nearMarketAddress,
                                 start_time:  Math.ceil(new Date().getTime() / 1000), // Time in seconds (as type u64)
                                 end_time: Math.ceil(
                                     new Date().setSeconds(
-                                        new Date().getSeconds() //+ obj.duration
+                                        new Date().getSeconds() + obj.duration
                                     ) /
-                                        1000 +
-                                        600
+                                        1000
                                 ), // Time in seconds (as type u64)
                                 msg: JSON.stringify({sale_conditions : parseNearAmount((Number(obj.startBid)/getDecimal(nft.chain)).toString())}),
                             },
@@ -1017,7 +1020,7 @@ const NftInfo = ({
                     Math.ceil(new Date().getTime() / 1000)+300,
                     Math.ceil(
                         new Date().setSeconds(
-                            new Date().getSeconds() //+ obj.duration
+                            new Date().getSeconds() + obj.duration
                         ) /
                             1000 +
                             600
@@ -1122,13 +1125,13 @@ const NftInfo = ({
                 const wallet = localStorage.getItem("wallet")
                 if(wallet === "Sender"){
                     const tx = {
-                        receiverId: "market_auct.subauction.testnet",
+                        receiverId: nearMarketAddress,
                         actions: [
                           {
                             methodName: 'offer',
                             args: {
                                 token_id: nft.tokenId,
-                                nft_contract_id: "nft.subauction.testnet",
+                                nft_contract_id: nearNftAddress,
                             },
                             gas: "200000000000000",
                             deposit: parseNearAmount((Number(auction.startBid) / getDecimal(nft.chain)).toString())
@@ -1257,13 +1260,13 @@ const NftInfo = ({
                 const wallet = localStorage.getItem("wallet")
                 if(wallet === "Sender"){
                     const tx = {
-                        receiverId: "market_auct.subauction.testnet",
+                        receiverId: nearMarketAddress,
                         actions: [
                           {
                             methodName: 'offer_bid',
                             args: {
                                 token_id: nft.tokenId,
-                                nft_contract_id: "nft.subauction.testnet",
+                                nft_contract_id: nearNftAddress,
                             },
                             gas: "200000000000000",
                             deposit: parseNearAmount(bid.toString())
@@ -1387,13 +1390,13 @@ const NftInfo = ({
                 const wallet = localStorage.getItem("wallet")
                 if(wallet === "Sender"){
                     const tx = {
-                        receiverId: "market_auct.subauction.testnet",
+                        receiverId: nearMarketAddress,
                         actions: [
                           {
                             methodName: 'remove_sale',
                             args: {
                                 token_id: nft.tokenId,
-                                nft_contract_id: "nft.subauction.testnet",
+                                nft_contract_id: nearNftAddress,
                             },
                             gas: "200000000000000",
                             deposit: "1"
@@ -1490,13 +1493,13 @@ const NftInfo = ({
                 const wallet = localStorage.getItem("wallet")
                 if(wallet === "Sender"){
                     const tx = {
-                        receiverId: "market_auct.subauction.testnet",
+                        receiverId: nearMarketAddress,
                         actions: [
                           {
                             methodName: 'process_auction_purchase',
                             args: {
                                 token_id: nft.tokenId,
-                                nft_contract_id: "nft.subauction.testnet",
+                                nft_contract_id: nearNftAddress,
                             },
                             gas: "200000000000000",
                             deposit: "0",
@@ -1587,13 +1590,13 @@ const NftInfo = ({
                 const wallet = localStorage.getItem("wallet")
                 if(wallet === "Sender"){
                     const tx = {
-                        receiverId: "market_auct.subauction.testnet",
+                        receiverId: nearMarketAddress,
                         actions: [
                           {
                             methodName: 'remove_auction',
                             args: {
                                 token_id: nft.tokenId,
-                                nft_contract_id: "nft.subauction.testnet",
+                                nft_contract_id: nearNftAddress,
                             },
                             gas: "200000000000000",
                             deposit: "1"
