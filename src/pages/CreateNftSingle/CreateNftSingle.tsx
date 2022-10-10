@@ -998,7 +998,7 @@ const CreateNftSingle = () => {
                                 className="btn create-btn"
                                 onClick={() => cryptoPayment()}
                             >
-                                {AssetCategory[category.toLowerCase()]['AssetButton']}
+                                {AssetCategory[category.toLowerCase()]['AssetButton']} {category}
                             </button>
                         </div>
                         <div className="preview-field">

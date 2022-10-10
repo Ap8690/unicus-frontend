@@ -9,7 +9,7 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise art",
+        AssetButton: "Tokenise ",
     },
     "carbon credits": {
         FieldTitle: "Upload File",
@@ -21,7 +21,7 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise art",
+        AssetButton: "Tokenise ",
     },
     "event tickets": {
         FieldTitle: "Upload File",
@@ -33,7 +33,7 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise art",
+        AssetButton: "Tokenise ",
     },
     "fin. instruments": {
         FieldTitle: "Upload File",
@@ -45,7 +45,7 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise art",
+        AssetButton: "Tokenise ",
     },
     gaming: {
         FieldTitle: "Upload File",
@@ -57,7 +57,7 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise art",
+        AssetButton: "Tokenise ",
     },
     metaverse: {
         FieldTitle: "Upload File",
@@ -69,7 +69,7 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise art",
+        AssetButton: "Tokenise ",
     },
 
     music: {
@@ -82,7 +82,7 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your music track...",
         AssetCollectionName: "Album/Collection Name (Optional)",
-        AssetButton: "Tokenise track",
+        AssetButton: "Tokenise ",
     },
     "nft collection": {
         FieldTitle: "Upload File",
@@ -94,7 +94,7 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise art",
+        AssetButton: "Tokenise ",
     },
     photography: {
         FieldTitle: "Upload File",
@@ -106,7 +106,7 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise art",
+        AssetButton: "Tokenise ",
     },
     "real estate": {
         FieldTitle: "Upload File",
@@ -118,7 +118,7 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise art",
+        AssetButton: "Tokenise ",
     },
     "trading cards": {
         FieldTitle: "Upload File",
@@ -130,6 +130,6 @@ export const AssetCategory: any = {
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
         AssetCollectionName: "Collection Name (Optional)",
-        AssetButton: "Tokenise art",
+        AssetButton: "Tokenise ",
     },
 };

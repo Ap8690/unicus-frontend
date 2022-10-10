@@ -168,14 +168,14 @@ const Table = ({ rows, columns, loading, page, setPage, metadata }) => {
                     </tbody>
                 )}
             </table>
-            <Pagination
+            {/* <Pagination
                 count={Math.ceil(Number(metadata?.total)/Number(metadata?.limit))}
                 defaultPage={page}
                 page={page}
                 onChange={(e: any, v: any) => setPage(v)}
                 color="primary" 
                 sx={{button:{color: '#ffffff'}}}
-            />
+            /> */}
         </div>
     );
 };

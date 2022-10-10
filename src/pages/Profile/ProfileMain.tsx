@@ -159,7 +159,9 @@ const Profile = (): ReactJSXElement => {
         }
         window.scrollTo(0, 0);
     }, []);
-
+    useEffect(() => {
+        getNfts()
+    },[page])
     return (
         <>
             {loading ? <PageLoader /> : (
