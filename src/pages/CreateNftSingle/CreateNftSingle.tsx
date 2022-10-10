@@ -603,6 +603,7 @@ const CreateNftSingle = () => {
                     setNftLoading(true);
                     toast.success("Minting The Asset");
                     const gasPrice = await web3.eth.getGasPrice();
+                    console.log(chain,"chain that is been selected")
                     const createNFT = getCreateNftContract(chain, contractType);
 
                     let res: any;
