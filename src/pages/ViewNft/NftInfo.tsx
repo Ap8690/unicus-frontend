@@ -2093,7 +2093,7 @@ const NftInfo = ({
                 <h2>{nft.name}</h2>
                 <div className="text-sm mb-4">
                     #Token ID:{" "}
-                    <span className="ml-2 font-bold text-sm text-[#5d5fef]">
+                    <span className="ml-2 tokenId text-sm">
                         {nft?.tokenId}
                     </span>
                 </div>

@@ -458,3 +458,9 @@
 .add-boottom-64 {
     bottom: 64px;
 }
+.tokenId {
+    background: linear-gradient(#a7a9fa, #7460ed) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
