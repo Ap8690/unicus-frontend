@@ -81,8 +81,4 @@ process.env.REACT_APP_ENV.trim() === "local"
 export const nearNftAddress = "nft-near.lobovh18.testnet"
 
 export const nearMarketAddress = "market-near.lobovh18.testnet"
-    process.env.REACT_APP_ENV.trim() === "local"
-        ? "localhost"
-        : process.env.REACT_APP_ENV.trim() === "demo"
-        ? "demo.unicus.one"
-        : "unicus.one";
+   
