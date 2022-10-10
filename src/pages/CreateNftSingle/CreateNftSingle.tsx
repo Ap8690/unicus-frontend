@@ -468,7 +468,7 @@ const CreateNftSingle = () => {
                 nftObj.append('mintedInfo',user.username)
                 nftObj.append('userInfo',user.username)
                 nftObj.append('image',fileSrc)
-                nftObj.append('tags',properties)
+                nftObj.append('tags',JSON.stringify(properties))
            
                 if (chain.toString() === nearChain()) {
                     const wallet = localStorage.getItem("wallet")
@@ -999,7 +999,7 @@ const CreateNftSingle = () => {
                                 className="btn create-btn"
                                 onClick={() => cryptoPayment()}
                             >
-                                {AssetCategory[category.toLowerCase()]['AssetButton']}
+                                {AssetCategory[category.toLowerCase()]['AssetButton']} {category}
                             </button>
                         </div>
                         <div className="preview-field">
