@@ -469,6 +469,7 @@ const CreateNftSingle = () => {
                 nftObj.append('userInfo',user.username)
                 nftObj.append('image',fileSrc)
                 nftObj.append('tags',JSON.stringify(properties))
+                nftObj.append('collectionName',collection)
            
                 if (chain.toString() === nearChain()) {
                     const wallet = localStorage.getItem("wallet")

@@ -96,7 +96,7 @@ const ViewNft = () => {
                                         key={uuid()}
                                         to={`/nft/${item.chain}/${item.contractAddress}/${item._id}`}
                                     >
-                                        <AllNFTsElement element={item} />s
+                                        <AllNFTsElement element={item} />
                                     </Link>
                                 ))}
                             </div>

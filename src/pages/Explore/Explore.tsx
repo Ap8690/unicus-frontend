@@ -73,6 +73,7 @@ const Explore = () => {
             getMarketplaceNfts(skip, getChainId(chain), sortBy, filter.toLowerCase())
                 .then((res: any) => {
                     setDisplayItems(res.data.data);
+                    console.log("res.data.data: ", res.data.data);
                     setLoading(false);
                     query.delete("search");
                     document.body.scrollTop = 0;
@@ -163,7 +164,6 @@ const Explore = () => {
     }
 
     useEffect(()=>{
-
         if(nearLoginQuery === "success"){
             nearLogin()
         }
