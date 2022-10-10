@@ -172,7 +172,7 @@ const Navbar = ({ store }) => {
                                     to={"/marketplace"}
                                     className="btn nav-link"
                                 >
-                                    Enter App
+                                    {getUserInfo() ? "Marketplace" :"Enter App"}
                                 </Link>
                             ) : (
                                 <button

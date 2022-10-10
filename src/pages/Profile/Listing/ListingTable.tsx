@@ -1,11 +1,7 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import ethereum from "../../../assets/svgs/ethereum.svg";
-import DefaultModal from "../../../components/modals/DefaultModal/DefaultModal";
-import { bscChain, ethChain, tronChain } from "../../../config";
+import { useNavigate } from "react-router-dom";
 import { getChainLogo, getChainSymbol } from "../../../utils/utils";
-import { getCompleteDate, getSimpleDate } from "../../../utils/date";
+import { getSimpleDate } from "../../../utils/date";
 import uuid from "react-uuid";
-import { useEffect, useState } from "react";
 import { Skeleton } from "@mui/material";
 import { getDecimal } from "../../../utils/helpers";
 import Pagination from "@mui/material/Pagination";

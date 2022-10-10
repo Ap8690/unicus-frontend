@@ -1,4 +1,3 @@
-import { bscChain } from '../../config'
 import {
   CONNECT_WALLET,
   PROFILE_REQUEST,
@@ -21,7 +20,7 @@ const initialState = {
   walletType: 'MetaMask',
   availableBalance: 0,
   nftCardType: null,
-  networkID: localStorage.getItem('networkID') || bscChain,
+  networkID: localStorage.getItem('networkID') || '1',
   assetInfo: {},
   provider: null,
   accessToken: '',

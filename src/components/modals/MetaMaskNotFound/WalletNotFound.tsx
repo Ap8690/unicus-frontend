@@ -24,21 +24,21 @@ const WalletNotFound = ({show, handleClose}: WalletsPopupProps) => {
       <div className="buy__cpt__modal">
         <div className="buy__cpt__header">
           <div className="buy__cpt__header__tile">
-            <h4>{networkID === tronChain ? TRONLINK : METAMASK} Not Found</h4>
+            <h4>{networkID === tronChain() ? TRONLINK : METAMASK} Not Found</h4>
           </div>
           <div className="buy__cpt__header__close" onClick={handleClose}>
             <CgClose />
           </div>
         </div>
         <div className="metaMask__body">
-          <Image src={networkID=== tronChain? tronLink:MetaMaskFox} alt="" />
+          <Image src={networkID=== tronChain() ? tronLink:MetaMaskFox} alt="" />
           <h5>
-            Please Install {networkID === tronChain ? TRONLINK : METAMASK}
+            Please Install {networkID === tronChain() ? TRONLINK : METAMASK}
           </h5>
           <VscCloudDownload />
           <a
             href={
-              networkID === tronChain
+              networkID === tronChain()
               ?"https://www.tronlink.org/" 
               :"https://metamask.io/download.html"
                 

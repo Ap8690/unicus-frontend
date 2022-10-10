@@ -88,7 +88,7 @@ const CreateNftSingle = () => {
     // const [category, setCategory] = useState("art");
     
     const [price, setPrice] = useState("0.00");
-    const [chain, setChain] = useState(ethChain);
+    const [chain, setChain] = useState(ethChain());
     const [contractType, setContractType] = useState("721");
     const [supply, setSupply] = useState(1);
     const [collection, setCollection] = useState<any>("");
@@ -395,7 +395,7 @@ const CreateNftSingle = () => {
                 return toast.error("Please enter a valid external link");
             }
             //@ts-expect-error
-            if (chain.toString() === tronChain && !window.tronWeb) {
+            if (chain.toString() === tronChain() && !window.tronWeb) {
                 toast.error("Tron wallet not detected!");
                 setNftLoading(false);
                 setMetamaskNotFound(true);
@@ -469,7 +469,7 @@ const CreateNftSingle = () => {
                 nftObj.append('image',fileSrc)
                 nftObj.append('tags',properties)
            
-                if (chain.toString() === nearChain) {
+                if (chain.toString() === nearChain()) {
                     const wallet = localStorage.getItem("wallet")
                     if(wallet === "Sender"){
                         nftObj.append('tokenId',uuid())
@@ -529,7 +529,7 @@ const CreateNftSingle = () => {
                         return;
                     }
                     
-                } else if (chain.toString() === solonaChain) {
+                } else if (chain.toString() === solonaChain()) {
                     console.log(chain,"chain")
                     const mintKey = await mintSolana(
                         name,
@@ -542,7 +542,7 @@ const CreateNftSingle = () => {
 
                     await createNft(nftObj);
                     navigate("/profile/created");
-                } else if (chain.toString() === tronChain) {
+                } else if (chain.toString() === tronChain()) {
                     setNftLoading(true);
                     toast.success("Minting The Asset");
                     const createNFT = getCreateNftContract(chain, contractType);
@@ -782,13 +782,13 @@ const CreateNftSingle = () => {
             }
         }
         if(localStorage.getItem("walletChain") === "Tron") {
-            setChain(tronChain)
+            setChain(tronChain())
         }
         else if(localStorage.getItem("walletChain") === "Solana") {
-            setChain(solonaChain)
+            setChain(solonaChain())
         }
         else if(localStorage.getItem("walletChain") === "Near") {
-            setChain(nearChain)
+            setChain(nearChain())
         }
         
     }, []);
@@ -903,7 +903,7 @@ const CreateNftSingle = () => {
                             </div>
                             <div className="blockchain">
                                 
-                                {chain === ethChain && (
+                                {chain === ethChain() && (
                                     <>
                                         <div className="field-title">
                                             Contract Type

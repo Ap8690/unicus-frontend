@@ -10,7 +10,7 @@ import {
     connToMetaMask,
     connToMew,
     connToSol,
-    connToTron,
+    connToTron, 
     connToWalletConnector,
     sign_solana_message,
     getChainName,

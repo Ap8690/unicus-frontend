@@ -19,7 +19,6 @@ import {auctionAbiB, auctionAddressB} from './Binance/auction'
 import {marketPlaceAbiP, marketPlaceAddressP} from './Polygon/marketPlace'
 import {createNFTAbiP, createNFTAddressP} from './Polygon/createNFT'
 import {auctionAbiP, auctionAddressP} from './Polygon/auction'
-import {PROVIDER} from '../constants'
 import { bscChain, ethChain, polygonChain, tronChain } from '../../config'
 import { auctionAbiT, auctionAddressT } from './Tron/auction'
 import { createNFTAddressT, createNFTAbiT } from './Tron/createNFT'
@@ -55,13 +54,13 @@ export const walletLink = new WalletLink({
   darkMode: false,
 })
 
-export const ethereumCoinbase = walletLink.makeWeb3Provider(RPC_URLS[Number(polygonChain)], Number(polygonChain))
+export const ethereumCoinbase = walletLink.makeWeb3Provider(RPC_URLS[Number(polygonChain())], Number(polygonChain))
 
 const POLLING_INTERVAL = 12000
 
 // walletconnect
 export const walletConnectorProvider: any = new WalletConnectProvider({
-  rpc: {137 : RPC_URLS[Number(polygonChain)]},
+  rpc: {137 : RPC_URLS[Number(polygonChain())]},
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,
@@ -91,7 +90,7 @@ const getContracts = (walletType: string, networkID: string) => {
      marketAddress,
      createAddress,
      auctionAddress;
-  let web3: any = new Web3(RPC_URLS[bscChain])
+  let web3: any = new Web3(RPC_URLS[bscChain()])
   
   switch (walletType) {
     case 'MetaMask':
@@ -120,7 +119,7 @@ const getContracts = (walletType: string, networkID: string) => {
  
 
   switch (networkID) {
-    case ethChain:
+    case ethChain():
       marketAddress = marketPlaceAddressE
       createAddress = createNFTAddressE
       auctionAddress = auctionAddressE
@@ -128,7 +127,7 @@ const getContracts = (walletType: string, networkID: string) => {
       createNFT = new web3.eth.Contract(createNFTAbiE, createNFTAddressE)
       auction = new web3.eth.Contract(auctionAbiE, auctionAddressE)
       break
-    case bscChain:
+    case bscChain():
       marketAddress = marketPlaceAddressB
       createAddress = createNFTAddressB
       auctionAddress = auctionAddressB
@@ -136,7 +135,7 @@ const getContracts = (walletType: string, networkID: string) => {
       createNFT = new web3.eth.Contract(createNFTAbiB, createNFTAddressB)
       auction = new web3.eth.Contract(auctionAbiB, auctionAddressB)
       break
-    case polygonChain:
+    case polygonChain():
       marketAddress = marketPlaceAddressP
       createAddress = createNFTAddressP
       auctionAddress = auctionAddressP;
@@ -144,7 +143,7 @@ const getContracts = (walletType: string, networkID: string) => {
       createNFT = new web3.eth.Contract(createNFTAbiP, createNFTAddressP)
       auction = new web3.eth.Contract(auctionAbiP, auctionAddressP)
       break 
-    case tronChain:
+    case tronChain():
       try{
       marketAddress = marketPlaceAddressT;
       createAddress = createNFTAddressT;
