@@ -91,11 +91,11 @@ const Testnet = ({ handleChain }: any) => {
                 chainName={"Telos"}
                 chainLogo={telosLogo}
             />
-            <ChainCard
+            {/* <ChainCard
                 handleChain={handleChain}
                 chainName={"Near"}
                 chainLogo={nearLogo}
-            />
+            /> */}
             <ChainCard
                 handleChain={handleChain}
                 chainName={"Solana"}
