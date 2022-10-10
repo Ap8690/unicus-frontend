@@ -22,6 +22,7 @@ import {
     telosChain,
     nearNftAddress,
     nearMarketAddress,
+    chains,
 } from "../config";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { IStore } from "../models/Store";
@@ -900,22 +901,23 @@ export const getAuctionABI = () => {
     return auctionAbiE;
 };
 export const getCreateNftContractAddress = (chain: any, contractType: any) => {
+    console.log(chain,"chain that is activated!")
     if (chain) {
         switch (chain.toString()) {
-            case ethChain():
-                return contractType === "1155"
-                    ? createNFTAddressE1155
-                    : createNFTAddressE;
-            case bscChain():
-                return createNFTAddressB;
-            case polygonChain():
-                return createNFTAddressP;
-            case avalancheChain():
-                return createNFTAddressA;
-            case shardeumChain():
-                return createNFTAddressS;
-            case telosChain():
-                return createNFTAddressTelos;
+            // case ethChain():
+            //     return contractType === "1155"
+            //         ? createNFTAddressE1155
+            //         : createNFTAddressE;
+            // case bscChain():
+            //     return createNFTAddressB;
+            // case polygonChain():
+            //     return createNFTAddressP;
+            // case avalancheChain():
+            //     return createNFTAddressA;
+            // case shardeumChain():
+            //     return createNFTAddressS;
+            // case telosChain():
+            //     return createNFTAddressTelos;
             case tronChain():
                 return createNFTAddressT;
             case nearChain():
@@ -923,9 +925,7 @@ export const getCreateNftContractAddress = (chain: any, contractType: any) => {
             case solonaChain():
                 return;
             default:
-                return contractType === "721"
-                    ? createNFTAddressE
-                    : createNFTAddressE1155;
+                return chains[chain].contracts["mintContract"]
         }
     }
 };
@@ -935,53 +935,49 @@ export const getMarketPlaceContractAddress = (
     contractType = "721"
 ) => {
     switch (chain.toString()) {
-        case ethChain():
-            return contractType === "1155"
-                ? marketPlaceAddressE1155
-                : marketPlaceAddressE;
-        case bscChain():
-            return marketPlaceAddressB;
-        case polygonChain():
-            return marketPlaceAddressP;
+        // case ethChain():
+        //     return contractType === "1155"
+        //         ? marketPlaceAddressE1155
+        //         : marketPlaceAddressE;
+        // case bscChain():
+        //     return marketPlaceAddressB;
+        // case polygonChain():
+        //     return marketPlaceAddressP;
         case tronChain():
             return marketPlaceAddressT;
-        case avalancheChain():
-            return marketPlaceAddressA;
-        case shardeumChain():
-            return marketPlaceAddressS;
-        case telosChain():
-            return marketPlaceAddressTelos;
+        // case avalancheChain():
+        //     return marketPlaceAddressA;
+        // case shardeumChain():
+        //     return marketPlaceAddressS;
+        // case telosChain():
+        //     return marketPlaceAddressTelos;
         default:
-            return contractType === "721"
-                ? "0x424bb7731c056a52b45cbd613ef08c69c628735f"
-                : "0x424bb7731c056a52b45CBD613Ef08c69c628735f";
+            return chains[chain].contracts["marketContract"]
     }
 };
 export const getAuctionContractAddress = (
-    chain: { toString: () => any },
+    chain: any,
     contractType = "721"
 ) => {
     switch (chain.toString()) {
-        case ethChain():
-            return contractType === "1155"
-                ? auctionAddressE1155
-                : auctionAddressE;
-        case bscChain():
-            return auctionAddressB;
-        case polygonChain():
-            return auctionAddressP;
+        // case ethChain():
+        //     return contractType === "1155"
+        //         ? auctionAddressE1155
+        //         : auctionAddressE;
+        // case bscChain():
+        //     return auctionAddressB;
+        // case polygonChain():
+        //     return auctionAddressP;
         case tronChain():
             return auctionAddressT;
-        case avalancheChain():
-            return auctionAddressA;
-        case shardeumChain():
-            return auctionAddressS;
-        case telosChain():
-            return auctionAddressTelos;
+        // case avalancheChain():
+        //     return auctionAddressA;
+        // case shardeumChain():
+        //     return auctionAddressS;
+        // case telosChain():
+        //     return auctionAddressTelos;
         default:
-            return contractType === "1155"
-                ? auctionAddressE1155
-                : auctionAddressE;
+            return chains[chain].contracts["auctionContract"]
     }
 };
 
