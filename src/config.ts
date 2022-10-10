@@ -71,9 +71,9 @@ export const UNICUS_STORE: string | undefined =
           "marketplace.unicus.one";
 
 export const cookieDomain: string | undefined =
-env_uri === "local"
+process.env.REACT_APP_ENV.trim() === "local"
 ? "localhost"
-: env_uri === "demo"
+: process.env.REACT_APP_ENV.trim() === "demo"
 ? "demo.unicus.one"
 : "unicus.one"
 
