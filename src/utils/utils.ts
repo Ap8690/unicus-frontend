@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import TronWeb from "tronweb";
 import Web3 from "web3";
 import {
@@ -145,7 +146,7 @@ export const connectWallet = async (
 ) => {
     try {
         let address: any;
-        if (network.toString() === nearChain) {
+        if (network.toString() === nearChain()) {
             if (getWalletChain() !== "Near") {
                 return toast.error("Please login with NEAR Wallet!");
             }
@@ -154,7 +155,7 @@ export const connectWallet = async (
             } else {
                 address = await connectNear();
             }
-        } else if (network.toString() === tronChain) {
+        } else if (network.toString() === tronChain()) {
             //@ts-ignore
             const res: requestAccountsResponse = await tronLink.request({
                 method: "tron_requestAccounts",
@@ -164,7 +165,7 @@ export const connectWallet = async (
             }
             await tronWeb.trx.sign("This has to be signed!");
             address = await tronWeb.defaultAddress.base58;
-        } else if (network.toString() === solonaChain) {
+        } else if (network.toString() === solonaChain()) {
             address = await connToSol(publicKey, wallet, connect, setVisible);
         } else {
             //@ts-ignore
@@ -196,13 +197,13 @@ export const connectWallet = async (
 
         return address;
     } catch (e) {
-        console.log(e);
+        //console.log(e);
         toast.error(e?.message);
     }
 };
 // const getChainData = (network: any) => {
 //     switch (network) {
-//         case bscChain:
+//         case bscChain():
 //             return {
 //                 chainId: Web3.utils.toHex(network),
 //                 rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
@@ -280,14 +281,14 @@ const chainParams = {
     "4": [
         {
             chainId: "0x4",
-            rpcUrls: ["https://rinkeby.infura.io/v3/"],
-            chainName: "Rinkeby Test Network",
+            rpcUrls: ["https://goerli.infura.io/v3/"],
+            chainName: "Goerli test network",
             nativeCurrency: {
-                name: "RinkebyETH",
-                symbol: "RinkebyETH", // 2-6 characters long
+                name: "GoerliETH",
+                symbol: "GoerliETH", // 2-6 characters long
                 decimals: 18,
             },
-            blockExplorerUrls: ["https://rinkeby.etherscan.io"],
+            blockExplorerUrls: ["https://goerli.etherscan.io"],
         },
     ],
     // eth mainnet
@@ -346,6 +347,20 @@ const chainParams = {
             blockExplorerUrls: ["https://testnet.snowtrace.io"],
         },
     ],
+    // Avalanche mainnet
+    "43114": [
+        {
+            chainId: "0xA86A",
+            rpcUrls: ["https://api.avax.network/ext/bc/C/rpc"],
+            chainName: "Avalanche Network",
+            nativeCurrency: {
+                name: "AVAX",
+                symbol: "AVAX", // 2-6 characters long
+                decimals: 18,
+            },
+            blockExplorerUrls: ["https://snowtrace.io/"],
+        },
+    ],
     "40": [
         {
             chainId: "0x28",
@@ -385,7 +400,7 @@ export const SwitchNetwork = async (network: any) => {
             ],
         });
     } catch (error: any) {
-        console.log(network,"network")
+        //console.log(network,"network")
         if (error?.code.toString() === "4902") {
             try {
                 const metaMaskProvider: any = await getMetamaskProvider();
@@ -491,19 +506,19 @@ export const connToTron = async () => {
 //     networkId: any
 // ) {
 //     nearWalletConnection = walletConnection;
-//     console.log(walletConnection.isSignedIn(), "is");
+//     //console.log(walletConnection.isSignedIn(), "is");
 //     localStorage.setItem("walletChain", "Near");
 //     let accountId = await walletConnection.account().accountId;
-//     console.log(accountId,"accountId")
+//     //console.log(accountId,"accountId")
 //     const timestamp = new Date().getTime().toString().toString();
 //     const msg = Buffer.from(timestamp);
 
 //     const signer = new nearAPI.InMemorySigner(keyStore);
-//     console.log("signer: ", signer);
+//     //console.log("signer: ", signer);
 //     const sign = await signer.signMessage(msg, accountId, networkId);
-//     console.log("sign: ", sign);
+//     //console.log("sign: ", sign);
 //     const publicKey = await signer.getPublicKey(accountId, networkId);
-//     console.log("publicKey: ", publicKey);
+//     //console.log("publicKey: ", publicKey);
 //     return {
 //         account: accountId,
 //         message: timestamp,
@@ -561,7 +576,7 @@ export const connectNear = async () => {
     const creds = await window.near.requestSignIn({
         contractId: "guest-book.testnet", // contract requesting access
     });
-    console.log(creds,"creds")
+    //console.log(creds,"creds")
     // await sendMeta(walletConnection, config);
     
     const { config, walletConnection, keyStore, networkId } =
@@ -617,10 +632,10 @@ export const sign_solana_message = async () => {
 //   // @ts-ignore
 //     const provider = getProvider();
 //     const resp = await provider.connect();
-//     console.log("resp: ", resp);
+//     //console.log("resp: ", resp);
 //       if (resp.publicKey) {
 //         const address = resp.publicKey.toBase58()
-//         console.log("address: ", address);
+//         //console.log("address: ", address);
 //         const sm = await sign_solana_message()
 //         return {
 //           account: address,
@@ -661,7 +676,7 @@ export const connToSol = async (
             token: sm.token,
         };
     }
-    // console.log("wallet: ", wallet);
+    // //console.log("wallet: ", wallet);
     // if (!wallet) {
     //     setVisible(true)
     // } else {
@@ -682,6 +697,10 @@ export const connToSol = async (
 export const disConnectWallet = async () => {
     Cookies.remove(ACCESS_TOKEN, { domain: cookieDomain, expires: 30 });
     Cookies.remove("userInfo", { domain: cookieDomain, expires: 30 });
+    Cookies.remove("expiry", {
+        domain: cookieDomain,
+        expires: 30,
+    });
     // walletConnectorProvider.disconnect();
     walletLink.disconnect();
     if (localStorage.getItem("chainName") === "near") {
@@ -696,7 +715,7 @@ export const disConnectWallet = async () => {
 export const getUserWallet = async (network: any) => {
     try {
         let accounts = [];
-        if (network.toString() === tronChain) {
+        if (network.toString() === tronChain()) {
             //@ts-ignore
             const address = window.tronWeb.defaultAddress.base58;
             accounts.push(address);
@@ -705,7 +724,7 @@ export const getUserWallet = async (network: any) => {
         }
         return accounts;
     } catch (e) {
-        console.log(e);
+        //console.log(e);
     }
 };
 
@@ -720,21 +739,21 @@ export const getNftContractAddress = (nft: any) => {
 };
 export const getChainSymbol = (chain: any) => {
     if (chain) {
-        return chain.toString() === bscChain
+        return chain.toString() === bscChain()
             ? "BSC"
-            : chain.toString() === polygonChain
+            : chain.toString() === polygonChain()
             ? "MATIC"
-            : chain.toString() === tronChain
+            : chain.toString() === tronChain()
             ? "TRX"
-            : chain.toString() === avalancheChain
+            : chain.toString() === avalancheChain()
             ? "AVAX"
-            : chain.toString() === shardeumChain
+            : chain.toString() === shardeumChain()
             ? "SHM"
-            : chain.toString() === telosChain
+            : chain.toString() === telosChain()
             ? "TLOS"
-            : chain.toString() === nearChain
+            : chain.toString() === nearChain()
             ? "NEAR"
-            : chain.toString() === solonaChain
+            : chain.toString() === solonaChain()
             ? "SOL"
             : "ETH";
     }
@@ -742,25 +761,26 @@ export const getChainSymbol = (chain: any) => {
 
 // Returns CHAIN ID
 export const getChainId = (chain: any) => {
+    console.log("chain: ", chain);
     switch (chain?.toString().toLowerCase()) {
         case "ethereum":
-            return ethChain;
+            return ethChain();
         case "binance":
-            return bscChain;
+            return bscChain();
         case "polygon":
-            return polygonChain;
+            return polygonChain();
         case "avalanche":
-            return avalancheChain;
+            return avalancheChain();
         case "shardeum":
-            return shardeumChain;
+            return shardeumChain();
         case "telos":
-            return telosChain;
+            return telosChain();
         case "near":
-            return nearChain;
+            return nearChain();
         case "tron":
-            return tronChain;
+            return tronChain();
         case "solana":
-            return solonaChain;
+            return solonaChain();
         case "all":
             return 0;
         default:
@@ -771,23 +791,23 @@ export const getChainId = (chain: any) => {
 // Returns CHAIN Name
 export const getChainName = (chain: any) => {
     switch (chain?.toString()) {
-        case ethChain:
+        case ethChain():
             return "ethereum";
-        case bscChain:
+        case bscChain():
             return "binance";
-        case polygonChain:
+        case polygonChain():
             return "polygon";
-        case avalancheChain:
+        case avalancheChain():
             return "avalanche";
-        case shardeumChain:
+        case shardeumChain():
             return "shardeum";
-        case telosChain:
+        case telosChain():
             return "telos";
-        case nearChain:
+        case nearChain():
             return "near";
-        case tronChain:
+        case tronChain():
             return "tron";
-        case solonaChain:
+        case solonaChain():
             return "solana";
         default:
             return chain;
@@ -797,23 +817,23 @@ export const getChainName = (chain: any) => {
 // Returns CHAIN Name
 export const getChainLogo = (chain: any) => {
     switch (chain?.toString()) {
-        case ethChain:
+        case ethChain():
             return ethereumLogo;
-        case bscChain:
+        case bscChain():
             return binanceLogo;
-        case polygonChain:
+        case polygonChain():
             return ploygonLogo;
-        case avalancheChain:
+        case avalancheChain():
             return avalancheLogo;
-        case shardeumChain:
+        case shardeumChain():
             return shardumLogo;
-        case telosChain:
+        case telosChain():
             return telosLogo;
-        case nearChain:
+        case nearChain():
             return nearLogo;
-        case tronChain:
+        case tronChain():
             return tronLogo;
-        case solonaChain:
+        case solonaChain():
             return solanaLogo;
         default:
             return chain;
@@ -824,23 +844,23 @@ export const getChainLogo = (chain: any) => {
 export const ChainIdUsingWalletName = (chainName: any) => {
     switch (chainName.toLowerCase()) {
         case "ethereum":
-            return ethChain;
+            return ethChain();
         case "binance":
-            return bscChain;
+            return bscChain();
         case "polygon":
-            return polygonChain;
+            return polygonChain();
         case "avalanche":
-            return avalancheChain;
+            return avalancheChain();
         case "shardeum":
-            return shardeumChain;
+            return shardeumChain();
         case "telos":
-            return telosChain;
+            return telosChain();
         case "near":
-            return nearChain;
+            return nearChain();
         case "tron":
-            return tronChain;
+            return tronChain();
         case "solana":
-            return solonaChain;
+            return solonaChain();
         case "all":
             return 0;
         default:
@@ -849,17 +869,17 @@ export const ChainIdUsingWalletName = (chainName: any) => {
 };
 export const selectNetwork = (chain: string) => {
     const type =
-        chain.toString() === bscChain
+        chain.toString() === bscChain()
             ? "Binance"
-            : chain.toString() === ethChain
+            : chain.toString() === ethChain()
             ? "ETH"
-            : chain.toString() === tronChain
+            : chain.toString() === tronChain()
             ? "TRX"
-            : chain.toString() === avalancheChain
+            : chain.toString() === avalancheChain()
             ? "Avalanche"
-            : chain.toString() === shardeumChain
+            : chain.toString() === shardeumChain()
             ? "Shardeum"
-            : chain.toString() === telosChain
+            : chain.toString() === telosChain()
             ? "Telos"
             : "Matic";
     SwitchNetwork(chain);
@@ -881,25 +901,25 @@ export const getAuctionABI = () => {
 export const getCreateNftContractAddress = (chain: any, contractType: any) => {
     if (chain) {
         switch (chain.toString()) {
-            case ethChain:
+            case ethChain():
                 return contractType === "1155"
                     ? createNFTAddressE1155
                     : createNFTAddressE;
-            case bscChain:
+            case bscChain():
                 return createNFTAddressB;
-            case polygonChain:
+            case polygonChain():
                 return createNFTAddressP;
-            case avalancheChain:
+            case avalancheChain():
                 return createNFTAddressA;
-            case shardeumChain:
+            case shardeumChain():
                 return createNFTAddressS;
-            case telosChain:
+            case telosChain():
                 return createNFTAddressTelos;
-            case tronChain:
+            case tronChain():
                 return createNFTAddressT;
-            case nearChain:
+            case nearChain():
                 return nearNftAddress;
-            case solonaChain:
+            case solonaChain():
                 return;
             default:
                 return contractType === "721"
@@ -914,21 +934,21 @@ export const getMarketPlaceContractAddress = (
     contractType = "721"
 ) => {
     switch (chain.toString()) {
-        case ethChain:
+        case ethChain():
             return contractType === "1155"
                 ? marketPlaceAddressE1155
                 : marketPlaceAddressE;
-        case bscChain:
+        case bscChain():
             return marketPlaceAddressB;
-        case polygonChain:
+        case polygonChain():
             return marketPlaceAddressP;
-        case tronChain:
+        case tronChain():
             return marketPlaceAddressT;
-        case avalancheChain:
+        case avalancheChain():
             return marketPlaceAddressA;
-        case shardeumChain:
+        case shardeumChain():
             return marketPlaceAddressS;
-        case telosChain:
+        case telosChain():
             return marketPlaceAddressTelos;
         default:
             return contractType === "721"
@@ -941,21 +961,21 @@ export const getAuctionContractAddress = (
     contractType = "721"
 ) => {
     switch (chain.toString()) {
-        case ethChain:
+        case ethChain():
             return contractType === "1155"
                 ? auctionAddressE1155
                 : auctionAddressE;
-        case bscChain:
+        case bscChain():
             return auctionAddressB;
-        case polygonChain:
+        case polygonChain():
             return auctionAddressP;
-        case tronChain:
+        case tronChain():
             return auctionAddressT;
-        case avalancheChain:
+        case avalancheChain():
             return auctionAddressA;
-        case shardeumChain:
+        case shardeumChain():
             return auctionAddressS;
-        case telosChain:
+        case telosChain():
             return auctionAddressTelos;
         default:
             return contractType === "1155"
@@ -965,7 +985,7 @@ export const getAuctionContractAddress = (
 };
 
 export const getCreateNftContract = (chain: any, contractType = "721") => {
-    if (chain.toString() === tronChain) {
+    if (chain.toString() === tronChain()) {
         return tronWeb.contract(createNFTAbiT, createNFTAddressT);
     } else {
         return new web3.eth.Contract(
@@ -977,7 +997,7 @@ export const getCreateNftContract = (chain: any, contractType = "721") => {
 };
 
 export const getMarketPlace = (chain: any, contractType = "721") => {
-    if (chain.toString() === tronChain) {
+    if (chain.toString() === tronChain()) {
         return tronWeb.contract(marketPlaceAbiT, marketPlaceAddressT);
     } else {
         return new web3.eth.Contract(
@@ -989,7 +1009,7 @@ export const getMarketPlace = (chain: any, contractType = "721") => {
 };
 
 export const getAuctionContract = (chain: any, contractType = "721") => {
-    if (chain.toString() === tronChain) {
+    if (chain.toString() === tronChain()) {
         return tronWeb.contract(auctionAbiT, auctionAddressT);
     } else {
         return new web3.eth.Contract(
@@ -1014,7 +1034,7 @@ export const offerPrice = async (token_id: string, assetBid: any) => {
             gas: new BN("200000000000000"),
         });
     } catch (e) {
-        console.log(e);
+        //console.log(e);
     }
 };
 
@@ -1142,8 +1162,8 @@ export const getStoreName = () => {
 };
 
 export const isMainStore = () => {
-    // console.log("UNICUS_STORE: ", UNICUS_STORE);
-    // console.log("window.location.host: ", window.location.host);
+    // //console.log("UNICUS_STORE: ", UNICUS_STORE);
+    // //console.log("window.location.host: ", window.location.host);
     return (window.location.host === UNICUS_STORE);
 };
 export interface WalletsPopupProps {
@@ -1178,4 +1198,8 @@ export function getRPCErrorMessage(err: any) {
 
 export const  trimString = (trimString: string) =>{
    return trimString.length>30 ? trimString.slice(0,8) + '...' + trimString.slice(-6) : trimString
+}
+
+export const getCookies:any = () => {
+    return Cookies.get('Chain_Environment')
 }

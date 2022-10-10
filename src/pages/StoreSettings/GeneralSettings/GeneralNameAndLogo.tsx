@@ -4,7 +4,8 @@ import uploadImg from "../../../assets/svgs/uploadImage.svg"
 import { IGeneral } from "../../../models/General";
 import axios from "axios";
 import countryList from "react-select-country-list";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import { BASE_URL } from "../../../config";
 import uuid from "react-uuid";
 import { Form } from "react-bootstrap";
@@ -50,7 +51,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
 
       setGeneral({ ...generals, logoUrl: JSONdata.url });
     } catch (err) {
-      console.log("Cloudinary User Image Upload Error ->", err);
+      //console.log("Cloudinary User Image Upload Error ->", err);
     }
     setLoadingImage(false);
   };
@@ -74,7 +75,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
         throw "Failed";
       }
     } catch (err:any) {
-      console.log("err", err);
+      //console.log("err", err);
       if (err.response) {
         toast.error(err.response.data.err);
       } else {

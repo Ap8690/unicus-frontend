@@ -1,58 +1,57 @@
-import userImg from "../../assets/images/userImage.png"
-import backgroundImg from "../../assets/images/favouritedImage.png"
-import {
-    updateProfileBg,
-    updateProfilePic,
-} from "../../services/api/supplier";
+import userImg from "../../assets/images/userImage.png";
+import backgroundImg from "../../assets/images/favouritedImage.png";
+import { updateProfileBg, updateProfilePic } from "../../services/api/supplier";
 import uuid from "react-uuid";
-import twitterImg from "../../assets/svgs/profileTwitter.svg"
-import instagramImg from "../../assets/svgs/profileInstagram.svg"
-import facebookImg from "../../assets/svgs/profileFacebook.svg"
-import discord from "../../assets/images/discord.svg"
-import linkedin from "../../assets/images/linkedin.png"
-import { useEffect, useRef, useState } from "react"
-import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
+import twitterImg from "../../assets/svgs/profileTwitter.svg";
+import instagramImg from "../../assets/svgs/profileInstagram.svg";
+import facebookImg from "../../assets/svgs/profileFacebook.svg";
+import discord from "../../assets/images/discord.svg";
+import linkedin from "../../assets/images/linkedin.png";
+import { useEffect, useRef, useState } from "react";
+import CameraAltRoundedIcon from "@mui/icons-material/CameraAltRounded";
 // import Input from "../../components/Input/Input"
-import Menu from "@mui/material/Menu"
-import MenuItem from "@mui/material/MenuItem"
-import WalletAdd from "../../components/Wallet/WalletAdd"
-import axios from "axios"
-import "./editprofile.scss"
-import Loader from "../../components/Loading/Loader"
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import WalletAdd from "../../components/Wallet/WalletAdd";
+import axios from "axios";
+import "./editprofile.scss";
+import Loader from "../../components/Loading/Loader";
 
-import { toast } from "react-toastify"
-import { useNavigate } from "react-router-dom"
-import { BASE_URL } from "../../config"
+import toast from "react-hot-toast";
+
+import { useNavigate, Navigate } from "react-router-dom";
+import { BASE_URL } from "../../config";
 import {
     changePasswordApi,
     updateProfileSocial,
     updateProfile,
     getAccessToken,
-} from "../../services/api/supplier"
-import Input from "../../components/Input/Input"
-import Cookies from "js-cookie"
-import { cookieDomain } from "../../config"
-import validator from "validator"
-import CircularProgress from '@mui/material/CircularProgress';
+} from "../../services/api/supplier";
+import Input from "../../components/Input/Input";
+import Cookies from "js-cookie";
+import { cookieDomain } from "../../config";
+import validator from "validator";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const EditProfile = (props: any) => {
-    const [active, setActive] = useState("general")
-    const [anchorEl, setAnchorEl] = useState(null)
-    const [loading, setLoading] = useState(false)
-    const [user, setUser] = useState<any>()
-    const open = Boolean(anchorEl)
-    const [profileImg, setProfileImg] = useState(null)
-    const [bannerImg, setBannerImg] = useState(null)
+    const [active, setActive] = useState("general");
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [usrLoading, setUsrLoading] = useState(false);
+    const [bgLoading, setBgLoading] = useState(false);
+    const [user, setUser] = useState<any>();
+    const open = Boolean(anchorEl);
+    const [profileImg, setProfileImg] = useState(null);
+    const [bannerImg, setBannerImg] = useState(null);
     const profilePicFile = useRef(null);
     const bannerPicFile = useRef(null);
     const handleClick = (event: any) => {
-        setAnchorEl(event.currentTarget)
-    }
+        setAnchorEl(event.currentTarget);
+    };
     const handleClose = () => {
-        setAnchorEl(null)
-    }
-    let navigate = useNavigate()
-    const accessToken = getAccessToken()
+        setAnchorEl(null);
+    };
+    let navigate = useNavigate();
+    const accessToken = getAccessToken();
     const uploadImage = (inputFile: any) => {
         // `current` points to the mounted file input element
         inputFile.current.click();
@@ -60,71 +59,36 @@ const EditProfile = (props: any) => {
 
     const uploadUserImage = async (e: any) => {
         try {
-            setLoading(true);
-            let cloudinaryFormData = new FormData();
-            cloudinaryFormData.append("file", e.target.files[0]);
-            cloudinaryFormData.append("upload_preset", `Unicus___User`);
-            cloudinaryFormData.append("public_id", uuid());
-            const cloudinaryRes = await fetch(
-                "https://api.cloudinary.com/v1_1/dhmglymaz/image/upload/",
-                {
-                    method: "POST",
-                    body: cloudinaryFormData,
-                }
-            );
-            const JSONdata = await cloudinaryRes.json();
-            setProfileImg(JSONdata.url);
-            // now sendig cloudinary url to backend server
-            const res = await updateProfilePic(JSONdata.url);
-
-            if (res && res.data && res.data.user) {
-                localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-                Cookies.set("userInfo", JSON.stringify(res.data.user), {
-                    domain: cookieDomain,
-                    expires: 30,
-                });
-            }
-            setLoading(false);
+            setUsrLoading(true);
+            let forms = new FormData();
+            forms.append("file", e.target.files[0]);
+            forms.append("upload_preset", `Unicus___User`);
+            forms.append("public_id", uuid());
+            const res = await updateProfilePic(forms);
+            setProfileImg(res.data?.user.profileUrl);
+            setUsrLoading(false);
+            await getUserProfile();
         } catch (err) {
-            setLoading(false);
-            toast.error(err?.response.data || "Image upload error");
-            console.log("Cloudinary User Image Upload Error ->", err);
+            setUsrLoading(false);
+            toast.error("Image upload error");
         }
     };
 
     // PORTFOLIO TO HEADER IMAGE
     const uploadBackgroundImage = async (e: any) => {
         try {
-            setLoading(true);
-            //set loading true
-            let cloudinaryFormData = new FormData();
-            cloudinaryFormData.append("file", e.target.files[0]);
-            cloudinaryFormData.append("upload_preset", `Unicus___User`);
-            cloudinaryFormData.append("public_id", uuid());
-
-            const cloudinaryRes = await fetch(
-                "https://api.cloudinary.com/v1_1/dhmglymaz/image/upload/",
-                {
-                    method: "POST",
-                    body: cloudinaryFormData,
-                }
-            );
-            const JSONdata = await cloudinaryRes.json();
-
-            setBannerImg(JSONdata.url);
+            setBgLoading(true);
+            let forms = new FormData();
+            forms.append("file", e.target.files[0]);
+            forms.append("upload_preset", `Unicus___User`);
+            forms.append("public_id", uuid());
             // sending to backend
-            const res = await updateProfileBg(JSONdata.url);
-            if (res && res.data && res.data.user) {
-                localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-                Cookies.set("userInfo", JSON.stringify(res.data.user), {
-                    domain: cookieDomain,
-                    expires: 30,
-                });
-            }
-            setLoading(false);
+            const res = await updateProfileBg(forms);
+            setBgLoading(false);
+            await getUserProfile();
         } catch (err) {
-            console.log("Cloudinary User Image Upload Error ->", err);
-            setLoading(false);
+            //console.log("Cloudinary User Image Upload Error ->", err);
+            setBgLoading(false);
             toast.error(err?.response.data || "Image upload error");
         }
     };
@@ -134,32 +98,50 @@ const EditProfile = (props: any) => {
                 headers: {
                     Authorization: "Bearer " + `${accessToken}`,
                 },
-            })
-            setUser(res.data.user)
+            });
+            setUser(res.data.user);
         } catch (err) {
-            console.log(err)
+            //console.log(err)
         }
-    }
+    };
     const handleCancel = () => {
-        navigate("/profile")
-    }
+        navigate("/profile");
+    };
     useEffect(() => {
-        getUserProfile()
+        getUserProfile();
         window.scrollTo(0, 0);
-    }, [])
+    }, []);
+    if (!getAccessToken()) {
+        return <Navigate to="/explore" />;
+    }
 
     return (
         <div className="md:mt-[70px] px-8 pb-12 screen7:pt-0 screen18:px-12 screen3:px-8 w-full max-w-[1290px]">
-            <div className="user-background-image-edit relative" onClick={() => uploadImage(bannerPicFile)}>
-                <img src={backgroundImg} className="w-100 object-cover" alt="edit-banner" />
-                {loading 
-                    ? <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-100 transition-all cursor-pointer">
-                        <CircularProgress className="opacity-60" color="inherit" />
+            <div
+                className="user-background-image-edit relative"
+                onClick={() => uploadImage(bannerPicFile)}
+            >
+                <img
+                    src={
+                        user && user.backgroundUrl
+                            ? user.backgroundUrl
+                            : backgroundImg
+                    }
+                    className="w-100 object-cover"
+                    alt="edit-banner"
+                />
+                {bgLoading ? (
+                    <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-100 transition-all cursor-pointer">
+                        <CircularProgress
+                            className="opacity-60"
+                            color="inherit"
+                        />
                     </div>
-                    : <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-0 hover:opacity-100 transition-all cursor-pointer">
+                ) : (
+                    <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-0 hover:opacity-100 transition-all cursor-pointer">
                         <CameraAltRoundedIcon className="opacity-60" />
                     </div>
-                }
+                )}
                 <input
                     type="file"
                     id="file"
@@ -167,13 +149,16 @@ const EditProfile = (props: any) => {
                     accept="image/jpeg, image/png , image/svg+xml"
                     onChange={(e) => uploadBackgroundImage(e)}
                     className="d-none"
-                    disabled={loading}
+                    disabled={bgLoading}
                 />
             </div>
-            <div className="w-full pt-12"> 
+            <div className="w-full pt-12">
                 <div className="editPage-info flex gap-8 screen11:flex-col">
                     <div className="relative felx items-center screen11:flex-col screen11:ml-0 min-w-[200px] editPage-main-image">
-                        <div className="w-32 h-32 relative rounded-full overflow-hidden" onClick={() => uploadImage(profilePicFile)} >
+                        <div
+                            className="w-32 h-32 relative rounded-full overflow-hidden"
+                            onClick={() => uploadImage(profilePicFile)}
+                        >
                             <img
                                 src={
                                     user && user.profileUrl
@@ -183,14 +168,18 @@ const EditProfile = (props: any) => {
                                 alt="user"
                                 className="h-full w-full object-cover relative z-10"
                             />
-                            {loading 
-                                ? <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-100 transition-all cursor-pointer">
-                                    <CircularProgress className="opacity-60" color="inherit" />
+                            {usrLoading ? (
+                                <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-100 transition-all cursor-pointer">
+                                    <CircularProgress
+                                        className="opacity-60"
+                                        color="inherit"
+                                    />
                                 </div>
-                                : <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-0 hover:opacity-100 transition-all cursor-pointer">
+                            ) : (
+                                <div className="absolute w-full h-full bg-[#00000044] z-20 top-0 flex justify-center items-center opacity-0 hover:opacity-100 transition-all cursor-pointer">
                                     <CameraAltRoundedIcon className="opacity-60" />
                                 </div>
-                            }
+                            )}
                             <input
                                 type="file"
                                 id="file"
@@ -198,7 +187,7 @@ const EditProfile = (props: any) => {
                                 accept="image/jpeg, image/png , image/svg+xml"
                                 onChange={(e) => uploadUserImage(e)}
                                 className="d-none"
-                                disabled={loading}
+                                disabled={usrLoading}
                             />
                         </div>
                     </div>
@@ -255,7 +244,10 @@ const EditProfile = (props: any) => {
                                 onClick={handleClick}
                                 className="bg-GreyButton p-2 text-lg font-semibold rounded-md d-none"
                             >
-                                <span className="capitalizeFirst">{active}</span> ...
+                                <span className="capitalizeFirst">
+                                    {active}
+                                </span>{" "}
+                                ...
                             </button>
                             <Menu
                                 id="basic-menu"
@@ -385,43 +377,43 @@ const EditProfile = (props: any) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 const GeneralSettings = ({ resUser }) => {
-    const [username, setUserName] = useState<string>()
-    const [email, setEmail] = useState("")
-    const [bio, setBio] = useState<string>()
-    const [loading, setLoading] = useState(false)
-    const [profileImg, setProfileImg] = useState()
-    const [bannerImg, setBannerImg] = useState()
-    let navigate = useNavigate()
+    const [username, setUserName] = useState<string>();
+    const [email, setEmail] = useState("");
+    const [bio, setBio] = useState<string>();
+    const [loading, setLoading] = useState(false);
+    const [profileImg, setProfileImg] = useState();
+    const [bannerImg, setBannerImg] = useState();
+    let navigate = useNavigate();
     const getUserProfile = async () => {
-        setUserName(resUser?.username)
-        setEmail(resUser?.email)
-        setBio(resUser?.bio)
-    }
-    
+        setUserName(resUser?.username);
+        setEmail(resUser?.email);
+        setBio(resUser?.bio);
+    };
+
     const updateUserProfile = async () => {
         try {
             if (!(username?.length > 0) && !(bio?.length > 0))
-                return toast.error("Please enter either username or bio")
+                return toast.error("Please enter either username or bio");
 
-            setLoading(true)
-            const res = await updateProfile(username, bio)
+            setLoading(true);
+            const res = await updateProfile(username, bio);
             toast.success("Profile updated Successfully", {
                 position: "bottom-center",
-            })
-            navigate('/profile')
-            setLoading(false)
+            });
+            navigate("/profile");
+            setLoading(false);
         } catch (err) {
-            console.log(err)
-            toast.error(err)
+            //console.log(err)
+            toast.error(err);
         }
-    }
+    };
     useEffect(() => {
-        getUserProfile()
-    }, [resUser])
+        getUserProfile();
+    }, [resUser]);
 
     return (
         <>
@@ -429,45 +421,45 @@ const GeneralSettings = ({ resUser }) => {
                 <Loader />
             ) : (
                 <div className="flex gap-8 edit-userInfo">
-                <div className="flex flex-col gap-4 w-full min-w-[300px] edit-details">
-                    <Input
-                        title="Username"
-                        placeholder="Enter your name"
-                        state={username}
-                        setState={setUserName}
-                        multi={undefined}
-                        date={undefined}
-                        time={undefined}
-                        password={undefined}
-                        required={undefined}
-                        disabled={undefined}
-                    />
-                    <Input
-                        title="Bio"
-                        placeholder="Enter your Bio"
-                        multi
-                        state={bio}
-                        setState={setBio}
-                        date={undefined}
-                        time={undefined}
-                        password={undefined}
-                        required={undefined}
-                        disabled={undefined}
-                    />
+                    <div className="flex flex-col gap-4 w-full min-w-[300px] edit-details">
+                        <Input
+                            title="Username"
+                            placeholder="Enter your name"
+                            state={username}
+                            setState={setUserName}
+                            multi={undefined}
+                            date={undefined}
+                            time={undefined}
+                            password={undefined}
+                            required={undefined}
+                            disabled={undefined}
+                        />
+                        <Input
+                            title="Bio"
+                            placeholder="Enter your Bio"
+                            multi
+                            state={bio}
+                            setState={setBio}
+                            date={undefined}
+                            time={undefined}
+                            password={undefined}
+                            required={undefined}
+                            disabled={undefined}
+                        />
 
-                    <div className="flex justify-between">
-                        <button
-                            onClick={() => navigate("/profile")}
-                            className="btn"
-                        >
-                            Cancel
-                        </button>
-                        <button className="btn" onClick={updateUserProfile}>
-                            Save Changes
-                        </button>
+                        <div className="flex justify-between">
+                            <button
+                                onClick={() => navigate("/profile")}
+                                className="btn"
+                            >
+                                Cancel
+                            </button>
+                            <button className="btn" onClick={updateUserProfile}>
+                                Save Changes
+                            </button>
+                        </div>
                     </div>
-                </div>
-                {/* <div className="flex flex-col gap-4 w-full">
+                    {/* <div className="flex flex-col gap-4 w-full">
                     <div>
                         <div>Profile Image</div>
                         <div className="flex gap-4 items-center mt-2">
@@ -523,25 +515,25 @@ const GeneralSettings = ({ resUser }) => {
                 </div>
             )}
         </>
-    )
-}
+    );
+};
 
 const ChangePassword = ({ handleCancel }) => {
-    const [oldPass, setOldPass] = useState("")
-    const [newPass, setNewPass] = useState("")
-    const [confirmPass, setConfirmPass] = useState("")
+    const [oldPass, setOldPass] = useState("");
+    const [newPass, setNewPass] = useState("");
+    const [confirmPass, setConfirmPass] = useState("");
 
     const changePass = async () => {
         try {
-            const res = await changePasswordApi(oldPass, newPass)
+            const res = await changePasswordApi(oldPass, newPass);
             toast.success("Password changed Successfully", {
                 position: "bottom-center",
-            })
+            });
         } catch (err) {
-            console.log(err)
-            toast.error(err)
+            //console.log(err)
+            toast.error(err);
         }
-    }
+    };
     return (
         <div className="flex flex-col gap-4">
             <Input
@@ -589,23 +581,23 @@ const ChangePassword = ({ handleCancel }) => {
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
 const AddSocials = ({ resUser, handleCancel }) => {
-    const [twitter, setTwitter] = useState("")
-    const [facebook, setFacebook] = useState("")
-    const [instagram, setInstagram] = useState("")
-    const [discord, setDiscord] = useState("")
-    const [linkedIn, setLinkedIn] = useState("")
-    const [loading, setLoading] = useState(false)
+    const [twitter, setTwitter] = useState("");
+    const [facebook, setFacebook] = useState("");
+    const [instagram, setInstagram] = useState("");
+    const [discord, setDiscord] = useState("");
+    const [linkedIn, setLinkedIn] = useState("");
+    const [loading, setLoading] = useState(false);
     const getUserProfile = async () => {
-        setTwitter(resUser?.twitter)
-        setFacebook(resUser?.facebook)
-        setInstagram(resUser?.instagram)
-        setDiscord(resUser?.discord)
-        setLinkedIn(resUser?.linkedIn)
-    }
+        setTwitter(resUser?.twitter);
+        setFacebook(resUser?.facebook);
+        setInstagram(resUser?.instagram);
+        setDiscord(resUser?.discord);
+        setLinkedIn(resUser?.linkedIn);
+    };
     const updateProfile = async () => {
         try {
             if (
@@ -614,7 +606,7 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 !validator.isURL(twitter) &&
                 !twitter.includes("twitter")
             ) {
-                return toast.error("Please enter a valid url link to twitter")
+                return toast.error("Please enter a valid url link to twitter");
             }
             if (
                 facebook &&
@@ -622,7 +614,7 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 !validator.isURL(facebook) &&
                 !facebook.includes("facebook")
             ) {
-                return toast.error("Please enter a valid url link to facebook")
+                return toast.error("Please enter a valid url link to facebook");
             }
             if (
                 instagram &&
@@ -632,7 +624,7 @@ const AddSocials = ({ resUser, handleCancel }) => {
             ) {
                 return toast.error(
                     "Please enter a valid url link to instagram"
-                )
+                );
             }
             if (
                 discord &&
@@ -640,7 +632,7 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 !validator.isURL(discord) &&
                 !discord.includes("discord")
             ) {
-                return toast.error("Please enter a valid url link to discord")
+                return toast.error("Please enter a valid url link to discord");
             }
             if (
                 linkedIn &&
@@ -648,40 +640,40 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 !validator.isURL(linkedIn) &&
                 !linkedIn.includes("linkedIn")
             ) {
-                return toast.error("Please enter a valid url link to linkedIn")
+                return toast.error("Please enter a valid url link to linkedIn");
             }
-            setLoading(true)
+            setLoading(true);
             const res = await updateProfileSocial(
                 instagram,
                 facebook,
                 twitter,
                 discord,
                 linkedIn
-            )
+            );
 
             if (res.data && res.data?.msg) {
-                localStorage.setItem("userInfo", JSON.stringify(res.data?.msg))
+                localStorage.setItem("userInfo", JSON.stringify(res.data?.msg));
                 Cookies.set("userInfo", JSON.stringify(res.data?.msg), {
                     domain: cookieDomain,
                     expires: 30,
-                })
+                });
             }
             toast.success("Socials Updated Successfully", {
                 position: "bottom-center",
-            })
-            setLoading(false)
+            });
+            setLoading(false);
         } catch (err) {
-            setLoading(false)
-            toast.error(err)
+            setLoading(false);
+            toast.error(err);
         }
-    }
+    };
 
     useEffect(() => {
-        getUserProfile()
-    }, [resUser])
+        getUserProfile();
+    }, [resUser]);
     useEffect(() => {
-        getUserProfile()
-    }, [])
+        getUserProfile();
+    }, []);
     return (
         <>
             {loading ? (
@@ -759,8 +751,8 @@ const AddSocials = ({ resUser, handleCancel }) => {
                 </div>
             )}
         </>
-    )
-}
+    );
+};
 
-export default EditProfile
+export default EditProfile;
 // export {}

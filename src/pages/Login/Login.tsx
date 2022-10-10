@@ -11,7 +11,8 @@ import { useDispatch } from "react-redux"
 import axios from "axios"
 import Cookies from "js-cookie"
 import { ACCESS_TOKEN } from "../../utils/constants"
-import { toast } from "react-toastify"
+import toast from 'react-hot-toast';
+
 import { cookieDomain } from "../../config"
 
 const Login = ({}) => {
@@ -51,7 +52,7 @@ const Login = ({}) => {
                     navigate("/home", {replace:true})
                 })
                 .catch((err) => {
-                    console.log(err.response.data);
+                    //console.log(err.response.data);
                     toast.error(err.response.data.msg)
                 })
         }

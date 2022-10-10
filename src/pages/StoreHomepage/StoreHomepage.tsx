@@ -9,7 +9,8 @@ import StayInLoop from "../../components/StayInLoop/StayInLoop";
 import StoreSwiper from "./StoreSwiper/StoreSwiper";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import { BASE_URL } from "../../config";
 import {AssetList} from "../../utils/AssetList";
 import {getChainId} from "../../utils/utils";

@@ -3,7 +3,8 @@ import "./WalletAdd.css";
 // modal
 import { addWalletAdd } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 const WalletAdd = () => {
     const [walletAddress, setWalletAddress] = useState({
         walletAdd: "",
@@ -24,7 +25,7 @@ const WalletAdd = () => {
         } catch (err) {
             toast.error(err?.response.data.err || "Wallet added failed!");
             setModalShow(false);
-            console.log("err: ", err);
+            //console.log("err: ", err);
         }
     };
     const onUpdateWalletAddress = async (event: any) => {

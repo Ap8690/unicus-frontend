@@ -16,7 +16,7 @@ const AdvancedSettings = () => {
       setAdvance(res.data.result);
     }
     catch(err){
-      console.log(err)
+      //console.log(err)
     }
   };
   

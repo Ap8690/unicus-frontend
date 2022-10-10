@@ -7,9 +7,11 @@
     border-radius: 20px;
     margin-top: 20px;
 }
+
 .category-paper {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 1rem !important;
 }
+
 .chain-name-container {
     display: flex;
     justify-content: space-evenly;
@@ -26,7 +28,7 @@
     row-gap: 10px;
     align-items: center;
     justify-content: center;
-    color:white;
+    color: white;
 }
 
 .dialog-title {
@@ -37,6 +39,7 @@
     border-bottom: 1px solid rgba($color: #666, $alpha: 0.4);
     text-align: center;
     position: relative;
+
     button {
         position: absolute;
         right: 1.5rem;
@@ -45,5 +48,80 @@
 }
 
 .boxShadow {
-   box-shadow: rgba(255, 255, 255, 0.25) 2.4px 2.4px 3.2px;
+    box-shadow: rgba(255, 255, 255, 0.25) 2.4px 2.4px 3.2px;
+}
+
+.Art,
+.Metaverse {
+    /* From https://css.glass */
+    background: rgba(51, 168, 253, 0.75);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.2px);
+    -webkit-backdrop-filter: blur(8.2px);
+    border: 1px solid rgba(51, 168, 253, 0.63);
+}
+.Art:hover,
+.Metaverse:hover {
+    box-shadow: 10px 10px 11px -4px rgba(51,168,253,0.35);
+-webkit-box-shadow: 10px 10px 11px -4px rgba(51,168,253,0.35);
+-moz-box-shadow: 10px 10px 11px -4px rgba(51,168,253,0.35);
+}
+
+.Carbon,
+.Real,
+.Photography {
+    /* From https://css.glass */
+    background: rgba(248, 197, 97, 0.75);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.2px);
+    -webkit-backdrop-filter: blur(8.2px);
+    border: 1px solid rgba(248, 197, 97, 0.63);
+}
+.Carbon:hover,
+.Real:hover,
+.Photography:hover {
+    box-shadow: 10px 10px 11px -4px rgba(248, 197, 97,0.35);
+-webkit-box-shadow: 10px 10px 11px -4px rgba(248, 197, 97,0.35);
+-moz-box-shadow: 10px 10px 11px -4px rgba(248, 197, 97,0.35);
+}
+
+.Music,
+.Cards,
+.Gaming {
+    /* From https://css.glass */
+    background: rgba(238, 118, 94, 0.75);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.2px);
+    -webkit-backdrop-filter: blur(8.2px);
+    border: 1px solid rgba(238, 118, 94, 0.63);
+}
+.Music:hover,
+.Cards:hover,
+.Gaming:hover  {
+    box-shadow: 10px 10px 11px -4px rgba(238, 118, 94,0.35);
+-webkit-box-shadow: 10px 10px 11px -4px rgba(238, 118, 94,0.35);
+-moz-box-shadow: 10px 10px 11px -4px rgba(238, 118, 94,0.35);
+}
+
+.Nft,
+.Instruments,
+.Event {
+    /* From https://css.glass */
+    background: rgba(52, 220, 143, 0.75);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.2px);
+    -webkit-backdrop-filter: blur(8.2px);
+    border: 1px solid rgba(52, 220, 143, 0.63);
+}
+
+.Nft:hover,
+.Instruments:hover,
+.Event:hover {
+    box-shadow: 10px 10px 11px -4px rgba(52, 220, 143,0.35);
+    -webkit-box-shadow: 10px 10px 11px -4px rgba(52, 220, 143,0.35);
+    -moz-box-shadow: 10px 10px 11px -4px rgba(52, 220, 143,0.35);
 }

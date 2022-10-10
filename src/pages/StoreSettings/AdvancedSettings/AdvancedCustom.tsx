@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react"
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import Input from "../../../components/Input/Input"
 import { BASE_URL } from "../../../config";
 import { IAdvance } from "../../../models/Advance";
@@ -19,7 +20,7 @@ const AdvancedCustom = (advance: IAdvance) => {
         throw new Error("Failed");
       }
     } catch (err) {
-      console.log("err", err);
+      //console.log("err", err);
       if (err?.response) {
         return toast.error(err.response.data.err);
       } else if(err?.message) {

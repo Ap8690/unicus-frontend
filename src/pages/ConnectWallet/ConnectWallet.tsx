@@ -12,7 +12,8 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import { WalletConnection } from "near-api-js";
 import { walletLogin } from "../../services/api/supplier";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "../../utils/constants";
 import { cookieDomain } from "../../config";

@@ -4,7 +4,8 @@ import { useState } from 'react'
 import Input from '../../components/Input/Input'
 import { Link, useNavigate } from 'react-router-dom'
 import { emailRegister } from '../../services/api/supplier'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast';
+
 import { Helmet } from "react-helmet";
 
 const Register = () => {
@@ -24,7 +25,7 @@ const Register = () => {
     else {
       emailRegister(email, password, username)
         .then(async (res: any) => {
-          console.log("in");
+          //console.log("in");
 
           // Cookies.set("accessToken", res.data.accessToken, {
           //     domain: "unicus.one",
@@ -36,7 +37,7 @@ const Register = () => {
           navigate("/home", { replace: true });
         })
         .catch((err) => {
-          console.log(err.response.data);
+          //console.log(err.response.data);
           toast.error(err.response.data.msg);
         });
     }

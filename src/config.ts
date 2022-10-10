@@ -1,43 +1,75 @@
-const env_uri: string | undefined  = (process.env.REACT_APP_ENV).trim()
+import Cookies from "js-cookie";
 
-export const BASE_URL: string | undefined = 
-    env_uri === "local"
+const env_uri: any = () => {
+    console.log("Cookies.get(): ", Cookies.get("Chain_Environment"));
+    if(Cookies.get("Chain_Environment") === 'prod') return true
+    return false
+};
+console.log("env_uri: ", env_uri());
+
+export const BASE_URL: string | undefined =
+    process.env.REACT_APP_ENV.trim() === "local"
         ? "http://localhost:4000"
-        : env_uri === "development"
+        : process.env.REACT_APP_ENV.trim() === "development"
         ? "https://unicus-storefront-backend-test.herokuapp.com"
-        : env_uri === "staging"
+        : process.env.REACT_APP_ENV.trim() === "staging"
         ? "https://unicus-storefront-backend-qa.herokuapp.com"
-        : env_uri === "demo"
+        : process.env.REACT_APP_ENV.trim() === "demo"
         ? "https://unicus-storefront-backend-demo.herokuapp.com"
-        : "https://unicus-storefront-backend.herokuapp.com"
-// testnet
-export const bscChain: string | undefined = env_uri === "prod" ? "56" : "97"
-export const ethChain: string | undefined = env_uri === "prod" ? "1" : "4"
-export const ethChain1155: string | undefined = env_uri === "prod" ? "1" : "4"
-export const polygonChain: string | undefined =
-    env_uri === "prod" ? "137" : "80001"
-export const tronChain: string | undefined = env_uri === "prod" ? "8700" : "8766"
-export const solonaChain: string | undefined =
-    env_uri === "prod" ? "6700" : "6766"
-export const nearChain: string | undefined = env_uri === "prod" ? "7700" : "7766"
-export const avalancheChain: string | undefined =
-    env_uri === "prod" ? "43114" : "43113"
-export const shardeumChain: string | undefined =
-env_uri === "prod" ? "8080" : "8080"
-export const telosChain: string | undefined =
-env_uri === "prod" ? "40" : "41"
+        : "https://unicus-storefront-backend.herokuapp.com";
+export const bscChain: any = () => env_uri() ? "56" : "97";
+export const ethChain: any = () => env_uri() ? "1" : "4";
+export const ethChain1155: any =
+    () => env_uri() ? "1" : "4";
+export const polygonChain: any =
+    () => env_uri() ? "137" : "80001";
+export const tronChain: any =
+    () => env_uri() ? "8700" : "8766";
+export const solonaChain: any =
+    () => env_uri() ? "6700" : "6766";
+export const nearChain: any =
+    () => env_uri() ? "7700" : "7766";
+export const avalancheChain: any =
+    () => env_uri() ? "43114" : "43113";
+export const shardeumChain: any =
+    () => env_uri() ? "8080" : "8080";
+export const telosChain: any =
+    () => env_uri() ? "40" : "41";
+
+// export const chains:any = {
+//     // Mainnet
+//     'binance': '56',
+//     'ethereum': '1',
+//     'polygon': '137',
+//     'tron': '8700',
+//     'solana': '6700',
+//     'near': '7700',
+//     'avalanche': '43114',
+//     'telos':'40',
+//     // Testnet
+//     'testnet-binance': '56',
+//     'testnet-ethereum': '1',
+//     'testnet-polygon': '137',
+//     'testnet-tron': '8700',
+//     'testnet-solana': '6700',
+//     'testnet-near': '7700',
+//     'testnet-avalanche': '43114',
+//     'testnet-telos':'40',
+//     'testnet-shardeum': '8080',
+
+// }
 
 export const UNICUS_STORE: string | undefined =
-    env_uri === "local"
+    process.env.REACT_APP_ENV.trim() === "local"
         ? "localhost:3000"
-        : env_uri === "development"
+        : process.env.REACT_APP_ENV.trim() === "development"
         ? "marketplace.test.unicus.one"
-        : env_uri === "staging"
+        : process.env.REACT_APP_ENV.trim() === "staging"
         ? "marketplace.qa.unicus.one"
-        : env_uri === "demo"
+        : process.env.REACT_APP_ENV.trim() === "demo"
         ? "marketplace.demo.unicus.one"
-        // ? "unicus-marketplace-demo.herokuapp.com"
-        : "marketplace.unicus.one"
+        : // ? "unicus-marketplace-demo.herokuapp.com"
+          "marketplace.unicus.one";
 
 export const cookieDomain: string | undefined =
 env_uri === "local"
@@ -50,3 +82,8 @@ env_uri === "local"
 export const nearNftAddress = "nft-near.lobovh18.testnet"
 
 export const nearMarketAddress = "market-near.lobovh18.testnet"
+    process.env.REACT_APP_ENV.trim() === "local"
+        ? "localhost"
+        : process.env.REACT_APP_ENV.trim() === "demo"
+        ? "demo.unicus.one"
+        : "unicus.one";

@@ -7,6 +7,7 @@ import { AllNFTsElement } from "../AllNFTs/AllNFTsBody/AllNFTsElements";
 import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
 import uuid from "react-uuid";
+import { Helmet } from "react-helmet";
 
 const filters = ["Properties","Bids", "History" ];
 
@@ -38,7 +39,7 @@ const ViewNft = () => {
             }
             setNftLoading(false);
         } catch (err) {
-            console.log("NFT FETCH", err);
+            //console.log("NFT FETCH", err);
             setNftLoading(false);
         }
     }
@@ -47,7 +48,7 @@ const ViewNft = () => {
         fetchItem();
         
         return () => {
-            console.log("This will be logged on unmount");
+            //console.log("This will be logged on unmount");
         };
     }, []);
 
@@ -57,6 +58,11 @@ const ViewNft = () => {
                 <PageLoader info=""/>
             ) : (
                 <div className="view-nft">
+                    <Helmet>
+                        <meta charSet="utf-8" />
+                        <title>UnicusOne - {nft && nft?.name ? nft.name : "Non-Fungible Token"}</title>
+                        <link rel="canonical" href={window.location.href} />
+                    </Helmet>
                     <div className="nft">
                         <NftImg
                             img={nftImg}

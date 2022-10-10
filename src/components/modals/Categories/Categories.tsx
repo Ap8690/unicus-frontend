@@ -10,21 +10,61 @@ import Alert from '@mui/material/Alert';
 import {AssetList} from "../../../utils/AssetList";
 import uuid from "react-uuid"
 import {getAccessToken} from "../../../services/api/supplier"
+import {background} from "../modalBackground"
+
+import Art from "../../../assets/categories-icons/art.svg"
+import Finance from "../../../assets/categories-icons/finance.svg"
+import Gaming from "../../../assets/categories-icons/game.svg"
+import Music from "../../../assets/categories-icons/music.svg"
+import Photography from "../../../assets/categories-icons/photo.svg"
+import RealEstate from "../../../assets/categories-icons/real-estate.svg"
+import Ticket from "../../../assets/categories-icons/ticket.svg"
+import TradingCard from "../../../assets/categories-icons/trading-card.svg"
+
+const categoriesImage: any = {
+    "Art": Art,
+    "Carbon Credits": "",
+    "Event Tickets": Ticket,
+    "Fin. Instruments": Finance,
+    "Gaming": Gaming,
+    "Metaverse": "",
+    "Music": Music,
+    "Nft Collection": "",
+    "Photography": Photography,
+    "Real Estate":RealEstate,
+    "Trading Cards": TradingCard,
+};
+
+const assetColor = {
+    "Art":"#33a9fd9b",
+    "Carbon Credits":"#F8C561",
+    "Event Tickets":"#EE765E",
+    "Fin. Instruments":"#34DC8F",
+    "Gaming":"#F8C561",
+    "Metaverse":"#33A8FD",
+    "Music":"#EE765E",
+    "Nft Collection":"#34DC8F",
+    "Photography":"#33A8FD",
+    "Real Estate":"#F8C561",
+    "Trading Cards":"#34DC8F",
+}
 
 const CategoryCard = ({asset,handleCategory,category}) => {
-    const paperStyle = "box py-4 rounded-2xl category-paper hover:border hover:border-white border border-black cursor-pointer flex justify-center items-center overflow-hidden w-full"
+    //console.log("asset: ", asset);
+    const paperStyle = `${asset} box py-4 rounded-2xl category-paper hover:border hover:border-white border border-[#1D1F25] cursor-pointer flex justify-center items-center overflow-hidden w-full`
     return (
-        <Paper
-            elevation={3}
+        <div
+            // elevation={3}
             onClick={() => handleCategory(asset)}
-            className={asset === category ? `border border-white ${paperStyle}` : paperStyle }
+            className={asset === category ? `${asset} border rounded-2xl border-white ${paperStyle}` : paperStyle }
         >
             <button className="wallet-logo flex items-center justify-center flex-col">
+                {/* <img className="h-[16px] text-white" src={categoriesImage[asset]} alt={asset}/> */}
                 <span className="text-white font-medium text-[20px]">
                  {asset}
                 </span>
             </button>
-        </Paper>
+        </div>
     );
 };
 const alertBox = {
@@ -61,15 +101,7 @@ const CategoriesModal = ({ open, setOpen, setWalletModal }) => {
             onClose={handleClose}
             open={open}
             TransitionComponent={Transition}
-            PaperProps={{
-                sx: {
-                    padding: 0,
-                    background: "black",
-                    width: "600px",
-                    borderRadius: "16px",
-                    filter: "drop-shadow(0 0 5px #333)",
-                },
-            }}
+            PaperProps={background}
         >
             <div className="dialog-title">
                 Select a Category

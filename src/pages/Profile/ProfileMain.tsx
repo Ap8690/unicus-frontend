@@ -23,9 +23,11 @@ import "./ProfileMain.scss";
 import axios from "axios";
 import { BASE_URL } from "../../config";
 import { getAccessToken, getNftByUserId } from "../../services/api/supplier";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import { Helmet } from "react-helmet";
 import PageLoader from "../../components/Loading/PageLoader"
+
 // Generics
 type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 
@@ -77,30 +79,33 @@ const Profile = (): ReactJSXElement => {
         },
     ];
 
-    const createdColumns = ["Item", "Chain", "Created"];
-    const listingColumns = ["Item", "Unit Price", "Status", "Created"];
-    const offersColumns = ["Item", "Latest Bid", "Chain", "Created"];
+    const createdColumns = ["Item", "Chain","Provenance" ,"Date"];
+    const listingColumns = ["Item", "Unit Price", "Status", "Date"];
+    const offersColumns = ["Item", "Latest Bid", "Chain", "Date"];
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
     const [ordisplayListing, setorDisplayListing] = useState([]);
     const [ordisplayCreated, setorDisplayCreated] = useState([]);
     const [displayListing, setDisplayListing] = useState([]);
     const [displayCreated, setDisplayCreated] = useState([]);
-    const [tableLoading, setTableLoading] = useState(true)
+    const [tableLoading, setTableLoading] = useState(true);
+    const [metadata,setMetadata] = useState<any>();
+    const [page,setPage] = useState(1);
     const navigate = useNavigate();
     const { profileState } = useParams();
 
     const getNfts = async () => {
         setTableLoading(true)
         try {
-            const res = await getNftByUserId();
+            const res = await getNftByUserId(page);
+            setMetadata(res.data.metadata)
             setorDisplayCreated(res.data.nfts);
             setorDisplayListing(res.data.auctions);
             setDisplayCreated(res.data.nfts);
             setDisplayListing(res.data.auctions);
             setTableLoading(false)
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             toast.error(e);
             setTableLoading(false)
         }
@@ -113,12 +118,13 @@ const Profile = (): ReactJSXElement => {
                     Authorization: "Bearer " + `${accessToken}`,
                 },
             });
+            
             setUser(res.data.user);
             await getNfts();
             setLoading(false);
         } catch (err) {
             setLoading(false);
-            console.log(err);
+            //console.log(err);
         }
     };
     useEffect(() => {
@@ -180,6 +186,13 @@ const Profile = (): ReactJSXElement => {
                             setSearch={setSearch}
                             columns={listingColumns}
                             loading={tableLoading}
+                            page={page}
+                            setPage={setPage}
+                            metadata={{
+                                limit: metadata.limit,
+                                skip: metadata.skip,
+                                total: metadata.totalNfts
+                            }}
                         />
                     )}
                     {profileState === "offers" && (
@@ -189,6 +202,13 @@ const Profile = (): ReactJSXElement => {
                             setSearch={setSearch}
                             columns={offersColumns}
                             loading={tableLoading}
+                            page={page}
+                            setPage={setPage}
+                            metadata={{
+                                limit: metadata.limit,
+                                skip: metadata.skip,
+                                total: metadata.totalAuctions
+                            }}
                         />
                     )}
                     {(profileState === "created" || !profileState) && (
@@ -198,6 +218,13 @@ const Profile = (): ReactJSXElement => {
                             setSearch={setSearch}
                             columns={createdColumns}
                             loading={tableLoading}
+                            page={page}
+                            setPage={setPage}
+                            metadata={{
+                                limit: metadata && metadata?.limit,
+                                skip: metadata && metadata?.skip,
+                                total: metadata && metadata?.totalNfts
+                            }}
                         />
                     )}
                 </div>

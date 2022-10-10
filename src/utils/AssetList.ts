@@ -1,1 +1,17 @@
-export const AssetList: any = ['Art', 'Nft Collection', 'Trading Cards', 'Photography', 'Carbon Credits', 'Real Estate', 'Financial Instruments', 'Event Tickets', 'Metaverse', 'Gaming', 'Music']
+export const AssetList: any = [
+    "Art",
+    "Carbon Credits",
+    "Event Tickets",
+    "Fin. Instruments",
+    "Gaming",
+    "Metaverse",
+    "Music",
+    "Nft Collection",
+    "Photography",
+    "Real Estate",
+    "Trading Cards",
+];
+
+
+
+

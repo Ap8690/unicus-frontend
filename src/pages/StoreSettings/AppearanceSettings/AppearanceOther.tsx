@@ -3,7 +3,8 @@ import { IOSSwitch } from "../GeneralSettings/GeneralBasic"
 import uploadImg from "../../../assets/svgs/uploadImage.svg"
 import { IAppearance } from "../../../models/Appearance";
 import axios from "axios";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import { BASE_URL } from "../../../config";
 import uuid from "react-uuid";
 import { CircularProgress } from "@mui/material";
@@ -54,7 +55,7 @@ const AppearanceOther = (appearance: IAppearance) => {
 
       setAppearance({ ...Appearance, storeLoader: JSONdata.url });
     } catch (err) {
-      console.log("Cloudinary User Image Upload Error ->", err);
+      //console.log("Cloudinary User Image Upload Error ->", err);
     }
     setLoadingImage(false);
   };
@@ -67,7 +68,7 @@ const AppearanceOther = (appearance: IAppearance) => {
         throw "Failed";
       }
     } catch (err) {
-      console.log("err", err);
+      //console.log("err", err);
       if (err.response) {
         toast.error(err.response.data.err);
       } else {

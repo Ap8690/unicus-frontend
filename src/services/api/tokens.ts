@@ -1,6 +1,7 @@
 import Web3 from "web3";
 import Web3Token from "web3-token";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 // Connection to MetaMask wallet (you can actually use any wallet)
 // you can even use ethersjs instead of web3
 const web3 = new Web3(window?.ethereum);
@@ -9,7 +10,7 @@ const web3 = new Web3(window?.ethereum);
 // EVM WALLET CONNECT
 export const connectWallet = async () => {
     try {
-        if (!window.ethereum) toast.info("Please Install Metamask");
+        if (!window.ethereum) toast.success("Please Install Metamask");
         // connection to metamask wallet
         await window.ethereum.request({
             method: "eth_requestAccounts",
@@ -27,10 +28,10 @@ export const connectWallet = async () => {
         //     token: token,
         // });
         // storeInformation(loginResponse?.data.user);
-        toast.info("Welcome ")
+        toast.success("Welcome ")
         return loginResponse?.data.user;
     } catch (err) {
-        console.log(err);
+        //console.log(err);
     }
 };
 
@@ -40,7 +41,7 @@ export const  switchChain = async() =>{
     const chainId = await web3.eth.getChainId()
     if(Number(chainId) !== Number(process.env.REACT_APP_CHAIN_ID)){
         try {
-            toast.warn("Please switch to Polygon")
+            toast.success("Please switch to Polygon")
             await window.ethereum.request({
                 method: "wallet_switchEthereumChain",
                 params: [{ chainId: "0x13881" }], // chainId must be in hexadecimal numbers

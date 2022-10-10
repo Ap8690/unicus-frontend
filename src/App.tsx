@@ -4,8 +4,7 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { ChainContext } from "./context/ChainContext";
 
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 // Components
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
@@ -46,9 +45,6 @@ import { UserProvider } from "./context/UserContext";
 import { TransactionProvider } from "./context/Web3Context";
 import { ConnectWalletContext } from "./context/ConnectWalletContext";
 import { StoreContext } from "./context/StoreContext";
-// redux integration
-import { Provider } from "react-redux";
-import { rstore } from "./Redux/Store";
 import ChainModal from "./components/modals/WalletsModal/ChainModal";
 import WalletsModal from "./components/modals/WalletsModal/WalletsModal";
 import CategoriesModal from "./components/modals/Categories/Categories";
@@ -66,6 +62,7 @@ const App = () => {
         setOpenInstall,
         openInstall,
         walletInstall,
+        validateSession
     } = useContext(ConnectWalletContext);
     const userInfo = getUserInfo();
     const { store, setStore } = useContext(StoreContext); // store data
@@ -75,7 +72,7 @@ const App = () => {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
-        console.log("isMainStore ", isMainStore());
+        //console.log("isMainStore ", isMainStore());
         if (isMainStore()) {
             getStoreForUser();
         } else {
@@ -96,10 +93,10 @@ const App = () => {
             localStorage.setItem("store", JSON.stringify(res.data.store));
             setLoading(false);
         } catch (err: any) {
-            console.log("STORE FETCH ERROR: ", err);
+            //console.log("STORE FETCH ERROR: ", err);
             setLoading(false);
             window.open(UNICUS_STORE)
-            console.log("UNICUS_STORE: ", UNICUS_STORE);
+            //console.log("UNICUS_STORE: ", UNICUS_STORE);
         }
     };
     const setLogin = () => {
@@ -108,10 +105,10 @@ const App = () => {
         if (cookieUser) {
             userInfo = JSON.parse(cookieUser);
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
-            console.log("Setting localstorage");
+            //console.log("Setting localstorage");
         } else {
             localStorage.removeItem("userInfo");
-            console.log("UnSetting localstorage");
+            //console.log("UnSetting localstorage");
         }
         const token = Cookies.get(ACCESS_TOKEN);
         if (token) {
@@ -122,7 +119,7 @@ const App = () => {
         try {
             if (Cookies.get(ACCESS_TOKEN)) {
                 const res = await getStoreByUser();
-                console.log("Store data: ", res.data);
+                //console.log("Store data: ", res.data);
                 if (res.data.store) {
                     setUserStore(res.data.store);
                 }
@@ -130,14 +127,16 @@ const App = () => {
                 setUserStore({});
             }
         } catch (err) {
-            console.log("err", err);
+            //console.log("err", err);
         }
     };
     useEffect(() => {
+        validateSession()
         if (location.pathname === "/") {
             navigate("/home", { replace: true });
         }
     }, []);
+
 
     return (
         <WalletModalProvider>
@@ -145,7 +144,7 @@ const App = () => {
                 <TransactionProvider>
                     <div className="App">
                         <Navbar store={isMainStore() ? userStore : store} />
-                        <ToastContainer limit={3} />
+                        
                         <ScrollToTop />
                         <Routes>
                             {isMainStore() ? (
@@ -324,6 +323,7 @@ const App = () => {
                         />
                         <Footer />
                     </div>
+                    <Toaster/>
                 </TransactionProvider>
             </UserProvider>
         </WalletModalProvider>

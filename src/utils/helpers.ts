@@ -76,11 +76,11 @@ export const sendMeta = async (walletConnection: any, nearConfig: any) => {
 };
 
 export const getDecimal = (chain: any) => {
-    if (chain.toString() == nearChain) {
+    if (chain.toString() == nearChain()) {
         return 10 ** 24;
-    } else if (chain.toString() == solonaChain) {
+    } else if (chain.toString() == solonaChain()) {
         return 1000000000;
-    } else if (chain.toString() == tronChain) {
+    } else if (chain.toString() == tronChain()) {
         return 1000000;
     } else {
         return 10 ** 18;
@@ -129,19 +129,19 @@ export async function decodeParams(
 // check on nft page is wallet connected with the desired chain
 export const isChainConnected = (pageChain: any) => {
     let chainName = null;
-    if (pageChain === polygonChain) {
+    if (pageChain === polygonChain()) {
         chainName = "Polygon";
-    } else if (pageChain === bscChain) {
+    } else if (pageChain === bscChain()) {
         chainName = "Binance";
-    } else if (pageChain === ethChain) {
+    } else if (pageChain === ethChain()) {
         chainName = "Ethereum";
-    } else if (pageChain === avalancheChain) {
+    } else if (pageChain === avalancheChain()) {
         chainName = "Avalanche";
-    } else if (pageChain === tronChain) {
+    } else if (pageChain === tronChain()) {
         chainName = "Tron";
-    } else if (pageChain === solonaChain) {
+    } else if (pageChain === solonaChain()) {
         chainName = "Solana";
-    } else if (pageChain === nearChain) {
+    } else if (pageChain === nearChain()) {
         chainName = "Near";
     }
 

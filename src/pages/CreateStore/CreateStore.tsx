@@ -7,7 +7,8 @@ import "./CreateStore.scss"
 import BlueBackground from "../../components/BlueBackground/BlueBackground"
 // Images
 import placeHolder from "../../assets/svgs/uploadImage.svg"
-import { toast } from "react-toastify"
+import toast from 'react-hot-toast';
+
 import { createStore, getAccessToken } from "../../services/api/supplier"
 import countryList from "react-select-country-list"
 import validator from "validator"
@@ -72,7 +73,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
             setGeneral({ ...generals,country: country, logoUrl: JSONdata.url })
             setLoading(false)
         } catch (err) {
-            console.log("Cloudinary User Image Upload Error ->", err)
+            //console.log("Cloudinary User Image Upload Error ->", err)
             setLoading(false)
             toast.error("Image upload error!")
         }
@@ -115,9 +116,10 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
                 }, 1000)
             } else {
                 throw new Error("Store creation failed!")
+                
             }
         } catch (err) {
-            console.log("err", err.response.data.err)
+            //console.log("err", err.response.data.err)
             setLoading(false)
             if (err.response) {
                 if (err.response.status === 401) {
@@ -270,10 +272,10 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
     )
 }
 const CreateStore = ({userStore}: any): ReactJSXElement => {
-    console.log("userStore: ", userStore);
+    //console.log("userStore: ", userStore);
     const [loadingImage, setLoadingImage] = useState(false)
     if(!getAccessToken() || (userStore && Object.keys(userStore).length === 0 && userStore?.domain && userStore?.domain[0])) {
-        console.log("NAVIGATE")
+        //console.log("NAVIGATE")
         return <Navigate to="/explore" />
     }
     return (
