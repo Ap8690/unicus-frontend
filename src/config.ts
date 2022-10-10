@@ -8,7 +8,7 @@ export const env_uri: any = () => {
 
 export const BASE_URL: string | undefined =
     process.env.REACT_APP_ENV.trim() === "local"
-        ? "http://localhost:4000"
+        ? "https://unicus-storefront-backend.herokuapp.com"
         : process.env.REACT_APP_ENV.trim() === "development"
         ? "https://unicus-storefront-backend-test.herokuapp.com"
         : process.env.REACT_APP_ENV.trim() === "staging"
