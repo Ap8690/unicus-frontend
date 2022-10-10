@@ -126,10 +126,12 @@ const ChainModal = ({ open, setOpen, setWalletModal, setShowCategory }) => {
     };
     const { setVisible } = useWalletModal();
     const handleChain = (chain: any) => {
+        console.log("ksdfhdsohf")
         setOpen(false);
         setShowCategory(true);
-        
+        console.log(chain,"to  connect")
         chain = getChainId(chain?.toLowerCase());
+        console.log(chain,"dsfhjdsb")
         localStorage.setItem("CHAIN", chain);
     };
     const handleTabChange = (event: React.SyntheticEvent, newValue: any) => {
