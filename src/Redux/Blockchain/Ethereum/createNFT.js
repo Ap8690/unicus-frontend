@@ -1,11 +1,13 @@
+import {env_uri} from '../../../config';
+
 export const createNFTAddressE =
-  process.env.REACT_APP_ENV === "prod"
+  env_uri()
     ? // mainnet
       "0x112f5D47b0f0810CFc07FA6Bf97306583f74D9aE"
     : // testnet
       "0x9529eB4956EC7a33C12980a62c4D8135f7Ca1887";
 export const createNFTAddressE1155 =
-  process.env.REACT_APP_ENV === "prod"
+  env_uri()
     ? // mainnet
       "0x0e871B1ED2B518eeCe9192cb567cd14C9692e9bC"
     : // testnet

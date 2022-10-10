@@ -1,11 +1,10 @@
 import Cookies from "js-cookie";
 
-const env_uri: any = () => {
+export const env_uri: any = () => {
     console.log("Cookies.get(): ", Cookies.get("Chain_Environment"));
     if(Cookies.get("Chain_Environment") === 'prod') return true
     return false
 };
-console.log("env_uri: ", env_uri());
 
 export const BASE_URL: string | undefined =
     process.env.REACT_APP_ENV.trim() === "local"

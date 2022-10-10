@@ -1,6 +1,7 @@
+import {env_uri} from "../../../config"
 // mainnet
 export const marketPlaceAddressP =
-  process.env.REACT_APP_ENV === "prod"
+env_uri()
     ? // mainnet
       "0xf21C3d3f1bA95c0EfFd4C9D957BFd5ddd8b40cAD"
     : // testnet

@@ -1,6 +1,7 @@
+import {env_uri} from "../../../config"
 // mainnet
 export const createNFTAddressB =
-  process.env.REACT_APP_ENV === "prod"
+env_uri()
     ? // mainnet
       "0x2f376c69feEC2a4cbb17a001EdB862573898E95a"
     : // testnet

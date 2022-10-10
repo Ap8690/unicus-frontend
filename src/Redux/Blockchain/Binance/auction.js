@@ -1,5 +1,6 @@
+import {env_uri} from "../../../config"
 export const auctionAddressB =
-  process.env.REACT_APP_ENV === "prod"
+env_uri()
     ? // mainnet
       "0xa4C5e68C3EAd90EE2E410F8c433fd2acc2074bC0"
     : // testnet
