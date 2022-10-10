@@ -20,6 +20,8 @@ import {
     avalancheChain,
     shardeumChain,
     telosChain,
+    nearNftAddress,
+    nearMarketAddress,
 } from "../config";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { IStore } from "../models/Store";
@@ -532,7 +534,7 @@ export const connToTron = async () => {
 //         await initContract();
 //     if (!walletConnection.isSignedIn()) {
 //         await walletConnection.requestSignIn({
-//             contractId: "nft.subauction.testnet",
+//             contractId: nearNftAddress,
 //             // methodNames: ["Unicus One"],
 //             // successUrl : `http://localhost:3000/explore/Near?near-login=success`,
 //             // failureUrl : 'http://localhost:3000/connect-wallet'
@@ -916,7 +918,7 @@ export const getCreateNftContractAddress = (chain: any, contractType: any) => {
             case tronChain():
                 return createNFTAddressT;
             case nearChain():
-                return "nft.subauction.testnet";
+                return nearNftAddress;
             case solonaChain():
                 return;
             default:
@@ -1022,10 +1024,10 @@ export const getAuctionContract = (chain: any, contractType = "721") => {
 export const offerPrice = async (token_id: string, assetBid: any) => {
     try {
         await nearWalletConnection.account().functionCall({
-            contractId: "market_auct.subauction.testnet",
+            contractId: nearMarketAddress,
             methodName: "offer",
             args: {
-                nft_contract_id: "nft.subauction.testnet",
+                nft_contract_id: nearNftAddress,
                 token_id,
             },
             attachedDeposit: parseNearAmount(assetBid.toString()),
@@ -1041,11 +1043,11 @@ export const approveNFTForSale = async (token_id: string, assetPrice: any) => {
         sale_conditions: parseNearAmount(assetPrice.toString()), // set asset price in ui
     };
     await nearWalletConnection.account().functionCall({
-        contractId: "nft.subauction.testnet",
+        contractId: nearNftAddress,
         methodName: "nft_approve",
         args: {
             token_id: token_id,
-            account_id: "market_auct.subauction.testnet",
+            account_id: nearMarketAddress,
             msg: JSON.stringify(sale_conditions),
         },
         attachedDeposit: new BN(parseNearAmount("0.01")),
@@ -1054,10 +1056,10 @@ export const approveNFTForSale = async (token_id: string, assetPrice: any) => {
 
 export const removeSale = async (token_id: any) => {
     await nearWalletConnection.account().functionCall({
-        contractId: "market_auct.subauction.testnet",
+        contractId: nearMarketAddress,
         methodName: "remove_sale",
         args: {
-            nft_contract_id: "nft.subauction.testnet",
+            nft_contract_id: nearNftAddress,
             token_id,
         },
         attachedDeposit: parseNearAmount("1"),
@@ -1076,11 +1078,11 @@ export const approveNFTForAuction = async (
         sale_conditions: parseNearAmount(assetPrice.toString()), // set asset price in ui
     };
     await nearWalletConnection.account().functionCall({
-        contractId: "nft.subauction.testnet",
+        contractId: nearNftAddress,
         methodName: "approve_nft_auction",
         args: {
             auction_token: token_id,
-            account_id: "market_auct.subauction.testnet",
+            account_id: nearMarketAddress,
             start_time: startTime, // Time in seconds (as type u64)
             end_time: endTime, // Time in seconds (as type u64)
             msg: JSON.stringify(sale_conditions),
@@ -1090,10 +1092,10 @@ export const approveNFTForAuction = async (
 };
 export const offerBid = async (token_id: any, assetBid: any) => {
     await nearWalletConnection.account().functionCall({
-        contractId: "market_auct.subauction.testnet",
+        contractId: nearMarketAddress,
         methodName: "offer_bid",
         args: {
-            nft_contract_id: "nft.subauction.testnet",
+            nft_contract_id: nearNftAddress,
             token_id,
         },
         attachedDeposit: parseNearAmount(assetBid.toString()),
@@ -1103,10 +1105,10 @@ export const offerBid = async (token_id: any, assetBid: any) => {
 //removes auction and refunds if there is any existing bid
 export const removeAuction = async (token_id: any) => {
     await nearWalletConnection.account().functionCall({
-        contractId: "market_auct.subauction.testnet",
+        contractId: nearMarketAddress,
         methodName: "remove_auction",
         args: {
-            nft_contract_id: "nft.subauction.testnet",
+            nft_contract_id: nearNftAddress,
             token_id,
         },
         attachedDeposit: "1",
@@ -1117,10 +1119,10 @@ export const removeAuction = async (token_id: any) => {
 //remove the auction and resolve purchase
 export const processPurchase = async (token_id: any) => {
     await nearWalletConnection.account().functionCall({
-        contractId: "market_auct.subauction.testnet",
+        contractId: nearMarketAddress,
         methodName: "process_auction_purchase",
         args: {
-            nft_contract_id: "nft.subauction.testnet",
+            nft_contract_id: nearNftAddress,
             token_id,
         },
         attachedDeposit: 0,
@@ -1132,7 +1134,7 @@ export const getMinimumStorage = async () => {
     let minimum_balance = await nearWalletConnection
         .account()
         .viewFunction(
-            "market_auct.subauction.testnet",
+            nearMarketAddress,
             "storage_minimum_balance"
         );
     return minimum_balance;
@@ -1141,7 +1143,7 @@ export const getMinimumStorage = async () => {
 export const sendStorageDeposit = async () => {
     const minimum = await getMinimumStorage();
     const res = await nearWalletConnection.account().functionCall({
-        contractId: "market_auct.subauction.testnet",
+        contractId: nearMarketAddress,
         methodName: "storage_deposit",
         args: {},
 

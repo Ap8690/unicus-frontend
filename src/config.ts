@@ -71,6 +71,16 @@ export const UNICUS_STORE: string | undefined =
           "marketplace.unicus.one";
 
 export const cookieDomain: string | undefined =
+env_uri === "local"
+? "localhost"
+: env_uri === "demo"
+? "demo.unicus.one"
+: "unicus.one"
+
+
+export const nearNftAddress = "nft-near.lobovh18.testnet"
+
+export const nearMarketAddress = "market-near.lobovh18.testnet"
     process.env.REACT_APP_ENV.trim() === "local"
         ? "localhost"
         : process.env.REACT_APP_ENV.trim() === "demo"
