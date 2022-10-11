@@ -589,8 +589,8 @@ const CreateNftSingle = () => {
                         nftObj.append('tokenId',tokenId)
                     }
                     
-                    toast.success("Asset Minted!");
                     await createNft(nftObj);
+                    toast.success("Asset Minted!");
                     navigate("/profile/created");
                     setNftLoading(false);
                 } else {
@@ -649,10 +649,9 @@ const CreateNftSingle = () => {
                         toast.error("Contract type is not ERC721 or ERC1155!");
                         return;
                     }
-
-                    setNftLoading(false);
-                    toast.success("Asset Minted");
                     await createNft(nftObj);
+                    toast.success("Asset Minted");
+                    setNftLoading(false);
                     navigate("/profile/created");
                 }
             } catch (error) {
