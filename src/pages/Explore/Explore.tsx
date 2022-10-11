@@ -65,6 +65,8 @@ const Explore = () => {
     const [skip, setskip] = useState(0);
     const [ResetPasswordPopUpShow, setResetPasswordPopUpShow] =
         useState<any>(false);
+
+    const [totalAssets,setTotalAssets] = useState<any>(0)
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -79,12 +81,11 @@ const Explore = () => {
                 filter.toLowerCase()
             )
                 .then((res: any) => {
-                    console.log("[displayElements ,...res.data.data]: ", [...displayElements ,...res.data.data]);
                     if(displayElements.length>0) {
                         setDisplayItems([...displayElements ,...res.data.data]);
                     }
                     else setDisplayItems(res.data.data);
-                    
+                    setTotalAssets(res.data?.totalAuctions)
                     setLoading(false);
                     setskip((prevState) => prevState + 30)
                     query.delete("search");
@@ -131,7 +132,9 @@ const Explore = () => {
         fetchItems();
         document.body.scrollTop = 0;
     }, [filter, chain]);
-
+    useEffect(() => {
+        console.log("totalAssets",totalAssets)
+    },[totalAssets])
     useEffect(() => {
         if (
             location.pathname.includes("/login") &&
@@ -206,7 +209,7 @@ const Explore = () => {
             <InfiniteScroll
                 dataLength={displayElements.length}
                 next={fetchItems}
-                hasMore={true}
+                hasMore={totalAssets >= displayElements.length}
                 loader={<NftSkeletonLoader />}
             >
                 <ExploreElements elements={displayElements} />

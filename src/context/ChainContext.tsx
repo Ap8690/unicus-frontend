@@ -28,7 +28,8 @@ export const ChainProvider = ({ children }) => {
             if (getChainName(localStorage.getItem("walletChain")))
                 setChain(getChainName(localStorage.getItem("walletChain")));
         }
-    }, [localStorage.getItem("walletChain")]);
+        console.log("chain id: ", chain);
+    }, [localStorage.getItem("walletChain"),chain]);
     useEffect(() => {
         if (sessionStorage.getItem("CATEGORY")) {
             setCategory(sessionStorage.getItem("CATEGORY"));
