@@ -100,16 +100,17 @@ const Explore = () => {
         localStorage.setItem("userInfo", JSON.stringify(res.data.user));
         navigate("/home", { replace: true });
     };
-    window.addEventListener("scroll", async function () {
-        var root: any;
-        root = document.querySelector(".market_place")?.getBoundingClientRect();
-        if (root?.top + root?.height - this.window.innerHeight - 4200 < 0) {
-            if (!skiploading) {
-                setskiploading(true);
-                setskip((prevState) => prevState + 30);
-            }
-        }
-    });
+    // window.addEventListener("scroll", async function () {
+    //     var root: any;
+    //     root = document.querySelector(".market_place")?.getBoundingClientRect();
+    //     console.log("root: ", root);
+    //     if (root?.top + root?.height - this.window.innerHeight - 4200 < 0) {
+    //         if (!skiploading) {
+    //             setskiploading(true);
+    //             setskip((prevState) => prevState + 30);
+    //         }
+    //     }
+    // });
 
     // Effect
     useEffect(() => {
