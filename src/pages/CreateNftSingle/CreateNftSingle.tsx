@@ -106,8 +106,6 @@ const CreateNftSingle = () => {
     const navigate = useNavigate();
     const { fullLoading } = useContext(ConnectWalletContext);
     const { category,setCategory } = useContext(ChainContext);
-    console.log("category ",category)
-    
     const { connection } = useConnection();
     const { sendTransaction } = useWallet();
     const anWallet = useAnchorWallet();
@@ -502,7 +500,6 @@ const CreateNftSingle = () => {
                         // let functionCallResult = await nearWalletConnection
                         // .account()
                         // .functionCall();
-                        console.log(res)
                         if(res?.response?.error){
                             throw new Error("Nft not minted!")
                         }
@@ -530,13 +527,11 @@ const CreateNftSingle = () => {
                     }
                     
                 } else if (chain.toString() === solonaChain()) {
-                    console.log(chain,"chain")
                     const mintKey = await mintSolana(
                         name,
                         description,
                         tokenUri
                     );
-                    console.log(mintKey,"mintKey")
                     nftObj.append('tokenId',mintKey)
                     nftObj.append('contractAddress',SOL_MINT_NFT_PROGRAM_ID.toBase58())
 
@@ -602,7 +597,6 @@ const CreateNftSingle = () => {
                     setNftLoading(true);
                     toast.success("Minting The Asset");
                     const gasPrice = await web3.eth.getGasPrice();
-                    console.log(chain,"chain that is been selected")
                     const createNFT = getCreateNftContract(chain, contractType);
 
                     let res: any;

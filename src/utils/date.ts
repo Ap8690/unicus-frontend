@@ -14,9 +14,7 @@ const monthNames = [
   "Nov",
   "Dec",
 ]
-
 const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-
 export const getDate = (newDate:any) => {
   return (
       new Date(newDate).getDate() +

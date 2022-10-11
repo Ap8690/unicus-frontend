@@ -3,7 +3,6 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import toast from "react-hot-toast";
-
 import {
     connectNear,
     connToCoinbase,
@@ -117,7 +116,6 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data.token;
                     message = data.message;
                     walletNetwork = "Tron";
-                    // setChain(tronChain)
                     break;
                 }
                 case "sol": {
@@ -139,7 +137,6 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data?.token;
                     message = data?.message;
                     walletNetwork = "Solana";
-                    // setChain(solonaChain)
                     break;
                 }
                 case "near": {
@@ -149,7 +146,6 @@ export const WalletConnectionProvider = ({ children }) => {
                     token = data.token;
                     message = data.message;
                     localStorage.setItem("wallet", "Sender");
-                    // setChain(nearChain)
                     break;
                 }
             }
@@ -191,15 +187,13 @@ export const WalletConnectionProvider = ({ children }) => {
                     walletChain = "Solana";
                 }
                 // Wallet name is stored
-                localStorage.setItem(
-                    "walletChain",
-                    getChainName(localStorage.getItem("CHAIN"))
-                );
+                localStorage.setItem("walletChain",getChainName(localStorage.getItem("CHAIN")));
                 // Address of wallet
                 setChainConnected(getChainName(localStorage.getItem("CHAIN")));
                 setFullLoading(false);
                 setWalletModal(false);
                 setShowChains(false);
+                console.log("getChainName(localStorage.getItem(): ", getChainName(localStorage.getItem("CHAIN")));
                 setChain(getChainName(localStorage.getItem("CHAIN")));
                 if (sessionStorage.getItem("redirect_after_login")) {
                     navigate(sessionStorage.getItem("redirect_after_login"));
@@ -235,6 +229,7 @@ export const WalletConnectionProvider = ({ children }) => {
             domain: cookieDomain,
             expires: 30,
         });
+        Cookies.remove("Chain_Environment")
         setChainConnected("");
         navigate("/");
         window.location.reload();

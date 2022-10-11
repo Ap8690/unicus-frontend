@@ -70,6 +70,7 @@ const Explore = () => {
     const fetchItems = async () => {
         if (skiploading) {
             setLoading(true);
+            console.log("fetch items chain: ", chain); 
             getMarketplaceNfts(skip, getChainId(chain), sortBy, filter.toLowerCase())
                 .then((res: any) => {
                     setDisplayItems(res.data.data);
@@ -135,6 +136,7 @@ const Explore = () => {
         }
 
         if (chain !== "" && !searchQuery) {
+            
             navigate(`/explore/${chain}`);
         }
         if(searchQuery) {

@@ -205,7 +205,6 @@ const NftInfo = ({
             });
 
             let order = await program.account.order.fetch(orderAccount);
-            console.log("Create Order Success!", order);
 
             return order.mintKey;
         } catch (err) {
@@ -285,7 +284,6 @@ const NftInfo = ({
             });
 
             let auction = await program.account.auction.fetch(auctionAccount);
-            console.log("Create Auction Success!", auction);
 
             return auction.mintKey;
         } catch (err) {
@@ -366,16 +364,6 @@ const NftInfo = ({
 
             const signature = await sendTransaction(tx, connection);
             const latestBlockhash = await connection.getLatestBlockhash();
-
-            console.log(
-                {
-                    blockhash: latestBlockhash.blockhash,
-                    lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-                    signature: signature,
-                },
-                "connection"
-            );
-
             await connection.confirmTransaction({
                 blockhash: latestBlockhash.blockhash,
                 lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,

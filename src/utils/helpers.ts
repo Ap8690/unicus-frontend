@@ -35,10 +35,7 @@ export async function initContract() {
 }
 
 export async function initNear(accessKey: any) {
-    console.log(
-        { keyStores, connect, transactions, WalletConnection },
-        "mearfkdjfj"
-    );
+    
     const config = {
         networkId: "testnet",
         keyStore: new keyStores.BrowserLocalStorageKeyStore(),
@@ -57,8 +54,6 @@ export async function initNear(accessKey: any) {
     await keyStore.setKey('testnet', accountId, keyPair);
     const near = await nearAPI.connect(Object.assign({ deps: { keyStore } }, config));
     const walletConnection = new WalletConnection(near, "unicus");
-
-
     return { config, walletConnection, keyStore, networkId: config.networkId };
 }
 

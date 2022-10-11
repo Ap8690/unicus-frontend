@@ -702,6 +702,7 @@ export const disConnectWallet = async () => {
         domain: cookieDomain,
         expires: 30,
     });
+    Cookies.remove("Chain_Environment")
     // walletConnectorProvider.disconnect();
     walletLink.disconnect();
     if (localStorage.getItem("chainName") === "near") {
@@ -739,7 +740,6 @@ export const getNftContractAddress = (nft: any) => {
     }
 };
 export const getChainSymbol = (chain: any) => {
-    console.log("chain: ", chain,bscChain());
     if (chain) {
         return chains[chain.toString()].chainSymbol;
     }
@@ -747,11 +747,14 @@ export const getChainSymbol = (chain: any) => {
 
 // Returns CHAIN ID
 export const getChainId = (chain: any) => {
-    console.log("chain: ", chain);
+    const chainType = Cookies.get("Chain_Environment")
     for(const item in chains){
-        if(chains[item].chainName === chain){
-            console.log(chains[item].chainId,"fipudshfjdsbf")
+        console.log(chainType, chains[item].chainType,"kdshfdsbfiu")
+        if(chainType === chains[item].chainType &&  chains[item].chainName === chain){
           return chains[item].chainId
+        }
+        if(chains[item].chainName === chain){
+            return chains[item].chainId
         }
     }
 };
@@ -777,7 +780,6 @@ export const getAuctionABI = () => {
     return auctionAbiE;
 };
 export const getCreateNftContractAddress = (chain: any, contractType: any) => {
-    console.log(chain,"chain that is activated!")
     if (chain) {
         switch (chain.toString()) {
             // case ethChain():
@@ -1035,8 +1037,6 @@ export const getStoreName = () => {
 };
 
 export const isMainStore = () => {
-    // //console.log("UNICUS_STORE: ", UNICUS_STORE);
-    // //console.log("window.location.host: ", window.location.host);
     return (window.location.host === UNICUS_STORE);
 };
 export interface WalletsPopupProps {

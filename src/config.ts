@@ -10,13 +10,13 @@ import nearLogo from "./assets/blockchain-logo/nearLogo.svg";
 import avalancheLogo from "./assets/blockchain-logo/avalancheLogo.svg";
 
 export const env_uri: any = () => {
-    if(Cookies.get("Chain_Environment") === 'prod') return true
+    if(Cookies.get("Chain_Environment") === 'mainnet') return true
     return false
 };
 
 export const BASE_URL: string | undefined =
     process.env.REACT_APP_ENV.trim() === "local"
-        ? "https://unicus-storefront-backend.herokuapp.com"
+        ? "http://localhost:4000"
         : process.env.REACT_APP_ENV.trim() === "development"
         ? "https://unicus-storefront-backend-test.herokuapp.com"
         : process.env.REACT_APP_ENV.trim() === "staging"
@@ -42,7 +42,7 @@ export const shardeumChain: any =
     () => env_uri() ? "8080" : "8080";
 export const telosChain: any =
     () => env_uri() ? "40" : "41";
-
+ 
 export const chains:any = {
     // Mainnet
     '56': {
@@ -54,7 +54,8 @@ export const chains:any = {
         },
         chainSymbol :"BSC",
         chainName: "binance",
-        chainLogo: binanceLogo
+        chainLogo: binanceLogo,
+        chainType: "mainnet"
     },
     '1': {
         chainId:'1',
@@ -65,7 +66,8 @@ export const chains:any = {
         },
         chainSymbol :"ETH",
         chainName: "ethereum",
-        chainLogo: ethereumLogo
+        chainLogo: ethereumLogo,
+        chainType: "mainnet"
     },
     '137': {
         chainId:'137',
@@ -76,7 +78,8 @@ export const chains:any = {
         },
         chainSymbol :"MATIC",
         chainName: "polygon",
-        chainLogo: ploygonLogo
+        chainLogo: ploygonLogo,
+        chainType: "mainnet"
     },
     '97': {
         chainId:'97',
@@ -87,7 +90,8 @@ export const chains:any = {
         },
         chainSymbol :"BSC",
         chainName: "binance",
-        chainLogo: binanceLogo
+        chainLogo: binanceLogo,
+        chainType: "testnet"
     },
     '4': {
         chainId:'4',
@@ -98,7 +102,8 @@ export const chains:any = {
         },
         chainSymbol :"ETH",
         chainName: "ethruem",
-        chainLogo: ethereumLogo
+        chainLogo: ethereumLogo,
+        chainType: "testnet"
     },
     '80001': {
         chainId:'8001',
@@ -109,7 +114,8 @@ export const chains:any = {
         },
         chainSymbol :"MATIC",
         chainName: "polygon",
-        chainLogo: ploygonLogo
+        chainLogo: ploygonLogo,
+        chainType: "testnet"
     },
     '43113': {
         chainId:'43113',
@@ -120,7 +126,8 @@ export const chains:any = {
         },
         chainSymbol :"AVAX",
         chainName: "avalanche",
-        chainLogo: avalancheLogo
+        chainLogo: avalancheLogo,
+        chainType: "testnet"
     },
     '43114': {
         chainId:'43114',
@@ -131,7 +138,8 @@ export const chains:any = {
         },
         chainSymbol :"AVAX",
         chainName: "avalanche",
-        chainLogo: avalancheLogo
+        chainLogo: avalancheLogo,
+        chainType: "mainnet"
     },
     '41':{
         chainId:'41',
@@ -142,7 +150,8 @@ export const chains:any = {
         },
         chainSymbol :"TLOS",
         chainName: "telos",
-        chainLogo: telosLogo
+        chainLogo: telosLogo,
+        chainType: "testnet"
     },
     '40':{
         chainId:'40',
@@ -153,7 +162,8 @@ export const chains:any = {
         },
         chainSymbol :"TLOS",
         chainName: "telos",
-        chainLogo: telosLogo
+        chainLogo: telosLogo,
+        chainType: "mainnet"
     },
     '8080': {
         chainId:'56',
@@ -164,7 +174,8 @@ export const chains:any = {
         },
         chainSymbol :"SHM",
         chainName: "shardeum",
-        chainLogo: shardumLogo
+        chainLogo: shardumLogo,
+        chainType: "testnet"
     },
     '8700': {
         chainId:'8700',
@@ -175,7 +186,8 @@ export const chains:any = {
         },
         chainSymbol :"TRX",
         chainName: "tron",
-        chainLogo: tronLogo
+        chainLogo: tronLogo,
+        chainType: "mainnet"
     },
     '8766': {
         chainId:'8766',
@@ -186,7 +198,8 @@ export const chains:any = {
         },
         chainSymbol :"TRX",
         chainName: "tron",
-        chainLogo: tronLogo
+        chainLogo: tronLogo,
+        chainType: "testnet"
     },
     '6700': {
         chainId:'6700',
@@ -197,7 +210,8 @@ export const chains:any = {
         },
         chainSymbol :"SOL",
         chainName: "solana",
-        chainLogo: solanaLogo
+        chainLogo: solanaLogo,
+        chainType: "mainnet"
     },
     '6766': {
         chainId:'6766',
@@ -208,7 +222,8 @@ export const chains:any = {
         },
         chainSymbol :"SOL",
         chainName: "solana",
-        chainLogo: solanaLogo
+        chainLogo: solanaLogo,
+        chainType: "testnet"
     },
     '7700': {
         chainId:'7700',
@@ -219,7 +234,8 @@ export const chains:any = {
         },
         chainSymbol :"NEAR",
         chainName: "near",
-        chainLogo: nearLogo
+        chainLogo: nearLogo,
+        chainType: "mainnet"
     },
     "7766": {
         chainId:'7766',
@@ -230,9 +246,10 @@ export const chains:any = {
         },
         chainSymbol :"NEAR",
         chainName: "near",
-        chainLogo: nearLogo
+        chainLogo: nearLogo,
+        chainType: "testnet"
     },
-    "0": {
+    "all": {
         chainId:'0',
         contracts : {
             mintContract: "0x",

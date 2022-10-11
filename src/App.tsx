@@ -148,7 +148,9 @@ const App = () => {
                         <ScrollToTop />
                         <Routes>
                             {isMainStore() ? (
-                                <Route path="/home" element={<Homepage />} />
+                                // <Route path="/home" element={<Homepage />} />
+                                <Route path="/home" element={<MarketPlace />} />
+
                             ) : (
                                 <Route
                                     path="/home"

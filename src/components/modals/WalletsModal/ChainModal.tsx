@@ -119,28 +119,24 @@ const alertBox = {
 };
 
 const ChainModal = ({ open, setOpen, setWalletModal, setShowCategory }) => {
-    const { chain, setChain } = useContext(ChainContext);
-    const [tabValue, setTabValue] = useState<any>("mainnet");
+    const { chain, setChain,chainEnvironment, setChainEnvironment } = useContext(ChainContext);
     const handleClose = () => {
         setOpen(false);
     };
     const { setVisible } = useWalletModal();
     const handleChain = (chain: any) => {
-        console.log("ksdfhdsohf")
         setOpen(false);
         setShowCategory(true);
-        console.log(chain,"to  connect")
         chain = getChainId(chain?.toLowerCase());
-        console.log(chain,"dsfhjdsb")
         localStorage.setItem("CHAIN", chain);
     };
     const handleTabChange = (event: React.SyntheticEvent, newValue: any) => {
-        Cookies.set('Chain_Environment',newValue === 'testnet' ? 'demo': 'prod')
-        setTabValue(newValue);
+        Cookies.set('Chain_Environment',newValue)
+        setChainEnvironment(newValue);
     };
     useEffect(() => {
-        if(!Cookies.get('Chain_Environment')) Cookies.set('Chain_Environment','prod')
-    })
+        if(!Cookies.get('Chain_Environment')) Cookies.set('Chain_Environment','mainnet')
+    },[])
     return (
         <Dialog
             onClose={handleClose}
@@ -159,13 +155,13 @@ const ChainModal = ({ open, setOpen, setWalletModal, setShowCategory }) => {
                     tab1={"Mainnet"}
                     tab2={"Testnet"}
                     handleTabChange={handleTabChange}
-                    tabValue={tabValue}
+                    tabValue={chainEnvironment}
                     tab1data={<Mainnet handleChain={handleChain} />}
                     tab2data={<Testnet handleChain={handleChain} />}
                 />
 
                 <Alert sx={alertBox} severity="info">
-                    You will be exploring assets on the {tabValue} chain you are selecting
+                    You will be exploring assets on the {chainEnvironment} chain you are selecting
                     right now.
                 </Alert>
             </div>

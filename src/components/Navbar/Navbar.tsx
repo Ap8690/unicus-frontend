@@ -23,7 +23,7 @@ import ChainLogo from "../../components/ChainLogo/ChainLogo";
 
 const Navbar = ({ store }) => {
     const [search, setSearch] = useState("");
-    const { chain, setChain, showChains, setShowChains, setShowCategory } =
+    const { chain,  showChains, setShowChains, setShowCategory } =
         useContext(ChainContext);
     const location = useLocation();
     const navigate = useNavigate();
@@ -37,15 +37,6 @@ const Navbar = ({ store }) => {
     const openChains = Boolean(anchorChains);
     const accessToken = Cookies.get(ACCESS_TOKEN);
 
-    const handleCloseChains = (chain: any) => {
-        setAnchorChains(null);
-        if (chain !== "") {
-            setChain(chain);
-            toast.dismiss();
-            if (chain !== "all")
-                toast.success(`You are on ${capitalize(chain)} network`);
-        }
-    };
 
     const handleGlobalSearch = (e: any) => {
         e.preventDefault();
