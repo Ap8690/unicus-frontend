@@ -25,8 +25,8 @@ export const ChainProvider = ({ children }) => {
 
     useEffect(() => {
         if (localStorage.getItem("walletChain")) {
-            if (getChainName(localStorage.getItem("walletChain")))
-                setChain(getChainName(localStorage.getItem("walletChain")));
+            console.log("HERE",localStorage.getItem("walletChain"),getChainName(localStorage.getItem("walletChain")))
+                setChain((localStorage.getItem("walletChain")));
         }
         console.log("chain id: ", chain);
     }, [localStorage.getItem("walletChain"),chain]);

@@ -73,10 +73,9 @@ const Explore = () => {
     const fetchItems = async () => {
         if (skiploading) {
             setLoading(true);
-            console.log("fetch items chain: ", chain);
             getMarketplaceNfts(
                 skip,
-                getChainId(chain),
+                localStorage.getItem('CHAIN') ? localStorage.getItem('CHAIN') : getChainId(chain),
                 sortBy,
                 filter.toLowerCase()
             )
@@ -85,6 +84,7 @@ const Explore = () => {
                         setDisplayItems([...displayElements ,...res.data.data]);
                     }
                     else setDisplayItems(res.data.data);
+                    console.log("res.data.data: ", res.data.data.length,res.data?.totalAuctions);
                     setTotalAssets(res.data?.totalAuctions)
                     setLoading(false);
                     setskip((prevState) => prevState + 30)
@@ -98,9 +98,7 @@ const Explore = () => {
                 });
         }
     };
-    useEffect(() => {
-        console.log('skiipi',skip)
-    },[skip])
+    
     const verifyEmail = async (token: string, email: string) => {
         const res = await verifyEmailApi(token, email);
         Cookies.set(ACCESS_TOKEN, res.data.accessToken, {
@@ -132,9 +130,7 @@ const Explore = () => {
         fetchItems();
         document.body.scrollTop = 0;
     }, [filter, chain]);
-    useEffect(() => {
-        console.log("totalAssets",totalAssets)
-    },[totalAssets])
+    
     useEffect(() => {
         if (
             location.pathname.includes("/login") &&
@@ -206,14 +202,25 @@ const Explore = () => {
                 setCurrentFilter={setFilter}
                 currentFilter={filter}
             />
+            {
+                loading && displayElements.length === 0 && <NftSkeletonLoader />
+            }
             <InfiniteScroll
                 dataLength={displayElements.length}
                 next={fetchItems}
-                hasMore={totalAssets >= displayElements.length}
+                hasMore={totalAssets > displayElements.length}
                 loader={<NftSkeletonLoader />}
+                endMessage={
+                    <p className="mt-10 text-center">
+                      <b></b>
+                    </p>
+                  }
             >
                 <ExploreElements elements={displayElements} />
             </InfiniteScroll>
+          {
+            !loading && displayElements.length === 0 && <NotFound/>
+          }
         </section>
     );
 };
