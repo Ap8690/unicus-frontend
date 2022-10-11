@@ -391,6 +391,7 @@ const chainParams = {
 };
 export const SwitchNetwork = async (network: any) => {
     try {
+        console.log("network: ", network);
         const metaMaskProvider: any = await getMetamaskProvider();
         return await metaMaskProvider.request({
             method: "wallet_switchEthereumChain",
@@ -749,11 +750,11 @@ export const getChainSymbol = (chain: any) => {
 export const getChainId = (chain: any) => {
     const chainType = Cookies.get("Chain_Environment")
     for(const item in chains){
-        console.log(chainType, chains[item].chainType,"kdshfdsbfiu")
-        if(chainType === chains[item].chainType &&  chains[item].chainName === chain){
+        
+        if(chainType === chains[item].chainType && chains[item].chainName === chain){
           return chains[item].chainId
         }
-        if(chains[item].chainName === chain){
+        if(chains[item].chainName === 'all'){
             return chains[item].chainId
         }
     }

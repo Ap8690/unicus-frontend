@@ -16,7 +16,7 @@ export const env_uri: any = () => {
 
 export const BASE_URL: string | undefined =
     process.env.REACT_APP_ENV.trim() === "local"
-        ? "http://localhost:4000"
+        ? "https://unicus-storefront-backend.herokuapp.com"
         : process.env.REACT_APP_ENV.trim() === "development"
         ? "https://unicus-storefront-backend-test.herokuapp.com"
         : process.env.REACT_APP_ENV.trim() === "staging"
@@ -101,12 +101,12 @@ export const chains:any = {
             auctionContract: "0xc90Ae164BCdD963352374DFD22d209Ca0C368444"
         },
         chainSymbol :"ETH",
-        chainName: "ethruem",
+        chainName: "ethereum",
         chainLogo: ethereumLogo,
         chainType: "testnet"
     },
     '80001': {
-        chainId:'8001',
+        chainId:'80001',
         contracts : {
             mintContract: "0x9fd3F105c9ce43FcF8B337Bf2EaF4fD30fFe49C5",
             marketContract: "0x0f4C92F0C4d8eb8650a73a1c02116570227268e8",
