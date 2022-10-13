@@ -304,6 +304,9 @@ export async function getCollectionsByUser(limit:any,skip:any) {
     axiosConfig()
   );
 }
+export async function getallCollections(limit:any, skip: any) {
+  return await axios.get(`${BASE_URL}/nft/getallCollections/${limit}/${skip}`, axiosConfig())
+}
 export async function getNftByCollection(collection: string,limit:any, skip: any) {
   return await axios.get(
     `${BASE_URL}/nft/getNftByCollections/${collection}/${limit}/${skip}`,
