@@ -8,7 +8,7 @@
     .title{
         // margin-top: 1.5rem;
         font-weight: 500;
-        margin-bottom: 1rem;
+        margin-bottom: 0.25rem;
     }
     .required{
         color: colors.$color-purple-2 !important;
@@ -32,7 +32,7 @@
         border: none;
         border-bottom: 1px solid rgba($color: #fff, $alpha: 0.3);
         // border-radius: 10px;
-        padding: 0.75rem 0;
+        padding: 0.5rem 0;
         font-family: fonts.$font-rubik;        
         &:focus{
             outline: rgba($color: #fff, $alpha: .3);
@@ -51,6 +51,9 @@
         &:focus{
             outline: rgba($color: #fff, $alpha: .3);
         }
+    }
+    .css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input{
+        color: #fff;
     }
 }
 

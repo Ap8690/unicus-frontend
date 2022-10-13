@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "0xsequence": "^0.40.6",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
@@ -33,7 +34,6 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-select-country-list": "^2.2.0",
     "@walletconnect/web3-provider": "^1.7.8",
-    "0xsequence": "^0.40.6",
     "axios": "^0.27.2",
     "bs58": "^5.0.0",
     "dayjs": "^1.11.5",
@@ -54,6 +54,7 @@
     "react-datetime-picker": "^4.0.0",
     "react-dom": "^18.1.0",
     "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.37.0",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.4.0",
     "react-infinite-scroll-component": "^6.1.0",

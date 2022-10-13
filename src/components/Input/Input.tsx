@@ -20,10 +20,10 @@ const Input = (props:any) => {
   return (
     <div className="input-box">
       {props.title && (
-        <span className="title">
+        <label className="title">
           {props.title}
           {props.required && <span className="required"> *</span>}
-        </span>
+        </label>
       )}
       {props.time ? (
         <input type="time" onChange={props.customChange ? props.customChange : handleChange} value={props.state} maxLength={props.maxLength ? props.maxLength : ''} />
