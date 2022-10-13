@@ -88,7 +88,7 @@ const ViewNft = () => {
                             />
                         )}
                     </div>
-                    {nft && nft?.collectionName && (
+                    {false && nft && nft?.collectionName && (
                         <div className="nft bottom-grid">
                             <span className="collection-more">More from {nft?.collectionName}</span>
                             <div className='grid sm:grid-cols-4 grid-cols-1'>
