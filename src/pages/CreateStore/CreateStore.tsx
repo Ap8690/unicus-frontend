@@ -112,7 +112,7 @@ const CreateStoreForm = ({ loading, setLoading }): ReactJSXElement => {
                     toast("Redirecting to your store")
                     setLoading(false)
                     window.open(redirectUrl,'_blank')
-                    navigate("/home")
+                    navigate("/marketplace")
                 }, 1000)
             } else {
                 throw new Error("Store creation failed!")

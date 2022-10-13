@@ -34,7 +34,7 @@ const Register = () => {
           //     domain: "unicus.one",
           // })
           toast("Registration Successful. Please Verify the mail");
-          navigate("/home", { replace: true });
+          navigate("/marketplace", { replace: true });
         })
         .catch((err) => {
           //console.log(err.response.data);

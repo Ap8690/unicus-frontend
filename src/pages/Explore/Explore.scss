@@ -10,11 +10,11 @@
   // padding-bottom: 25rem;
 
   .explore-heading {
-    font-weight: 600;
-    font-size: fonts.$font-size-5xl;
-    background: colors.$gradient-blue;
-    background-clip: text;
-    color: transparent;
+    font-weight: 600 !important;
+    font-size: fonts.$font-size-5xl !important;
+    background: colors.$gradient-blue !important;
+    background-clip: text !important;
+    color: transparent !important;
   }
   .bottom-filter-border{
     // left: 0;

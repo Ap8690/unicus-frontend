@@ -49,7 +49,7 @@ const Login = ({}) => {
                     //     domain: "unicus.one",
                     // })
                     toast.success("Login successful")
-                    navigate("/home", {replace:true})
+                    navigate("/marketplace", {replace:true})
                 })
                 .catch((err) => {
                     //console.log(err.response.data);

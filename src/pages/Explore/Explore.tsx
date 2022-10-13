@@ -1,13 +1,10 @@
 // Lib
 import { useContext, useEffect, useState } from "react";
-
 // Images
 import elementImage from "../../assets/images/createselector1.png";
 import creatorImage from "../../assets/images/token.png";
-
 // SASS
 import "./Explore.scss";
-
 // Components
 import ExploreFilters from "./ExploreFilters";
 import ExploreElements from "./ExploreElements";
@@ -66,13 +63,14 @@ const Explore = () => {
     const [ResetPasswordPopUpShow, setResetPasswordPopUpShow] =
         useState<any>(false);
 
-    const [totalAssets,setTotalAssets] = useState<any>(0)
+    const [totalAssets,setTotalAssets] = useState<any>(1)
     const location = useLocation();
     const navigate = useNavigate();
 
     const fetchItems = async () => {
         if (skiploading) {
             setLoading(true);
+            // if(filter.toLowerCase() === 'all') {}
             getMarketplaceNfts(
                 skip,
                 localStorage.getItem('CHAIN') ? localStorage.getItem('CHAIN') : getChainId(chain),
@@ -110,7 +108,7 @@ const Explore = () => {
             expires: 30,
         });
         localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-        navigate("/home", { replace: true });
+        navigate("/marketplace", { replace: true });
     };
     // window.addEventListener("scroll", async function () {
     //     var root: any;
@@ -210,7 +208,7 @@ const Explore = () => {
                 next={fetchItems}
                 hasMore={totalAssets > displayElements.length}
                 loader={<NftSkeletonLoader />}
-                endMessage={
+                endMessage={ 
                     <p className="mt-10 text-center">
                       <b></b>
                     </p>
@@ -219,7 +217,7 @@ const Explore = () => {
                 <ExploreElements elements={displayElements} />
             </InfiniteScroll>
           {
-            !loading && displayElements.length === 0 && <NotFound/>
+            !loading && totalAssets === 0 && <NotFound/>
           }
         </section>
     );

@@ -67,6 +67,7 @@ const NavMenu = ({
             ) : (
                 <div className="nav-links main">
                     <NestedMenu chain={chain} />
+                    
                     {!getUserInfo() ? (
                         <button
                             onClick={() => setShowChains(!showChains)}

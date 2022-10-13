@@ -92,9 +92,10 @@ const Navbar = ({ store }) => {
                 handleGlobalSearch={handleGlobalSearch}
                 handleRedirectToTokenzie={handleRedirectToTokenzie}
             />
+            
             <nav className={solidNav ? "solid-nav" : ""}>
                 <div className={`navbar`}>
-                    <Link to={"/home"} className="brand-link">
+                    <Link to={"/marketplace"} className="brand-link">
                         <img
                             src={unicusLogo}
                             className={
@@ -114,8 +115,10 @@ const Navbar = ({ store }) => {
                             />
                         </div>
                     )}
+                    
                     <div className="nav-menu-icons">
                         <ChainLogo />
+                        
                         <ProfileButton
                             accessToken={accessToken}
                             store={store}
@@ -151,6 +154,7 @@ const Navbar = ({ store }) => {
                     ) : (
                         <div className="nav-links">
                             <NestedMenu chain={chain} />
+                            <Link to='/collections'>Collections</Link>
                             {!getUserInfo() ? (
                                 <button
                                     onClick={handleRedirectToTokenzie}
@@ -252,11 +256,11 @@ const ProfileButton = ({
                         My Assets
                     </Link>
                 </MenuItem>
-                <MenuItem onClick={handleCloseProfile}>
+                {/* <MenuItem onClick={handleCloseProfile}>
                     <Link to={"/profile/listing"} className="menu-link">
                         My Listings
                     </Link>
-                </MenuItem>
+                </MenuItem> */}
                 {isMainStore() && store && Object.keys(store).length !== 0 ? (
                     <MenuItem onClick={handleCloseProfile}>
                         <a

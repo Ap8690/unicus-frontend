@@ -11,7 +11,7 @@ const NotFound = () => {
 			</div>
 			{/* <h2>Page not found</h2> */}
 			{/* <p>The page you are looking for might have been removed had its name changed or is temporarily unavailable.</p> */}
-			<Link className='btn' to="/home">Go To Homepage</Link>
+			<Link className='btn' to="/marketplace">Go To Homepage</Link>
 		</div>
 	</div>
   )

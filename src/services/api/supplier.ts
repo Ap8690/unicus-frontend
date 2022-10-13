@@ -298,15 +298,15 @@ export async function updateProfileBg(formData: any) {
     axiosConfig()
   );
 }
-export async function getCollectionsByUser() {
+export async function getCollectionsByUser(limit:any,skip:any) {
   return await axios.post(
-    `${BASE_URL}/nft/getCollectionsByUser`,
+    `${BASE_URL}/nft/getCollectionsByUser/:limit/:skip`,
     axiosConfig()
   );
 }
-export async function getNftByCollection(collection: string) {
+export async function getNftByCollection(collection: string,limit:any, skip: any) {
   return await axios.get(
-    `${BASE_URL}/nft/getNftByCollections/${collection}`,
+    `${BASE_URL}/nft/getNftByCollections/${collection}/${limit}/${skip}`,
     axiosConfig()
   );
 }

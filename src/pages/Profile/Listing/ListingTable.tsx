@@ -82,13 +82,18 @@ const TableData = ({ activity, link }) => {
                     <td className="table-data-exp">
                         {getChainSymbol(activity.chain)}
                     </td>
+                    {activity?.nftStatus == 1 ? 
                     <td>
                         {activity?.uploadedBy &&
                         activity?.uploadedBy ===
                             JSON.parse(localStorage.getItem("userInfo"))?._id
                             ? "Minted"
                             : "Purchased"}
-                    </td>
+                    </td> : <td>
+                        {activity?.nftStatus == 2 ?
+                            "On Sale"  : activity?.nftStatus == 3 && 'On Auction'
+                        }
+                    </td>}
                     <td className="table-data-exp">
                         {activity?.createdAt &&
                             getSimpleDate(activity.createdAt)}

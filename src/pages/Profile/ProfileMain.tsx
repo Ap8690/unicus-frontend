@@ -37,7 +37,7 @@ const Profile = (): ReactJSXElement => {
         // { name: "Collected", image: profileCollected, add: "5" },
         { name: "Created", image: profileCreated, add: "" },
         // { name: "Favourited", image: profileFavourited, add: "6" },
-        { name: "Listing", image: profileListing, add: "" },
+        // { name: "Listing", image: profileListing, add: "" },
         { name: "Offers", image: profileOffers, add: "" },
     ];
     // Index of current element

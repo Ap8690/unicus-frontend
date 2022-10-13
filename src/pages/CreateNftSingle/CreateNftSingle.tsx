@@ -16,6 +16,8 @@ import AddProperties from "../../components/modals/Add Properties/AddProperties"
 import axios from "axios";
 import toast from 'react-hot-toast';
 import {AssetCategory} from "../../utils/AssetCategory"
+import SuccessModal from "../../components/modals/Status/SuccessModal"
+import {useModal} from 'mui-modal-provider';
 
 import {
     tronChain,
@@ -101,7 +103,6 @@ const CreateNftSingle = () => {
     const [nftLoading, setNftLoading] = useState<boolean>(false);
     const [MetamaskNotFound, setMetamaskNotFound] = useState(false);
     const [defaultErrorModal, setdefaultErrorModal] = useState<any>(false);
-    const [defaultErrorMessage, setdefaultErrorMessage] = useState<any>("");
     const inputFile = useRef(null);
     const navigate = useNavigate();
     const { fullLoading } = useContext(ConnectWalletContext);
@@ -136,7 +137,7 @@ const CreateNftSingle = () => {
             total: "",
         },
     ]);
-
+    const { showModal } = useModal();
     const propDescription = {
         properties:
             "Properties show up underneath your item, are clickable, and can be filtered in your collection's sidebar.",
@@ -174,7 +175,7 @@ const CreateNftSingle = () => {
         setFileSrc(e.target.files[0]);
         try {
             const im = await getBase64(e.target.files[0]);
-            localStorage.setItem("fileSrc", JSON.stringify(im));
+            // localStorage.setItem("fileSrc", JSON.stringify(im));
         } catch (err) {
             console.log(err);
         }
@@ -428,9 +429,35 @@ const CreateNftSingle = () => {
 
             try {
                 toast.success("Uploading the metadata...");
-                const response: any = await uploadToPinata(formData);
+                let user = userInfo;
+                if (!user) {
+                    user = JSON.parse(localStorage.getItem("userInfo"));
+                }
+                if(!fileSrc) {
+                    setNftLoading(false);
+                    toast.dismiss()
+                    return toast.error("Please upload your asset file!")
+                }
+                let nftObj:any = new FormData();
+                nftObj.append('name',name)
+                nftObj.append('royalty',royalty)
+                nftObj.append('description',description)
+                nftObj.append('category',category)
+                nftObj.append('nftType',fileSrc?.type)
+                nftObj.append('chain',chain)
+                nftObj.append('contractAddress',contractAddress)
+                nftObj.append('owner',user._id)
+                nftObj.append('uploadedBy',user._id)
+                nftObj.append('mintedBy',user._id)
+                nftObj.append('mintedInfo',user.username)
+                nftObj.append('userInfo',user.username)
+                nftObj.append('image',fileSrc)
+                nftObj.append('tags',JSON.stringify(properties))
+                nftObj.append('collectionName',collection)
+                nftObj.append("attributes", JSON.stringify(properties))
+                const response: any = await uploadToPinata(nftObj);
                 if (!response) {
-                    setdefaultErrorMessage("Network Error");
+                    toast.error("Pinata: Network Error");
                     return;
                 }
                 var tokenHash = response.data;
@@ -444,28 +471,10 @@ const CreateNftSingle = () => {
                     imageUrl = val.data.image;
                 });
                 toast.success("Metadata Uploaded...");
-                let user = userInfo;
-                if (!user) {
-                    user = JSON.parse(localStorage.getItem("userInfo"));
-                }
-
-                let nftObj:any = new FormData();
-                nftObj.append('name',name)
-                nftObj.append('royalty',royalty)
-                nftObj.append('description',description)
-                nftObj.append('category',category)
+                
                 nftObj.append('jsonIpfs',tokenUri)
-                nftObj.append('nftType',fileSrc.type)
-                nftObj.append('chain',chain)
-                nftObj.append('contractAddress',contractAddress)
-                nftObj.append('owner',user._id)
-                nftObj.append('uploadedBy',user._id)
-                nftObj.append('mintedBy',user._id)
-                nftObj.append('mintedInfo',user.username)
-                nftObj.append('userInfo',user.username)
-                nftObj.append('image',fileSrc)
-                nftObj.append('tags',JSON.stringify(properties))
-                nftObj.append('collectionName',collection)
+
+                
            
                 if (chain.toString() === nearChain()) {
                     const wallet = localStorage.getItem("wallet")
@@ -652,17 +661,12 @@ const CreateNftSingle = () => {
                     await createNft(nftObj);
                     toast.success("Asset Minted");
                     setNftLoading(false);
-                    navigate("/profile/created");
+                    navigate("/profile/created?");
                 }
             } catch (error) {
-                toast.error("Minting Failed");
+                toast.error("Minting Failed ",error.message);
                 console.log(error, error.message);
-                setdefaultErrorMessage(error);
                 setNftLoading(false);
-                toast.dismiss();
-                if (error.message) {
-                    setdefaultErrorMessage(error.message);
-                }
                 setdefaultErrorModal(true);
             }
         } catch (e) {
@@ -671,17 +675,7 @@ const CreateNftSingle = () => {
         }
         setNftLoading(false);
     };
-    const convertToFile = async () => {
-        try {
-            const file: any = await blobUrlToFile(
-                JSON.parse(localStorage.getItem("fileSrc")),
-                "newUpload"
-            );
-            setFileSrc(file);
-        } catch (err) {
-            console.log(err);
-        }
-    };
+
     useEffect(() => {
         if (localStorage.getItem("properties")) {
             setProperties(JSON.parse(localStorage.getItem("properties")));
@@ -801,7 +795,7 @@ const CreateNftSingle = () => {
                 />
             ))}
             {nftLoading || fullLoading ? (
-                <PageLoader info={'Keep Patience.. Your awesome track is being tokenised on Blockchain'}/>
+                <PageLoader info={`${AssetCategory[category.toLowerCase()].LoadingMessage}`}/>
             ) : (
                 <div className="create-nft-single-page">
                     <div className="head">
@@ -1042,16 +1036,12 @@ const CreateNftSingle = () => {
                                 <div className="nft-info">
                                     <div className="titles">
                                         <span>Name</span>
-                                        <span>Price</span>
-                                    </div>
-                                    <div className="info">
                                         <span>{name}</span>
-                                        <span>
-                                            {price} {getChainSymbol(chain)}
-                                        </span>
+                                        {/* <span>Price</span> */}
                                     </div>
+                                    
                                 </div>
-                                <div
+                                {/* <div
                                     className="btn-box hidden
               "
                                 >
@@ -1062,7 +1052,7 @@ const CreateNftSingle = () => {
                                         <FavoriteBorderIcon />
                                         27
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>}

@@ -50,11 +50,13 @@ import WalletsModal from "./components/modals/WalletsModal/WalletsModal";
 import CategoriesModal from "./components/modals/Categories/Categories";
 import InstalWallet from "./components/modals/InstallWallet/InstallWallet";
 import {UNICUS_STORE} from "./config";
+import ModalProvider from 'mui-modal-provider';
+import Collections from "./pages/Collections/Collections";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 const App = () => {
-    const { chain, showChains, setShowChains, showCategory, setShowCategory } =
+    const { showChains, setShowChains, showCategory, setShowCategory } =
         useContext(ChainContext);
     const {
         walletModal,
@@ -133,12 +135,13 @@ const App = () => {
     useEffect(() => {
         validateSession()
         if (location.pathname === "/") {
-            navigate("/home", { replace: true });
+            navigate("/marketplace", { replace: true });
         }
     }, []);
 
 
     return (
+        <ModalProvider>
         <WalletModalProvider>
             <UserProvider>
                 <TransactionProvider>
@@ -149,7 +152,7 @@ const App = () => {
                         <Routes>
                             {isMainStore() ? (
                                 // <Route path="/home" element={<Homepage />} />
-                                <Route path="/home" element={<MarketPlace />} />
+                                <Route path="/marketplace" element={<MarketPlace />} />
 
                             ) : (
                                 <Route
@@ -172,6 +175,7 @@ const App = () => {
                                 path="/create-nft"
                                 element={<CreateNftSingle />}
                             />
+                            <Route path="/collections" element={<Collections/>} />
                             <Route
                                 path="/create-nft/single-item"
                                 element={<CreateNftSingle />}
@@ -328,7 +332,7 @@ const App = () => {
                     <Toaster/>
                 </TransactionProvider>
             </UserProvider>
-        </WalletModalProvider>
+        </WalletModalProvider></ModalProvider>
     );
 };
 

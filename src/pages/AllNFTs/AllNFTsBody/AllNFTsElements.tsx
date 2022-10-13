@@ -5,16 +5,21 @@ import likes from "../../../assets/svgs/likes.svg";
 
 // Components
 export const AllNFTsElement = ({ element }) => {
+    console.log("element: ", element);
     return (
         <div className="all-nfts-element">
             <img
                 className="element-image"
-                src={image}
+                src={element?.cloudinaryUrl}
                 alt={element?.cloudinaryUrl}
             />
             <div className="info">
+            <div>
+                    <div>Asset</div>
+                    <div>{element?.name}</div>
+                </div>
                 <div>
-                    <div>Collection name</div>
+                    <div>Collection</div>
                     <div>{element?.collectionName}</div>
                 </div>
                 {(element?.nftStatus === 2 || element?.nftStatus === 3) && (

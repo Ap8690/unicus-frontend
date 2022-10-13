@@ -4,7 +4,7 @@ import { NestedMenuItem } from "mui-nested-menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {useNavigate} from "react-router-dom"
+import {useNavigate,Link} from "react-router-dom"
 import {UserContext} from "../../context/UserContext"
 
 const NestedMenu = ({chain}) => {
@@ -29,6 +29,7 @@ const NestedMenu = ({chain}) => {
             >
                 Explore <ExpandMoreIcon />
             </button>
+            
             <Menu anchorEl={anchorEl} open={open} onClose={() =>setAnchorEl(null)}>
             <MenuItem onClick={() =>handleClose('All')}>All NFTs</MenuItem>
                 <NestedMenuItem style={{paddingLeft: '8px'}} label="Collectibles" parentMenuOpen={open}>
@@ -40,10 +41,11 @@ const NestedMenu = ({chain}) => {
                     <MenuItem onClick={() =>handleClose(' Trading Cards')}>
                         Trading Cards
                     </MenuItem>
-                    <MenuItem onClick={() =>handleClose('Photography')}>Photography</MenuItem>
+                    
                 </NestedMenuItem>
                 <MenuItem onClick={() =>handleClose('Carbon Credits')}>Carbon Credits</MenuItem>
                 <MenuItem onClick={() =>handleClose('Real Estate')}>Real Estate</MenuItem>
+                <MenuItem onClick={() =>handleClose('Photography')}>Photography</MenuItem>
                 <MenuItem onClick={() =>handleClose('Financial Instruments')}>Financial Instruments</MenuItem>
                 <MenuItem onClick={() =>handleClose('Event Tickets')}>Event Tickets</MenuItem>
                 <MenuItem onClick={() =>handleClose('Metaverse')}>Metaverse</MenuItem>
