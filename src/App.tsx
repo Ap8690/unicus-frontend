@@ -53,6 +53,7 @@ import {UNICUS_STORE} from "./config";
 import ModalProvider from 'mui-modal-provider';
 import Collections from "./pages/Collections/Collections";
 import CreateCollection from "./pages/CreateCollection/CreateCollection";
+import CollectionPage from "./pages/CollectionPage/CollectionPage";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 
@@ -178,7 +179,7 @@ const App = () => {
                             />
                             <Route path="/collections" element={<Collections/>} />
                             <Route path="/create-collection" element={<CreateCollection/>} />
-                            <Route path="/collections/:id" element={<Collections/>} />
+                            <Route path="/collections/:id" element={<CollectionPage/>} />
                             <Route
                                 path="/create-nft/single-item"
                                 element={<CreateNftSingle />}

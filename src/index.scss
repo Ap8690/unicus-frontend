@@ -71,7 +71,12 @@ button {
   color: inherit;
   cursor: pointer;
 }
-
+.button-hover-link{
+  transition: all 0.3s ease;
+  &:hover{
+    box-shadow: 0 0 8px #a7a9fa;
+  }
+}
 .btn {
   border: none;
   border-radius: 10px;
@@ -96,6 +101,32 @@ button {
   &:hover {
     filter: brightness(125%);
     color: #fff !important;
+  }
+}
+.collection-page-filter{
+  &::after{
+    content: '';
+    position: absolute;
+    left: 2rem;
+    right: 2rem;
+    bottom: 0;
+    height: 2px;
+    background-color: #66666699;
+    z-index: 4;
+  }
+  .collection-page-filter-btn{
+    color: helper.$color-purple-1;
+    transition: all 0.3s ease;
+    &::after{
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background-color: helper.$color-purple-2;
+      z-index: 5;
+    }
   }
 }
 .large-btn {
@@ -151,8 +182,16 @@ a {
   border-radius: 10px !important;
 }
 
-.hidden {
+.hidden, .d-none {
   display: none;
+  @media screen and (max-width: 992px) {
+    display: block;
+  }
+}
+.d-vis{
+  @media screen and (max-width: 992px) {
+    display: none;
+  }
 }
 
 p {
