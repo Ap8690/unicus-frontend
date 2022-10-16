@@ -2154,6 +2154,9 @@ const NftInfo = ({
                     {activeFilter === "History" && (
                         <History data={historyData} />
                     )}
+                    {activeFilter === "Info" && (
+                        <NftInfo_ data={nft} />
+                    )}
 
                     {activeFilter === "Bids" && (
                         <Bids bids={bids} nftChain={nft?.chain} />
@@ -2270,6 +2273,24 @@ const History = ({ data }) => {
                     </div>
                 </div>
             ))}
+        </div>
+    );
+};
+const NftInfo_ = ({ data }) => {
+    return (
+        <div className="nft-history-box">
+            <div key={uuid()} className="nft-history">
+                    <div>
+                        <div className="msg">
+                            Supply: 
+                        </div>
+                        <div className="info">
+                        {data.quantity}
+                        </div>
+                        
+                    </div>
+                </div>
+           
         </div>
     );
 };

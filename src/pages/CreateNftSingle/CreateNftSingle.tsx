@@ -14,10 +14,10 @@ import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import AddProperties from "../../components/modals/Add Properties/AddProperties";
 import axios from "axios";
-import toast from 'react-hot-toast';
-import {AssetCategory} from "../../utils/AssetCategory"
-import SuccessModal from "../../components/modals/Status/SuccessModal"
-import {useModal} from 'mui-modal-provider';
+import toast from "react-hot-toast";
+import { AssetCategory } from "../../utils/AssetCategory";
+import SuccessModal from "../../components/modals/Status/SuccessModal";
+import { useModal } from "mui-modal-provider";
 
 import {
     tronChain,
@@ -68,7 +68,7 @@ import PageLoader from "../../components/Loading/PageLoader";
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
 import web3 from "../../web3";
-import {AssetList} from "../../utils/AssetList"
+import { AssetList } from "../../utils/AssetList";
 import SolMintNftIdl from "../../utils/sol_mint_nft.json";
 import validator from "validator";
 import { getBase64, blobUrlToFile } from "../../utils/imageConvert";
@@ -83,11 +83,13 @@ const CreateNftSingle = () => {
     const supportedVid = ["mp4", "webm"];
     const supportedAud = ["mp3", "wav", "ogg"];
     const supported3d = ["gltf, glb"];
+
+    const finSupported = [...supportedImg, ...supportedVid, ...supported3d]
     const [name, setName] = useState("");
     const [extLink, setExtlink] = useState("");
     const [description, setDescription] = useState("");
     // const [category, setCategory] = useState("art");
-    
+
     const [price, setPrice] = useState("0.00");
     const [chain, setChain] = useState(ethChain());
     const [contractType, setContractType] = useState("721");
@@ -103,10 +105,11 @@ const CreateNftSingle = () => {
     const [nftLoading, setNftLoading] = useState<boolean>(false);
     const [MetamaskNotFound, setMetamaskNotFound] = useState(false);
     const [defaultErrorModal, setdefaultErrorModal] = useState<any>(false);
+    const [nftQuantity, setNftQuantity] = useState(1);
     const inputFile = useRef(null);
     const navigate = useNavigate();
     const { fullLoading } = useContext(ConnectWalletContext);
-    const { category,setCategory } = useContext(ChainContext);
+    const { category, setCategory } = useContext(ChainContext);
     const { connection } = useConnection();
     const { sendTransaction } = useWallet();
     const anWallet = useAnchorWallet();
@@ -145,13 +148,9 @@ const CreateNftSingle = () => {
         stats: "Stats show up underneath your item, are clickable, and can be filtered in your collection's sidebar.",
     };
 
-    const handleCategoryChange = (event: any) => {
-        setCategory(event.target.value);
-    };
     const handleClickOpen = () => {
         setOpenProp(true);
     };
-
 
     const handleClose = (value: any) => {
         setOpenProp(false);
@@ -159,18 +158,15 @@ const CreateNftSingle = () => {
         setOpenLevels(false);
     };
 
-    const handleRoyaltyChange = (e: any) => {
-        if (e.target.value < 0 || e.target.value > 100) {
-            return;
-        }
-        setRoyalty(e.target.value);
-    };
-
     const uploadFile = async (e: any) => {
-        if(category.toLowerCase() === "music" && !supportedVid.includes(
-            e.target.files[0].name.split(".").pop()
-        )) {
-            return toast.error("Please upload supported file types only!")
+        if (
+            category.toLowerCase() === "music" &&
+            !supportedVid.includes(e.target.files[0].name.split(".").pop())
+        ) {
+            return toast.error("Please upload supported file types only!");
+        }
+        else if(!finSupported.includes(e.target.files[0].name.split(".").pop())) {
+            return toast.error("Please upload supported file types only!");
         }
         setFileSrc(e.target.files[0]);
         try {
@@ -186,7 +182,6 @@ const CreateNftSingle = () => {
         }
         return true;
     };
-    
 
     const {
         utils: {
@@ -312,40 +307,40 @@ const CreateNftSingle = () => {
         });
 
         const metadataAddress = await getMetadata(mintKey.publicKey);
-            const tx = program.transaction.mintNft(
-                mintKey.publicKey,
-                title,
-                description,
-                fileUrl, //metadatauri
-                {
-                    accounts: {
-                        mintAuthority: provider.wallet.publicKey,
-                        mint: mintKey.publicKey,
-                        tokenAccount: nftTokenAccount,
-                        tokenProgram: TOKEN_PROGRAM_ID,
-                        metadata: metadataAddress,
-                        tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
-                        payer: provider.wallet.publicKey,
-                        systemProgram: anchor.web3.SystemProgram.programId,
-                        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-                    },
-                }
-            );
+        const tx = program.transaction.mintNft(
+            mintKey.publicKey,
+            title,
+            description,
+            fileUrl, //metadatauri
+            {
+                accounts: {
+                    mintAuthority: provider.wallet.publicKey,
+                    mint: mintKey.publicKey,
+                    tokenAccount: nftTokenAccount,
+                    tokenProgram: TOKEN_PROGRAM_ID,
+                    metadata: metadataAddress,
+                    tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+                    payer: provider.wallet.publicKey,
+                    systemProgram: anchor.web3.SystemProgram.programId,
+                    rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+                },
+            }
+        );
 
-            signature = await sendTransaction(tx, connection);
-            latestBlockhash = await connection.getLatestBlockhash();
+        signature = await sendTransaction(tx, connection);
+        latestBlockhash = await connection.getLatestBlockhash();
 
-            await connection.confirmTransaction({
-                blockhash: latestBlockhash.blockhash,
-                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-                signature: signature,
-            });
-            // const metaplex = new Metaplex(connection);
-            //Fetch all nfts of by owner
-            //the returned Assets may be Metadatas
-            // const myNfts = await metaplex.nfts().findByMint(mintKey.publicKey)
-            //     .run();
-            return mintKey.publicKey.toBase58();
+        await connection.confirmTransaction({
+            blockhash: latestBlockhash.blockhash,
+            lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+            signature: signature,
+        });
+        // const metaplex = new Metaplex(connection);
+        //Fetch all nfts of by owner
+        //the returned Assets may be Metadatas
+        // const myNfts = await metaplex.nfts().findByMint(mintKey.publicKey)
+        //     .run();
+        return mintKey.publicKey.toBase58();
     };
     // NEAR Protocol Minting
     const mintAssetToNft = async (
@@ -400,10 +395,9 @@ const CreateNftSingle = () => {
                 return null;
             }
 
-            const wallet = localStorage.getItem('walletType')
-           
-        
-            let address = localStorage.getItem("walletConnected")
+            const wallet = localStorage.getItem("walletType");
+
+            let address = localStorage.getItem("walletConnected");
             if (!address) {
                 toast.error("Wallet connection failed");
                 return;
@@ -415,8 +409,8 @@ const CreateNftSingle = () => {
 
             setNftModalMessage("Uploading the metadata.");
             setNftLoading(true);
-            if(wallet === 'Metamask'){
-                await SwitchNetwork(chain)
+            if (wallet === "Metamask") {
+                await SwitchNetwork(chain);
             }
             let formData = new FormData();
             formData.append("name", name);
@@ -433,28 +427,31 @@ const CreateNftSingle = () => {
                 if (!user) {
                     user = JSON.parse(localStorage.getItem("userInfo"));
                 }
-                if(!fileSrc) {
+                if (!fileSrc) {
                     setNftLoading(false);
-                    toast.dismiss()
-                    return toast.error("Please upload your asset file!")
+                    toast.dismiss();
+                    return toast.error("Please upload your asset file!");
                 }
-                let nftObj:any = new FormData();
-                nftObj.append('name',name)
-                nftObj.append('royalty',royalty)
-                nftObj.append('description',description)
-                nftObj.append('category',category)
-                nftObj.append('nftType',fileSrc?.type)
-                nftObj.append('chain',chain)
-                nftObj.append('contractAddress',contractAddress)
-                nftObj.append('owner',user._id)
-                nftObj.append('uploadedBy',user._id)
-                nftObj.append('mintedBy',user._id)
-                nftObj.append('mintedInfo',user.username)
-                nftObj.append('userInfo',user.username)
-                nftObj.append('image',fileSrc)
-                nftObj.append('tags',JSON.stringify(properties))
-                nftObj.append('collectionName',collection)
-                nftObj.append("attributes", JSON.stringify(properties))
+                let nftObj: any = new FormData();
+                nftObj.append("name", name);
+                nftObj.append("royalty", royalty);
+                nftObj.append("description", description);
+                nftObj.append("category", category);
+                nftObj.append("nftType", fileSrc?.type);
+                nftObj.append("chain", chain);
+                nftObj.append("contractAddress", contractAddress);
+                nftObj.append("owner", user._id);
+                nftObj.append("uploadedBy", user._id);
+                nftObj.append("mintedBy", user._id);
+                nftObj.append("mintedInfo", user.username);
+                nftObj.append("userInfo", user.username);
+                nftObj.append("image", fileSrc);
+                nftObj.append("tags", JSON.stringify(properties));
+                nftObj.append("collectionName", collection);
+                nftObj.append("attributes", JSON.stringify(properties));
+                if(Cookies.get("Chain_Environment") == 'testnet') {
+                    nftObj.append("quantity", nftQuantity)
+                }
                 const response: any = await uploadToPinata(nftObj);
                 if (!response) {
                     toast.error("Pinata: Network Error");
@@ -471,57 +468,63 @@ const CreateNftSingle = () => {
                     imageUrl = val.data.image;
                 });
                 toast.success("Metadata Uploaded...");
-                
-                nftObj.append('jsonIpfs',tokenUri)
 
-                
-           
+                nftObj.append("jsonIpfs", tokenUri);
+
                 if (chain.toString() === nearChain()) {
-                    const wallet = localStorage.getItem("wallet")
-                    if(wallet === "Sender"){
-                        nftObj.append('tokenId',uuid())
-                        localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
-                       
+                    const wallet = localStorage.getItem("wallet");
+                    if (wallet === "Sender") {
+                        nftObj.append("tokenId", uuid());
+                        localStorage.setItem(
+                            "nearNftObj",
+                            JSON.stringify(nftObj)
+                        );
+
                         // @ts-ignore
-                        const accountId =  window.near.getAccountId();
+                        const accountId = window.near.getAccountId();
                         const tx = {
                             receiverId: nearNftAddress,
                             actions: [
-                              {
-                                methodName: 'nft_mint',
-                                args: {
-                                  token_id: `${nftObj.tokenId}`,
-                                  metadata: {
-                                    title: `${nftObj.name}`,
-                                    description: `${description}`,
-                                    media: `${imageUrl}`,
-                                    reference: `${tokenUri}`,
-                                  //extra: `${extLink}`,
-                                     },
-                                  receiver_id: accountId,
-                                   },
-                                gas: "200000000000000",
-                                deposit: parseNearAmount('1'),
-                            }]
-                          }
+                                {
+                                    methodName: "nft_mint",
+                                    args: {
+                                        token_id: `${nftObj.tokenId}`,
+                                        metadata: {
+                                            title: `${nftObj.name}`,
+                                            description: `${description}`,
+                                            media: `${imageUrl}`,
+                                            reference: `${tokenUri}`,
+                                            //extra: `${extLink}`,
+                                        },
+                                        receiver_id: accountId,
+                                    },
+                                    gas: "200000000000000",
+                                    deposit: parseNearAmount("1"),
+                                },
+                            ],
+                        };
                         // @ts-ignore
-                        const res = await window.near.signAndSendTransaction(tx)
+                        const res = await window.near.signAndSendTransaction(
+                            tx
+                        );
                         // let functionCallResult = await nearWalletConnection
                         // .account()
                         // .functionCall();
-                        if(res?.response?.error){
-                            throw new Error("Nft not minted!")
+                        if (res?.response?.error) {
+                            throw new Error("Nft not minted!");
                         }
                         toast.success("Asset Minted");
-                        nftObj.contractAddress = nearNftAddress
+                        nftObj.contractAddress = nearNftAddress;
                         await createNft(nftObj);
                         navigate("/profile/created");
-                    }
-                    else{
-                        const uid = uuid()
-                        nftObj.append('tokenId',uid)
+                    } else {
+                        const uid = uuid();
+                        nftObj.append("tokenId", uid);
 
-                        localStorage.setItem("nearNftObj", JSON.stringify(nftObj));
+                        localStorage.setItem(
+                            "nearNftObj",
+                            JSON.stringify(nftObj)
+                        );
                         // if (!nftObj.tokenId) {
                         //     return;
                         // }
@@ -534,15 +537,17 @@ const CreateNftSingle = () => {
                         );
                         return;
                     }
-                    
                 } else if (chain.toString() === solonaChain()) {
                     const mintKey = await mintSolana(
                         name,
                         description,
                         tokenUri
                     );
-                    nftObj.append('tokenId',mintKey)
-                    nftObj.append('contractAddress',SOL_MINT_NFT_PROGRAM_ID.toBase58())
+                    nftObj.append("tokenId", mintKey);
+                    nftObj.append(
+                        "contractAddress",
+                        SOL_MINT_NFT_PROGRAM_ID.toBase58()
+                    );
 
                     await createNft(nftObj);
                     navigate("/profile/created");
@@ -558,8 +563,11 @@ const CreateNftSingle = () => {
                                 from: address,
                             });
                         if (res?.transactionHash) {
-                        //returnValues NFTId
-                                nftObj.append('tokenId',res.events.Minted.returnValues._NftId)
+                            //returnValues NFTId
+                            nftObj.append(
+                                "tokenId",
+                                res.events.Minted.returnValues._NftId
+                            );
                         }
                     } else if (contractType === "1155") {
                         res = await createNFT.methods
@@ -573,8 +581,11 @@ const CreateNftSingle = () => {
                                 from: address,
                             });
                         if (res?.transactionHash) {
-                            nftObj.append('tokenId',res.events.Minted.returnValues._id)
-                             //returnValues NFTId
+                            nftObj.append(
+                                "tokenId",
+                                res.events.Minted.returnValues._id
+                            );
+                            //returnValues NFTId
                         }
                     } else {
                         toast.error("Contract not found");
@@ -595,9 +606,9 @@ const CreateNftSingle = () => {
                         throw Error("Tron Transaction Failed");
                     } else {
                         tranIsSuccess = true;
-                        nftObj.append('tokenId',tokenId)
+                        nftObj.append("tokenId", tokenId);
                     }
-                    
+
                     await createNft(nftObj);
                     toast.success("Asset Minted!");
                     navigate("/profile/created");
@@ -624,8 +635,11 @@ const CreateNftSingle = () => {
                                 gasPrice: gasPrice,
                             });
                         if (res?.transactionHash) {
-                             //returnValues NFTId
-                                nftObj.append('tokenId',res.events.Minted.returnValues._NftId)
+                            //returnValues NFTId
+                            nftObj.append(
+                                "tokenId",
+                                res.events.Minted.returnValues._NftId
+                            );
                         }
                     } else if (contractType === "1155") {
                         estimated = await createNFT.methods
@@ -652,7 +666,10 @@ const CreateNftSingle = () => {
                             });
                         if (res?.transactionHash) {
                             //returnValues NFTId
-                            nftObj.append('tokenId',res.events.Minted.returnValues._id)
+                            nftObj.append(
+                                "tokenId",
+                                res.events.Minted.returnValues._id
+                            );
                         }
                     } else {
                         toast.error("Contract type is not ERC721 or ERC1155!");
@@ -664,7 +681,7 @@ const CreateNftSingle = () => {
                     navigate("/profile/created?");
                 }
             } catch (error) {
-                toast.error("Minting Failed ",error.message);
+                toast.error("Minting Failed ", error.message);
                 console.log(error, error.message);
                 setNftLoading(false);
                 setdefaultErrorModal(true);
@@ -769,16 +786,13 @@ const CreateNftSingle = () => {
                     });
             }
         }
-        if(localStorage.getItem("walletChain") === "Tron") {
-            setChain(tronChain())
+        if (localStorage.getItem("walletChain") === "Tron") {
+            setChain(tronChain());
+        } else if (localStorage.getItem("walletChain") === "Solana") {
+            setChain(solonaChain());
+        } else if (localStorage.getItem("walletChain") === "Near") {
+            setChain(nearChain());
         }
-        else if(localStorage.getItem("walletChain") === "Solana") {
-            setChain(solonaChain())
-        }
-        else if(localStorage.getItem("walletChain") === "Near") {
-            setChain(nearChain())
-        }
-        
     }, []);
 
     return (
@@ -795,253 +809,328 @@ const CreateNftSingle = () => {
                 />
             ))}
             {nftLoading || fullLoading ? (
-                <PageLoader info={`${AssetCategory[category.toLowerCase()].LoadingMessage}`}/>
+                <PageLoader
+                    info={`${
+                        AssetCategory[category.toLowerCase()].LoadingMessage
+                    }`}
+                />
             ) : (
                 <div className="create-nft-single-page">
                     <div className="head">
-                        <div className="blue-head capitalize">Tokenise {category}</div>
+                        <div className="blue-head capitalize">
+                            Tokenise {category}
+                        </div>
                         {/* <div className="head-text">
                             Image, Video, Audio, or 3D Model. File types
                             supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV,
                             OGG, GLB, GLTF. Max size: 100 MB
                         </div> */}
-                    </div> 
-                    {category && <div className="body">
-                        <div className="input-fields">
-                            <div className="upload-file">
-                                <div className="field-title">{AssetCategory[category.toLowerCase()]['FieldTitle']}</div>
-                                <button
-                                    className="field"
-                                    onClick={() => inputFile?.current.click()}
-                                >
-                                    {fileSrc &&
-                                    fileSrc !== "undefined" &&
-                                    supportedVid.includes(
-                                        fileSrc.name.split(".").pop()
-                                    ) ? (
-                                        <video width="100%">
-                                            <source
-                                                src={
-                                                    fileSrc
-                                                        ? URL.createObjectURL(
-                                                              fileSrc
-                                                          )
-                                                        : ""
-                                                }
-                                                type="video/mp4"
-                                            />
-                                        </video>
-                                    ) : fileSrc &&
-                                      supportedImg.includes(
-                                          fileSrc.name.split(".").pop()
-                                      ) ? (
-                                        <Image
-                                            src={URL.createObjectURL(fileSrc)}
-                                            alt=""
-                                        />
-                                    ) : (
-                                        fileSrc &&
-                                        supportedAud.includes(
+                    </div>
+                    {category && (
+                        <div className="body">
+                            <div className="input-fields">
+                                <div className="upload-file">
+                                    <div className="field-title">
+                                        {
+                                            AssetCategory[
+                                                category.toLowerCase()
+                                            ]["FieldTitle"]
+                                        }
+                                    </div>
+                                    <button
+                                        className="field"
+                                        onClick={() =>
+                                            inputFile?.current.click()
+                                        }
+                                    >
+                                        {fileSrc &&
+                                        fileSrc !== "undefined" &&
+                                        supportedVid.includes(
                                             fileSrc.name.split(".").pop()
-                                        ) && (
-                                            <audio
+                                        ) ? (
+                                            <video width="100%">
+                                                <source
+                                                    src={
+                                                        fileSrc
+                                                            ? URL.createObjectURL(
+                                                                  fileSrc
+                                                              )
+                                                            : ""
+                                                    }
+                                                    type="video/mp4"
+                                                />
+                                            </video>
+                                        ) : fileSrc &&
+                                          supportedImg.includes(
+                                              fileSrc.name.split(".").pop()
+                                          ) ? (
+                                            <Image
                                                 src={URL.createObjectURL(
                                                     fileSrc
                                                 )}
+                                                alt=""
                                             />
-                                        )
-                                    )}
-                                    {!fileSrc && (
-                                        <img src={uploadImg} alt="Upload" />
-                                    )}
-                                </button>
-                                <input
-                                    type="file"
-                                    id="file"
-                                    ref={inputFile}
-                                    onChange={(e) => uploadFile(e)}
-                                    className="d-none"
-                                />{" "}
-                            </div>
-                            <div className="basic-info">
-                                <div className="mt-2"></div>
-                                <Input
-                                    title={AssetCategory[category.toLowerCase()]['AssetName']}
-                                    placeholder={AssetCategory[category.toLowerCase()]['AssetNamePlaceholder']}
-                                    state={name}
-                                    setState={setName}
-                                />
-                                <div className="mt-8"></div>
-                                <Input
-                                    title={AssetCategory[category.toLowerCase()]['AssetLink']}
-                                    placeholder={
-                                        "https://www.youtube.com/watch?_your_link..."
-                                    }
-                                    state={extLink}
-                                    setState={setExtlink}
-                                />
-                                <div className="mt-8"></div>
-                                <Input
-                                    title={AssetCategory[category.toLowerCase()]['AssetInfo']}
-                                    multi
-                                    placeholder={AssetCategory[category.toLowerCase()]['AssetInfoPlaceholder']}
-                                    state={description}
-                                    setState={setDescription}
-                                />
-                            </div>
-                            <div className="blockchain">
-                                
-                                {chain === ethChain() && (
-                                    <>
-                                        <div className="field-title">
-                                            Contract Type
-                                        </div>
-                                        <div className="select-chain">
-                                            <FormControl
-                                                variant="standard"
-                                                sx={{
-                                                    m: 0,
-                                                    minWidth: 120,
-                                                    width: "100%",
-                                                }}
-                                            >
-                                                <Select
-                                                    labelId="category-select-label"
-                                                    id="chain-select"
-                                                    defaultValue="art"
-                                                    value={contractType}
-                                                    onChange={(e) =>
-                                                        setContractType(
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    label="Category"
-                                                >
-                                                    <MenuItem value={"721"}>
-                                                        ERC 721
-                                                    </MenuItem>
-                                                    <MenuItem value={"1155"}>
-                                                        ERC 1155
-                                                    </MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </div>
-                                    </>
-                                )}
-                                
-                                <div className="set-price">
-                                    {contractType === "1155" && (
+                                        ) : (
+                                            fileSrc &&
+                                            supportedAud.includes(
+                                                fileSrc.name.split(".").pop()
+                                            ) && (
+                                                <audio
+                                                    src={URL.createObjectURL(
+                                                        fileSrc
+                                                    )}
+                                                />
+                                            )
+                                        )}
+                                        {!fileSrc && (
+                                            <img src={uploadImg} alt="Upload" />
+                                        )}
+                                    </button>
+                                    <input
+                                        type="file"
+                                        id="file"
+                                        ref={inputFile}
+                                        onChange={(e) => uploadFile(e)}
+                                        className="d-none"
+                                    />{" "}
+                                </div>
+                                <div className="basic-info">
+                                    <div className="mt-2"></div>
+                                    <Input
+                                        title={
+                                            AssetCategory[
+                                                category.toLowerCase()
+                                            ]["AssetName"]
+                                        }
+                                        placeholder={
+                                            AssetCategory[
+                                                category.toLowerCase()
+                                            ]["AssetNamePlaceholder"]
+                                        }
+                                        state={name}
+                                        setState={setName}
+                                    />
+                                    <div className="mt-8"></div>
+                                    <Input
+                                        title={
+                                            AssetCategory[
+                                                category.toLowerCase()
+                                            ]["AssetLink"]
+                                        }
+                                        placeholder={
+                                            "https://www.youtube.com/watch?_your_link..."
+                                        }
+                                        state={extLink}
+                                        setState={setExtlink}
+                                    />
+                                    <div className="mt-8"></div>
+                                    {Cookies.get("Chain_Environment") ==
+                                        "testnet" && (
                                         <Input
-                                            title={"Supply"}
-                                            placeholder=""
-                                            state={supply}
-                                            setState={setSupply}
+                                            number
+                                            title={
+                                                AssetCategory[
+                                                    category.toLowerCase()
+                                                ]["AssetQuantity"]
+                                            }
+                                            placeholder={
+                                                AssetCategory[
+                                                    category.toLowerCase()
+                                                ]["AssetPlaceholder"]
+                                            }
+                                            state={nftQuantity}
+                                            min={1}
+                                            setState={setNftQuantity}
+                                        />
+                                    )}
+
+                                    <div className="mt-8"></div>
+                                    <Input
+                                        title={
+                                            AssetCategory[
+                                                category.toLowerCase()
+                                            ]["AssetInfo"]
+                                        }
+                                        multi
+                                        placeholder={
+                                            AssetCategory[
+                                                category.toLowerCase()
+                                            ]["AssetInfoPlaceholder"]
+                                        }
+                                        state={description}
+                                        setState={setDescription}
+                                    />
+                                </div>
+                                <div className="blockchain">
+                                    {chain === ethChain() && (
+                                        <>
+                                            <div className="field-title">
+                                                Contract Type
+                                            </div>
+                                            <div className="select-chain">
+                                                <FormControl
+                                                    variant="standard"
+                                                    sx={{
+                                                        m: 0,
+                                                        minWidth: 120,
+                                                        width: "100%",
+                                                    }}
+                                                >
+                                                    <Select
+                                                        labelId="category-select-label"
+                                                        id="chain-select"
+                                                        defaultValue="art"
+                                                        value={contractType}
+                                                        onChange={(e) =>
+                                                            setContractType(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        label="Category"
+                                                    >
+                                                        <MenuItem value={"721"}>
+                                                            ERC 721
+                                                        </MenuItem>
+                                                        <MenuItem
+                                                            value={"1155"}
+                                                        >
+                                                            ERC 1155
+                                                        </MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </div>
+                                        </>
+                                    )}
+
+                                    <div className="set-price">
+                                        {contractType === "1155" && (
+                                            <Input
+                                                title={"Supply"}
+                                                placeholder=""
+                                                state={supply}
+                                                setState={setSupply}
+                                                number
+                                            />
+                                        )}
+                                        <Input
+                                            title={"Royalty"}
+                                            placeholder="0 - 99 %"
+                                            state={royalty}
+                                            setState={setRoyalty}
                                             number
                                         />
-                                    )}
-                                    <Input
-                                        title={"Royalty"}
-                                        placeholder="0 - 99 %"
-                                        state={royalty}
-                                        setState={setRoyalty}
-                                        number
-                                    />
-                                    {royaltyError && (
-                                        <span
-                                            style={{
-                                                marginTop: "5px",
-                                                fontSize: "12px",
-                                                color: "red",
-                                            }}
-                                        >
-                                            Royalty Should be between 0 - 99 %
-                                        </span>
-                                    )}
-                                </div>
+                                        {royaltyError && (
+                                            <span
+                                                style={{
+                                                    marginTop: "5px",
+                                                    fontSize: "12px",
+                                                    color: "red",
+                                                }}
+                                            >
+                                                Royalty Should be between 0 - 99
+                                                %
+                                            </span>
+                                        )}
+                                    </div>
 
-                                <div className="select-collection">
-                                    <Input
-                                        title={AssetCategory[category.toLowerCase()]['AssetCollectionName']}
-                                        placeholder="Collection#1"
-                                        state={collection}
-                                        setState={setCollection}
-                                        text
-                                    />
-                                </div>
-                                <div className="set-attributes">
-                                    <button
-                                        className="btn-outline"
-                                        onClick={handleClickOpen}
-                                    >
-                                        <div className="btn-text">
-                                            <img src={listImg} alt="dollar" />
-                                            <span>Properties</span>
-                                        </div>
-                                        <AddRoundedIcon />
-                                    </button>
-                                </div>
-                            </div>
-                            <button
-                                className="btn create-btn"
-                                onClick={() => cryptoPayment()}
-                            >
-                                {AssetCategory[category.toLowerCase()]['AssetButton']} {category.toLowerCase() !== 'photography' ? category : ""}
-                            </button>
-                        </div>
-                        <div className="preview-field">
-                            <div className="field-title">Preview</div>
-                            <div className="preview-card">
-                                <div className="img-box">
-                                    {fileSrc &&
-                                    supportedVid.includes(
-                                        fileSrc.name.split(".").pop()
-                                    ) ? (
-                                        <video width="100%">
-                                            <source
-                                                src={
-                                                    fileSrc
-                                                        ? URL.createObjectURL(
-                                                              fileSrc
-                                                          )
-                                                        : ""
-                                                }
-                                                type="video/mp4"
-                                            />
-                                        </video>
-                                    ) : fileSrc &&
-                                      supportedImg.includes(
-                                          fileSrc.name.split(".").pop()
-                                      ) ? (
-                                        <Image
-                                            src={URL.createObjectURL(fileSrc)}
-                                            alt=""
+                                    <div className="select-collection">
+                                        <Input
+                                            title={
+                                                AssetCategory[
+                                                    category.toLowerCase()
+                                                ]["AssetCollectionName"]
+                                            }
+                                            placeholder="Collection#1"
+                                            state={collection}
+                                            setState={setCollection}
+                                            text
                                         />
-                                    ) : (
-                                        fileSrc &&
-                                        supportedAud.includes(
+                                    </div>
+                                    <div className="set-attributes">
+                                        <button
+                                            className="btn-outline"
+                                            onClick={handleClickOpen}
+                                        >
+                                            <div className="btn-text">
+                                                <img
+                                                    src={listImg}
+                                                    alt="dollar"
+                                                />
+                                                <span>Properties</span>
+                                            </div>
+                                            <AddRoundedIcon />
+                                        </button>
+                                    </div>
+                                </div>
+                                <button
+                                    className="btn create-btn"
+                                    onClick={() => cryptoPayment()}
+                                >
+                                    {
+                                        AssetCategory[category.toLowerCase()][
+                                            "AssetButton"
+                                        ]
+                                    }{" "}
+                                    {category.toLowerCase() !== "photography"
+                                        ? category
+                                        : ""}
+                                </button>
+                            </div>
+                            <div className="preview-field">
+                                <div className="field-title">Preview</div>
+                                <div className="preview-card">
+                                    <div className="img-box">
+                                        {fileSrc &&
+                                        supportedVid.includes(
                                             fileSrc.name.split(".").pop()
-                                        ) && (
-                                            <audio
+                                        ) ? (
+                                            <video width="100%">
+                                                <source
+                                                    src={
+                                                        fileSrc
+                                                            ? URL.createObjectURL(
+                                                                  fileSrc
+                                                              )
+                                                            : ""
+                                                    }
+                                                    type="video/mp4"
+                                                />
+                                            </video>
+                                        ) : fileSrc &&
+                                          supportedImg.includes(
+                                              fileSrc.name.split(".").pop()
+                                          ) ? (
+                                            <Image
                                                 src={URL.createObjectURL(
                                                     fileSrc
                                                 )}
-                                                style={{ width: "90%" }}
+                                                alt=""
                                             />
-                                        )
-                                    )}
-                                    {!fileSrc && (
-                                        <img src={uploadImg} alt="Upload" />
-                                    )}
-                                </div>
-                                <div className="nft-info">
-                                    <div className="titles">
-                                        <span>Name</span>
-                                        <span>{name}</span>
-                                        {/* <span>Price</span> */}
+                                        ) : (
+                                            fileSrc &&
+                                            supportedAud.includes(
+                                                fileSrc.name.split(".").pop()
+                                            ) && (
+                                                <audio
+                                                    src={URL.createObjectURL(
+                                                        fileSrc
+                                                    )}
+                                                    style={{ width: "90%" }}
+                                                />
+                                            )
+                                        )}
+                                        {!fileSrc && (
+                                            <img src={uploadImg} alt="Upload" />
+                                        )}
                                     </div>
-                                    
-                                </div>
-                                {/* <div
+                                    <div className="nft-info">
+                                        <div className="titles">
+                                            <span>Name</span>
+                                            <span>{name}</span>
+                                            {/* <span>Price</span> */}
+                                        </div>
+                                    </div>
+                                    {/* <div
                                     className="btn-box hidden
               "
                                 >
@@ -1053,9 +1142,10 @@ const CreateNftSingle = () => {
                                         27
                                     </div>
                                 </div> */}
+                                </div>
                             </div>
                         </div>
-                    </div>}
+                    )}
                 </div>
             )}
         </>
