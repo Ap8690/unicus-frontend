@@ -8,8 +8,9 @@ import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
 import uuid from "react-uuid";
 import { Helmet } from "react-helmet";
+import Cookies from 'js-cookie'
 
-const filters = ["Properties","Bids", "History" ];
+const filters = Cookies.get('Chain_Environment') == 'testnet' ? ["Properties","Bids", "History", "Info" ] : ["Properties","Bids", "History"];
 
 const ViewNft = () => {
     const [activeFilter, setActiveFilter] = useState(filters[0]);

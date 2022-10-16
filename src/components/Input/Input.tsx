@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import "./Input.scss";
 
 const Input = (props:any) => {
@@ -12,6 +13,10 @@ const Input = (props:any) => {
     if(props?.item === 'socialLinks') {
       //console.log("props.name: ", props.name);
       props.setState(props.name,e.target.value)
+      return 
+    }
+    if(props.title?.includes('Asset Supply') && e.target.value <= 0) {
+      toast.error('Min value should be 1!')
       return 
     }
     props.setState(e.target.value);
@@ -67,6 +72,7 @@ const Input = (props:any) => {
           placeholder={props.placeholder}
           disabled={props.disabled}
           maxLength={props.maxLength ? props.maxLength : ''}
+          min={props.min}
         />
       ):
        (
