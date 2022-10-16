@@ -90,6 +90,10 @@ export async function createAuctionApi(createObj:any){
     
 }
 
+export async function createCollection(dataObj: any) {
+  return await axios.post(`${BASE_URL}/nft/createCollection`, dataObj, axiosConfig())
+}
+
 export async function buyItemApi(
   auction: any,
   hash: string,
