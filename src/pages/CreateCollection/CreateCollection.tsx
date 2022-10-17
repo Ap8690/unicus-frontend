@@ -6,9 +6,10 @@ import FormControl from "@mui/material/FormControl"
 import Select from "@mui/material/Select"
 import uploadImg from "../../assets/svgs/uploadImage.svg"
 import { getBase64 } from "../../utils/imageConvert"
-import { createCollection } from "../../services/api/supplier"
+import { createCollection, getAccessToken } from "../../services/api/supplier"
 import toast from "react-hot-toast"
 import PageLoader from "../../components/Loading/PageLoader"
+import { Navigate } from "react-router"
 
 type Inputs = {
     name: string
@@ -30,7 +31,7 @@ const CreateCollection = () => {
     const collectionLogoRef = useRef(null)
     const collectionBannerRef = useRef(null)
 
-    const { register, handleSubmit, control, getValues } = useForm<Inputs>({
+    const { register, handleSubmit, formState: { errors }, control, getValues } = useForm<Inputs>({
         defaultValues: {
             name: "",
             description: "",
@@ -50,17 +51,13 @@ const CreateCollection = () => {
             console.log(err)
         }
     }
-    const uploadBanner = async (e: any) => {
+    const uploadBanner = (e: any) => {
         setBanner(e.target.files[0])
-        try {
-            const im = await getBase64(e.target.files[0])
-            setBannerBin(im)
-        } catch (err) {
-            console.log(err)
-        }
+        
     }
-    const handleCreate = async () => {
+    const handleCreate = async (v:any) => {
         try {
+            console.log(v,"here")
             setLoading(true)
             const {
                 name,
@@ -71,7 +68,8 @@ const CreateCollection = () => {
                 twitter,
                 telegram,
             } = getValues()
-            if (!logoBin && !bannerBin) {
+            if (!logo && !banner) {
+                toast.error("Please upload images!")
                 setLoading(false)
                 return
             }
@@ -89,14 +87,19 @@ const CreateCollection = () => {
             toast.success("Collection")
             setLoading(false)
         } catch (err) {
-            // console.log(err)
+            console.log(err)
             toast.error(err?.response.data)
+
             setLoading(false)
         }
         // console.log(res)
         // const response = await createCollection()
     }
 
+    if(!getAccessToken()) {
+        toast.error("Login to continue!")
+        return <Navigate to='/marketplace' />
+    }
     return (
         <>
             {loading ? (
@@ -113,7 +116,7 @@ const CreateCollection = () => {
                         className="md:w-[600px] w-full mt-6 flex flex-col gap-8"
                     >
                         <div className="input-box">
-                            <label className="title">Collection Logo</label>
+                            <label className="title">Collection Logo*</label>
                             <button
                                 className="border-dashed border-2 flex items-center justify-center rounded-full w-[200px] h-[200px] overflow-hidden p-1 border-[#666666699] mt-2"
                                 onClick={() =>
@@ -138,7 +141,7 @@ const CreateCollection = () => {
                             />{" "}
                         </div>
                         <div className="input-box">
-                            <label className="title">Collection Banner</label>
+                            <label className="title">Collection Banner*</label>
                             <button
                                 className="border-dashed border-2 flex items-center justify-center rounded-lg h-[200px] w-full overflow-hidden p-1 border-[#666666699] mt-2"
                                 onClick={() =>
@@ -170,8 +173,9 @@ const CreateCollection = () => {
                                 minLength: 8,
                                 maxLength: 30,
                             })}
-                            title="Collection Name"
+                            title="Collection Name*"
                             placeholder="Enter your collection name"
+                            errors={errors}
                         />
                         <HookedInput
                             register={register("description", {
@@ -179,8 +183,9 @@ const CreateCollection = () => {
                                 minLength: 20,
                                 maxLength: 160,
                             })}
-                            title="Description"
+                            title="Description*"
                             placeholder="Enter collection description"
+                            errors={errors}
                         />
                         <div className="input-box">
                             <label className="title">Category</label>
@@ -214,41 +219,46 @@ const CreateCollection = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <HookedInput
                                 register={register("website", {
-                                    required: true,
+                                    // required: true,
                                     pattern:
                                         /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
                                 })}
                                 title="Website"
                                 placeholder="yourcollection.io"
+                                errors={errors}
                             />
                             <HookedInput
                                 register={register("discord", {
-                                    required: true,
-                                    pattern:
-                                        /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/.+[a-z]/g,
+                                    // required: true,
+                                    // pattern:
+                                    //     /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/.+[a-z]/g,
                                 })}
                                 title="Discord"
                                 placeholder="discord.gg/yourcollection"
+                                errors={errors}
                             />
                             <HookedInput
                                 register={register("twitter", {
-                                    required: true,
+                                    // required: true,
                                     pattern:
                                         /https?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/g,
                                 })}
                                 title="Twitter"
                                 placeholder="twitter.com/yourcollection"
+                                errors={errors}
                             />
                             <HookedInput
                                 register={register("telegram", {
-                                    required: true,
+                                    // required: true,
                                     pattern:
                                         /(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$/g,
                                 })}
                                 title="Telegram"
                                 placeholder="t.me/joinchat/yourcollection"
+                                errors={errors}
                             />
                         </div>
+                        <p>* are the required fields.</p>
                         <button type="submit" className="btn">
                             Create
                         </button>

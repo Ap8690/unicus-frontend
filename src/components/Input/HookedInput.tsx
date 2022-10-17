@@ -1,4 +1,5 @@
 import "./Input.scss"
+import { ErrorMessage } from '@hookform/error-message';
 
 const HookedInput = (props: any) => {
     return (
@@ -10,6 +11,7 @@ const HookedInput = (props: any) => {
                 </label>
             )}
             <input {...props.register} placeholder={props.placeholder} />
+            
         </div>
     )
 }
