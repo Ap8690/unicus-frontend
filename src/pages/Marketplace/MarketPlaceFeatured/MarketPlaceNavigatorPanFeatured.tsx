@@ -51,7 +51,7 @@ const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll, loading }) => {
                     onClick={() =>
                         navigate(
                             `/nft/${element.chain}/${getNftContractAddress(
-                                element
+                                element,"721"
                             )}/${element.tokenId}`
                         )
                     }

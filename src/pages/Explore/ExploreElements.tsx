@@ -9,7 +9,7 @@ export const ExploreElement = ({ element }) => {
         <Link
             to={{
                 pathname: `/nft/${element.chain}/${getNftContractAddress(
-                    element.nftId
+                    element.nftId,"721"
                 )}/${element.tokenId}`,
             }}
         >

@@ -37,16 +37,19 @@ import {
 } from "../Redux/Blockchain/contracts";
 import {
     auctionAbiE,
+    auctionAbiE1155,
     auctionAddressE,
     auctionAddressE1155,
 } from "../Redux/Blockchain/Ethereum/auction";
 import {
     createNFTAbiE,
+    createNFTAbiE1155,
     createNFTAddressE,
     createNFTAddressE1155,
 } from "../Redux/Blockchain/Ethereum/createNFT";
 import {
     marketPlaceAbiE,
+    marketPlaceAbiE1155,
     marketPlaceAddressE,
     marketPlaceAddressE1155,
 } from "../Redux/Blockchain/Ethereum/marketPlace";
@@ -730,12 +733,12 @@ export const getUserWallet = async (network: any) => {
     }
 };
 
-export const getNftContractAddress = (nft: any) => {
+export const getNftContractAddress = (nft: any,type:string) => {
     if (nft) {
         if (nft.contractAddress !== undefined) {
             return nft.contractAddress;
         } else {
-            return getCreateNftContractAddress(nft.chain, "721");
+            return getCreateNftContractAddress(nft.chain, type);
         }
     }
 };
@@ -769,15 +772,27 @@ export const getChainLogo = (chain: any) => {
     return chains[chain.toString()]?.chainLogo
 };
 
-export const getCreateNftABI = () => {
-    return createNFTAbiE;
+export const getCreateNftABI = (type: string) => {
+    if(type === "721")
+      return createNFTAbiE;
+    else{
+        return createNFTAbiE1155
+    }
 };
-export const getMarketplaceABI = () => {
-    return marketPlaceAbiE;
+export const getMarketplaceABI = (type) => {
+    if(type === "721")
+      return marketPlaceAbiE;
+    else{
+        return marketPlaceAbiE1155
+    }
 };
 
-export const getAuctionABI = () => {
-    return auctionAbiE;
+export const getAuctionABI = (type) => {
+    if(type === "721")
+      return auctionAbiE;
+    else{
+        return auctionAbiE1155
+    }
 };
 export const getCreateNftContractAddress = (chain: any, contractType: any) => {
     if (chain) {
@@ -803,7 +818,11 @@ export const getCreateNftContractAddress = (chain: any, contractType: any) => {
             case solonaChain():
                 return;
             default:
-                return chains[chain].contracts["mintContract"]
+                if(contractType === "721")
+                  return chains[chain].contracts["mintContract"]
+                else{
+                  return chains[chain].contracts["mint1155"]
+                }
         }
     }
 };
@@ -830,7 +849,14 @@ export const getMarketPlaceContractAddress = (
         // case telosChain():
         //     return marketPlaceAddressTelos;
         default:
-            return chains[chain].contracts["marketContract"]
+            if(contractType === "721"){
+            console.log("721")
+                return chains[chain].contracts["marketContract"]
+            }
+            else{
+                console.log("1155")
+                return chains[chain].contracts["market1155"]
+            }
     }
 };
 export const getAuctionContractAddress = (
@@ -855,17 +881,22 @@ export const getAuctionContractAddress = (
         // case telosChain():
         //     return auctionAddressTelos;
         default:
-            return chains[chain].contracts["auctionContract"]
+            if(contractType === "721")
+                return chains[chain].contracts["auctionContract"]
+            else{
+                return chains[chain].contracts["auction1155"]
+            }
     }
 };
 
 export const getCreateNftContract = (chain: any, contractType = "721") => {
+    console.log(contractType,"type")
     if (chain.toString() === tronChain()) {
         return tronWeb.contract(createNFTAbiT, createNFTAddressT);
     } else {
         return new web3.eth.Contract(
             //@ts-ignore
-            getCreateNftABI(),
+            getCreateNftABI(contractType),
             getCreateNftContractAddress(chain, contractType)
         );
     }
@@ -877,7 +908,7 @@ export const getMarketPlace = (chain: any, contractType = "721") => {
     } else {
         return new web3.eth.Contract(
             //@ts-ignore
-            getMarketplaceABI(),
+            getMarketplaceABI(contractType),
             getMarketPlaceContractAddress(chain, contractType)
         );
     }
@@ -889,7 +920,7 @@ export const getAuctionContract = (chain: any, contractType = "721") => {
     } else {
         return new web3.eth.Contract(
             //@ts-ignore
-            getAuctionABI(),
+            getAuctionABI(contractType),
             getAuctionContractAddress(chain, contractType)
         );
     }

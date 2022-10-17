@@ -54,6 +54,11 @@ const Mainnet = ({ handleChain }) => {
                 chainName={"Polygon"}
                 chainLogo={ploygonLogo}
             />
+            <ChainCard
+                handleChain={handleChain}
+                chainName={"Telos"}
+                chainLogo={telosLogo}
+            />
             
         </div>
     );

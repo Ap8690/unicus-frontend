@@ -82,7 +82,7 @@ const MarketPlaceAuctionsElements = ({ list, currentScroll,currentType, loading 
         <SwiperSlide
           key={uuid()}
           onClick={()=>navigate(`/nft/${element.chain}/${getNftContractAddress(
-              element.nftId
+              element.nftId,"721"
             )}/${element.tokenId}`,
       )}
         >
