@@ -388,7 +388,7 @@ const chainParams = {
                 symbol: "TLOS", // 2-6 characters long
                 decimals: 18,
             },
-            blockExplorerUrls: ["https://testnet.telos.net/v2/explore/"],
+            blockExplorerUrls: ["https://testnet.teloscan.io/"],
         },
     ],
 };

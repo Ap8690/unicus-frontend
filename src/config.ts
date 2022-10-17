@@ -171,7 +171,7 @@ export const chains:any = {
     '8080': {
         chainId:'8080',
         contracts : {
-            mintContract: "0xD5b5780eEdcCD3e60742d739d6d114Eaf77b74Fe",
+            mintContract: "0xd5b5780eedccd3e60742d739d6d114eaf77b74fe",
             marketContract: "0x8b7EFF67e323Af67C0bDEE49881e87C1E433bD6D",
             auctionContract: "0x62033A72d19461E9Ff3543a82c48b9A2B1b5409b"
         },
@@ -183,9 +183,9 @@ export const chains:any = {
     '8700': {
         chainId:'8700',
         contracts : {
-            mintContract: "0xD5b5780eEdcCD3e60742d739d6d114Eaf77b74Fe",
-            marketContract: "0x8b7EFF67e323Af67C0bDEE49881e87C1E433bD6D",
-            auctionContract: "0x62033A72d19461E9Ff3543a82c48b9A2B1b5409b"
+            mintContract: "TVxXc5kCmafEvVfnNY5Dsxh8WaJutCF7EM",
+            marketContract: "TWjJF6eMgujSJ5c6ofqwT8RGvQKgGbAdA1",
+            auctionContract: "TJd9zyMr2CaQsMtDbbQMqVrnnPHxssHDFG"
         },
         chainSymbol :"TRX",
         chainName: "tron",
@@ -195,9 +195,9 @@ export const chains:any = {
     '8766': {
         chainId:'8766',
         contracts : {
-            mintContract: "0xD5b5780eEdcCD3e60742d739d6d114Eaf77b74Fe",
-            marketContract: "0x8b7EFF67e323Af67C0bDEE49881e87C1E433bD6D",
-            auctionContract: "0x62033A72d19461E9Ff3543a82c48b9A2B1b5409b"
+            mintContract: "TVxXc5kCmafEvVfnNY5Dsxh8WaJutCF7EM",
+            marketContract: "TWjJF6eMgujSJ5c6ofqwT8RGvQKgGbAdA1",
+            auctionContract: "TJd9zyMr2CaQsMtDbbQMqVrnnPHxssHDFG"
         },
         chainSymbol :"TRX",
         chainName: "tron",
