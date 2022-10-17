@@ -18,6 +18,7 @@ import uuid from "react-uuid"
 import FilterAltIcon from "@mui/icons-material/FilterAlt"
 import Drawer from "@mui/material/Drawer"
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded"
+import {useParams} from 'react-router-dom'
 
 const ALL_NFTS = [
     {
@@ -399,6 +400,9 @@ const ALL_NFTS = [
 ]
 
 const CollectionPage = () => {
+    const {id} = useParams()
+    console.log("id: ", id);
+
     const [lessDesc, setLessDesc] = useState(true)
     const [descriprion, setDescription] = useState(
         "A handpicked collection of 10,000 NFTs created by artist Ramdaram. You can participate in a journey of nostalgia as a way to be true to yourself. VEE yourself and see you at the pool party."
@@ -407,7 +411,7 @@ const CollectionPage = () => {
     const [keyword, setKeyword] = useState("")
     const [view, setView] = useState("grid1")
     const [sortBy, setSortBy] = useState("NONE")
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [nfts, setNfts] = useState(ALL_NFTS)
     const [status, setStatus] = useState({
         onSale: false,
@@ -423,6 +427,19 @@ const CollectionPage = () => {
     const telegramLink = ""
     const twitterLink = ""
     const discordLink = ""
+
+
+    // const getCollectionById = async () => {
+    //     try {
+    //         setLoading(true)
+    //         const collection = await getCollectionUsingId(id)
+    //         console.log("getAll: ", collection);
+    //         setLoading(false)
+    //     }
+    //     catch(err) {
+    //         console.log(err)
+    //     }
+    // }
 
     return (
         <>

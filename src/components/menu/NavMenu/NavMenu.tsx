@@ -60,6 +60,7 @@ const NavMenu = ({
                         Resources
                     </Link>
                     <NestedMenu chain={chain} />
+                    
                     <Link to={"/marketplace"} className="btn nav-link">
                         Marketplace
                     </Link>

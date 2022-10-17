@@ -179,7 +179,7 @@ const App = () => {
                             />
                             <Route path="/collections" element={<Collections/>} />
                             <Route path="/create-collection" element={<CreateCollection/>} />
-                            <Route path="/collections/:id" element={<CollectionPage/>} />
+                            <Route path="/collection/:id" element={<CollectionPage/>} />
                             <Route
                                 path="/create-nft/single-item"
                                 element={<CreateNftSingle />}

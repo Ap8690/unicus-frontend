@@ -20,6 +20,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { getLocation, getEnabledStore } from "../../utils/helpers";
 import NestedMenu from "../NestedMenu/NestedMenu";
 import ChainLogo from "../../components/ChainLogo/ChainLogo";
+import CollectinMenu from "../../components/CollectionMenu/CollectionMenu";
 
 const Navbar = ({ store }) => {
     const [search, setSearch] = useState("");
@@ -144,6 +145,7 @@ const Navbar = ({ store }) => {
                                 Resources
                             </Link>
                             <NestedMenu chain={chain} />
+                            <CollectinMenu />
                             <Link to={"/marketplace"} className="btn nav-link">
                             {getUserInfo() ? "Marketplace" :"Enter App"}
                             </Link>
@@ -154,6 +156,7 @@ const Navbar = ({ store }) => {
                     ) : (
                         <div className="nav-links">
                             <NestedMenu chain={chain} />
+                            <CollectinMenu />
                             {/* <Link className='nav-link' to='/collections'>Collections</Link> */}
                             {!getUserInfo() ? (
                                 <button
@@ -235,7 +238,7 @@ const ProfileButton = ({
 
     return (
         <>
-            <button className="nav-link" onClick={handleClickProfile}>
+            <button onMouseOver={handleClickProfile} className="nav-link" onClick={handleClickProfile}>
                 <img src={profileLogo} alt="profile" className="nav-icons" />
             </button>
             <Menu
@@ -244,6 +247,7 @@ const ProfileButton = ({
                 onClose={handleCloseProfile}
                 MenuListProps={{
                     "aria-labelledby": "basic-button",
+                    onMouseLeave: handleCloseProfile
                 }}
             >
                 <MenuItem onClick={handleCloseProfile}>

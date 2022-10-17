@@ -2032,9 +2032,8 @@ const NftInfo = ({
                                                 width: "100%",
                                             }}
                                         >
-                                            <LocalizationProvider
-                                                dateAdapter={AdapterDayjs}
-                                            >
+                                            {/* @ts-ignore */}
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <MobileDatePicker
                                                     inputFormat="MM/DD/YYYY"
                                                     value={newTime}
