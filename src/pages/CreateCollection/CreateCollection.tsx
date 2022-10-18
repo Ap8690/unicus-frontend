@@ -10,6 +10,7 @@ import { createCollection, getAccessToken } from "../../services/api/supplier"
 import toast from "react-hot-toast"
 import PageLoader from "../../components/Loading/PageLoader"
 import { Navigate } from "react-router"
+import { ErrorMessage } from "@hookform/error-message"
 
 type Inputs = {
     name: string
@@ -107,7 +108,7 @@ const CreateCollection = () => {
             ) : (
                 <div className="create-nft-single-page">
                     <div className="head !w-full">
-                        <div className="blue-head capitalize">
+                        <div className="capitalize blue-head">
                             Create Collection
                         </div>
                     </div>
@@ -127,7 +128,7 @@ const CreateCollection = () => {
                                     <img
                                         src={URL.createObjectURL(logo)}
                                         alt=""
-                                        className="object-cover overflow-hidden rounded-full w-full h-full"
+                                        className="object-cover w-full h-full overflow-hidden rounded-full"
                                     />
                                 )}
                                 {!logo && <img src={uploadImg} alt="Upload" />}
@@ -135,10 +136,11 @@ const CreateCollection = () => {
                             <input
                                 type="file"
                                 id="file"
+                                name='collectionLogo'
                                 ref={collectionLogoRef}
                                 onChange={(e) => uploadLogo(e)}
                                 className="d-none"
-                            />{" "}
+                            />
                         </div>
                         <div className="input-box">
                             <label className="title">Collection Banner*</label>
@@ -152,7 +154,7 @@ const CreateCollection = () => {
                                     <img
                                         src={URL.createObjectURL(banner)}
                                         alt=""
-                                        className="object-cover overflow-hidden rounded-lg w-full h-full"
+                                        className="object-cover w-full h-full overflow-hidden rounded-lg"
                                     />
                                 )}
                                 {!banner && (
@@ -169,22 +171,36 @@ const CreateCollection = () => {
                         </div>
                         <HookedInput
                             register={register("name", {
-                                required: true,
-                                minLength: 8,
-                                maxLength: 30,
+                                required: 'Collection name invalid',
+                                minLength: {
+                                    value: 3,
+                                    message: "Collection name should be atleast 3 characters long"
+                                },
+                                maxLength: {
+                                    value: 30,
+                                    message: "Collection name should be atmost 30 characters long"
+                                },
                             })}
                             title="Collection Name*"
                             placeholder="Enter your collection name"
+                            name="name"
                             errors={errors}
                         />
                         <HookedInput
                             register={register("description", {
-                                required: true,
-                                minLength: 20,
-                                maxLength: 160,
+                                required: 'Collection description required',
+                                minLength: {
+                                    value: 3,
+                                    message: "Description should be atleast 10 characters long"
+                                },
+                                maxLength: {
+                                    value: 30,
+                                    message: "Description should be atmost 160 characters long"
+                                },
                             })}
                             title="Description*"
                             placeholder="Enter collection description"
+                            name="description"
                             errors={errors}
                         />
                         <div className="input-box">
@@ -216,7 +232,7 @@ const CreateCollection = () => {
                                 />
                             </FormControl>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                             <HookedInput
                                 register={register("website", {
                                     // required: true,
@@ -225,6 +241,7 @@ const CreateCollection = () => {
                                 })}
                                 title="Website"
                                 placeholder="yourcollection.io"
+                                name="website"
                                 errors={errors}
                             />
                             <HookedInput
@@ -235,6 +252,7 @@ const CreateCollection = () => {
                                 })}
                                 title="Discord"
                                 placeholder="discord.gg/yourcollection"
+                                name="discord"
                                 errors={errors}
                             />
                             <HookedInput
@@ -245,6 +263,7 @@ const CreateCollection = () => {
                                 })}
                                 title="Twitter"
                                 placeholder="twitter.com/yourcollection"
+                                name="twitter"
                                 errors={errors}
                             />
                             <HookedInput
@@ -254,11 +273,12 @@ const CreateCollection = () => {
                                         /(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$/g,
                                 })}
                                 title="Telegram"
-                                placeholder="t.me/joinchat/yourcollection"
+                                placeholder="t.me/yourcollection"
+                                name="telegram"
                                 errors={errors}
                             />
                         </div>
-                        <p>* are the required fields.</p>
+                        <p className="text-sm text-[#7460ed]">* are the required fields.</p>
                         <button type="submit" className="btn">
                             Create
                         </button>
