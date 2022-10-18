@@ -156,7 +156,7 @@ export const chains:any = {
         chainLogo: telosLogo
     },
     '8080': {
-        chainId:'56',
+        chainId:'8080',
         contracts : {
             mintContract: "0xD5b5780eEdcCD3e60742d739d6d114Eaf77b74Fe",
             marketContract: "0x8b7EFF67e323Af67C0bDEE49881e87C1E433bD6D",

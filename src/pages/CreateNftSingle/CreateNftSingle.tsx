@@ -623,6 +623,19 @@ const CreateNftSingle = () => {
                              //returnValues NFTId
                                 nftObj.append('tokenId',res.events.Minted.returnValues._NftId)
                         }
+                        //@ts-ignore
+                    const wasAdded = await ethereum.request({
+                        method: 'wallet_watchAsset',
+                        params: {
+                          type: 'ERC721', // Initially only supports ERC20, but eventually more!
+                          options: {
+                            address: address, // The address that the token is at.
+                            symbol: "Unic.", // A ticker symbol or shorthand, up to 5 chars.
+                            decimals: 0, // The number of decimals in the token
+                            image: "", // A string url of the token logo
+                          },
+                        },
+                      });
                     } else if (contractType === "1155") {
                         estimated = await createNFT.methods
                             .mintNFT(
@@ -650,14 +663,28 @@ const CreateNftSingle = () => {
                             //returnValues NFTId
                             nftObj.append('tokenId',res.events.Minted.returnValues._id)
                         }
+                        //@ts-ignore
+                    const wasAdded = await ethereum.request({
+                        method: 'wallet_watchAsset',
+                        params: {
+                          type: 'ERC1155', // Initially only supports ERC20, but eventually more!
+                          options: {
+                            address: address, // The address that the token is at.
+                            symbol: "Unic.", // A ticker symbol or shorthand, up to 5 chars.
+                            decimals: 0, // The number of decimals in the token
+                            image: "", // A string url of the token logo
+                          },
+                        },
+                      });
                     } else {
                         toast.error("Contract type is not ERC721 or ERC1155!");
                         return;
                     }
 
+                    
+                    await createNft(nftObj);
                     setNftLoading(false);
                     toast.success("Asset Minted");
-                    await createNft(nftObj);
                     navigate("/profile/created");
                 }
             } catch (error) {
