@@ -21,6 +21,10 @@ export const getUserId = () => {
   return JSON.parse(Cookies.get('userInfo'))._id
 }
 
+export async function getUserById(userId){
+  return await axios.get(`${BASE_URL}/users/getUserById/${userId}`, axiosConfig())
+}
+
 export async function getFeaturedNft(number: number,chain: any) {
   return await axios.get(`${BASE_URL}/nft/getFeaturedNfts/${number}/${getChainId(chain)}`,
   axiosConfig());
