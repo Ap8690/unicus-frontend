@@ -65,7 +65,7 @@ const Collections = () => {
                 </div>
             </InfiniteScroll>
 
-            <NotFound message={"Stay tuned for more collections..."} />
+            {!collections && <NotFound message={"Stay tuned for more collections..."} />}
         </div>
     );
 };
