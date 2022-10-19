@@ -98,12 +98,12 @@ const Profile = (): ReactJSXElement => {
         setTableLoading(true)
         try {
             const res = await getNftByUserId(page);
-            setMetadata(res.data.metadata)
+            setMetadata(res.data.metadata);
             setorDisplayCreated(res.data.nfts);
             setorDisplayListing(res.data.auctions);
             setDisplayCreated(res.data.nfts);
             setDisplayListing(res.data.auctions);
-            setTableLoading(false)
+            setTableLoading(false);
         } catch (e) {
             //console.log(e);
             toast.error(e);
@@ -118,9 +118,7 @@ const Profile = (): ReactJSXElement => {
                     Authorization: "Bearer " + `${accessToken}`,
                 },
             });
-            
             setUser(res.data.user);
-            await getNfts();
             setLoading(false);
         } catch (err) {
             setLoading(false);

@@ -18,7 +18,9 @@ const TableData = ({ activity, link }) => {
         >
             <td className="table-data-item-name">
                 {activity.hasOwnProperty("nftId") ? (
-                   activity && activity?.nftId && activity?.nftId.nftType?.match(/image/) ? (
+                    activity &&
+                    activity?.nftId &&
+                    activity?.nftId.nftType?.match(/image/) ? (
                         <img
                             src={activity.cloudinaryUrl}
                             alt={activity.name}
@@ -35,7 +37,8 @@ const TableData = ({ activity, link }) => {
                             />
                         </video>
                     )
-                ) : activity && activity.hasOwnProperty("nftType") &&
+                ) : activity &&
+                  activity.hasOwnProperty("nftType") &&
                   activity?.nftType?.match(/image/) ? (
                     <img
                         src={activity.cloudinaryUrl}
@@ -82,18 +85,22 @@ const TableData = ({ activity, link }) => {
                     <td className="table-data-exp">
                         {getChainSymbol(activity.chain)}
                     </td>
-                    {activity?.nftStatus == 1 ? 
-                    <td>
-                        {activity?.uploadedBy &&
-                        activity?.uploadedBy ===
-                            JSON.parse(localStorage.getItem("userInfo"))?._id
-                            ? "Minted"
-                            : "Purchased"}
-                    </td> : <td>
-                        {activity?.nftStatus == 2 ?
-                            "On Sale"  : activity?.nftStatus == 3 && 'On Auction'
-                        }
-                    </td>}
+                    {activity?.nftStatus == 1 ? (
+                        <td>
+                            {activity?.uploadedBy &&
+                            activity?.uploadedBy ===
+                                JSON.parse(localStorage.getItem("userInfo"))
+                                    ?._id
+                                ? "Minted"
+                                : "Purchased"}
+                        </td>
+                    ) : (
+                        <td>
+                            {activity?.nftStatus == 2
+                                ? "On Sale"
+                                : activity?.nftStatus == 3 && "On Auction"}
+                        </td>
+                    )}
                     <td className="table-data-exp">
                         {activity?.createdAt &&
                             getSimpleDate(activity.createdAt)}
@@ -117,54 +124,35 @@ const Table = ({ rows, columns, loading, page, setPage, metadata }) => {
                 </thead>
                 {loading ? (
                     <tbody>
-                        <tr className="table-data cursor-pointer pb-6">
-                            <td className="table-data-item-name">
-                                <Skeleton
-                                    variant="rectangular"
-                                    sx={{
-                                        width: "80px",
-                                        height: "80px",
-                                        borderRadius: "20px",
-                                        bgcolor: "#66666666",
-                                    }}
-                                />
-                                <Skeleton
-                                    sx={{
-                                        bgcolor: "#66666666",
-                                        fontSize: "20px",
-                                    }}
-                                />
-                            </td>
-                            {columns.map((item: any, i: any) => {
-                                if (i === columns.length - 2) return;
-                                return (
-                                    <td key={item + i}>
-                                        <Skeleton
-                                            sx={{
-                                                bgcolor: "#66666666",
-                                                fontSize: "20px",
-                                            }}
-                                        />
-                                    </td>
-                                );
-                            }).reverse()}
-                        </tr>
+                        <NftTableLoad columns={columns} />
+                        <NftTableLoad columns={columns} />
+                        <NftTableLoad columns={columns} />
+                        <NftTableLoad columns={columns} />
+                        <NftTableLoad columns={columns} />
+                        <NftTableLoad columns={columns} />
+                        <NftTableLoad columns={columns} />
+                        <NftTableLoad columns={columns} />
+                        <NftTableLoad columns={columns} />
+                        <NftTableLoad columns={columns} />
+
                     </tbody>
                 ) : (
                     <tbody>
                         {rows && rows.length > 0 ? (
-                            rows.map((row: any, i: number) => (
-                                <TableData
-                                    link={`/nft/${row.chain}/${
-                                        row.contractAddress
-                                            ? row.contractAddress
-                                            : row.nftId &&
-                                              row.nftId.contractAddress
-                                    }/${row.tokenId}`}
-                                    activity={row}
-                                    key={uuid()}
-                                />
-                            )).reverse()
+                            rows
+                                .map((row: any, i: number) => (
+                                    <TableData
+                                        link={`/nft/${row.chain}/${
+                                            row.contractAddress
+                                                ? row.contractAddress
+                                                : row.nftId &&
+                                                  row.nftId.contractAddress
+                                        }/${row.tokenId}`}
+                                        activity={row}
+                                        key={uuid()}
+                                    />
+                                ))
+                               
                         ) : (
                             <tr>
                                 <td>No Assets Found</td>
@@ -173,15 +161,56 @@ const Table = ({ rows, columns, loading, page, setPage, metadata }) => {
                     </tbody>
                 )}
             </table>
-            {/* <Pagination
-                count={Math.ceil(Number(metadata?.total)/Number(metadata?.limit))}
+            <Pagination
+                count={Math.ceil(
+                    Number(metadata?.total) / Number(metadata?.limit)
+                )}
                 defaultPage={page}
                 page={page}
                 onChange={(e: any, v: any) => setPage(v)}
-                color="primary" 
-                sx={{button:{color: '#ffffff'}}}
-            /> */}
+                color="primary"
+                sx={{ button: { color: "#ffffff" } }}
+            />
         </div>
+    );
+};
+
+const NftTableLoad = ({ columns }: any) => {
+    return (
+        <tr className="table-data cursor-pointer pb-6">
+            <td className="table-data-item-name">
+                <Skeleton
+                    variant="rectangular"
+                    sx={{
+                        width: "80px",
+                        height: "80px",
+                        borderRadius: "20px",
+                        bgcolor: "#66666666",
+                    }}
+                />
+                <Skeleton
+                    sx={{
+                        bgcolor: "#66666666",
+                        fontSize: "20px",
+                    }}
+                />
+            </td>
+            {columns
+                .map((item: any, i: any) => {
+                    if (i === columns.length - 2) return;
+                    return (
+                        <td key={item + i}>
+                            <Skeleton
+                                sx={{
+                                    bgcolor: "#66666666",
+                                    fontSize: "20px",
+                                }}
+                            />
+                        </td>
+                    );
+                })
+                .reverse()}
+        </tr>
     );
 };
 
