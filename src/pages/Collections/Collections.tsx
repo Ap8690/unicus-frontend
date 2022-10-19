@@ -10,6 +10,7 @@ import NftSkeletonLoader from "../../components/Loading/SkeletonLoading/NftSkele
 import ExploreFilters from "../Explore/ExploreFilters";
 import "./collection.scss";
 import uuid from "react-uuid";
+import PageLoader from "../../components/Loading/PageLoader";
 import CollectionCard from "./CollectionCard";
 
 const Collections = () => {
@@ -18,13 +19,30 @@ const Collections = () => {
     const [totalAssets, setTotalAssets] = useState(1);
     const [filter, setFilter] = useState("all");
     const [collections, setCollections] = useState([]);
-    const filters = ["all"];
+    const [loading,setLoading] = useState(false)
+    const filters = [
+        "All",
+        "Art",
+        "Nft Collection",
+        "Trading Cards",
+        "Photography",
+        "Carbon Credits",
+        "Real Estate",
+        "Financial Instruments",
+        "Event Tickets",
+        "Metaverse",
+        "Gaming",
+        "Music",
+    ];
     const getCollection = async () => {
         try {
-            const getData = await getallCollections(limit,skip);
+            // setLoading(true)
+            const getData = await getallCollections(limit,skip,filter);
+            console.log("getData: ", getData.data);
             setTotalAssets(getData.data?.total)
-            setCollections(getData.data?.data)
-            setSkip((prevState) => prevState + 30)
+            setCollections([...collections,...getData.data?.data])
+            setSkip((prevState) => prevState + getData.data?.data.length)
+            // setLoading(false)
         } catch (err) {
             console.log(err);
         }
@@ -33,6 +51,15 @@ const Collections = () => {
         //fetch get collections
         getCollection();
     }, []);
+
+    useEffect(() => {
+        setCollections([])
+        getCollection();
+    },[filter])
+
+    if(loading) {
+        return <PageLoader/>
+    }
     return (
         <div className="min-h-[100vh] explore">
             <Helmet>
@@ -49,7 +76,6 @@ const Collections = () => {
                     currentFilter={filter}
                 />
             </div>
-
             <InfiniteScroll
                 dataLength={collections.length}
                 next={getCollection}
@@ -59,7 +85,7 @@ const Collections = () => {
             >
                 <div className="explore-all-Collections">
                     {collections.map((element: any) => (
-                        <CollectionCard element={element} />
+                        <CollectionCard key={uuid()} element={element} />
                     ))}
                 </div>
             </InfiniteScroll>
