@@ -87,7 +87,7 @@ const MarketPlaceTrendingElements = ({
                         navigate(
                             `/nft/${element.chain}/${getNftContractAddress(
                                 element,"721" // need to be changed
-                            )}/${element.tokenId}`
+                            )}/${element.tokenId}/${element._id}`
                         )
                     }
                 >

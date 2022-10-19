@@ -134,7 +134,6 @@ const Table = ({ rows, columns, loading, page, setPage, metadata }) => {
                         <NftTableLoad columns={columns} />
                         <NftTableLoad columns={columns} />
                         <NftTableLoad columns={columns} />
-
                     </tbody>
                 ) : (
                     <tbody>
@@ -147,7 +146,7 @@ const Table = ({ rows, columns, loading, page, setPage, metadata }) => {
                                                 ? row.contractAddress
                                                 : row.nftId &&
                                                   row.nftId.contractAddress
-                                        }/${row.tokenId}`}
+                                        }/${row.tokenId}/${row?._id}`}
                                         activity={row}
                                         key={uuid()}
                                     />

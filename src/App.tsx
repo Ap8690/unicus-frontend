@@ -294,7 +294,7 @@ const App = () => {
                             )}
                             <Route path="/all-nfts" element={<AllNFTs />} />
                             <Route
-                                path="/nft/:chain/:contractAddress/:nftId"
+                                path="/nft/:chain/:contractAddress/:nftId/:nftDbId"
                                 element={<ViewNft />}
                             />
                             <Route path="/auctions" element={<Auctions />} />

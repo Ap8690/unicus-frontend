@@ -21,13 +21,13 @@ const ViewNft = () => {
     const [nftStates, setNftStates] = useState<any>();
     const [nftLoading, setNftLoading] = useState<boolean>(false);
     const [nftByCollection, setNftByCollection] = useState<any>();
-    const { chain, contractAddress, nftId } = useParams();
+    const { chain, contractAddress, nftId,nftDbId } = useParams();
     const [bids,setBids] = useState([])
 
     async function fetchItem() {
         try {
             setNftLoading(true);
-            const res = await getNftById(chain, contractAddress, nftId);
+            const res = await getNftById(chain, contractAddress, nftId,nftDbId);
             setNft(res.data.nft);
             setNftStates(res.data.nftStates);
             setAuction(res.data.auction);
@@ -97,7 +97,7 @@ const ViewNft = () => {
                                     <Link
                                         key={uuid()}
                                         className='w-full'
-                                        to={`/nft/${item.chain}/${item.contractAddress}/${item._id}`}
+                                        to={`/nft/${item.chain}/${item.contractAddress}/${item.tokenId}/${item._id}`}
                                     >
                                         <AllNFTsElement element={item} />
                                     </Link>
