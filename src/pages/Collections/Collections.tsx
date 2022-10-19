@@ -14,7 +14,7 @@ import PageLoader from "../../components/Loading/PageLoader";
 import CollectionCard from "./CollectionCard";
 
 const Collections = () => {
-    const [limit, setLimti] = useState(10);
+    const [limit, setLimit] = useState(10);
     const [skip, setSkip] = useState(0);
     const [totalAssets, setTotalAssets] = useState(1);
     const [filter, setFilter] = useState("all");
@@ -34,32 +34,38 @@ const Collections = () => {
         "Gaming",
         "Music",
     ];
-    const getCollection = async () => {
+    const getCollection = async (skip:number,filterApplied:boolean) => {
         try {
-            // setLoading(true)
+            setLoading(true)
             const getData = await getallCollections(limit,skip,filter);
-            console.log("getData: ", getData.data);
             setTotalAssets(getData.data?.total)
-            setCollections([...collections,...getData.data?.data])
+            if(getData.data?.total == 0) {
+                setSkip(0)
+                setLoading(false)
+                return setCollections([])
+            }
             setSkip((prevState) => prevState + getData.data?.data.length)
-            // setLoading(false)
+            setLoading(false)
+            if(!filterApplied) return setCollections([...collections,...getData.data?.data])
+            setCollections(getData.data?.data)
+            setLoading(false)
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
         //fetch get collections
-        getCollection();
+        
+        getCollection(skip,false);
     }, []);
-
+ 
     useEffect(() => {
-        setCollections([])
-        getCollection();
+        setSkip(0)
+        getCollection(0,true);
+        
     },[filter])
 
-    if(loading) {
-        return <PageLoader/>
-    }
+    
     return (
         <div className="min-h-[100vh] explore">
             <Helmet>
@@ -78,7 +84,7 @@ const Collections = () => {
             </div>
             <InfiniteScroll
                 dataLength={collections.length}
-                next={getCollection}
+                next={() => getCollection(skip,false)}
                 hasMore={totalAssets > collections.length}
                 loader={<NftSkeletonLoader />}
                 endMessage={<p className="mt-10 text-center"></p>}
@@ -89,8 +95,8 @@ const Collections = () => {
                     ))}
                 </div>
             </InfiniteScroll>
-
-            {!collections && <NotFound message={"Stay tuned for more collections..."} />}
+            {loading && <NftSkeletonLoader />}
+            {totalAssets == 0 && <NotFound message={"Stay tuned for more collections..."} />}
         </div>
     );
 };

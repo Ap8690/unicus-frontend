@@ -67,7 +67,7 @@ const Explore = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const fetchItems = async () => {
+    const fetchItems = async (filterApplied: boolean) => {
         if (skiploading) {
             setLoading(true);
             // if(filter.toLowerCase() === 'all') {}
@@ -82,10 +82,14 @@ const Explore = () => {
                         setDisplayItems([...displayElements ,...res.data.data]);
                     }
                     else setDisplayItems(res.data.data);
-                    console.log("res.data.data: ", res.data.data.length,res.data?.totalAuctions);
                     setTotalAssets(res.data?.totalAuctions)
                     setLoading(false);
                     setskip((prevState) => prevState + 30)
+
+                    if(res.data?.totalAuctions == 0) {
+                        setDisplayItems([])
+                        setskip(0)
+                    }
                     query.delete("search");
                     document.body.scrollTop = 0;
                 })
@@ -110,23 +114,12 @@ const Explore = () => {
         localStorage.setItem("userInfo", JSON.stringify(res.data.user));
         navigate("/marketplace", { replace: true });
     };
-    // window.addEventListener("scroll", async function () {
-    //     var root: any;
-    //     root = document.querySelector(".market_place")?.getBoundingClientRect();
-    //     console.log("root: ", root);
-    //     if (root?.top + root?.height - this.window.innerHeight - 4200 < 0) {
-    //         if (!skiploading) {
-    //             setskiploading(true);
-    //             setskip((prevState) => prevState + 30);
-    //         }
-    //     }
-    // });
 
     // Effect
     useEffect(() => {
+        setDisplayItems([])
         // nothing for now
-        fetchItems();
-        document.body.scrollTop = 0;
+        fetchItems(true);
     }, [filter, chain]);
     
     useEffect(() => {
@@ -159,7 +152,7 @@ const Explore = () => {
         if (chain !== "" && !searchQuery) {
             navigate(`/explore/${chain}`);
         }
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
     }, [chain]);
 
     async function nearLogin() {
@@ -205,7 +198,7 @@ const Explore = () => {
             }
             <InfiniteScroll
                 dataLength={displayElements.length}
-                next={fetchItems}
+                next={() => fetchItems(false)}
                 hasMore={totalAssets > displayElements.length}
                 loader={<NftSkeletonLoader />}
                 endMessage={ 
