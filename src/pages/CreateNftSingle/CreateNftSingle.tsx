@@ -445,13 +445,14 @@ const CreateNftSingle = () => {
                 nftObj.append("uploadedBy", user._id);
                 nftObj.append("mintedBy", user._id);
                 nftObj.append("mintedInfo", user.username);
+                nftObj.append("contractType", contractType);
                 nftObj.append("userInfo", user.username);
                 nftObj.append("image", fileSrc);
                 nftObj.append("tags", JSON.stringify(properties));
                 nftObj.append("collectionName", collection);
                 nftObj.append("attributes", JSON.stringify(properties));
                 if(Cookies.get("Chain_Environment") == 'testnet') {
-                    nftObj.append("quantity", nftQuantity)
+                    nftObj.append("quantity", supply)
                 }
                 const response: any = await uploadToPinata(nftObj);
                 if (!response) {
@@ -558,6 +559,7 @@ const CreateNftSingle = () => {
                     const createNFT = getCreateNftContract(chain, contractType);
                     let res: any;
                     if (contractType === "721") {
+                        console.log("herejkdh")
                         res = await createNFT.methods
                             .batchMint([tokenUri], [royalty])
                             .send({
@@ -571,6 +573,7 @@ const CreateNftSingle = () => {
                             );
                         }
                     } else if (contractType === "1155") {
+                        console.log("here")
                         res = await createNFT.methods
                             .mintNFT(
                                 tokenUri,
@@ -581,6 +584,7 @@ const CreateNftSingle = () => {
                             .send({
                                 from: address,
                             });
+                            console.log(res.events.Minted,'res')
                         if (res?.transactionHash) {
                             nftObj.append(
                                 "tokenId",
@@ -643,6 +647,7 @@ const CreateNftSingle = () => {
                             );
                         }
                     } else if (contractType === "1155") {
+                        console.log("sdfihheresdfh")
                         estimated = await createNFT.methods
                             .mintNFT(
                                 tokenUri,
@@ -669,7 +674,7 @@ const CreateNftSingle = () => {
                             //returnValues NFTId
                             nftObj.append(
                                 "tokenId",
-                                res.events.Minted.returnValues._id
+                                res.events.Minted.returnValues.id
                             );
                         }
                     } else {
@@ -693,6 +698,13 @@ const CreateNftSingle = () => {
         }
         setNftLoading(false);
     };
+
+    // useEffect(()=>{
+    //     if(Cookies.get("Chain_Environment") ==="testnet")
+    //       setContractType("1155")
+    //     else
+    //       setContractType("721")
+    // },[])
 
     useEffect(() => {
         if (localStorage.getItem("properties")) {
@@ -925,7 +937,7 @@ const CreateNftSingle = () => {
                                         setState={setExtlink}
                                     />
                                     <div className="mt-8"></div>
-                                    {Cookies.get("Chain_Environment") ==
+                                    {/* {Cookies.get("Chain_Environment") ==
                                         "testnet" && (
                                         <Input
                                             number
@@ -943,7 +955,7 @@ const CreateNftSingle = () => {
                                             min={1}
                                             setState={setNftQuantity}
                                         />
-                                    )}
+                                    )} */}
 
                                     <div className="mt-8"></div>
                                     <Input

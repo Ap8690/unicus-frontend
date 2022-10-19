@@ -122,6 +122,7 @@ const NftInfo = ({
     const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
         "AvrGQ538bsHRfqJpyfEZumVxLfde3GcBw4AH4JLT3Wyu"
     );
+    console.log(nft,"nft")
 
     useEffect(() => {
         if (anWallet) {
@@ -800,7 +801,7 @@ const NftInfo = ({
                 console.log("else if");
                 const listContract = getCreateNftContract(
                     nft.chain,
-                    getNftContractAddress(nft)
+                    getNftContractAddress(nft,nft.contractType)
                 );
 
                 nft.contractType && nft.contractType === "1155"
@@ -843,8 +844,8 @@ const NftInfo = ({
             } else {
                 const listContract = new web3.eth.Contract(
                     //@ts-ignore
-                    getCreateNftABI(),
-                    getNftContractAddress(nft)
+                    getCreateNftABI(nft.contractType),
+                    getNftContractAddress(nft,nft.contractType)
                 );
 
                 const gasPrice = await web3.eth.getGasPrice();
@@ -1043,16 +1044,16 @@ const NftInfo = ({
                 setNftLoading(false);
                 toast.success("Auction created");
             } else if (nft.chain.toString() === tronChain()) {
-                await getCreateNftContract(nft.chain)
+                await getCreateNftContract(nft.chain,nft.contractType)
                     .methods.approve(
-                        getAuctionContractAddress(nft.chain),
+                        getAuctionContractAddress(nft.chain,nft.contractType),
                         nft.tokenId
                     )
                     .send({ from: address });
                 const amount = startBid * getDecimal(tronChain());
-                const res = await getAuctionContract(nft.chain)
+                const res = await getAuctionContract(nft.chain,nft.contractType)
                     .methods.createAuction(
-                        getCreateNftContractAddress(nft.chain, "721"),
+                        getCreateNftContractAddress(nft.chain, nft.contractType),
                         nft.tokenId,
                         amount.toString(),
                         Number(duration)
@@ -1075,15 +1076,17 @@ const NftInfo = ({
                 toast.success("Auction created");
             } else {
                 const gasPrice = await web3.eth.getGasPrice();
-                let estimated = await getCreateNftContract(nft.chain)
+                console.log(await getCreateNftContract(nft.chain,nft.contractType),"tgype")
+                if(nft.contractType === "721"){
+                    let estimated = await getCreateNftContract(nft.chain,nft.contractType)
                     .methods.approve(
-                        getAuctionContractAddress(nft.chain),
+                        getAuctionContractAddress(nft.chain,nft.contractType),
                         nft.tokenId
                     )
                     .estimateGas({ from: address });
-                await getCreateNftContract(nft.chain)
+                await getCreateNftContract(nft.chain,nft.contractType)
                     .methods.approve(
-                        getAuctionContractAddress(nft.chain),
+                        getAuctionContractAddress(nft.chain,nft.contractType),
                         nft.tokenId
                     )
                     .send({
@@ -1091,18 +1094,37 @@ const NftInfo = ({
                         gas: estimated,
                         gasPrice: gasPrice,
                     });
+                }
+                else{
+                    let estimated = await getCreateNftContract(nft.chain,nft.contractType)
+                    .methods.setApprovalForAll(
+                        getAuctionContractAddress(nft.chain,nft.contractType),
+                        nft.tokenId
+                    )
+                    .estimateGas({ from: address });
+                await getCreateNftContract(nft.chain,nft.contractType)
+                    .methods.setApprovalForAll(
+                        getAuctionContractAddress(nft.chain,nft.contractType),
+                        nft.tokenId
+                    )
+                    .send({
+                        from: address,
+                        gas: estimated,
+                        gasPrice: gasPrice,
+                    });
+                }
 
-                estimated = await getAuctionContract(nft.chain)
+                const estimated = await getAuctionContract(nft.chain,nft.contractType)
                     .methods.createAuction(
-                        getCreateNftContractAddress(nft.chain, "721"),
+                        getCreateNftContractAddress(nft.chain, nft.contractType),
                         nft.tokenId,
                         web3.utils.toWei(startBid.toString(), "ether"),
                         Number(duration)
                     )
                     .estimateGas({ from: address });
-                const res = await getAuctionContract(nft.chain)
+                const res = await getAuctionContract(nft.chain,nft.contractType)
                     .methods.createAuction(
-                        getCreateNftContractAddress(nft.chain, "721"),
+                        getCreateNftContractAddress(nft.chain, nft.contractType),
                         nft.tokenId,
                         web3.utils.toWei(startBid.toString(), "ether"),
                         Number(duration)
@@ -1470,7 +1492,7 @@ const NftInfo = ({
             } else if (Number(nft.chain) === Number(tronChain())) {
                 const res = await getMarketPlace(
                     auction.chain,
-                    auction.nftId.contractType
+                    nft.contractType
                 )
                     .methods.EndSale(auction.auctionId)
                     .send({ from: address });
@@ -1484,13 +1506,13 @@ const NftInfo = ({
                 const gasPrice = await web3.eth.getGasPrice();
                 const estimated = await getMarketPlace(
                     auction.chain,
-                    auction.nftId.contractType
+                    nft.contractType
                 )
                     .methods.EndSale(auction.auctionId)
                     .estimateGas({ from: address });
                 const res = await getMarketPlace(
                     auction.chain,
-                    auction.nftId.contractType
+                    nft.contractType
                 )
                     .methods.EndSale(auction.auctionId)
                     .send({

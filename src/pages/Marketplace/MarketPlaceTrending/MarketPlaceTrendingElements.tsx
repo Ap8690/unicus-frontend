@@ -86,7 +86,7 @@ const MarketPlaceTrendingElements = ({
                     onClick={() =>
                         navigate(
                             `/nft/${element.chain}/${getNftContractAddress(
-                                element
+                                element,"721" // need to be changed
                             )}/${element.tokenId}`
                         )
                     }
