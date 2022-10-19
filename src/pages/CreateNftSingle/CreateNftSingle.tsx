@@ -640,6 +640,7 @@ const CreateNftSingle = () => {
                             });
                         if (res?.transactionHash) {
                             //returnValues NFTId
+                            console.log(res,"res")
                             nftObj.append(
                                 "tokenId",
                                 res.events.Minted.returnValues._NftId
@@ -698,12 +699,12 @@ const CreateNftSingle = () => {
         setNftLoading(false);
     };
 
-    // useEffect(()=>{
-    //     if(Cookies.get("Chain_Environment") ==="testnet")
-    //       setContractType("1155")
-    //     else
-    //       setContractType("721")
-    // },[])
+    useEffect(()=>{
+        if(Cookies.get("Chain_Environment") ==="testnet")
+          setContractType("1155")
+        else
+          setContractType("721")
+    },[])
 
     useEffect(() => {
         if (localStorage.getItem("properties")) {
