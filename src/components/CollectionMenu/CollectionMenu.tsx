@@ -3,6 +3,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
+import PageLoader from "../../components/Loading/PageLoader";
 
 export default function CollectinMenu() {
     let navigate = useNavigate();
@@ -16,6 +17,8 @@ export default function CollectinMenu() {
         navigate(linkTo);
     };
 
+    
+
     return (
         <div>
             <button
@@ -24,7 +27,7 @@ export default function CollectinMenu() {
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
-                onMouseOver={handleClick}
+                // onMouseOver={handleClick}
             >
                 Collection <ExpandMoreIcon />
             </button>

@@ -34,8 +34,8 @@ const ViewNft = () => {
             setNftImg(res.data.nft.cloudinaryUrl);
             setBids(res.data.bids)
             setCreator(res.data.user);
-            if (res.data.nft.collectionName && res.data.nft.collectionName !== "undefined") {
-                const col = await getNftByCollection(res.data.nft.collectionName, 4, 0);
+            if (res.data.nft.collectionId && res.data.nft.collectionId !== "undefined") {
+                const col = await getNftByCollection(res.data.nft.collectionId, 4, 0);
                 setNftByCollection(col.data.nft);
             }
             setNftLoading(false);
@@ -89,9 +89,9 @@ const ViewNft = () => {
                             />
                         )}
                     </div>
-                    {false && nft && nft?.collectionName && (
+                    {nft && nft?.collectionId && (
                         <div className="nft bottom-grid">
-                            <span className="collection-more">More from {nft?.collectionName}</span>
+                            <span className="collection-more">More from this collection</span>
                             <div className='grid sm:grid-cols-4 grid-cols-1'>
                                 {nftByCollection && nftByCollection.map((item: any) => (
                                     <Link

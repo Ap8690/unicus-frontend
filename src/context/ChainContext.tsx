@@ -25,10 +25,8 @@ export const ChainProvider = ({ children }) => {
 
     useEffect(() => {
         if (localStorage.getItem("walletChain")) {
-            console.log("HERE",localStorage.getItem("walletChain"),getChainName(localStorage.getItem("walletChain")))
                 setChain((localStorage.getItem("walletChain")));
         }
-        console.log("chain id: ", chain);
     }, [localStorage.getItem("walletChain"),chain]);
     useEffect(() => {
         if (sessionStorage.getItem("CATEGORY")) {
@@ -40,9 +38,6 @@ export const ChainProvider = ({ children }) => {
             setChainEnvironment(Cookies.get("Chain_Environment"));
     }, [Cookies.get("Chain_Environment")]);
 
-    useEffect(() => {
-        console.log("NEW CHAIN ", chain);
-    }, [chain]);
     return (
         <ChainContext.Provider
             value={{

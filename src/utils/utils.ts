@@ -394,7 +394,6 @@ const chainParams = {
 };
 export const SwitchNetwork = async (network: any) => {
     try {
-        console.log("network: ", network);
         const metaMaskProvider: any = await getMetamaskProvider();
         return await metaMaskProvider.request({
             method: "wallet_switchEthereumChain",

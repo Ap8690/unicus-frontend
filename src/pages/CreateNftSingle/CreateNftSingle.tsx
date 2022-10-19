@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { AssetCategory } from "../../utils/AssetCategory";
 import SuccessModal from "../../components/modals/Status/SuccessModal";
 import { useModal } from "mui-modal-provider";
+import CollectionSearch from "../../components/SearchInput/CollectionSearch";
 
 import {
     tronChain,
@@ -1047,7 +1048,7 @@ const CreateNftSingle = () => {
                                     </div>
 
                                     <div className="select-collection">
-                                        <Input
+                                        {/* <Input
                                             title={
                                                 AssetCategory[
                                                     category.toLowerCase()
@@ -1057,7 +1058,10 @@ const CreateNftSingle = () => {
                                             state={collection}
                                             setState={setCollection}
                                             text
-                                        />
+                                        /> */}
+                                        <CollectionSearch title={AssetCategory[
+                                                    category.toLowerCase()
+                                                ]["AssetCollectionName"]} state={collection} setState={setCollection}/>
                                     </div>
                                     <div className="set-attributes">
                                         <button

@@ -21,11 +21,10 @@ const Collections = () => {
     const filters = ["all"];
     const getCollection = async () => {
         try {
-            const getData = await getallCollections(limit, skip);
-            console.log("getData: ", getData.data?.data);
-            setTotalAssets(getData.data?.total);
-            setCollections(getData.data?.data);
-            setSkip((prevState) => prevState + 30);
+            const getData = await getallCollections(limit,skip);
+            setTotalAssets(getData.data?.total)
+            setCollections(getData.data?.data)
+            setSkip((prevState) => prevState + 30)
         } catch (err) {
             console.log(err);
         }

@@ -60,7 +60,7 @@ require("@solana/wallet-adapter-react-ui/styles.css");
 const App = () => {
     const { showChains, setShowChains, showCategory, setShowCategory } =
         useContext(ChainContext);
-    const {
+    const { 
         walletModal,
         setWalletModal,
         setOpenInstall,
@@ -76,7 +76,6 @@ const App = () => {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
-        //console.log("isMainStore ", isMainStore());
         if (isMainStore()) {
             getStoreForUser();
         } else {
