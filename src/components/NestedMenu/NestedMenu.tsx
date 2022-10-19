@@ -25,7 +25,7 @@ const NestedMenu = ({ chain }) => {
             <button
                 onClick={handleClick}
                 className="nav-link capitalize font-normal"
-                onMouseOver={handleClick}
+                // onMouseOver={handleClick}
             >
                 Explore <ExpandMoreIcon />
             </button>

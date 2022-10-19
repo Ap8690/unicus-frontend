@@ -76,6 +76,17 @@ const Input = (props:any) => {
         />
       ):
        (
+        props.ref ? <input
+          type={"text"}
+          onChange={props.customChange ? props.customChange : handleChange}
+          value={props.state}
+          placeholder={props.placeholder}
+          disabled={props.disabled}
+          maxLength={props.maxLength ? props.maxLength : ''}
+          list={props.list}
+          ref={props.ref}
+        />
+        :
         <input
           type={props.email ? "email" : "text"}
           onChange={props.customChange ? props.customChange : handleChange}
@@ -83,6 +94,7 @@ const Input = (props:any) => {
           placeholder={props.placeholder}
           disabled={props.disabled}
           maxLength={props.maxLength ? props.maxLength : ''}
+          list={props.list}
         />
       )}
     </div>

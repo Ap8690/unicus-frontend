@@ -12,10 +12,15 @@ import searchIcon from "../../assets/svgs/searchIcon.svg";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { ChainContext } from "../../context/ChainContext";
 import { ACCESS_TOKEN } from "../../utils/constants";
-import { disConnectWallet, isMainStore, getUserInfo, getChainId } from "../../utils/utils";
+import {
+    disConnectWallet,
+    isMainStore,
+    getUserInfo,
+    getChainId,
+} from "../../utils/utils";
 import { capitalize, getLocalStorage } from "../../utils/helpers";
 import NavMenu from "../menu/NavMenu/NavMenu";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { getLocation, getEnabledStore } from "../../utils/helpers";
 import NestedMenu from "../NestedMenu/NestedMenu";
@@ -24,7 +29,7 @@ import CollectinMenu from "../../components/CollectionMenu/CollectionMenu";
 
 const Navbar = ({ store }) => {
     const [search, setSearch] = useState("");
-    const { chain,  showChains, setShowChains, setShowCategory } =
+    const { chain, showChains, setShowChains, setShowCategory } =
         useContext(ChainContext);
     const location = useLocation();
     const navigate = useNavigate();
@@ -38,7 +43,6 @@ const Navbar = ({ store }) => {
     const openChains = Boolean(anchorChains);
     const accessToken = Cookies.get(ACCESS_TOKEN);
 
-
     const handleGlobalSearch = (e: any) => {
         e.preventDefault();
         navigate(`/search/${search}`);
@@ -48,22 +52,22 @@ const Navbar = ({ store }) => {
         else setShowChains(true);
     };
     const handleRedirectToTokenzie = () => {
-        if(!isMainStore()) {
-            sessionStorage.setItem("redirect_after_login","/create-nft")
-            setShowCategory(true)
-            let storeEnabled = getEnabledStore(store.advance)
-            let nchain:any = getChainId(storeEnabled); // pass enabled chain for storefront
+        if (!isMainStore()) {
+            sessionStorage.setItem("redirect_after_login", "/create-nft");
+            setShowCategory(true);
+            let storeEnabled = getEnabledStore(store.advance);
+            let nchain: any = getChainId(storeEnabled); // pass enabled chain for storefront
             localStorage.setItem("CHAIN", nchain); // store enabled chain
-            return 
-        } 
-
-        if(!getUserInfo()) {
-            setShowChains(!showChains)
-            sessionStorage.setItem("redirect_after_login","/create-nft")
-            return
+            return;
         }
-        setShowCategory(true)
-        sessionStorage.setItem("redirect_after_login","/create-nft")
+
+        if (!getUserInfo()) {
+            setShowChains(!showChains);
+            sessionStorage.setItem("redirect_after_login", "/create-nft");
+            return;
+        }
+        setShowCategory(true);
+        sessionStorage.setItem("redirect_after_login", "/create-nft");
     };
 
     useEffect(() => {
@@ -93,7 +97,7 @@ const Navbar = ({ store }) => {
                 handleGlobalSearch={handleGlobalSearch}
                 handleRedirectToTokenzie={handleRedirectToTokenzie}
             />
-            
+
             <nav className={solidNav ? "solid-nav" : ""}>
                 <div className={`navbar`}>
                     <Link to={"/marketplace"} className="brand-link">
@@ -116,10 +120,10 @@ const Navbar = ({ store }) => {
                             />
                         </div>
                     )}
-                    
+
                     <div className="nav-menu-icons">
                         <ChainLogo />
-                        
+
                         <ProfileButton
                             accessToken={accessToken}
                             store={store}
@@ -147,7 +151,7 @@ const Navbar = ({ store }) => {
                             <NestedMenu chain={chain} />
                             <CollectinMenu />
                             <Link to={"/marketplace"} className="btn nav-link">
-                            {getUserInfo() ? "Marketplace" :"Enter App"}
+                                {getUserInfo() ? "Marketplace" : "Enter App"}
                             </Link>
                             <div className="chainLogo">
                                 <ChainLogo />
@@ -170,7 +174,9 @@ const Navbar = ({ store }) => {
                                     to={"/marketplace"}
                                     className="btn nav-link"
                                 >
-                                    {getUserInfo() ? "Marketplace" :"Enter App"}
+                                    {getUserInfo()
+                                        ? "Marketplace"
+                                        : "Enter App"}
                                 </Link>
                             ) : (
                                 <button
@@ -238,7 +244,11 @@ const ProfileButton = ({
 
     return (
         <>
-            <button onMouseOver={handleClickProfile} className="nav-link" onClick={handleClickProfile}>
+            <button
+                // onMouseOver={handleClickProfile}
+                className="nav-link"
+                onClick={handleClickProfile}
+            >
                 <img src={profileLogo} alt="profile" className="nav-icons" />
             </button>
             <Menu
@@ -247,7 +257,7 @@ const ProfileButton = ({
                 onClose={handleCloseProfile}
                 MenuListProps={{
                     "aria-labelledby": "basic-button",
-                    onMouseLeave: handleCloseProfile
+                    onMouseLeave: handleCloseProfile,
                 }}
             >
                 <MenuItem onClick={handleCloseProfile}>
@@ -290,7 +300,8 @@ const ProfileButton = ({
                         </MenuItem>
                     )
                 )}
-                {!isMainStore() && store && 
+                {!isMainStore() &&
+                    store &&
                     store.general &&
                     store.general.user === getUserInfo()._id && (
                         <MenuItem onClick={handleCloseProfile}>

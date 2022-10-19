@@ -193,7 +193,6 @@ export const WalletConnectionProvider = ({ children }) => {
                 setFullLoading(false);
                 setWalletModal(false);
                 setShowChains(false);
-                console.log("getChainName(localStorage.getItem(): ", getChainName(localStorage.getItem("CHAIN")));
                 setChain(getChainName(localStorage.getItem("CHAIN")));
                 if (sessionStorage.getItem("redirect_after_login")) {
                     navigate(sessionStorage.getItem("redirect_after_login"));
@@ -240,7 +239,6 @@ export const WalletConnectionProvider = ({ children }) => {
             //clear cache
             clearCache()
         } else if (Cookies.get(ACCESS_TOKEN) && Cookies.get("expiry")) {
-            console.log(Cookies.get("expiry"),new Date().getTime()/1000, Number(Cookies.get("expiry")) <= (new Date().getTime()/1000));
             if (Number(Cookies.get("expiry")) <= (new Date().getTime()/1000)) {
                 clearCache()
             }

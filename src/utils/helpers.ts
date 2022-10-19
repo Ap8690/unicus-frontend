@@ -71,7 +71,7 @@ export const sendMeta = async (walletConnection: any, nearConfig: any) => {
 };
 
 export const getDecimal = (chain: any) => {
-    if (chain.toString() == nearChain()) {
+    if (chain?.toString() == nearChain()) {
         return 10 ** 24;
     } else if (chain.toString() == solonaChain()) {
         return 1000000000;
