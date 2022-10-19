@@ -38,7 +38,13 @@ import {
 } from "../../services/api/supplier";
 import { useContext, useEffect, useState } from "react";
 import web3 from "../../web3";
-import { nearChain, nearMarketAddress, nearNftAddress, solonaChain, tronChain } from "../../config";
+import {
+    nearChain,
+    nearMarketAddress,
+    nearNftAddress,
+    solonaChain,
+    tronChain,
+} from "../../config";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { setNotification } from "../../Redux/Blockchain/contracts";
@@ -78,6 +84,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { getRemainingSeconds } from "../../utils/date";
 import { ChainContext } from "../../context/ChainContext";
 import { parseNearAmount } from "near-api-js/lib/utils/format";
+import Tooltip from "@mui/material/Tooltip";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 
 const NftInfo = ({
     filters,
@@ -761,12 +769,19 @@ const NftInfo = ({
                     tx = {
                         receiverId: nearNftAddress,
                         actions: [
-                          {
-                            methodName: 'nft_approve',
-                            args: {
-                                token_id: obj.tokenId,
-                                account_id: nearMarketAddress,
-                                msg: JSON.stringify({sale_conditions : parseNearAmount((Number(obj.startBid)/getDecimal(nft.chain)).toString())}),
+                            {
+                                methodName: "nft_approve",
+                                args: {
+                                    token_id: obj.tokenId,
+                                    account_id: nearMarketAddress,
+                                    msg: JSON.stringify({
+                                        sale_conditions: parseNearAmount(
+                                            (
+                                                Number(obj.startBid) /
+                                                getDecimal(nft.chain)
+                                            ).toString()
+                                        ),
+                                    }),
                                 },
                                 deposit: parseNearAmount("0.01"),
                             },
@@ -800,7 +815,7 @@ const NftInfo = ({
                 console.log("else if");
                 const listContract = getCreateNftContract(
                     nft.chain,
-                    getNftContractAddress(nft,nft.contractType)
+                    getNftContractAddress(nft, nft.contractType)
                 );
 
                 nft.contractType && nft.contractType === "1155"
@@ -844,7 +859,7 @@ const NftInfo = ({
                 const listContract = new web3.eth.Contract(
                     //@ts-ignore
                     getCreateNftABI(nft.contractType),
-                    getNftContractAddress(nft,nft.contractType)
+                    getNftContractAddress(nft, nft.contractType)
                 );
 
                 const gasPrice = await web3.eth.getGasPrice();
@@ -985,19 +1000,28 @@ const NftInfo = ({
                     tx = {
                         receiverId: nearNftAddress,
                         actions: [
-                          {
-                            methodName: 'approve_nft_auction',
-                            args: {
-                                auction_token: obj.tokenId,
-                                account_id: nearMarketAddress,
-                                start_time:  Math.ceil(new Date().getTime() / 1000), // Time in seconds (as type u64)
-                                end_time: Math.ceil(
-                                    new Date().setSeconds(
-                                        new Date().getSeconds() + obj.duration
-                                    ) /
-                                        1000
-                                ), // Time in seconds (as type u64)
-                                msg: JSON.stringify({sale_conditions : parseNearAmount((Number(obj.startBid)/getDecimal(nft.chain)).toString())}),
+                            {
+                                methodName: "approve_nft_auction",
+                                args: {
+                                    auction_token: obj.tokenId,
+                                    account_id: nearMarketAddress,
+                                    start_time: Math.ceil(
+                                        new Date().getTime() / 1000
+                                    ), // Time in seconds (as type u64)
+                                    end_time: Math.ceil(
+                                        new Date().setSeconds(
+                                            new Date().getSeconds() +
+                                                obj.duration
+                                        ) / 1000
+                                    ), // Time in seconds (as type u64)
+                                    msg: JSON.stringify({
+                                        sale_conditions: parseNearAmount(
+                                            (
+                                                Number(obj.startBid) /
+                                                getDecimal(nft.chain)
+                                            ).toString()
+                                        ),
+                                    }),
                                 },
                                 deposit: parseNearAmount("0.01"),
                             },
@@ -1043,16 +1067,22 @@ const NftInfo = ({
                 setNftLoading(false);
                 toast.success("Auction created");
             } else if (nft.chain.toString() === tronChain()) {
-                await getCreateNftContract(nft.chain,nft.contractType)
+                await getCreateNftContract(nft.chain, nft.contractType)
                     .methods.approve(
-                        getAuctionContractAddress(nft.chain,nft.contractType),
+                        getAuctionContractAddress(nft.chain, nft.contractType),
                         nft.tokenId
                     )
                     .send({ from: address });
                 const amount = startBid * getDecimal(tronChain());
-                const res = await getAuctionContract(nft.chain,nft.contractType)
+                const res = await getAuctionContract(
+                    nft.chain,
+                    nft.contractType
+                )
                     .methods.createAuction(
-                        getCreateNftContractAddress(nft.chain, nft.contractType),
+                        getCreateNftContractAddress(
+                            nft.chain,
+                            nft.contractType
+                        ),
                         nft.tokenId,
                         amount.toString(),
                         Number(duration)
@@ -1075,55 +1105,87 @@ const NftInfo = ({
                 toast.success("Auction created");
             } else {
                 const gasPrice = await web3.eth.getGasPrice();
-                console.log(await getCreateNftContract(nft.chain,nft.contractType),"tgype")
-                if(nft.contractType === "721"){
-                    let estimated = await getCreateNftContract(nft.chain,nft.contractType)
-                    .methods.approve(
-                        getAuctionContractAddress(nft.chain,nft.contractType),
-                        nft.tokenId
+                console.log(
+                    await getCreateNftContract(nft.chain, nft.contractType),
+                    "tgype"
+                );
+                if (nft.contractType === "721") {
+                    let estimated = await getCreateNftContract(
+                        nft.chain,
+                        nft.contractType
                     )
-                    .estimateGas({ from: address });
-                await getCreateNftContract(nft.chain,nft.contractType)
-                    .methods.approve(
-                        getAuctionContractAddress(nft.chain,nft.contractType),
-                        nft.tokenId
+                        .methods.approve(
+                            getAuctionContractAddress(
+                                nft.chain,
+                                nft.contractType
+                            ),
+                            nft.tokenId
+                        )
+                        .estimateGas({ from: address });
+                    await getCreateNftContract(nft.chain, nft.contractType)
+                        .methods.approve(
+                            getAuctionContractAddress(
+                                nft.chain,
+                                nft.contractType
+                            ),
+                            nft.tokenId
+                        )
+                        .send({
+                            from: address,
+                            gas: estimated,
+                            gasPrice: gasPrice,
+                        });
+                } else {
+                    let estimated = await getCreateNftContract(
+                        nft.chain,
+                        nft.contractType
                     )
-                    .send({
-                        from: address,
-                        gas: estimated,
-                        gasPrice: gasPrice,
-                    });
-                }
-                else{
-                    let estimated = await getCreateNftContract(nft.chain,nft.contractType)
-                    .methods.setApprovalForAll(
-                        getAuctionContractAddress(nft.chain,nft.contractType),
-                        nft.tokenId
-                    )
-                    .estimateGas({ from: address });
-                await getCreateNftContract(nft.chain,nft.contractType)
-                    .methods.setApprovalForAll(
-                        getAuctionContractAddress(nft.chain,nft.contractType),
-                        nft.tokenId
-                    )
-                    .send({
-                        from: address,
-                        gas: estimated,
-                        gasPrice: gasPrice,
-                    });
+                        .methods.setApprovalForAll(
+                            getAuctionContractAddress(
+                                nft.chain,
+                                nft.contractType
+                            ),
+                            nft.tokenId
+                        )
+                        .estimateGas({ from: address });
+                    await getCreateNftContract(nft.chain, nft.contractType)
+                        .methods.setApprovalForAll(
+                            getAuctionContractAddress(
+                                nft.chain,
+                                nft.contractType
+                            ),
+                            nft.tokenId
+                        )
+                        .send({
+                            from: address,
+                            gas: estimated,
+                            gasPrice: gasPrice,
+                        });
                 }
 
-                const estimated = await getAuctionContract(nft.chain,nft.contractType)
+                const estimated = await getAuctionContract(
+                    nft.chain,
+                    nft.contractType
+                )
                     .methods.createAuction(
-                        getCreateNftContractAddress(nft.chain, nft.contractType),
+                        getCreateNftContractAddress(
+                            nft.chain,
+                            nft.contractType
+                        ),
                         nft.tokenId,
                         web3.utils.toWei(startBid.toString(), "ether"),
                         Number(duration)
                     )
                     .estimateGas({ from: address });
-                const res = await getAuctionContract(nft.chain,nft.contractType)
+                const res = await getAuctionContract(
+                    nft.chain,
+                    nft.contractType
+                )
                     .methods.createAuction(
-                        getCreateNftContractAddress(nft.chain, nft.contractType),
+                        getCreateNftContractAddress(
+                            nft.chain,
+                            nft.contractType
+                        ),
                         nft.tokenId,
                         web3.utils.toWei(startBid.toString(), "ether"),
                         Number(duration)
@@ -1166,11 +1228,11 @@ const NftInfo = ({
                     const tx = {
                         receiverId: nearMarketAddress,
                         actions: [
-                          {
-                            methodName: 'offer',
-                            args: {
-                                token_id: nft.tokenId,
-                                nft_contract_id: nearNftAddress,
+                            {
+                                methodName: "offer",
+                                args: {
+                                    token_id: nft.tokenId,
+                                    nft_contract_id: nearNftAddress,
                                 },
                                 gas: "200000000000000",
                                 deposit: parseNearAmount(
@@ -1312,11 +1374,11 @@ const NftInfo = ({
                     const tx = {
                         receiverId: nearMarketAddress,
                         actions: [
-                          {
-                            methodName: 'offer_bid',
-                            args: {
-                                token_id: nft.tokenId,
-                                nft_contract_id: nearNftAddress,
+                            {
+                                methodName: "offer_bid",
+                                args: {
+                                    token_id: nft.tokenId,
+                                    nft_contract_id: nearNftAddress,
                                 },
                                 gas: "200000000000000",
                                 deposit: parseNearAmount(bid.toString()),
@@ -1448,11 +1510,11 @@ const NftInfo = ({
                     const tx = {
                         receiverId: nearMarketAddress,
                         actions: [
-                          {
-                            methodName: 'remove_sale',
-                            args: {
-                                token_id: nft.tokenId,
-                                nft_contract_id: nearNftAddress,
+                            {
+                                methodName: "remove_sale",
+                                args: {
+                                    token_id: nft.tokenId,
+                                    nft_contract_id: nearNftAddress,
                                 },
                                 gas: "200000000000000",
                                 deposit: "1",
@@ -1563,11 +1625,11 @@ const NftInfo = ({
                     const tx = {
                         receiverId: nearMarketAddress,
                         actions: [
-                          {
-                            methodName: 'process_auction_purchase',
-                            args: {
-                                token_id: nft.tokenId,
-                                nft_contract_id: nearNftAddress,
+                            {
+                                methodName: "process_auction_purchase",
+                                args: {
+                                    token_id: nft.tokenId,
+                                    nft_contract_id: nearNftAddress,
                                 },
                                 gas: "200000000000000",
                                 deposit: "0",
@@ -1670,11 +1732,11 @@ const NftInfo = ({
                     const tx = {
                         receiverId: nearMarketAddress,
                         actions: [
-                          {
-                            methodName: 'remove_auction',
-                            args: {
-                                token_id: nft.tokenId,
-                                nft_contract_id: nearNftAddress,
+                            {
+                                methodName: "remove_auction",
+                                args: {
+                                    token_id: nft.tokenId,
+                                    nft_contract_id: nearNftAddress,
                                 },
                                 gas: "200000000000000",
                                 deposit: "1",
@@ -1840,6 +1902,7 @@ const NftInfo = ({
         setNewTime(e["$d"]);
         setDuration(remainingSeconds);
     };
+
     useEffect(() => {
         (async () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -2032,7 +2095,9 @@ const NftInfo = ({
                                             }}
                                         >
                                             {/* @ts-ignore */}
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <LocalizationProvider
+                                                dateAdapter={AdapterDayjs}
+                                            >
                                                 <MobileDatePicker
                                                     inputFormat="MM/DD/YYYY"
                                                     value={newTime}
@@ -2101,9 +2166,7 @@ const NftInfo = ({
                 <h2>{nft.name}</h2>
                 <div className="text-sm mb-4">
                     #Token ID:{" "}
-                    <span className="ml-2 tokenId text-sm">
-                        {nft?.tokenId}
-                    </span>
+                    <span className="ml-2 tokenId text-sm">{nft?.tokenId}</span>
                 </div>
                 {auction && (
                     <div className="nft-price">
@@ -2174,9 +2237,7 @@ const NftInfo = ({
                     {activeFilter === "History" && (
                         <History data={historyData} />
                     )}
-                    {activeFilter === "Info" && (
-                        <NftInfo_ data={nft} />
-                    )}
+                    {activeFilter === "Info" && <NftInfo_ data={nft} />}
 
                     {activeFilter === "Bids" && (
                         <Bids bids={bids} nftChain={nft?.chain} />
@@ -2297,20 +2358,61 @@ const History = ({ data }) => {
     );
 };
 const NftInfo_ = ({ data }) => {
+    const [isCopied, setIsCopied] = useState(false);
+
+    async function copyTextToClipboard(text: any) {
+        if ("clipboard" in navigator) {
+            return await navigator.clipboard.writeText(text);
+        } else {
+            return document.execCommand("copy", true, text);
+        }
+    }
+    const handleCopyClick = (copyText: string) => {
+        // Asynchronously call copyTextToClipboard
+        copyTextToClipboard(copyText)
+            .then(() => {
+                // If successful, update the isCopied state value
+                setIsCopied(true);
+                setTimeout(() => {
+                    setIsCopied(false);
+                }, 1500);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     return (
         <div className="nft-history-box">
-            <div key={uuid()} className="nft-history">
-                    <div>
-                        <div className="msg">
-                            Supply: 
-                        </div>
-                        <div className="info">
-                        {data.quantity}
-                        </div>
-                        
+            <div
+                key={uuid()}
+                className="nft-history flex flex-col justify-start items-start"
+            >
+                <div className="flex justify-center">
+                    <div className="text-sm font-medium mr-2">
+                        Contract Address:
                     </div>
+                    <Tooltip title={isCopied ? "Copied" : data.contractAddress}>
+                        <div className="info mb-0 cursor-pointer">
+                            {trimString(data.contractAddress)}{" "}
+                            <ContentPasteIcon
+                                onClick={() =>
+                                    handleCopyClick(data.contractAddress)
+                                }
+                                fontSize="small"
+                                className="h-2"
+                            />
+                        </div>
+                    </Tooltip>
                 </div>
-           
+                <div className="flex justify-center">
+                    <div className="text-sm font-medium mr-2">Supply:</div>
+                    <div className="info mb-0">{data.quantity}</div>
+                </div>
+                <div className="flex justify-center">
+                    <div className="text-sm font-medium mr-2">Contract Type:</div>
+                    <div className="info mb-0">ERC-{data?.contractType}</div>
+                </div>
+            </div>
         </div>
     );
 };

@@ -150,6 +150,7 @@ const Profile = (): ReactJSXElement => {
     }, [search]);
 
     useEffect(() => {
+        console.log("porieu")
         getNfts();
         getUserProfile();
         if (!getAccessToken()) {
@@ -158,6 +159,7 @@ const Profile = (): ReactJSXElement => {
         window.scrollTo(0, 0);
     }, []);
     useEffect(() => {
+        console.log("ASD FDSF")
         getNfts()
     },[page])
     return (

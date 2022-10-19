@@ -294,12 +294,12 @@
     overflow-y: scroll;
 
     .nft-history {
-        @include mixins.flex(center, flex-start);
+        @include mixins.flex(flex-start, flex-start);
         gap: 1rem;
 
         .msg {
             font-weight: 500;
-            margin-bottom: 0.5rem;
+            // margin-bottom: 0.5rem;
         }
 
         .info {
