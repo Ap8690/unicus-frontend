@@ -1,19 +1,13 @@
 import userImg from "../../assets/images/Rectangle 8 (1).png";
 import bannerImg from "../../assets/images/allNFTImage.png";
-import { useEffect, useState } from "react";
+import {useNavigate} from 'react-router';
 import { getUserById } from "../../services/api/supplier";
+import {trimString} from "../../utils/utils";
 
 const CollectionCard = ({ element }) => {
-    const [user, setUser] = useState("");
-    const getUserName = async () => {
-        const res = await getUserById(element.owner);
-        setUser(res.data.user.username)
-    };
-    useEffect(() => {
-        getUserName();
-    }, []);
+    const navigate = useNavigate();
     return (
-        <div className="market-place-trending-element">
+        <div onClick={() => navigate(`/collection/${element._id}`)} className="market-place-trending-element hover:cursor-pointer">
             <div className="nft-image-size">
                 {element.bannerUrl ? (
                     <img src={element.bannerUrl} alt={element.name} />
@@ -44,9 +38,7 @@ const CollectionCard = ({ element }) => {
                     <p className="credit">
                         By{" "}
                         <span className="creator-name">
-                            {user.length > 12
-                                ? user.slice(0, 12) + "..."
-                                : user}
+                            {element.owner && trimString(element.owner.wallets[0])}
                         </span>
                     </p>
                 </div>

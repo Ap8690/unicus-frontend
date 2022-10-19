@@ -33,7 +33,7 @@
                 justify-items: center;
                 gap: 2rem;
                 .all-nfts-element {
-                    width: fit-content;
+                    width: 100%;
                     display: flex;
                     flex-direction: column;
                     gap: 0.5rem;
@@ -56,7 +56,7 @@
                     }
                     .buy {
                         display: flex;
-                        justify-content: space-between;
+                        justify-content: center;
                         padding: 0.5rem;
                         border-top: 1px solid #ffffff1a;
                         margin-top: 0.5rem;

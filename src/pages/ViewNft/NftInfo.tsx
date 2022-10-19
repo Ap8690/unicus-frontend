@@ -122,7 +122,6 @@ const NftInfo = ({
     const SOL_MINT_NFT_PROGRAM_ID = new anchor.web3.PublicKey(
         "AvrGQ538bsHRfqJpyfEZumVxLfde3GcBw4AH4JLT3Wyu"
     );
-    console.log(nft,"nft")
 
     useEffect(() => {
         if (anWallet) {

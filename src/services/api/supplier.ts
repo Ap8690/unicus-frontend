@@ -28,7 +28,7 @@ export const getUserId = () => {
     return JSON.parse(Cookies.get("userInfo"))._id;
 };
 
-export async function getUserById(userId){
+export async function getUserById(userId:any){
   return await axios.get(`${BASE_URL}/users/getUserById/${userId}`, axiosConfig())
 }
 
@@ -381,9 +381,9 @@ export async function getCollectionsSearch(
         axiosConfig()
     );
 }
-export async function getallCollections(limit: any, skip: any) {
+export async function getallCollections(limit: any, skip: any, filter:string) {
     return await axios.get(
-        `${BASE_URL}/nft/getallCollections/${limit}/${skip}`,
+        `${BASE_URL}/collection/getallCollections/${limit}/${skip}?filter=${filter}`,
         axiosConfig()
     );
 }

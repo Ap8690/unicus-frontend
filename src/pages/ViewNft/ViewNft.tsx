@@ -96,6 +96,7 @@ const ViewNft = () => {
                                 {nftByCollection && nftByCollection.map((item: any) => (
                                     <Link
                                         key={uuid()}
+                                        className='w-full'
                                         to={`/nft/${item.chain}/${item.contractAddress}/${item._id}`}
                                     >
                                         <AllNFTsElement element={item} />
