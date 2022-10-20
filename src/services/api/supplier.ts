@@ -221,7 +221,7 @@ export async function saveGenerals(generals: IGeneral) {
     return await axios.post(`${BASE_URL}/general`, generals, axiosConfig());
 }
 export async function uploadStorefrontLogo(logo:any) {
-    return await axios.post(`${BASE_URL}/logo/upload`,logo,axiosConfig())
+    return await axios.post(`${BASE_URL}/general/logo/upload`,logo,axiosConfig())
 }
 export async function saveAdvance(advance: IAdvance) {
     return await axios.post(`${BASE_URL}/advance`, advance, axiosConfig());

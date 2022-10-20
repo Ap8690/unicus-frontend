@@ -27,6 +27,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
 
   const uploadImage = () => {
     // `current` points to the mounted file input element
+    console.log("LOg uploadImage")
     inputFile.current.click();
   };
   
@@ -85,7 +86,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
     <div className="general-name-logo">
       <div className="create-store-form">
         <div className="form-input">
-          <label htmlFor="store-name">{generals?.storeName ? generals.storeName :"Store Name"}</label>
+          <label htmlFor="store-name">{"Store Name"}</label>
           <Input
             type="text"
             id="store-name"
