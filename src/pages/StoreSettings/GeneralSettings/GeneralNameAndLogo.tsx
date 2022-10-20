@@ -10,11 +10,13 @@ import { BASE_URL } from "../../../config";
 import uuid from "react-uuid";
 import { Form } from "react-bootstrap";
 import { FormControl, MenuItem, Select } from "@mui/material";
-import { axiosConfig, saveGenerals } from "../../../services/api/supplier";
+import { saveGenerals, uploadStorefrontLogo } from "../../../services/api/supplier";
 
 const GeneralNameAndLogo = (general: IGeneral) => {
   //@ts-ignore
-  const [generals, setGeneral] = useState<IGeneral>({});
+  const [generals, setGeneral] = useState<IGeneral>({
+    logoUrl:""
+  });
   const [storeName, setStoreName] = useState("");
   const [storeEmail, setStoreEmail] = useState("");
   const [storeCountry, setStoreCountry] = useState("");
@@ -30,30 +32,19 @@ const GeneralNameAndLogo = (general: IGeneral) => {
   
 
   const getImageUrl = async (e: any) => {
-    //uploading to cloudinary
     try {
-      setLoadingImage(true);
-      let cloudinaryFormData = new FormData();
-
-      cloudinaryFormData.append("file", e.target.files[0]);
-      cloudinaryFormData.append("upload_preset", `Unicus___User`);
-
-      cloudinaryFormData.append("public_id", uuid());
-
-      const cloudinaryRes = await fetch(
-        "https://api.cloudinary.com/v1_1/dhmglymaz/image/upload/",
-        {
-          method: "POST",
-          body: cloudinaryFormData,
-        }
-      );
-      const JSONdata = await cloudinaryRes.json();
-
-      setGeneral({ ...generals, logoUrl: JSONdata.url });
-    } catch (err) {
-      //console.log("Cloudinary User Image Upload Error ->", err);
+      setLoadingImage(true)
+      const formData = new FormData();
+      formData.append('logo',e.target.files[0]);
+      const up = await uploadStorefrontLogo(formData)
+      console.log(up)
+      setLoadingImage(false)
+      // setGeneral({ ...generals, logoUrl: e.target.files[0] });
     }
-    setLoadingImage(false);
+    catch(err) {
+      console.log(err);
+    }
+      
   };
 
   const handleStoreName = (e:any) => {
@@ -148,11 +139,11 @@ const GeneralNameAndLogo = (general: IGeneral) => {
       <div className="file-upload-container">
         <div className="title">Logo</div>
         <label className="file-upload-box">
-          {generals.logoUrl === "" ? (
+          {!generals.logoUrl ? (
             <img src={uploadImg} alt="" onClick={uploadImage} />)
           :(
             <img
-              src={generals.logoUrl}
+              src={URL.createObjectURL(generals?.logoUrl)}
               alt=""
               style={{ width: "90%" }}
               onClick={uploadImage}

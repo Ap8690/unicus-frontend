@@ -330,7 +330,8 @@ const App = () => {
                             setOpen={setOpenInstall}
                             wallet={walletInstall}
                         />
-                        <Footer />
+                        {!isMainStore() ? store?.appearance.showFooter && <Footer /> : <Footer />} 
+
                     </div>
                     <Toaster/>
                 </TransactionProvider>

@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { StoreContext } from "../../context/StoreContext";
 // Logos
 import UnicusLogo from "../../assets/images/Unicus-logo.png";
 import GmailLogo from "../../assets/svgs/gmailFooter.svg";
@@ -12,91 +14,152 @@ import { Link } from "react-router-dom";
 // Sass
 import "./Footer.scss";
 
+import { isMainStore } from "../../utils/utils";
+
 const SocialElement = ({ social }) => {
-  const href = social.name === "Mail" ? `mailto:${social.link}` : social.link;
-  return (
-    <a
-      href={href}
-      className="footer-social-link"
-      target="_blank"
-      rel="noreferrer"
-    >
-      <img src={social.logo} alt={social.name} />
-    </a>
-  );
+    const href = social.name === "Mail" ? `mailto:${social.link}` : social.link;
+    return (
+        <a
+            href={href}
+            className="footer-social-link"
+            target="_blank"
+            rel="noreferrer"
+        >
+            <img src={social.logo} alt={social.name} />
+        </a>
+    );
 };
 const Footer = () => {
-  const socials = [
-    {
-      name: "Twitter",
-      link: "https://twitter.com/unicus_one?s=21&t=2Izg6oEpBtUcLUpetcvcRA",
-      logo: TwitterLogo,
-    },
-    {
-      name: "Medium",
-      link: "https://unicus.medium.com/",
-      logo: MediumLogo,
-    },
-    {
-      name: "Instagram",
-      link: "https://instagram.com/unicus_one?igshid=NmNmNjAwNzg=",
-      logo: InstagramLogo,
-    },
-    {
-      name: "Telegram",
-      link: "https://instagram.com/unicus_one?igshid=NmNmNjAwNzg=",
-      logo: TelegramLogo,
-    },
-    {
-      name: "Mail",
-      link: "mailto:info@unicus.one",
-      logo: GmailLogo,
-    },
-  ];
-  return (
-    <footer>
-      <Link to={"/"} className="footer-logo">
-        <img src={UnicusLogo} alt="Unicus One" />
-      </Link>
-      <h3 className="footer-intro">
-        Worlds first Multi Chain WaaS (Web3 as a Service) Platform for
-        Metaverse, Gaming, and NFT Economy
-      </h3>
-      <nav className="footer-nav-bar">
-        <div className="footer-nav-links">
-          <Link to={"/about-us"} className="footer-nav-link">
-            About
-          </Link>
-          <Link to={"/for-creator"} className="footer-nav-link">
-            For Creators
-          </Link>
-          <Link to={"/token"} className="footer-nav-link">
-            Token
-          </Link>
-          <Link to={"/blog"} className="footer-nav-link">
-            Blog
-          </Link>
-          <Link to={"/create-store"} className="footer-nav-link">
-            Create Store
-          </Link>
-          <Link to={"/launchpad"} className="footer-nav-link">
-            Launchpad
-          </Link>
-          <Link to={"/marketplace"} className="footer-nav-link">
-            Marketplace
-          </Link>
-        </div>
-      </nav>
-      <div className="footer-social-links">
-        {socials.map((social) => (
-          <SocialElement social={social} key={social.name} />
-        ))}
-      </div>
-      <div className="footer-copyright">
-        Copyright © {new Date().getFullYear()}. All rights reserved
-      </div>
-    </footer>
-  );
+  const { store } = useContext(StoreContext);
+    const socials = [
+        {
+            name: "Twitter",
+            link: "https://twitter.com/unicus_one?s=21&t=2Izg6oEpBtUcLUpetcvcRA",
+            logo: TwitterLogo,
+        },
+        {
+            name: "Medium",
+            link: "https://unicus.medium.com/",
+            logo: MediumLogo,
+        },
+        {
+            name: "Instagram",
+            link: "https://instagram.com/unicus_one?igshid=NmNmNjAwNzg=",
+            logo: InstagramLogo,
+        },
+        {
+            name: "Telegram",
+            link: "https://instagram.com/unicus_one?igshid=NmNmNjAwNzg=",
+            logo: TelegramLogo,
+        },
+        {
+            name: "Mail",
+            link: "mailto:info@unicus.one",
+            logo: GmailLogo,
+        },
+    ];
+    return (
+        <>
+            {isMainStore() ? (
+                <footer>
+                    <Link to={"/"} className="footer-logo">
+                        <img src={UnicusLogo} alt="Unicus One" />
+                    </Link>
+                    <h3 className="footer-intro">
+                        Worlds first Multi Chain WaaS (Web3 as a Service)
+                        Platform for Metaverse, Gaming, and NFT Economy
+                    </h3>
+                    <nav className="footer-nav-bar">
+                        <div className="footer-nav-links">
+                            <Link to={"/about-us"} className="footer-nav-link">
+                                About
+                            </Link>
+                            <Link
+                                to={"/for-creator"}
+                                className="footer-nav-link"
+                            >
+                                For Creators
+                            </Link>
+                            <Link to={"/token"} className="footer-nav-link">
+                                Token
+                            </Link>
+                            <Link to={"/blog"} className="footer-nav-link">
+                                Blog
+                            </Link>
+                            <Link
+                                to={"/create-store"}
+                                className="footer-nav-link"
+                            >
+                                Create Store
+                            </Link>
+                            <Link to={"/launchpad"} className="footer-nav-link">
+                                Launchpad
+                            </Link>
+                            <Link
+                                to={"/marketplace"}
+                                className="footer-nav-link"
+                            >
+                                Marketplace
+                            </Link>
+                        </div>
+                    </nav>
+                    <div className="footer-social-links">
+                        {socials.map((social) => (
+                            <SocialElement social={social} key={social.name} />
+                        ))}
+                    </div>
+                    <div className="footer-copyright">
+                        Copyright © {new Date().getFullYear()}. All rights
+                        reserved
+                    </div>
+                </footer>
+            ) : (
+                <footer>
+                    <Link to={"/"} className="footer-logo">
+                        <img src={store?.general.logoUrl ? store?.general.logoUrl : UnicusLogo} alt="Unicus One" />
+                    </Link>
+                    <h3 className="footer-intro">
+                        UnicusOne | Worlds first Multi Chain WaaS (Web3 as a Service)
+                        Platform for Metaverse, Gaming, and NFT Economy
+                    </h3>
+                    <nav className="footer-nav-bar">
+                        <div className="footer-nav-links">
+                            <Link to={"/about-us"} className="footer-nav-link">
+                                About
+                            </Link>
+                            <Link
+                                to={"/for-creator"}
+                                className="footer-nav-link"
+                            >
+                                For Creators
+                            </Link>
+                            <Link to={"/token"} className="footer-nav-link">
+                                Token
+                            </Link>
+                            <Link to={"/launchpad"} className="footer-nav-link">
+                                Launchpad
+                            </Link>
+                            <Link
+                                to={"/marketplace"}
+                                className="footer-nav-link"
+                            >
+                                Marketplace
+                            </Link>
+                        </div>
+                    </nav>
+                    <div className="footer-social-links">
+                        {socials.map((social) => (
+                            <SocialElement social={social} key={social.name} />
+                        ))}
+                    </div>
+                    <div className="footer-copyright">
+                        Copyright © {new Date().getFullYear()}. All rights
+                        reserved
+                    </div>
+                </footer>
+            )}
+        </>
+    );
 };
 
 export default Footer;
