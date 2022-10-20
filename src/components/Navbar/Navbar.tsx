@@ -151,7 +151,7 @@ const Navbar = ({ store }) => {
                                 Resources
                             </Link>
                             <NestedMenu chain={chain} />
-                            {/* <CollectinMenu /> */}
+                            <CollectinMenu />
                             <Link to={"/marketplace"} className="btn nav-link">
                                 {getUserInfo() ? "Marketplace" : "Enter App"}
                             </Link>
@@ -162,8 +162,8 @@ const Navbar = ({ store }) => {
                     ) : (
                         <div className="nav-links">
                             <NestedMenu chain={chain} />
-                            {/* <CollectinMenu /> */}
-                            {/* <Link className='nav-link' to='/collections'>Collections</Link> */}
+                            <CollectinMenu />
+                            <Link className='nav-link' to='/collections'>Collections</Link>
                             {!getUserInfo() ? (
                                 <button
                                     onClick={handleRedirectToTokenzie}
