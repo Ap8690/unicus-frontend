@@ -23,7 +23,7 @@ const AppearanceOther = (appearance: IAppearance) => {
     // `current` points to the mounted file input element
     inputFile.current.click();
   };
-  const handleStoreLoader = (e) => {
+  const handleStoreLoader = (e:any) => {
     setStoreLoader(e.target.value);
   };
    useEffect(() => {
@@ -61,6 +61,7 @@ const AppearanceOther = (appearance: IAppearance) => {
   };
   const handleSave = async () => {
     try {
+      console.log("Appearance: ", Appearance);
       const res = await axios.post(`${BASE_URL}/appearance`, Appearance);
       if (res) {
         toast.success("Saved Changes");
@@ -89,7 +90,7 @@ const AppearanceOther = (appearance: IAppearance) => {
           <span>Turn this ON/off to show Footer section</span>
         </div>
       </div>
-      <div className="file-upload-container">
+      {/* <div className="file-upload-container">
         <div className="title">Store Loader</div>
         <label className="file-upload-box">
           <div id="">
@@ -128,7 +129,7 @@ const AppearanceOther = (appearance: IAppearance) => {
             className="d-none"
           />{" "}
         </label>
-      </div>
+      </div> */}
       <button className="btn" onClick={handleSave}>
         Save Changes
       </button>

@@ -2404,10 +2404,10 @@ const NftInfo_ = ({ data }) => {
                         </div>
                     </Tooltip>
                 </div>
-                <div className="flex justify-center">
+                {data && data.quantity && <div className="flex justify-center">
                     <div className="text-sm font-medium mr-2">Supply:</div>
-                    <div className="info mb-0">{data.quantity}</div>
-                </div>
+                    <div className="info mb-0">{data?.quantity}</div>
+                </div>}
                 <div className="flex justify-center">
                     <div className="text-sm font-medium mr-2">Contract Type:</div>
                     <div className="info mb-0">ERC-{data?.contractType}</div>
