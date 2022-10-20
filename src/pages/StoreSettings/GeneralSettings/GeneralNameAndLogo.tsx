@@ -37,7 +37,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
       const formData = new FormData();
       formData.append('logo',e.target.files[0]);
       const up = await uploadStorefrontLogo(formData)
-      console.log(up)
+      console.log(up.data)
       setLoadingImage(false)
       // setGeneral({ ...generals, logoUrl: e.target.files[0] });
     }
@@ -143,7 +143,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
             <img src={uploadImg} alt="" onClick={uploadImage} />)
           :(
             <img
-              src={URL.createObjectURL(generals?.logoUrl)}
+              src={generals?.logoUrl}
               alt=""
               style={{ width: "90%" }}
               onClick={uploadImage}
