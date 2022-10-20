@@ -1,5 +1,5 @@
 import userImg from "../../assets/images/userImage.png";
-import backgroundImg from "../../assets/images/favouritedImage.png";
+import backgroundImg from "../../assets/images/userBackground.png";
 import { updateProfileBg, updateProfilePic } from "../../services/api/supplier";
 import uuid from "react-uuid";
 import twitterImg from "../../assets/svgs/profileTwitter.svg";

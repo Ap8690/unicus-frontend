@@ -11,7 +11,7 @@ import DropDownSearch from "../../../components/DropDownSearch/DropDownSearch";
 import BlueBackground from "../../../components/BlueBackground/BlueBackground";
 import { useEffect, useState } from "react";
 
-const Listing = ({ list, search, setSearch, columns, loading, setPage, page, metadata }) => {
+const Listing = ({ list,profileState, search, setSearch, columns, loading, setPage, page, metadata }) => {
   //console.log("metadata: ", metadata);
   const [filteredList, setFilteredList] = useState(list);
 
@@ -31,7 +31,7 @@ const Listing = ({ list, search, setSearch, columns, loading, setPage, page, met
           searchList={filteredList}
           list={list}
         />
-        <Table page={page} metadata={metadata} setPage={setPage} columns={columns} rows={filteredList} loading={loading} />
+        <Table profileState={profileState} page={page} metadata={metadata} setPage={setPage} columns={columns} rows={filteredList} loading={loading} />
 
       </div>
     </div>

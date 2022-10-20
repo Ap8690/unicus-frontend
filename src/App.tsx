@@ -149,7 +149,7 @@ const App = () => {
                     <div className="App">
                         <Navbar store={isMainStore() ? userStore : store} />
                         
-                        <ScrollToTop />
+                        {/* <ScrollToTop /> */}
                         <Routes>
                             {isMainStore() ? (
                                 // <Route path="/home" element={<Homepage />} />

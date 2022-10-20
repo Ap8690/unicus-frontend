@@ -55,10 +55,11 @@ const Navbar = ({ store }) => {
     const handleRedirectToTokenzie = () => {
         if (!isMainStore()) {
             sessionStorage.setItem("redirect_after_login", "/create-nft");
-            setShowCategory(true);
-            let storeEnabled = getEnabledStore(store.advance);
-            let nchain: any = getChainId(storeEnabled); // pass enabled chain for storefront
-            localStorage.setItem("CHAIN", nchain); // store enabled chain
+            // setShowCategory(true);
+            let storeEnabled = getEnabledStore(store.advance); // returns enabled chain
+            // let nchain: any = getChainId(storeEnabled); // pass enabled chain for storefront
+            // localStorage.setItem("CHAIN", nchain); // store enabled chain
+            setShowChains(!showChains);
             return;
         }
 

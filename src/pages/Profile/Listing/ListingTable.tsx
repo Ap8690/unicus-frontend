@@ -110,8 +110,8 @@ const TableData = ({ activity, link }) => {
         </tr>
     );
 };
-const Table = ({ rows, columns, loading, page, setPage, metadata }) => {
-    //console.log("metadata: ", metadata);
+const Table = ({ rows, profileState, columns, loading, page, setPage, metadata }) => {
+    console.log("rows: ", rows);
     return (
         <div className="table">
             <table>
@@ -141,7 +141,12 @@ const Table = ({ rows, columns, loading, page, setPage, metadata }) => {
                             rows
                                 .map((row: any, i: number) => (
                                     <TableData
-                                        link={`/nft/${row.chain}/${
+                                        link={profileState == 'offers' ? `/nft/${row.chain}/${
+                                            row.contractAddress
+                                                ? row.contractAddress
+                                                : row.nftId &&
+                                                  row.nftId.contractAddress
+                                        }/${row.tokenId}/${row?.nftId._id}` : `/nft/${row.chain}/${
                                             row.contractAddress
                                                 ? row.contractAddress
                                                 : row.nftId &&
