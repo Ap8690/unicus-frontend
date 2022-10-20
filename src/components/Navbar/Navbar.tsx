@@ -28,6 +28,7 @@ import ChainLogo from "../../components/ChainLogo/ChainLogo";
 import CollectinMenu from "../../components/CollectionMenu/CollectionMenu";
 
 const Navbar = ({ store }) => {
+    console.log("store: ", store);
     const [search, setSearch] = useState("");
     const { chain, showChains, setShowChains, setShowCategory } =
         useContext(ChainContext);
@@ -102,7 +103,7 @@ const Navbar = ({ store }) => {
                 <div className={`navbar`}>
                     <Link to={"/marketplace"} className="brand-link">
                         <img
-                            src={unicusLogo}
+                            src={isMainStore() ? unicusLogo : store?.general.logoUrl}
                             className={
                                 window.location.pathname.includes("explore")
                                     ? "navbar-brand logo--fix"

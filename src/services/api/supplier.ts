@@ -203,9 +203,12 @@ export async function cancelAuctionApi(
 
 export async function createStore(generals: any) {
     let userData = getUserInfo();
+    let storeForm = new FormData();
+    storeForm.append('store',generals);
+    storeForm.append('user',JSON.stringify(userData));
     return await axios.post(
         `${BASE_URL}/store/create`,
-        { store: generals, user: userData },
+        generals,
         axiosConfig()
     );
 }

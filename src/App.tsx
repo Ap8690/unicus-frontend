@@ -234,8 +234,8 @@ const App = () => {
                                                     title={
                                                         "Terms and Conditions"
                                                     }
-                                                    text={
-                                                        store.advance.terms &&
+                                                    text={store && store.advance &&
+                                                        store.advance?.terms &&
                                                         store.advance.terms !==
                                                             ""
                                                             ? store.advance
