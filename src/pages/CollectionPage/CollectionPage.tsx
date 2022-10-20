@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import dummyImg from "../../assets/images/allNFTImage.png";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -27,15 +27,15 @@ import PageLoader from "../../components/Loading/PageLoader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {getSimpleDate} from "../../utils/date";
 import NotFound from "../../components/404/NotFound";
+import { ChainContext } from "../../context/ChainContext";
+import { getDecimal } from "../../utils/helpers";
 
 
 const CollectionPage = () => {
     const { id } = useParams();
     const [lessDesc, setLessDesc] = useState(true);
     const [totalAssets,setTotalAssets] = useState<any>(1)
-    const [descriprion, setDescription] = useState(
-        "A handpicked collection of 10,000 NFTs created by artist Ramdaram. You can participate in a journey of nostalgia as a way to be true to yourself. VEE yourself and see you at the pool party."
-    );
+    const [visibleNfts, setVisiBleNfts] = useState([])
     const [pageState, setPageState] = useState("assets");
     const [collection, setCollection] = useState<any>("");
     const [keyword, setKeyword] = useState("");
@@ -54,11 +54,48 @@ const CollectionPage = () => {
     });
     const [skip, setSkip] = useState(0);
     const [filterDrawer, setFilterDrawer] = useState(false);
+    const { chain } = useContext(ChainContext)
 
-    const collectionWebsite = "";
-    const telegramLink = "";
-    const twitterLink = "";
-    const discordLink = "";
+    const searchNfts = (prevData: any[]) => {
+        const regex = new RegExp(keyword.trim(), 'i')
+        const newData = prevData.filter((item) => {
+            return regex.test(item.name)
+        })
+        return newData
+    }
+
+    const filterByStatus = (prevData: any[]) => {
+        const newData = prevData.filter((item) => {
+            if(status.onAuction && status.onSale) {
+                return item.auctionType === 'Auction' && item.auctionType === 'Sale'
+            }
+            if(status.onSale) {
+                return item.auctionType === 'Sale'
+            }
+            if(status.onAuction) {
+                return item.auctionType === 'Auction'
+            }
+            return true
+        })
+        return newData
+    }
+
+    const filterByPrice = (prevData: any[]) => {
+        if(priceRange.min > priceRange.max) return prevData
+        const newData = prevData.filter((item) => {
+            return item.startBid / getDecimal(chain) >= priceRange.min && item.startBid / getDecimal(chain) <= priceRange.max
+        })
+        return newData
+    }
+
+    const applyFilters = () => {
+        const prevData = [...nfts]
+        const newSearchData = keyword.trim() ? searchNfts(prevData) : prevData
+        const newStatusData = filterByStatus(newSearchData)
+        const newPriceData = filterByPrice(newStatusData)
+        //   console.log(newPriceData)
+        setVisiBleNfts(newPriceData)
+    }
 
     const getCollectionById = async () => {
         try {
@@ -79,6 +116,7 @@ const CollectionPage = () => {
             console.log("g: ", g);
             setTotalAssets(g.data.total)
             setNfts([...nfts,...g.data.data]);
+            setVisiBleNfts([...nfts,...g.data.data]);
             setSkip((prev)=>prev+30)
             setItemLoading(false)
 
@@ -91,6 +129,16 @@ const CollectionPage = () => {
         getCollectionById();
         fetchCollectionItems();
     }, []);
+
+    useEffect(() => {
+        applyFilters()
+    }, [
+        keyword, 
+        status.onAuction, 
+        status.onSale, 
+        priceRange.min, 
+        priceRange.max
+    ])
 
     if (loading) {
         return <PageLoader />;
@@ -137,7 +185,7 @@ const CollectionPage = () => {
                             <img
                                 src={collection?.logoUrl}
                                 alt="collection-logo"
-                                className="rounded-full h-[180px] w-[180px] object-fill"
+                                className="rounded-full h-[180px] w-[180px] object-cover"
                             />
                         </div>
                     </div>
@@ -355,7 +403,7 @@ const CollectionPage = () => {
                             }
                         >
                             <div className={`${view} collection-page-grid`}>
-                                {nfts.map((element: any) => (
+                                {visibleNfts.map((element: any) => (
                                     <ExploreElement
                                         key={uuid()}
                                         element={element}
