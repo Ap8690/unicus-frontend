@@ -39,8 +39,8 @@ const GeneralNameAndLogo = (general: IGeneral) => {
       formData.append('logo',e.target.files[0]);
       const up = await uploadStorefrontLogo(formData)
       console.log(up.data)
+      setGeneral({ ...generals, logoUrl: up.data });
       setLoadingImage(false)
-      // setGeneral({ ...generals, logoUrl: e.target.files[0] });
     }
     catch(err) {
       console.log(err);
@@ -157,6 +157,7 @@ const GeneralNameAndLogo = (general: IGeneral) => {
             accept="image/jpeg, image/png , image/svg+xml"
             onChange={(e) => getImageUrl(e)}
             className="d-none"
+            style={{'display':'none !important'}}
           />
         </label>
         <div className="file-size-info">
