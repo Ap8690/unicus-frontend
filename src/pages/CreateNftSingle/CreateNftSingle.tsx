@@ -700,12 +700,12 @@ const CreateNftSingle = () => {
         setNftLoading(false);
     };
 
-    // useEffect(()=>{
-    //     if(Cookies.get("Chain_Environment") ==="testnet")
-    //       setContractType("1155")
-    //     else
-    //       setContractType("721")
-    // },[])
+    useEffect(()=>{
+        if(Cookies.get("Chain_Environment") ==="testnet")
+          setContractType("1155")
+        else
+          setContractType("721")
+    },[])
 
     useEffect(() => {
         if (localStorage.getItem("properties")) {
