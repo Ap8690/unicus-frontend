@@ -1827,7 +1827,7 @@ const NftInfo = ({
                 if (nft.nftStatus === 2) {
                     return "End Sale";
                 } else if (nft.nftStatus === 3) {
-                    if (new Date() < new Date(auction.auctionTimer)) {
+                    if (new Date() < new Date(auction?.auctionTimer)) {
                         return "Cancel Auction";
                     } else {
                         return "End Auction";
