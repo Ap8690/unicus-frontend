@@ -126,7 +126,7 @@ const Profile = (): ReactJSXElement => {
     }, [search]);
 
     useEffect(() => {
-        console.log("porieu")
+        console.log("asdwe")
         getNfts();
         getUserProfile();
         if (!getAccessToken()) {
@@ -134,6 +134,7 @@ const Profile = (): ReactJSXElement => {
         }
     }, []);
     useEffect(() => {
+        console.log("page chainge")
         getNfts()
     },[page])
     return (

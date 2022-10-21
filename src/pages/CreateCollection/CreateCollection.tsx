@@ -1,4 +1,4 @@
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useContext, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import HookedInput from "../../components/Input/HookedInput";
 import MenuItem from "@mui/material/MenuItem";
@@ -23,6 +23,8 @@ type Inputs = {
     discord: string;
     twitter: string;
     telegram: string;
+    instagram: string;
+    linkedIn:string;
 };
 
 const CreateCollection = () => {
@@ -53,6 +55,8 @@ const CreateCollection = () => {
             discord: "",
             twitter: "",
             telegram: "",
+            linkedIn:"",
+            instagram: ""
         },
     });
     const uploadLogo = async (e: any) => {
@@ -78,6 +82,8 @@ const CreateCollection = () => {
                 discord,
                 twitter,
                 telegram,
+                instagram,
+                linkedIn
             } = getValues();
             if (!logo && !banner) {
                 toast.error("Please upload images!");
@@ -92,6 +98,8 @@ const CreateCollection = () => {
             formData.append("discord", discord);
             formData.append("twitter", twitter);
             formData.append("telegram", telegram);
+            formData.append("instagram", instagram);
+            formData.append("linkedIn", linkedIn);
             formData.append("logo", logo);
             formData.append("banner", banner);
             formData.append("chain", chain);
@@ -105,6 +113,7 @@ const CreateCollection = () => {
             setLoading(false);
         }
     };
+    useEffect(() => {window.scrollTo(0,0)}, [])
 
     if (!getAccessToken()) {
         toast.error("Login to continue!");
@@ -232,9 +241,10 @@ const CreateCollection = () => {
                                             onChange={(e) =>
                                                 onChange(e.target.value)
                                             }
+                                            style={{color: "#fff !important"}}
                                         >
                                             {AssetList.map((asset:string) => (
-                                                <MenuItem key={uuid()} value={asset.toLowerCase()}>
+                                                <MenuItem style={{color: "#fff !important"}} key={uuid()} value={asset.toLowerCase()}>
                                                     {asset}
                                                 </MenuItem>
                                             ))}
@@ -286,6 +296,28 @@ const CreateCollection = () => {
                                 title="Telegram"
                                 placeholder="t.me/yourcollection"
                                 name="telegram"
+                                errors={errors}
+                            />
+                            <HookedInput
+                                register={register("linkedIn", {
+                                    // required: true,
+                                    // pattern:
+                                    //     /(https?:\/\/)?(www[.])?(linkedin|t)\.com\/([a-zA-Z0-9_-]*)\/?$/g,
+                                })}
+                                title="LinkedIn"
+                                placeholder="linkedin.com/yourcollection"
+                                name="linkedIn"
+                                errors={errors}
+                            />
+                            <HookedInput
+                                register={register("instagram", {
+                                    // required: true,
+                                    // pattern:
+                                    //     /(https?:\/\/)?(www[.])?(linkedin|t)\.com\/([a-zA-Z0-9_-]*)\/?$/g,
+                                })}
+                                title="Instagram"
+                                placeholder="instgram.com/yourcollection"
+                                name="instagram"
                                 errors={errors}
                             />
                         </div>

@@ -415,3 +415,8 @@ export async function getCollections(id: string, limit:any, skip:any) {
   return await axios.get(`${BASE_URL}/collection/getCollections/${limit}/${skip}/${id}`,
   axiosConfig())
 }
+
+
+export async function verifyCollectionName(collectionName: string) {
+    return await axios.get(`${BASE_URL}/collection/verify-collection-name/${collectionName}`,axiosConfig())
+}

@@ -131,22 +131,6 @@ const NftInfo = ({
         "AvrGQ538bsHRfqJpyfEZumVxLfde3GcBw4AH4JLT3Wyu"
     );
 
-    useEffect(() => {
-        if (anWallet) {
-            provider = new anchor.AnchorProvider(connection, anWallet, {
-                commitment: "processed",
-            });
-            anchor.setProvider(provider);
-
-            program = new Program(
-                //@ts-ignore
-                SolMintNftIdl,
-                SOL_MINT_NFT_PROGRAM_ID,
-                provider
-            );
-        }
-    }, [anWallet]);
-
     const navigate = useNavigate();
 
     const createSaleSol = async (key: any, assetPrice: any) => {
@@ -2047,7 +2031,21 @@ const NftInfo = ({
         window.scrollTo(0, 0);
         checkChain();
     }, []);
+    useEffect(() => {
+        if (anWallet) {
+            provider = new anchor.AnchorProvider(connection, anWallet, {
+                commitment: "processed",
+            });
+            anchor.setProvider(provider);
 
+            program = new Program(
+                //@ts-ignore
+                SolMintNftIdl,
+                SOL_MINT_NFT_PROGRAM_ID,
+                provider
+            );
+        }
+    }, [anWallet]);
     useEffect(() => {
         if (localStorage.getItem("walletConnected")) {
             checkChain();
@@ -2405,13 +2403,25 @@ const NftInfo_ = ({ data }) => {
                     </Tooltip>
                 </div>
                 {data && data.quantity && <div className="flex justify-center">
-                    <div className="text-sm font-medium mr-2">Supply:</div>
+                    <div className="text-sm font-medium mr-2">Available Asset:</div>
                     <div className="info mb-0">{data?.quantity}</div>
                 </div>}
+                
                 <div className="flex justify-center">
                     <div className="text-sm font-medium mr-2">Contract Type:</div>
                     <div className="info mb-0">ERC-{data?.contractType}</div>
                 </div>
+                {data && data.externalLink && <div className="flex justify-center">
+                    <div className="text-sm font-medium mr-2">More info:</div>
+                    <Tooltip title={isCopied ? "Copied" : data.externalLink}>
+                    <div className="info mb-0 cursor-pointer"><a href={data?.externalLink} target="_blank">{data?.externalLink?.length>20 ? data?.externalLink?.slice(0,19) + "..." + data?.externalLink?.slice(-4) : data?.externalLink}</a> <ContentPasteIcon
+                                onClick={() =>
+                                    handleCopyClick(data.externalLink)
+                                }
+                                fontSize="small"
+                                className="h-2"
+                            /></div></Tooltip>
+                </div>}
             </div>
         </div>
     );

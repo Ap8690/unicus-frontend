@@ -2,7 +2,6 @@ import "./Input.scss"
 import { ErrorMessage } from "@hookform/error-message"
 
 const HookedInput = (props: any) => {
-    console.log(props.errors)
     return (
         <div className="input-box">
             {props.title && (

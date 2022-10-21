@@ -10,6 +10,8 @@ import {
     polygonChain,
 } from "../config";
 import { ethers } from "ethers";
+import e from "express";
+import Cookies from 'js-cookie';
 
 const { keyStores, connect, transactions, WalletConnection } = nearAPI;
 
@@ -203,3 +205,7 @@ export const getEnabledStore = (storeData: any) => {
     }
     return false;
 };
+
+export const verifyOwner = (id: string) => {
+    return id === JSON.parse(Cookies.get('userInfo'))?._id
+}

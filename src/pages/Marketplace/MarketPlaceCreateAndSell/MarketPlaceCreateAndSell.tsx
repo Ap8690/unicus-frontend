@@ -49,7 +49,7 @@ const MarketPlaceCreateAndSell = () => {
     <div className="market-place-create-and-sell">
       <div className="left">
         <h2 className="heading">Tokenise & Trade your asset</h2>
-        <Link to="/create-nft" className="btn nav-link">Tokenise Asset</Link>
+        <Link to="/asset/tokenise" className="btn nav-link">Tokenise Asset</Link>
       </div>
       <div className="right">
         {elements.map((element:any) => (

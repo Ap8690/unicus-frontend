@@ -92,7 +92,7 @@ const CategoriesModal = ({ open, setOpen, setWalletModal }) => {
             setOpen(false);
             setCategory(category?.toLowerCase());
             sessionStorage.setItem("CATEGORY", category);
-            navigate('/create-nft')
+            navigate(`/asset/tokenise/option_selection`)
         }
         
     };
