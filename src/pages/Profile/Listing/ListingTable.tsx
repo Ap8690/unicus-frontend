@@ -5,10 +5,10 @@ import uuid from "react-uuid";
 import { Skeleton } from "@mui/material";
 import { getDecimal } from "../../../utils/helpers";
 import Pagination from "@mui/material/Pagination";
+import { trimString } from "../../../utils/utils";
 
 // Element of data of activity table
 const TableData = ({ activity, link }) => {
-    //console.log("activity: ", activity);
     let navigate = useNavigate();
 
     return (
@@ -17,12 +17,18 @@ const TableData = ({ activity, link }) => {
             onClick={() => navigate(link)}
         >
             <td className="table-data-item-name">
-                {activity.hasOwnProperty("nftId") ? (
+                {activity.hasOwnProperty("logoUrl") ? (
+                    <img
+                        src={activity?.logoUrl}
+                        alt={activity.collectionName}
+                        className="w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md"
+                    />
+                ) : activity.hasOwnProperty("nftId") ? (
                     activity &&
                     activity?.nftId &&
                     activity?.nftId.nftType?.match(/image/) ? (
                         <img
-                            src={activity.cloudinaryUrl}
+                            src={activity?.cloudinaryUrl}
                             alt={activity.name}
                             className="w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md"
                         />
@@ -32,7 +38,7 @@ const TableData = ({ activity, link }) => {
                             className="w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md"
                         >
                             <source
-                                src={activity.cloudinaryUrl}
+                                src={activity?.cloudinaryUrl}
                                 type={activity && activity?.nftType}
                             />
                         </video>
@@ -41,7 +47,7 @@ const TableData = ({ activity, link }) => {
                   activity.hasOwnProperty("nftType") &&
                   activity?.nftType?.match(/image/) ? (
                     <img
-                        src={activity.cloudinaryUrl}
+                        src={activity?.cloudinaryUrl}
                         alt={activity.name}
                         className="w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md"
                     />
@@ -51,39 +57,40 @@ const TableData = ({ activity, link }) => {
                         className="w-[80px] h-[80px] min-w-[80px] min-h-[80px] overflow-hidden object-cover mr-4 rounded-md"
                     >
                         <source
-                            src={activity.cloudinaryUrl}
+                            src={activity?.cloudinaryUrl}
                             type={activity && activity?.nftType}
                         />
                     </video>
                 )}
 
-                {activity.name}
+                {activity?.name ? activity?.name : activity?.collectionName}
             </td>
-            {activity.startBid ? (
+            {activity?.startBid ? (
                 <>
                     <td className="table-data-price ">
                         <span className="eth-price ">
                             <img
                                 className="w-[23px] mr-2"
-                                src={getChainLogo(activity.chain)}
+                                src={getChainLogo(activity?.chain)}
                                 alt="Ethereum"
                             />
                             <span className="flex justify-center items-center">
-                                {activity.startBid / getDecimal(activity.chain)}
+                                {activity?.startBid /
+                                    getDecimal(activity?.chain)}
                             </span>
                         </span>
                         {/* <span className="dollar-price">${activity.priceDollar}</span> */}
                     </td>
-                    <td className="table-data-fd">{activity.auctionType}</td>
+                    <td className="table-data-fd">{activity?.auctionType}</td>
                     <td className="table-data-exp">
-                        {activity.createdAt &&
-                            getSimpleDate(activity.createdAt)}
+                        {activity?.createdAt &&
+                            getSimpleDate(activity?.createdAt)}
                     </td>
                 </>
-            ) : (
+            ) : activity.hasOwnProperty("nftStatus") ? (
                 <>
                     <td className="table-data-exp">
-                        {getChainSymbol(activity.chain)}
+                        {getChainSymbol(activity?.chain)}
                     </td>
                     {activity?.nftStatus == 1 ? (
                         <td>
@@ -106,12 +113,27 @@ const TableData = ({ activity, link }) => {
                             getSimpleDate(activity.createdAt)}
                     </td>
                 </>
+            ) : (
+                <>
+                    <td>{trimString(activity?.owner)}</td>
+                    <td className="table-data-exp">
+                        {activity?.createdAt &&
+                            getSimpleDate(activity?.createdAt)}
+                    </td>
+                </>
             )}
         </tr>
     );
 };
-const Table = ({ rows, profileState, columns, loading, page, setPage, metadata }) => {
-    console.log("rows: ", rows);
+const Table = ({
+    rows,
+    profileState,
+    columns,
+    loading,
+    page,
+    setPage,
+    metadata,
+}) => {
     return (
         <div className="table">
             <table>
@@ -138,25 +160,31 @@ const Table = ({ rows, profileState, columns, loading, page, setPage, metadata }
                 ) : (
                     <tbody>
                         {rows && rows.length > 0 ? (
-                            rows
-                                .map((row: any, i: number) => (
-                                    <TableData
-                                        link={profileState == 'offers' ? `/nft/${row.chain}/${
-                                            row.contractAddress
-                                                ? row.contractAddress
-                                                : row.nftId &&
-                                                  row.nftId.contractAddress
-                                        }/${row.tokenId}/${row?.nftId._id}` : `/nft/${row.chain}/${
-                                            row.contractAddress
-                                                ? row.contractAddress
-                                                : row.nftId &&
-                                                  row.nftId.contractAddress
-                                        }/${row.tokenId}/${row?._id}`}
-                                        activity={row}
-                                        key={uuid()}
-                                    />
-                                ))
-                               
+                            rows.map((row: any, i: number) => (
+                                <TableData
+                                    link={
+                                        profileState == "offers"
+                                            ? `/nft/${row.chain}/${
+                                                  row.contractAddress
+                                                      ? row.contractAddress
+                                                      : row.nftId &&
+                                                        row.nftId
+                                                            .contractAddress
+                                              }/${row.tokenId}/${
+                                                  row?.nftId._id
+                                              }`
+                                            : profileState == "my collections" ? `/collection/${row?._id}` :`/nft/${row.chain}/${
+                                                  row.contractAddress
+                                                      ? row.contractAddress
+                                                      : row.nftId &&
+                                                        row.nftId
+                                                            .contractAddress
+                                              }/${row.tokenId}/${row?._id}`
+                                    }
+                                    activity={row}
+                                    key={uuid()}
+                                />
+                            ))
                         ) : (
                             <tr>
                                 <td>No Assets Found</td>

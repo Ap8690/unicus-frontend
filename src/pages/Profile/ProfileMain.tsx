@@ -17,6 +17,7 @@ import favouritedImg from "../../assets/images/favouritedImage.png";
 // Icons
 import profileCreated from "../../assets/svgs/profileCreated.svg";
 import profileListing from "../../assets/svgs/listing.svg";
+import profileCollected from "../../assets/svgs/profileCollected.svg";
 import profileOffers from "../../assets/svgs/list.svg"; 
 // Styles
 import "./ProfileMain.scss";
@@ -34,8 +35,8 @@ type useStateType<T> = [T, Dispatch<SetStateAction<T>>];
 const Profile = (): ReactJSXElement => {
     // add is additional information
     const tabs = [
-        // { name: "Collected", image: profileCollected, add: "5" },
         { name: "Created", image: profileCreated, add: "" },
+        { name: "My Collections", image: profileCollected, add: "" },
         // { name: "Favourited", image: profileFavourited, add: "6" },
         // { name: "Listing", image: profileListing, add: "" },
         { name: "Offers", image: profileOffers, add: "" },
@@ -44,16 +45,16 @@ const Profile = (): ReactJSXElement => {
     const location = useLocation();
     const accessToken = getAccessToken();
     // Name of the current tab
-    const tabName = location.pathname.slice(
+    const tabName = decodeURIComponent(location.pathname.slice(
         location.pathname.lastIndexOf("/") + 1
-    );
+        ));
     const [currentTab, setCurrentTab]: useStateType<Number> = useState(
         tabs.findIndex((tab) => tab.name.toLowerCase() === tabName)
     );
     const [search, setSearch]: useStateType<String> = useState("");
 
     const createdColumns = ["Item", "Chain","Provenance" ,"Date"];
-    const listingColumns = ["Item", "Unit Price", "Status", "Date"];
+    const collectionColumn = ["Collection", "Owner", "Date"];
     const offersColumns = ["Item", "Latest Bid", "Chain", "Date"];
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
@@ -61,6 +62,7 @@ const Profile = (): ReactJSXElement => {
     const [ordisplayCreated, setorDisplayCreated] = useState([]);
     const [displayListing, setDisplayListing] = useState([]);
     const [displayCreated, setDisplayCreated] = useState([]);
+    const [displayCollections,setDisplayCollection] = useState([]);
     const [tableLoading, setTableLoading] = useState(true);
     const [metadata,setMetadata] = useState<any>();
     const [page,setPage] = useState(1);
@@ -76,6 +78,7 @@ const Profile = (): ReactJSXElement => {
             setorDisplayListing(res.data.auctions);
             setDisplayCreated(res.data.nfts);
             setDisplayListing(res.data.auctions);
+            setDisplayCollection(res.data.collections);
             setTableLoading(false);
         } catch (e) {
             //console.log(e);
@@ -133,7 +136,6 @@ const Profile = (): ReactJSXElement => {
         }
     }, []);
     useEffect(() => {
-        console.log("ASD FDSF")
         getNfts()
     },[page])
     return (
@@ -155,12 +157,12 @@ const Profile = (): ReactJSXElement => {
                     {/* {profileState === "favourited" && (
                         <Favourited items={items} />
                     )} */}
-                    {profileState === "listing" && (
+                    {profileState === "my collections" && (
                         <Listing
-                            list={displayListing}
+                            list={displayCollections}
                             search={search}
                             setSearch={setSearch}
-                            columns={listingColumns}
+                            columns={collectionColumn}
                             loading={tableLoading}
                             page={page}
                             setPage={setPage}
@@ -168,7 +170,7 @@ const Profile = (): ReactJSXElement => {
                             metadata={{
                                 limit: metadata?.limit,
                                 skip: metadata?.skip,
-                                total: metadata?.totalNfts
+                                total: metadata?.totalCollections
                             }}
                         />
                     )}

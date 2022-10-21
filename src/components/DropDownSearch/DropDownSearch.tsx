@@ -38,8 +38,8 @@ const DropDownSearch = ({ searchList, heading, search, setSearch, list }) => {
 
   // Display Only Using the Active Ones
   useEffect(() => {
-    const temp = searchList.filter((searchEle) =>
-      searchEle.name.toLowerCase().includes(search.toLowerCase())
+    const temp = searchList && searchList.filter((searchEle:any) =>
+      searchEle.hasOwnProperty('name') ? searchEle?.name.toLowerCase().includes(search.toLowerCase()) : searchEle?.collectionName.toLowerCase().includes(search.toLowerCase())
     );
     setDisplayList(temp);
   }, [search]);
