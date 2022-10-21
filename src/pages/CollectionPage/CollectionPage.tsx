@@ -29,6 +29,7 @@ import { getSimpleDate } from "../../utils/date";
 import NotFound from "../../components/404/NotFound";
 import { ChainContext } from "../../context/ChainContext";
 import { getDecimal, verifyOwner } from "../../utils/helpers";
+import {Helmet} from 'react-helmet'
 
 const CollectionPage = () => {
     const { id } = useParams();
@@ -162,6 +163,11 @@ const CollectionPage = () => {
                     },
                 }}
             >
+                {/* <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Create a new collection</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet> */}
                 <div className="text-white text-2xl mb-6 font-semibold relative">
                     Filter
                     <button

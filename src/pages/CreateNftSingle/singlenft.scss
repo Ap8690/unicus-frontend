@@ -123,6 +123,7 @@
             width: 100%;
             padding: 1.5rem;
             border: 1px solid rgba($color: #666, $alpha: 0.8);
+            border-radius: 10px;
             .btn-box{
                 @include mixins.flex(center, space-between);
                 padding-bottom: 1.5rem;

@@ -11,7 +11,7 @@ import {
 } from "../config";
 import { ethers } from "ethers";
 import e from "express";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const { keyStores, connect, transactions, WalletConnection } = nearAPI;
 
@@ -37,7 +37,6 @@ export async function initContract() {
 }
 
 export async function initNear(accessKey: any) {
-    
     const config = {
         networkId: "testnet",
         keyStore: new keyStores.BrowserLocalStorageKeyStore(),
@@ -53,8 +52,10 @@ export async function initNear(accessKey: any) {
     const accountId = window.near.getAccountId();
     const keyStore = new nearAPI.keyStores.InMemoryKeyStore();
     const keyPair = nearAPI.KeyPair.fromString(accessKey.secretKey);
-    await keyStore.setKey('testnet', accountId, keyPair);
-    const near = await nearAPI.connect(Object.assign({ deps: { keyStore } }, config));
+    await keyStore.setKey("testnet", accountId, keyPair);
+    const near = await nearAPI.connect(
+        Object.assign({ deps: { keyStore } }, config)
+    );
     const walletConnection = new WalletConnection(near, "unicus");
     return { config, walletConnection, keyStore, networkId: config.networkId };
 }
@@ -207,5 +208,6 @@ export const getEnabledStore = (storeData: any) => {
 };
 
 export const verifyOwner = (id: string) => {
-    return id === JSON.parse(Cookies.get('userInfo'))?._id
-}
+    if (!Cookies.get("token")) return;
+    return id === JSON.parse(Cookies.get("userInfo"))?._id;
+};

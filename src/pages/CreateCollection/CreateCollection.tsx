@@ -14,6 +14,7 @@ import { ChainContext } from "../../context/ChainContext";
 import { AssetList } from "../../utils/AssetList";
 import uuid from "react-uuid";
 import { ErrorMessage } from "@hookform/error-message"
+import {Helmet} from 'react-helmet';
 
 type Inputs = {
     name: string;
@@ -125,6 +126,11 @@ const CreateCollection = () => {
                 <PageLoader info={"Creating Collection"} />
             ) : (
                 <div className="create-nft-single-page">
+                    <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Create a new collection</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
                     <div className="head !w-full">
                         <div className="capitalize blue-head">
                             Create Collection

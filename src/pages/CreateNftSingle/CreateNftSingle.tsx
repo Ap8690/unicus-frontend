@@ -19,6 +19,7 @@ import { AssetCategory } from "../../utils/AssetCategory";
 import SuccessModal from "../../components/modals/Status/SuccessModal";
 import { useModal } from "mui-modal-provider";
 import CollectionSearch from "../../components/SearchInput/CollectionSearch";
+import { Helmet } from "react-helmet";
 
 import {
     tronChain,
@@ -846,6 +847,11 @@ const CreateNftSingle = () => {
                 />
             ) : (
                 <div className="create-nft-single-page">
+                    <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Tokenise your Asset </title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
                     <div className="head">
                         <div className="blue-head capitalize">
                             Tokenise {category}
@@ -855,6 +861,7 @@ const CreateNftSingle = () => {
                             supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV,
                             OGG, GLB, GLTF. Max size: 100 MB
                         </div> */}
+                        
                     </div>
                     {category && (
                         <div className="body">
@@ -1042,6 +1049,7 @@ const CreateNftSingle = () => {
                                                 number
                                             />
                                         )}
+                                        <div className="mt-2"></div>
                                         <Input
                                             title={"Royalty"}
                                             placeholder="0 - 99 %"
@@ -1075,6 +1083,8 @@ const CreateNftSingle = () => {
                                             disableCollection={disableCollection}
                                             queryParam={collectionParams}
                                         />
+                                         <div className="flex justify-center items-center my-2 w-full">OR</div>
+                                         <button onClick={() => navigate('/create-collection')} className="flex items-center my-2 w-full border-1 hover:text-[#7460ed] hover:underline border-white">+ Add a new Collection</button>
                                     </div>
                                     <div className="set-attributes">
                                         <button

@@ -61,7 +61,7 @@ const CollectionSearch = ({
         if (queryParam && disableCollection) return setSearchQuery(queryParam);
     });
     return (
-        <div ref={inputRef}>
+        <div className="relative" ref={inputRef}>
             <div className="flex">
                 <Input
                     title={title}
@@ -77,11 +77,11 @@ const CollectionSearch = ({
                 {/* OR
                 <button className="text-bold">Add a new collection</button> */}
             </div>
-            <div className="relative flex flex-col">
+            <div className="absolute flex flex-col w-full">
                 {showSuggestion &&
                     (loading ? (
-                        <div className="flex justify-center items-center p-2">
-                            Searching collection...{" "}
+                        <div className="flex bg-[#2e2d2d] justify-center items-center p-2">
+                            Searching collection...{"  "}
                             <CircularProgress size={20} />
                         </div>
                     ) : (
