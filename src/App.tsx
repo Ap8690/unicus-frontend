@@ -149,7 +149,7 @@ const App = () => {
                     <div className="App">
                         <Navbar store={isMainStore() ? userStore : store} />
                         
-                        <ScrollToTop />
+                        {/* <ScrollToTop /> */}
                         <Routes>
                             {isMainStore() ? (
                                 // <Route path="/home" element={<Homepage />} />
@@ -234,8 +234,8 @@ const App = () => {
                                                     title={
                                                         "Terms and Conditions"
                                                     }
-                                                    text={
-                                                        store.advance.terms &&
+                                                    text={store && store.advance &&
+                                                        store.advance?.terms &&
                                                         store.advance.terms !==
                                                             ""
                                                             ? store.advance
@@ -330,7 +330,8 @@ const App = () => {
                             setOpen={setOpenInstall}
                             wallet={walletInstall}
                         />
-                        <Footer />
+                        {!isMainStore() ? store?.appearance.showFooter && <Footer /> : <Footer />} 
+
                     </div>
                     <Toaster/>
                 </TransactionProvider>

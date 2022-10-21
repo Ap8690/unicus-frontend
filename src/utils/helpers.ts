@@ -179,6 +179,7 @@ export const getEnabledStore = (storeData: any) => {
             enabledObj = { ...enabledObj, showTron: true };
         }
     }
+    console.log("enabledObj: ", enabledObj);
     if (enabledObj["showEth"]) {
         return "ethereum";
     }

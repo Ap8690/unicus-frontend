@@ -2,7 +2,7 @@ export interface IGeneral {
   storeName: string;
   email: string;
   country: string;
-  logoUrl: string;
+  logoUrl: any;
   showInSuperMarket: boolean;
   marketPlaceAsHome: boolean;
   showLanguage: boolean;

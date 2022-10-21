@@ -10,7 +10,7 @@ import uuid from "react-uuid";
 import { Helmet } from "react-helmet";
 import Cookies from 'js-cookie'
 
-const filters = Cookies.get('Chain_Environment') == 'testnet' ? ["Properties","Bids", "History", "Info" ] : ["Properties","Bids", "History"];
+const filters =  ["Properties","Bids", "History", "Info" ] 
 
 const ViewNft = () => {
     const [activeFilter, setActiveFilter] = useState(filters[0]);
@@ -47,7 +47,6 @@ const ViewNft = () => {
 
     useEffect(() => {
         fetchItem();
-        
         return () => {
             //console.log("This will be logged on unmount");
         };

@@ -28,6 +28,7 @@ import ChainLogo from "../../components/ChainLogo/ChainLogo";
 import CollectinMenu from "../../components/CollectionMenu/CollectionMenu";
 
 const Navbar = ({ store }) => {
+    console.log("store: ", store);
     const [search, setSearch] = useState("");
     const { chain, showChains, setShowChains, setShowCategory } =
         useContext(ChainContext);
@@ -54,10 +55,11 @@ const Navbar = ({ store }) => {
     const handleRedirectToTokenzie = () => {
         if (!isMainStore()) {
             sessionStorage.setItem("redirect_after_login", "/create-nft");
-            setShowCategory(true);
-            let storeEnabled = getEnabledStore(store.advance);
-            let nchain: any = getChainId(storeEnabled); // pass enabled chain for storefront
-            localStorage.setItem("CHAIN", nchain); // store enabled chain
+            // setShowCategory(true);
+            let storeEnabled = getEnabledStore(store.advance); // returns enabled chain
+            // let nchain: any = getChainId(storeEnabled); // pass enabled chain for storefront
+            // localStorage.setItem("CHAIN", nchain); // store enabled chain
+            setShowChains(!showChains);
             return;
         }
 
@@ -102,7 +104,7 @@ const Navbar = ({ store }) => {
                 <div className={`navbar`}>
                     <Link to={"/marketplace"} className="brand-link">
                         <img
-                            src={unicusLogo}
+                            src={isMainStore() ? unicusLogo : store?.general.logoUrl}
                             className={
                                 window.location.pathname.includes("explore")
                                     ? "navbar-brand logo--fix"
@@ -149,7 +151,7 @@ const Navbar = ({ store }) => {
                                 Resources
                             </Link>
                             <NestedMenu chain={chain} />
-                            {/* <CollectinMenu /> */}
+                            <CollectinMenu />
                             <Link to={"/marketplace"} className="btn nav-link">
                                 {getUserInfo() ? "Marketplace" : "Enter App"}
                             </Link>
@@ -160,8 +162,8 @@ const Navbar = ({ store }) => {
                     ) : (
                         <div className="nav-links">
                             <NestedMenu chain={chain} />
-                            {/* <CollectinMenu /> */}
-                            {/* <Link className='nav-link' to='/collections'>Collections</Link> */}
+                            <CollectinMenu />
+                            <Link className='nav-link' to='/collections'>Collections</Link>
                             {!getUserInfo() ? (
                                 <button
                                     onClick={handleRedirectToTokenzie}

@@ -52,33 +52,6 @@ const Profile = (): ReactJSXElement => {
     );
     const [search, setSearch]: useStateType<String> = useState("");
 
-    const items = [
-        {
-            image: favouritedImg,
-            eventName: "Event Name 1",
-            eventDescription:
-                "OpenSea is the world's first and largest NFT marketplace",
-        },
-        {
-            image: favouritedImg,
-            eventName: "Event Name 1",
-            eventDescription:
-                "OpenSea is the world's first and largest NFT marketplace",
-        },
-        {
-            image: favouritedImg,
-            eventName: "Event Name 1",
-            eventDescription:
-                "OpenSea is the world's first and largest NFT marketplace",
-        },
-        {
-            image: favouritedImg,
-            eventName: "Event Name 1",
-            eventDescription:
-                "OpenSea is the world's first and largest NFT marketplace",
-        },
-    ];
-
     const createdColumns = ["Item", "Chain","Provenance" ,"Date"];
     const listingColumns = ["Item", "Unit Price", "Status", "Date"];
     const offersColumns = ["Item", "Latest Bid", "Chain", "Date"];
@@ -150,14 +123,15 @@ const Profile = (): ReactJSXElement => {
     }, [search]);
 
     useEffect(() => {
+        console.log("porieu")
         getNfts();
         getUserProfile();
         if (!getAccessToken()) {
             navigate("/explore");
         }
-        window.scrollTo(0, 0);
     }, []);
     useEffect(() => {
+        console.log("ASD FDSF")
         getNfts()
     },[page])
     return (
@@ -176,9 +150,9 @@ const Profile = (): ReactJSXElement => {
                         setCurrentTab={setCurrentTab}
                     />
                     {profileState === "activity" && <Activity />}
-                    {profileState === "favourited" && (
+                    {/* {profileState === "favourited" && (
                         <Favourited items={items} />
-                    )}
+                    )} */}
                     {profileState === "listing" && (
                         <Listing
                             list={displayListing}
@@ -188,10 +162,11 @@ const Profile = (): ReactJSXElement => {
                             loading={tableLoading}
                             page={page}
                             setPage={setPage}
+                            profileState={profileState}
                             metadata={{
-                                limit: metadata.limit,
-                                skip: metadata.skip,
-                                total: metadata.totalNfts
+                                limit: metadata?.limit,
+                                skip: metadata?.skip,
+                                total: metadata?.totalNfts
                             }}
                         />
                     )}
@@ -204,10 +179,11 @@ const Profile = (): ReactJSXElement => {
                             loading={tableLoading}
                             page={page}
                             setPage={setPage}
+                            profileState={profileState}
                             metadata={{
-                                limit: metadata.limit,
-                                skip: metadata.skip,
-                                total: metadata.totalAuctions
+                                limit: metadata?.limit,
+                                skip: metadata?.skip,
+                                total: metadata?.totalAuctions
                             }}
                         />
                     )}
@@ -219,6 +195,7 @@ const Profile = (): ReactJSXElement => {
                             columns={createdColumns}
                             loading={tableLoading}
                             page={page}
+                            profileState={profileState}
                             setPage={setPage}
                             metadata={{
                                 limit: metadata && metadata?.limit,

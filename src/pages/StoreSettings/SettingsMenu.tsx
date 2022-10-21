@@ -14,7 +14,7 @@ const SettingsMenu = ({
     return (
         <div className="settings-menu">
             <div className="store-info">
-                <img src={store?.general.logoUrl ? store?.general.logoUrl : storeImg} alt="" />
+                <img className='w-1/2' src={store?.general.logoUrl ? store?.general.logoUrl : storeImg} alt="" />
                 <span>{store?.general.storeName ? store?.general.storeName : storeName}</span>
             </div>
             <button
