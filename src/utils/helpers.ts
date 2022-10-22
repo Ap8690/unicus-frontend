@@ -208,6 +208,6 @@ export const getEnabledStore = (storeData: any) => {
 };
 
 export const verifyOwner = (id: string) => {
-    if (!Cookies.get("token")) return;
+    if (!Cookies.get("ACCESS_TOKEN")) return;
     return id === JSON.parse(Cookies.get("userInfo"))?._id;
 };

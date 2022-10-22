@@ -4,6 +4,8 @@ import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import { FaDiscord } from "react-icons/fa";
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import CollectionFilter from "./CollectionFilter";
@@ -276,6 +278,42 @@ const CollectionPage = () => {
                                     className="text-xl text-white/50 rounded-full aspect-square w-10 p-1 flex items-center justify-center"
                                 >
                                     <FaDiscord />
+                                </a>
+                            )}
+                            {collection?.instagramUrl ? (
+                                <a
+                                    href={collection?.instagramUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-xl text-white rounded-full aspect-square w-10 p-1 flex items-center justify-center"
+                                >
+                                    <InstagramIcon />
+                                </a>
+                            ) : (
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-xl text-white/50 rounded-full aspect-square w-10 p-1 flex items-center justify-center"
+                                >
+                                    <InstagramIcon />
+                                </a>
+                            )}
+                            {collection?.linkedInUrl ? (
+                                <a
+                                    href={collection?.linkedInUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-xl text-white rounded-full aspect-square w-10 p-1 flex items-center justify-center"
+                                >
+                                    <LinkedInIcon />
+                                </a>
+                            ) : (
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-xl text-white/50 rounded-full aspect-square w-10 p-1 flex items-center justify-center"
+                                >
+                                    <LinkedInIcon />
                                 </a>
                             )}
                         </div>
