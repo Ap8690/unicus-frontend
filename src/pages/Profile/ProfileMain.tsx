@@ -56,6 +56,7 @@ const Profile = (): ReactJSXElement => {
     const createdColumns = ["Item", "Chain","Provenance" ,"Date"];
     const collectionColumn = ["Collection", "Owner", "Date"];
     const offersColumns = ["Item", "Latest Bid", "Chain", "Date"];
+    const listingColumns = ["Item", "Unit Price", "Status","Quantity", "Created"];
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
     const [ordisplayListing, setorDisplayListing] = useState([]);
@@ -158,6 +159,23 @@ const Profile = (): ReactJSXElement => {
                     {/* {profileState === "favourited" && (
                         <Favourited items={items} />
                     )} */}
+                    {profileState === "listing" && (
+                        <Listing
+                            list={displayListing}
+                            search={search}
+                            setSearch={setSearch}
+                            columns={listingColumns}
+                            loading={tableLoading}
+                            page={page}
+                            setPage={setPage}
+                            profileState={profileState}
+                            metadata={{
+                                limit: metadata?.limit,
+                                skip: metadata?.skip,
+                                total: metadata?.totalListing
+                            }}
+                        />
+                    )}
                     {profileState === "my collections" && (
                         <Listing
                             list={displayCollections}
