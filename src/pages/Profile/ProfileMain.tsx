@@ -53,10 +53,10 @@ const Profile = (): ReactJSXElement => {
     );
     const [search, setSearch]: useStateType<String> = useState("");
 
-    const createdColumns = ["Item", "Chain","Provenance" ,"Date"];
+    const createdColumns = ["Item", "Chain","Provenance" ,"Date","Quantity"];
     const collectionColumn = ["Collection", "Owner", "Date"];
     const offersColumns = ["Item", "Latest Bid", "Chain", "Date"];
-    const listingColumns = ["Item", "Unit Price", "Status","Quantity", "Created"];
+    const listingColumns = ["Item", "Unit Price", "Status", "Created","Quantity"];
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
     const [ordisplayListing, setorDisplayListing] = useState([]);
