@@ -77,9 +77,9 @@ export async function getMarketplaceNfts(
     );
 }
 
-export async function getNftById(chain: any, contractAddress: any, nftId: any, nftDbId: any) {
+export async function getNftById(chain: any, contractAddress: any, nftId: any, nftDbId: any,assetListed:any) {
     return await axios.get(
-        `${BASE_URL}/nft/getNftById/${chain}/${contractAddress}/${nftId}/${nftDbId}`,
+        `${BASE_URL}/nft/getNftById/${chain}/${contractAddress}/${nftId}/${nftDbId}?asset_listed=${assetListed}`,
         axiosConfig()
     );
 }
@@ -136,9 +136,9 @@ export async function buyItemApi(
     return await axios.post(
         `${BASE_URL}/auction/buy`,
         {
-            nftId: auction.nftId,
-            name: auction.name,
-            auctionId: auction._id,
+            nftId: auction[0].nftId,
+            name: auction[0].name,
+            auctionId: auction[0]._id,
             owner: userId,
             endAuctionHash: hash,
             userInfo: username,

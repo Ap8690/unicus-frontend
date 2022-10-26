@@ -8,9 +8,9 @@ import { getNftByCollection, getNftById } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
 import uuid from "react-uuid";
 import { Helmet } from "react-helmet";
-import Cookies from 'js-cookie'
+import { useQuery } from "../../Hooks/useQuery";
 
-const filters =  ["Info","Properties","Bids", "History",  ] 
+const filters = ["Info", "Properties", "Bids", "History"];
 
 const ViewNft = () => {
     const [activeFilter, setActiveFilter] = useState(filters[0]);
@@ -21,21 +21,40 @@ const ViewNft = () => {
     const [nftStates, setNftStates] = useState<any>();
     const [nftLoading, setNftLoading] = useState<boolean>(false);
     const [nftByCollection, setNftByCollection] = useState<any>();
-    const { chain, contractAddress, nftId,nftDbId } = useParams();
-    const [bids,setBids] = useState([])
-
+    const { chain, contractAddress, nftId, nftDbId } = useParams();
+    const [bids, setBids] = useState([]);
+    const [totalListed,setTotalListed] = useState(0);
+    const [isAssetListed,setAssetListed] = useState(false);
+    // listed_asset
+    const query = useQuery();
+    const assetListed = query.get("listed_asset");
     async function fetchItem() {
         try {
             setNftLoading(true);
-            const res = await getNftById(chain, contractAddress, nftId,nftDbId);
+            const res = await getNftById(
+                chain,
+                contractAddress,
+                nftId,
+                nftDbId,
+                assetListed
+            );
             setNft(res.data.nft);
             setNftStates(res.data.nftStates);
             setAuction(res.data.auction);
             setNftImg(res.data.nft.cloudinaryUrl);
-            setBids(res.data.bids)
+            setBids(res.data.bids);
             setCreator(res.data.user);
-            if (res.data.nft.collectionId && res.data.nft.collectionId !== "undefined") {
-                const col = await getNftByCollection(res.data.nft.collectionId, 4, 0);
+            setTotalListed(res.data.total_quantity_listed)
+            setAssetListed(assetListed !== null ? true : false);
+            if (
+                res.data.nft.collectionId &&
+                res.data.nft.collectionId !== "undefined"
+            ) {
+                const col = await getNftByCollection(
+                    res.data.nft.collectionId,
+                    4,
+                    0
+                );
                 setNftByCollection(col.data.nft);
             }
             setNftLoading(false);
@@ -55,12 +74,15 @@ const ViewNft = () => {
     return (
         <>
             {nftLoading ? (
-                <PageLoader info=""/>
+                <PageLoader info="" />
             ) : (
                 <div className="view-nft">
                     <Helmet>
                         <meta charSet="utf-8" />
-                        <title>UnicusOne - {nft && nft?.name ? nft.name : "Non-Fungible Token"}</title>
+                        <title>
+                            UnicusOne -{" "}
+                            {nft && nft?.name ? nft.name : "Non-Fungible Token"}
+                        </title>
                         <link rel="canonical" href={window.location.href} />
                     </Helmet>
                     <div className="nft">
@@ -78,29 +100,33 @@ const ViewNft = () => {
                                 activeFilter={activeFilter}
                                 setActiveFilter={setActiveFilter}
                                 historyData={nftStates}
-                                
                                 nft={nft}
                                 auction={auction}
                                 setNftLoading={setNftLoading}
                                 fetchItem={fetchItem}
                                 pageChain={chain}
                                 bids={bids}
+                                totalListed={totalListed}
+                                isAssetListed={isAssetListed}
                             />
                         )}
                     </div>
                     {nft && nft?.collectionId && (
                         <div className="nft bottom-grid">
-                            <span className="collection-more">More from this collection</span>
-                            <div className='grid sm:grid-cols-4 grid-cols-1'>
-                                {nftByCollection && nftByCollection.map((item: any) => (
-                                    <Link
-                                        key={uuid()}
-                                        className='w-full'
-                                        to={`/nft/${item.chain}/${item.contractAddress}/${item.tokenId}/${item._id}`}
-                                    >
-                                        <AllNFTsElement element={item} />
-                                    </Link>
-                                ))}
+                            <span className="collection-more">
+                                More from this collection
+                            </span>
+                            <div className="grid sm:grid-cols-4 grid-cols-1">
+                                {nftByCollection &&
+                                    nftByCollection.map((item: any) => (
+                                        <Link
+                                            key={uuid()}
+                                            className="w-full"
+                                            to={`/nft/${item.chain}/${item.contractAddress}/${item.tokenId}/${item._id}`}
+                                        >
+                                            <AllNFTsElement element={item} />
+                                        </Link>
+                                    ))}
                             </div>
                         </div>
                     )}

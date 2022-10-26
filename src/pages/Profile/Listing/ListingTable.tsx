@@ -122,6 +122,9 @@ const TableData = ({ activity, link }) => {
                     </td>
                 </>
             )}
+            {activity.quantity && (
+                <td className="table-data-exp">{activity?.quantity}</td>
+            )}
         </tr>
     );
 };
@@ -135,8 +138,8 @@ const Table = ({
     metadata,
 }) => {
     const handlePageChange = (e: any, v: any) => {
-        setPage(v) 
-    }
+        setPage(v);
+    };
     return (
         <div className="table">
             <table>
@@ -176,7 +179,11 @@ const Table = ({
                                               }/${row.tokenId}/${
                                                   row?.nftId._id
                                               }`
-                                            : profileState == "my collections" ? `/collection/${row?._id}` :`/nft/${row.chain}/${
+                                            : profileState == "my collections"
+                                            ? `/collection/${row?._id}`
+                                            : profileState === "listing"
+                                            ? `/nft/${row.chain}/${row.nftId.contractAddress}/${row.tokenId}/${row.nftId._id}?listed_asset=${row._id}`
+                                            : `/nft/${row.chain}/${
                                                   row.contractAddress
                                                       ? row.contractAddress
                                                       : row.nftId &&
@@ -197,7 +204,9 @@ const Table = ({
                 )}
             </table>
             <Pagination
-                count={Math.ceil(Number(metadata?.total) / Number(metadata?.limit))}
+                count={Math.ceil(
+                    Number(metadata?.total) / Number(metadata?.limit)
+                )}
                 defaultPage={page}
                 page={page}
                 onChange={handlePageChange}

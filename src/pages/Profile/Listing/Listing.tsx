@@ -11,31 +11,48 @@ import DropDownSearch from "../../../components/DropDownSearch/DropDownSearch";
 import BlueBackground from "../../../components/BlueBackground/BlueBackground";
 import { useEffect, useState } from "react";
 
-const Listing = ({ list,profileState, search, setSearch, columns, loading, setPage, page, metadata }) => {
-  //console.log("metadata: ", metadata);
-  const [filteredList, setFilteredList] = useState(list);
+const Listing = ({
+    list,
+    profileState,
+    search,
+    setSearch,
+    columns,
+    loading,
+    setPage,
+    page,
+    metadata,
+}) => {
+    //console.log("metadata: ", metadata);
+    const [filteredList, setFilteredList] = useState(list);
 
- useEffect(() => {
-   setFilteredList(list)
- }, [list])
- 
-  return (
-    <div className="listing">
-      <BlueBackground />
-      {/* <Header /> */}
-      <div className="listing-body">
-        <DropDownSearch
-          heading="Search"
-          search={search}
-          setSearch={setSearch}
-          searchList={filteredList}
-          list={list}
-        />
-        <Table profileState={profileState} page={page} metadata={metadata} setPage={setPage} columns={columns} rows={filteredList} loading={loading} />
+    useEffect(() => {
+        setFilteredList(list);
+    }, [list]);
 
-      </div>
-    </div>
-  );
+    return (
+        <div className="listing">
+            <BlueBackground />
+            {/* <Header /> */}
+            <div className="listing-body">
+                <DropDownSearch
+                    heading="Search"
+                    search={search}
+                    setSearch={setSearch}
+                    searchList={filteredList}
+                    list={list}
+                />
+                <Table
+                    profileState={profileState}
+                    page={page}
+                    metadata={metadata}
+                    setPage={setPage}
+                    columns={columns}
+                    rows={filteredList}
+                    loading={loading}
+                />
+            </div>
+        </div>
+    );
 };
 
 export default Listing;
