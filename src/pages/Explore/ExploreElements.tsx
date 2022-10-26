@@ -7,9 +7,7 @@ import ImageVideo from "../../components/Image-Video/Image-Video"
 export const ExploreElement = ({ element }) => {
     return (
         <Link
-            to={{
-                pathname: `/nft/${element.chain}/${getNftContractAddress(element.nftId,"721")}/${element.tokenId}`,
-            }}
+            to={`/nft/${element.chain}/${getNftContractAddress(element.nftId,"721")}/${element.tokenId}?listed_asset=${element._id}`}
         >
             <div className="explore-element">
                 <ImageVideo img={element?.cloudinaryUrl} nftType={element && element?.nftId && element.nftId?.nftType} />
