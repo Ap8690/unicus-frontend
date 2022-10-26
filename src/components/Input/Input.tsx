@@ -73,6 +73,7 @@ const Input = (props:any) => {
           disabled={props.disabled}
           maxLength={props.maxLength ? props.maxLength : ''}
           min={props.min}
+          max={props.max}
         />
       ):
        (

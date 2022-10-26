@@ -117,6 +117,7 @@ const NftInfo = ({
     const [type, setType] = useState(0);
     const [popUpShow, setPopUpShow] = useState(false);
     const [popUpShowBid, setPopUpShowBid] = useState(false);
+    const [assetQuantity, setAssetQuantity] = useState(1)
     const { connection } = useConnection();
     const { connect, publicKey, sendTransaction } = useWallet();
     const wallet = useWallet();
@@ -2076,6 +2077,23 @@ const NftInfo = ({
                                 setState={setStartBid}
                                 number
                             />
+                            <div className="mt-2"></div>
+                            {
+                                nft && nft.contractType == '1155' && <Input
+                                title={"Quantity"}
+                                placeholder="Enter Asset Quantity"
+                                state={assetQuantity}
+                                setState={setAssetQuantity}
+                                customChange={(e) => {
+                                    if(e.target.value > 0 && e.target.value <= nft.quantity) {
+                                        setAssetQuantity(e.target.value)
+                                    }
+                                }}
+                                min={1}
+                                max={nft.quantity}
+                                number
+                            />
+                            }
 
                             {type === 1 && (
                                 <div
