@@ -719,6 +719,7 @@ const NftInfo = ({
                 cloudinaryUrl: nft.cloudinaryUrl,
                 sellerWallet: address,
                 sellerId: userInfo && userInfo._id,
+                quantity : assetQuantity
             };
             if (startBid === 0.0) {
                 throw new Error("Asset Price cannot be zero");
@@ -986,6 +987,7 @@ const NftInfo = ({
                 cloudinaryUrl: nft.cloudinaryUrl,
                 sellerWallet: address,
                 sellerId: userInfo && userInfo._id,
+                quantity : assetQuantity
             };
 
             if (nft.chain.toString() === nearChain()) {
@@ -1179,22 +1181,23 @@ const NftInfo = ({
                         });
                 }
 
-                const estimated = await getAuctionContract(
-                    nft.chain,
-                    nft.contractType
-                )
-                    .methods.createAuction(
-                        getCreateNftContractAddress(
-                            nft.chain,
-                            nft.contractType
-                        ),
-                        nft.tokenId,
-                        web3.utils.toWei(startBid.toString(), "ether"),
-                        Number(duration)
-                    )
-                    .estimateGas({ from: address });
+                
                 let res: { events: { AuctionCreated: { returnValues: { auctionId: string; }; }; }; transactionHash: string; } ;
                 if(nft.contractType === "721"){
+                    const estimated = await getAuctionContract(
+                        nft.chain,
+                        nft.contractType
+                    )
+                        .methods.createAuction(
+                            getCreateNftContractAddress(
+                                nft.chain,
+                                nft.contractType
+                            ),
+                            nft.tokenId,
+                            web3.utils.toWei(startBid.toString(), "ether"),
+                            Number(duration)
+                        )
+                        .estimateGas({ from: address });
                     res = await getAuctionContract(
                         nft.chain,
                         nft.contractType
@@ -1215,6 +1218,21 @@ const NftInfo = ({
                         });
                 }
                 else{
+                    const estimated = await getAuctionContract(
+                        nft.chain,
+                        nft.contractType
+                    )
+                        .methods.createAuction(
+                            getCreateNftContractAddress(
+                                nft.chain,
+                                nft.contractType
+                            ),
+                            nft.tokenId,
+                            web3.utils.toWei(startBid.toString(), "ether"),
+                            Number(duration),
+                            assetQuantity
+                        )
+                        .estimateGas({ from: address });
                     res = await getAuctionContract(
                         nft.chain,
                         nft.contractType
