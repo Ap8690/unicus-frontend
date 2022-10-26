@@ -52,14 +52,18 @@ const Navbar = ({ store }) => {
         else setShowChains(true);
     };
     const handleRedirectToTokenzie = () => {
-        const linkTo = `/asset/tokenise/option_selection`
+        const linkTo = `/asset/tokenise/option_selection`;
         if (!isMainStore()) {
+            if (!getUserInfo()) {
+                sessionStorage.setItem("redirect_after_login", linkTo);
+                // setShowCategory(true);
+                let storeEnabled = getEnabledStore(store.advance); // returns enabled chain
+                // let nchain: any = getChainId(storeEnabled); // pass enabled chain for storefront
+                // localStorage.setItem("CHAIN", nchain); // store enabled chain
+                setShowChains(!showChains);
+            }
             sessionStorage.setItem("redirect_after_login", linkTo);
-            // setShowCategory(true);
-            let storeEnabled = getEnabledStore(store.advance); // returns enabled chain
-            // let nchain: any = getChainId(storeEnabled); // pass enabled chain for storefront
-            // localStorage.setItem("CHAIN", nchain); // store enabled chain
-            setShowChains(!showChains);
+            setShowCategory(true);
             return;
         }
 
@@ -104,7 +108,11 @@ const Navbar = ({ store }) => {
                 <div className={`navbar`}>
                     <Link to={"/marketplace"} className="brand-link">
                         <img
-                            src={isMainStore() ? unicusLogo : store?.general.logoUrl}
+                            src={
+                                isMainStore()
+                                    ? unicusLogo
+                                    : store?.general.logoUrl
+                            }
                             className={
                                 window.location.pathname.includes("explore")
                                     ? "navbar-brand logo--fix"
@@ -152,7 +160,9 @@ const Navbar = ({ store }) => {
                             </Link>
                             <NestedMenu chain={chain} />
                             {/* <CollectinMenu /> */}
-                            <Link className='nav-link' to='/collections'>Collections</Link>
+                            <Link className="nav-link" to="/collections">
+                                Collections
+                            </Link>
 
                             <Link to={"/marketplace"} className="btn nav-link">
                                 {getUserInfo() ? "Marketplace" : "Enter App"}
@@ -165,7 +175,9 @@ const Navbar = ({ store }) => {
                         <div className="nav-links">
                             <NestedMenu chain={chain} />
                             {/* <CollectinMenu /> */}
-                            <Link className='nav-link' to='/collections'>Collections</Link>
+                            <Link className="nav-link" to="/collections">
+                                Collections
+                            </Link>
                             {!getUserInfo() ? (
                                 <button
                                     onClick={handleRedirectToTokenzie}
