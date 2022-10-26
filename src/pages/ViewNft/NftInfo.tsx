@@ -888,7 +888,11 @@ const NftInfo = ({
                               gasPrice: gasPrice,
                           });
                 //else fr 1155 apprval fr all , params marketAdrress1155 , true
-                estimated = await getMarketPlace(nft.chain, nft.contractType)
+                
+                let res: { events: { saleCreated: { returnValues: { itemId: string; }; }; }; transactionHash: string; };
+                
+                if(nft.contractType === "721"){
+                    estimated = await getMarketPlace(nft.chain, nft.contractType)
                     .methods.createSale(
                         nft.contractAddress,
                         nft.tokenId,
@@ -896,17 +900,45 @@ const NftInfo = ({
                     )
                     .estimateGas({ from: address });
 
-                const res = await getMarketPlace(nft.chain, nft.contractType)
+                    res= await getMarketPlace(nft.chain, nft.contractType)
                     .methods.createSale(
                         nft.contractAddress,
                         nft.tokenId,
-                        web3.utils.toWei(startBid, "ether")
+                        web3.utils.toWei(startBid, "ether"),
                     )
                     .send({
                         from: address,
                         gas: estimated,
                         gasPrice: gasPrice,
                     });
+                }
+                else{
+                    estimated = await getMarketPlace(nft.chain, nft.contractType)
+                    .methods.createSale(
+                        nft.contractAddress,
+                        nft.tokenId,
+                        web3.utils.toWei(startBid, "ether"),
+                        assetQuantity
+                    )
+                    .estimateGas({ from: address });
+
+                    console.log(nft.contractAddress,
+                        nft.tokenId,
+                        web3.utils.toWei(startBid, "ether"),
+                        assetQuantity,"print")
+                    res= await getMarketPlace(nft.chain, nft.contractType)
+                    .methods.createSale(
+                        nft.contractAddress,
+                        nft.tokenId,
+                        web3.utils.toWei(startBid, "ether"),
+                        assetQuantity
+                    )
+                    .send({
+                        from: address,
+                        gas: estimated,
+                        gasPrice: gasPrice,
+                    });
+                }
 
                 obj.auctionId = res.events.saleCreated.returnValues.itemId;
                 obj.auctionHash = res.transactionHash;
@@ -1162,24 +1194,49 @@ const NftInfo = ({
                         Number(duration)
                     )
                     .estimateGas({ from: address });
-                const res = await getAuctionContract(
-                    nft.chain,
-                    nft.contractType
-                )
-                    .methods.createAuction(
-                        getCreateNftContractAddress(
-                            nft.chain,
-                            nft.contractType
-                        ),
-                        nft.tokenId,
-                        web3.utils.toWei(startBid.toString(), "ether"),
-                        Number(duration)
+                let res: { events: { AuctionCreated: { returnValues: { auctionId: string; }; }; }; transactionHash: string; } ;
+                if(nft.contractType === "721"){
+                    res = await getAuctionContract(
+                        nft.chain,
+                        nft.contractType
                     )
-                    .send({
-                        from: address,
-                        gas: estimated,
-                        gasPrice: gasPrice,
-                    });
+                        .methods.createAuction(
+                            getCreateNftContractAddress(
+                                nft.chain,
+                                nft.contractType
+                            ),
+                            nft.tokenId,
+                            web3.utils.toWei(startBid.toString(), "ether"),
+                            Number(duration),
+                        )
+                        .send({
+                            from: address,
+                            gas: estimated,
+                            gasPrice: gasPrice,
+                        });
+                }
+                else{
+                    res = await getAuctionContract(
+                        nft.chain,
+                        nft.contractType
+                    )
+                        .methods.createAuction(
+                            getCreateNftContractAddress(
+                                nft.chain,
+                                nft.contractType
+                            ),
+                            nft.tokenId,
+                            web3.utils.toWei(startBid.toString(), "ether"),
+                            Number(duration),
+                            assetQuantity
+                        )
+                        .send({
+                            from: address,
+                            gas: estimated,
+                            gasPrice: gasPrice,
+                        });
+                }
+
 
                 obj.auctionId =
                     res.events.AuctionCreated.returnValues.auctionId;
