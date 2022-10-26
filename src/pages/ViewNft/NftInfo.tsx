@@ -704,7 +704,6 @@ const NftInfo = ({
             setPopUpShow(false);
             setNftLoading(true);
             let address: String = localStorage.getItem("walletConnected");
-            console.log("address: ", address);
             let obj = {
                 nftId: nft._id,
                 sellerInfo: userInfo.username,
