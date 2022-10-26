@@ -2231,13 +2231,14 @@ const NftInfo = ({
                             )
                         )}
                     </div>
+                    {activeFilter === "Info" && <NftInfo_ data={nft} />}
+
                     {activeFilter === "Properties" && (
                         <Properties tags={nft.tags} />
                     )}
                     {activeFilter === "History" && (
                         <History data={historyData} />
                     )}
-                    {activeFilter === "Info" && <NftInfo_ data={nft} />}
 
                     {activeFilter === "Bids" && (
                         <Bids bids={bids} nftChain={nft?.chain} />

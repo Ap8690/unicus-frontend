@@ -87,9 +87,9 @@ export const chains:any = {
             mintContract: "0x451853f88ec565F04F40d74DBbC45C9C8Ff32793",
             marketContract: "0x58eC046978bA7205ba4C2846Fde4ca91cE361f9A",
             auctionContract: "0xA78511E45b160763E2875e8459137efE0897812e",
-            mint1155: "0x6f44c17AA123a9C3fAC65BC7A554A10aDD5BFF30",
-            market1155 : "0xdC2613CCD41F70E15592906d4a0ebF9F43E15F12",
-            auction1155 : "0x2F2653E76eACBF1e6a9C1abC0251DF6EFC202857"
+            mint1155: "0x6CDd2e7EaA67790ee9e199299A30Cc38e800A28E",
+            market1155 : "0xe68397427a77594ba8A1B61cfD31e6c06675B208",
+            auction1155 : "0x2559da0bc249d045031a211536814fB49D5D5337"
         },
         chainSymbol :"BSC",
         chainName: "binance",
