@@ -169,7 +169,7 @@ const Table = ({
                             rows.map((row: any, i: number) => (
                                 <TableData
                                     link={
-                                        profileState == "offers"
+                                        profileState==("offered bids")
                                             ? `/nft/${row.chain}/${
                                                   row.contractAddress
                                                       ? row.contractAddress

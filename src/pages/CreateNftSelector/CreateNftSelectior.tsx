@@ -3,10 +3,13 @@ import "./nftselector.scss"
 import selectorImg1 from '../../assets/images/createselector1.png'
 import selectorImg2 from '../../assets/images/createselector2.png'
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
+import {getUserInfo} from "../../utils/utils"
 
 const CreateNftSelector = () => {
   const navigate = useNavigate()
+  if(!getUserInfo()) return <Navigate to='/marketplace' />
+
   return (
     <div className="create-nft-selector">
       <div className="blue-head">Individual Or Multiple?</div>

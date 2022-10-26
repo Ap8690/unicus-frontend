@@ -39,7 +39,7 @@ const Profile = (): ReactJSXElement => {
         { name: "My Collections", image: profileCollected, add: "" },
         // { name: "Favourited", image: profileFavourited, add: "6" },
         { name: "Listing", image: profileListing, add: "" },
-        { name: "Offers", image: profileOffers, add: "" },
+        { name: "Offered Bids", image: profileOffers, add: "" },
     ];
     // Index of current element
     const location = useLocation();
@@ -53,10 +53,10 @@ const Profile = (): ReactJSXElement => {
     );
     const [search, setSearch]: useStateType<String> = useState("");
 
-    const createdColumns = ["Item", "Chain","Provenance" ,"Date","Quantity"];
+    const createdColumns = ["Item", "Chain","Provenance" ,"Date","Total Assets"];
     const collectionColumn = ["Collection", "Owner", "Date"];
-    const offersColumns = ["Item", "Latest Bid", "Chain", "Date"];
-    const listingColumns = ["Item", "Unit Price", "Status", "Created","Quantity"];
+    const offersColumns = ["Item", "Latest Bid", "Chain", "Date", "Available Assets"];
+    const listingColumns = ["Item", "Unit Price", "Status", "Created","Available Assets"];
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
     const [ordisplayListing, setorDisplayListing] = useState([]);
@@ -193,7 +193,7 @@ const Profile = (): ReactJSXElement => {
                             }}
                         />
                     )}
-                    {profileState === "offers" && (
+                    {profileState ==("offered bids") && (
                         <Listing
                             list={displayListing}
                             search={search}
