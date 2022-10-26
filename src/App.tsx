@@ -313,7 +313,7 @@ const App = () => {
                                 )}
                                 <Route path="/all-nfts" element={<AllNFTs />} />
                                 <Route
-                                    path="/nft/:chain/:contractAddress/:nftId/:nftDbId"
+                                    path="/nft/:chain/:contractAddress/:nftId"
                                     element={<ViewNft />}
                                 />
                                 <Route

@@ -21,7 +21,7 @@ const ViewNft = () => {
     const [nftStates, setNftStates] = useState<any>();
     const [nftLoading, setNftLoading] = useState<boolean>(false);
     const [nftByCollection, setNftByCollection] = useState<any>();
-    const { chain, contractAddress, nftId, nftDbId } = useParams();
+    const { chain, contractAddress, nftId } = useParams();
     const [bids, setBids] = useState([]);
     const [totalListed,setTotalListed] = useState(0);
     const [isAssetListed,setAssetListed] = useState(false);
@@ -35,7 +35,6 @@ const ViewNft = () => {
                 chain,
                 contractAddress,
                 nftId,
-                nftDbId,
                 assetListed
             );
             setNft(res.data.nft);
@@ -122,7 +121,7 @@ const ViewNft = () => {
                                         <Link
                                             key={uuid()}
                                             className="w-full"
-                                            to={`/nft/${item.chain}/${item.contractAddress}/${item.tokenId}/${item._id}`}
+                                            to={`/nft/${item.chain}/${item.contractAddress}/${item.tokenId}`}
                                         >
                                             <AllNFTsElement element={item} />
                                         </Link>

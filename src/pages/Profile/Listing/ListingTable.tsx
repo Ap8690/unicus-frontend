@@ -176,20 +176,18 @@ const Table = ({
                                                       : row.nftId &&
                                                         row.nftId
                                                             .contractAddress
-                                              }/${row.tokenId}/${
-                                                  row?.nftId._id
-                                              }`
+                                              }/${row.tokenId}`
                                             : profileState == "my collections"
                                             ? `/collection/${row?._id}`
                                             : profileState === "listing"
-                                            ? `/nft/${row.chain}/${row.nftId.contractAddress}/${row.tokenId}/${row.nftId._id}?listed_asset=${row._id}`
+                                            ? `/nft/${row.chain}/${row.nftId.contractAddress}/${row.tokenId}?listed_asset=${row._id}`
                                             : `/nft/${row.chain}/${
                                                   row.contractAddress
                                                       ? row.contractAddress
                                                       : row.nftId &&
                                                         row.nftId
                                                             .contractAddress
-                                              }/${row.tokenId}/${row?._id}`
+                                              }/${row.tokenId}`
                                     }
                                     activity={row}
                                     key={uuid()}

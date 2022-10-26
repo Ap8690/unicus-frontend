@@ -8,7 +8,7 @@ export const ExploreElement = ({ element }) => {
     return (
         <Link
             to={{
-                pathname: `/nft/${element.chain}/${getNftContractAddress(element.nftId,"721")}/${element.tokenId}/${element.nftId._id}`,
+                pathname: `/nft/${element.chain}/${getNftContractAddress(element.nftId,"721")}/${element.tokenId}`,
             }}
         >
             <div className="explore-element">

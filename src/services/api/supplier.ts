@@ -77,9 +77,9 @@ export async function getMarketplaceNfts(
     );
 }
 
-export async function getNftById(chain: any, contractAddress: any, nftId: any, nftDbId: any,assetListed:any) {
+export async function getNftById(chain: any, contractAddress: any, nftId: any,assetListed:any) {
     return await axios.get(
-        `${BASE_URL}/nft/getNftById/${chain}/${contractAddress}/${nftId}/${nftDbId}?asset_listed=${assetListed}`,
+        `${BASE_URL}/nft/getNftById/${chain}/${contractAddress}/${nftId}?asset_listed=${assetListed}`,
         axiosConfig()
     );
 }
