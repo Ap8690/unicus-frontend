@@ -19,6 +19,7 @@ import { AssetCategory } from "../../utils/AssetCategory";
 import SuccessModal from "../../components/modals/Status/SuccessModal";
 import { useModal } from "mui-modal-provider";
 import CollectionSearch from "../../components/SearchInput/CollectionSearch";
+import { Helmet } from "react-helmet";
 
 import {
     tronChain,
@@ -57,7 +58,7 @@ import {
 } from "../../services/api/supplier";
 import * as nearAPI from "near-api-js";
 import BN from "bn.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
     getAssociatedTokenAddress,
     createInitializeMintInstruction,
@@ -74,23 +75,33 @@ import SolMintNftIdl from "../../utils/sol_mint_nft.json";
 import validator from "validator";
 import { getBase64, blobUrlToFile } from "../../utils/imageConvert";
 import uuid from "react-uuid";
-import { decodeParams } from "../../utils/helpers";
+import { decodeParams, capitalize } from "../../utils/helpers";
 import Cookies from "js-cookie";
 import { ConnectWalletContext } from "../../context/ConnectWalletContext";
 import { ChainContext } from "../../context/ChainContext";
+import { verifyCollectionName } from "../../services/api/supplier";
 
 const CreateNftSingle = () => {
     const supportedImg = ["jpg", "jpeg", "png", "svg", "gif"];
     const supportedVid = ["mp4", "webm"];
     const supportedAud = ["mp3", "wav", "ogg"];
     const supported3d = ["gltf, glb"];
+    const finSupported = [...supportedImg, ...supportedVid, ...supported3d];
 
-    const finSupported = [...supportedImg, ...supportedVid, ...supported3d]
+    const inputFile = useRef(null);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const collectionParams = (new URLSearchParams(location?.search)).get('collection');
+    const categoryParams = (new URLSearchParams(location?.search)).get('category');
+
+
+    const { fullLoading } = useContext(ConnectWalletContext);
+    const { category, setCategory } = useContext(ChainContext);
+
     const [name, setName] = useState("");
     const [extLink, setExtlink] = useState("");
     const [description, setDescription] = useState("");
     // const [category, setCategory] = useState("art");
-
     const [price, setPrice] = useState("0.00");
     const [chain, setChain] = useState(ethChain());
     const [contractType, setContractType] = useState("721");
@@ -107,10 +118,8 @@ const CreateNftSingle = () => {
     const [MetamaskNotFound, setMetamaskNotFound] = useState(false);
     const [defaultErrorModal, setdefaultErrorModal] = useState<any>(false);
     const [nftQuantity, setNftQuantity] = useState(1);
-    const inputFile = useRef(null);
-    const navigate = useNavigate();
-    const { fullLoading } = useContext(ConnectWalletContext);
-    const { category, setCategory } = useContext(ChainContext);
+    const [disableCollection, setDisableCollection] = useState(false);
+
     const { connection } = useConnection();
     const { sendTransaction } = useWallet();
     const anWallet = useAnchorWallet();
@@ -165,8 +174,9 @@ const CreateNftSingle = () => {
             !supportedVid.includes(e.target.files[0].name.split(".").pop())
         ) {
             return toast.error("Please upload supported file types only!");
-        }
-        else if(!finSupported.includes(e.target.files[0].name.split(".").pop())) {
+        } else if (
+            !finSupported.includes(e.target.files[0].name.split(".").pop())
+        ) {
             return toast.error("Please upload supported file types only!");
         }
         setFileSrc(e.target.files[0]);
@@ -379,6 +389,12 @@ const CreateNftSingle = () => {
     };
     const cryptoPayment = async () => {
         try {
+            //verify collection name
+            if (collection) {
+                const verifyCollection = await verifyCollectionName(collection);
+                if (!verifyCollection.data?.status)
+                    return toast.error("Collection Name does not exists!");
+            }
             //@ts-ignore
             if (!window.ethereum) {
                 setNftLoading(false);
@@ -451,8 +467,9 @@ const CreateNftSingle = () => {
                 nftObj.append("tags", JSON.stringify(properties));
                 nftObj.append("collectionName", collection);
                 nftObj.append("attributes", JSON.stringify(properties));
-                if(Cookies.get("Chain_Environment") == 'testnet') {
-                    nftObj.append("quantity", supply)
+                nftObj.append("externalLink",extLink);
+                if (Cookies.get("Chain_Environment") == "testnet") {
+                    nftObj.append("quantity", supply);
                 }
                 const response: any = await uploadToPinata(nftObj);
                 if (!response) {
@@ -559,7 +576,7 @@ const CreateNftSingle = () => {
                     const createNFT = getCreateNftContract(chain, contractType);
                     let res: any;
                     if (contractType === "721") {
-                        console.log("herejkdh")
+                        console.log("herejkdh");
                         res = await createNFT.methods
                             .batchMint([tokenUri], [royalty])
                             .send({
@@ -573,7 +590,7 @@ const CreateNftSingle = () => {
                             );
                         }
                     } else if (contractType === "1155") {
-                        console.log("here")
+                        console.log("here");
                         res = await createNFT.methods
                             .mintNFT(
                                 tokenUri,
@@ -584,7 +601,7 @@ const CreateNftSingle = () => {
                             .send({
                                 from: address,
                             });
-                            console.log(res.events.Minted,'res')
+                        console.log(res.events.Minted, "res");
                         if (res?.transactionHash) {
                             nftObj.append(
                                 "tokenId",
@@ -641,14 +658,14 @@ const CreateNftSingle = () => {
                             });
                         if (res?.transactionHash) {
                             //returnValues NFTId
-                            console.log(res,"res")
+                            console.log(res, "res");
                             nftObj.append(
                                 "tokenId",
                                 res.events.Minted.returnValues._NftId
                             );
                         }
                     } else if (contractType === "1155") {
-                        console.log("sdfihheresdfh")
+                        console.log("sdfihheresdfh");
                         estimated = await createNFT.methods
                             .mintNFT(
                                 tokenUri,
@@ -720,9 +737,7 @@ const CreateNftSingle = () => {
         if (localStorage.getItem("description")) {
             setDescription(JSON.parse(localStorage.getItem("description")));
         }
-        // if (localStorage.getItem("category")) {
-        //     setCategory(JSON.parse(localStorage.getItem("category")));
-        // }
+
         if (localStorage.getItem("CHAIN")) {
             setChain(JSON.parse(localStorage.getItem("CHAIN")));
         }
@@ -735,13 +750,15 @@ const CreateNftSingle = () => {
         if (localStorage.getItem("royalty")) {
             setRoyalty(JSON.parse(localStorage.getItem("royalty")));
         }
-        // if (
-        //     localStorage.getItem("fileSrc") &&
-        //     Object.keys(JSON.parse(localStorage.getItem("fileSrc"))).length !==
-        //         0
-        // ) {
-        //     convertToFile();
-        // }
+        if (collectionParams) {
+            setCollection(collectionParams);
+            setDisableCollection(true);
+        }
+        if(categoryParams) {
+            setCategory(capitalize(categoryParams))
+            sessionStorage.setItem("CATEGORY",capitalize(categoryParams))
+            console.log("categoryParams?.toUpperCase(): ", capitalize(categoryParams));
+        }
         window.scrollTo(0, 0);
     }, []);
 
@@ -830,6 +847,11 @@ const CreateNftSingle = () => {
                 />
             ) : (
                 <div className="create-nft-single-page">
+                    <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Tokenise your Asset </title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
                     <div className="head">
                         <div className="blue-head capitalize">
                             Tokenise {category}
@@ -839,6 +861,7 @@ const CreateNftSingle = () => {
                             supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV,
                             OGG, GLB, GLTF. Max size: 100 MB
                         </div> */}
+                        
                     </div>
                     {category && (
                         <div className="body">
@@ -1026,6 +1049,7 @@ const CreateNftSingle = () => {
                                                 number
                                             />
                                         )}
+                                        <div className="mt-2"></div>
                                         <Input
                                             title={"Royalty"}
                                             placeholder="0 - 99 %"
@@ -1048,20 +1072,19 @@ const CreateNftSingle = () => {
                                     </div>
 
                                     <div className="select-collection">
-                                        {/* <Input
+                                        <CollectionSearch
                                             title={
                                                 AssetCategory[
                                                     category.toLowerCase()
                                                 ]["AssetCollectionName"]
                                             }
-                                            placeholder="Collection#1"
                                             state={collection}
                                             setState={setCollection}
-                                            text
-                                        /> */}
-                                        <CollectionSearch title={AssetCategory[
-                                                    category.toLowerCase()
-                                                ]["AssetCollectionName"]} state={collection} setState={setCollection}/>
+                                            disableCollection={disableCollection}
+                                            queryParam={collectionParams}
+                                        />
+                                         <div className="flex justify-center items-center my-2 w-full">OR</div>
+                                         <button onClick={() => navigate('/create-collection')} className="flex items-center my-2 w-full border-1 hover:text-[#7460ed] hover:underline border-white">+ Add a new Collection</button>
                                     </div>
                                     <div className="set-attributes">
                                         <button

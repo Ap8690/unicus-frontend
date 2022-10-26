@@ -31,7 +31,6 @@ export const ExploreElement = ({ element }) => {
 };
 
 export const ExploreElements = ({ elements }) => {
-    console.log(elements)
     return (
         <div className="explore-elements">
             {elements.map((element: any) => (

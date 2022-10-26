@@ -161,6 +161,14 @@
     }
 }
 
+.addAsset:hover {
+    font-weight: 500;
+    background: linear-gradient(#a7a9fa, #7460ed) !important;
+    border-color: linear-gradient(#a7a9fa, #7460ed) !important;
+    min-width: 7rem;
+    color: #fff;
+}
+
 @media screen and (max-width: 768px) {
     .grid2,
     .grid1 {

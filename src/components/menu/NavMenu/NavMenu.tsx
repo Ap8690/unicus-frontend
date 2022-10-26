@@ -76,7 +76,7 @@ const NavMenu = ({
                         >
                             Tokenise Asset
                         </button>
-                    ) : location.pathname.includes("create-nft") ? (
+                    ) : location.pathname.includes("asset") ? (
                         <Link to={"/marketplace"} className="btn nav-link">
                             Marketplace
                         </Link>

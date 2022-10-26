@@ -101,6 +101,7 @@ button {
   &:hover {
     filter: brightness(125%);
     color: #fff !important;
+    background: linear-gradient(#a7a9fa, #7460ed);
   }
 }
 .collection-page-filter{
@@ -235,4 +236,8 @@ scrollbar-width: none;
     color: white;}
 .capitalizeFirst{
   text-transform: capitalize;
+}
+.css-1utq5rl,
+.css-1cayd89 {
+  color: white !important;
 }

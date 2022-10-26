@@ -8,7 +8,7 @@ export const AssetCategory: any = {
         AssetInfo: "Asset Description",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
-        AssetCollectionName: "Collection Name (Optional)",
+        AssetCollectionName: "Select a Collection Name (Optional)",
         AssetButton: "Tokenise ",
         LoadingMessage:'Keep Patience.. Your awesome art is being tokenised on Blockchain'
         , AssetQuantity: 'Asset Supply',
@@ -23,7 +23,7 @@ export const AssetCategory: any = {
         AssetInfo: "Asset Description",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
-        AssetCollectionName: "Collection Name (Optional)",
+        AssetCollectionName: "Select a Collection Name (Optional)",
         AssetButton: "Tokenise ",
         
         LoadingMessage:'Keep Patience.. Your awesome carbon credit is being tokenised on Blockchain'
@@ -39,7 +39,7 @@ export const AssetCategory: any = {
         AssetInfo: "Asset Description",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
-        AssetCollectionName: "Collection Name (Optional)",
+        AssetCollectionName: "Select a Collection Name (Optional)",
         AssetButton: "Tokenise ",
         LoadingMessage:'Keep Patience.. Your awesome event ticket is being tokenised on Blockchain'
         , AssetQuantity: 'Asset Supply',
@@ -55,7 +55,7 @@ export const AssetCategory: any = {
         AssetInfo: "Asset Description",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
-        AssetCollectionName: "Collection Name (Optional)",
+        AssetCollectionName: "Select a Collection Name (Optional)",
         AssetButton: "Tokenise ",
         LoadingMessage:'Keep Patience.. Your awesome financial instrument is being tokenised on Blockchain'
         , AssetQuantity: 'Asset Supply',
@@ -70,7 +70,7 @@ export const AssetCategory: any = {
         AssetInfo: "Asset Description",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
-        AssetCollectionName: "Collection Name (Optional)",
+        AssetCollectionName: "Select a Collection Name (Optional)",
         AssetButton: "Tokenise ",
         LoadingMessage:'Keep Patience.. Your awesome gaming asset is being tokenised on Blockchain'
         , AssetQuantity: 'Asset Supply',
@@ -85,7 +85,7 @@ export const AssetCategory: any = {
         AssetInfo: "Asset Description",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
-        AssetCollectionName: "Collection Name (Optional)",
+        AssetCollectionName: "Select a Collection Name (Optional)",
         AssetButton: "Tokenise ",
         LoadingMessage:'Keep Patience.. Your awesome metaverse asset is being tokenised on Blockchain'
         , AssetQuantity: 'Asset Supply',
@@ -101,7 +101,7 @@ export const AssetCategory: any = {
         AssetInfo: "Track Description",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your music track...",
-        AssetCollectionName: "Album/Collection Name (Optional)",
+        AssetCollectionName: "Select a Album/Collection Name (Optional)",
         AssetButton: "Tokenise ",
         LoadingMessage:'Keep Patience.. Your awesome track is being tokenised on Blockchain'
         , AssetQuantity: 'Asset Supply',
@@ -116,7 +116,7 @@ export const AssetCategory: any = {
         AssetInfo: "Asset Description",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
-        AssetCollectionName: "Collection Name (Optional)",
+        AssetCollectionName: "Select a Collection Name (Optional)",
         AssetButton: "Tokenise ",
         LoadingMessage:'Keep Patience.. Your awesome nft collection is being tokenised on Blockchain'
         , AssetQuantity: 'Asset Supply',
@@ -131,7 +131,7 @@ export const AssetCategory: any = {
         AssetInfo: "Description of Photograph",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
-        AssetCollectionName: "Collection Name (Optional)",
+        AssetCollectionName: "Select a Collection Name (Optional)",
         AssetButton: "Tokenise your Photograph",
         LoadingMessage:'Keep Patience.. Your awesome photograph is being tokenised on Blockchain'
         , AssetQuantity: 'Asset Supply',
@@ -146,7 +146,7 @@ export const AssetCategory: any = {
         AssetInfo: "Asset Description",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
-        AssetCollectionName: "Collection Name (Optional)",
+        AssetCollectionName: "Select a Collection Name (Optional)",
         AssetButton: "Tokenise ",
         LoadingMessage:'Keep Patience.. Your awesome real estate is being tokenised on Blockchain'
         , AssetQuantity: 'Asset Supply',
@@ -161,7 +161,7 @@ export const AssetCategory: any = {
         AssetInfo: "Asset Description",
         AssetInfoPlaceholder:
             "Please provide a detailed description of your asset...",
-        AssetCollectionName: "Collection Name (Optional)",
+        AssetCollectionName: "Select a Collection Name (Optional)",
         AssetButton: "Tokenise ",
         LoadingMessage:'Keep Patience.. Your awesome trading card is being tokenised on Blockchain'
         , AssetQuantity: 'Asset Supply',

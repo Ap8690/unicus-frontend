@@ -8,7 +8,7 @@ const MarketPlaceMain = ({ saleStats, storeTitle, noStats, noBanner = false }) =
   const {setShowChains} = useContext(ChainContext)
   let navigate = useNavigate();
   const handleNavigateCreateNft = () => {
-    getUserInfo() ? navigate("/create-nft") : setShowChains(true)
+    getUserInfo() ? navigate("/asset/tokenise") : setShowChains(true)
   }
   return (
     <div className="market-place-main">

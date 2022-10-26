@@ -4,7 +4,7 @@
 
 .create-nft-selector{
     @include mixins.flex-col(center, center);
-    padding: 6rem 2rem;
+    padding: 3rem 2rem;
     gap: 1.5rem;
     width: 100%;
     .blue-head{
@@ -19,7 +19,7 @@
     }
     .selectors{
         @include mixins.flex(center, center);
-        margin: 4rem 0;
+        margin: 2rem 0;
         gap: 2rem;
         .selector{
             @include mixins.flex-col(center, center);

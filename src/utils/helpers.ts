@@ -10,6 +10,8 @@ import {
     polygonChain,
 } from "../config";
 import { ethers } from "ethers";
+import e from "express";
+import Cookies from "js-cookie";
 
 const { keyStores, connect, transactions, WalletConnection } = nearAPI;
 
@@ -35,7 +37,6 @@ export async function initContract() {
 }
 
 export async function initNear(accessKey: any) {
-    
     const config = {
         networkId: "testnet",
         keyStore: new keyStores.BrowserLocalStorageKeyStore(),
@@ -51,8 +52,10 @@ export async function initNear(accessKey: any) {
     const accountId = window.near.getAccountId();
     const keyStore = new nearAPI.keyStores.InMemoryKeyStore();
     const keyPair = nearAPI.KeyPair.fromString(accessKey.secretKey);
-    await keyStore.setKey('testnet', accountId, keyPair);
-    const near = await nearAPI.connect(Object.assign({ deps: { keyStore } }, config));
+    await keyStore.setKey("testnet", accountId, keyPair);
+    const near = await nearAPI.connect(
+        Object.assign({ deps: { keyStore } }, config)
+    );
     const walletConnection = new WalletConnection(near, "unicus");
     return { config, walletConnection, keyStore, networkId: config.networkId };
 }
@@ -202,4 +205,9 @@ export const getEnabledStore = (storeData: any) => {
         return "tron";
     }
     return false;
+};
+
+export const verifyOwner = (id: string) => {
+    if (!Cookies.get("ACCESS_TOKEN")) return;
+    return id === JSON.parse(Cookies.get("userInfo"))?._id;
 };

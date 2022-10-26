@@ -10,7 +10,7 @@ import uuid from "react-uuid";
 import { Helmet } from "react-helmet";
 import Cookies from 'js-cookie'
 
-const filters =  ["Info","Properties","Bids", "History"] 
+const filters =  ["Info","Properties","Bids", "History",  ] 
 
 const ViewNft = () => {
     const [activeFilter, setActiveFilter] = useState(filters[0]);

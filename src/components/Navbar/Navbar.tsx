@@ -28,7 +28,6 @@ import ChainLogo from "../../components/ChainLogo/ChainLogo";
 import CollectinMenu from "../../components/CollectionMenu/CollectionMenu";
 
 const Navbar = ({ store }) => {
-    console.log("store: ", store);
     const [search, setSearch] = useState("");
     const { chain, showChains, setShowChains, setShowCategory } =
         useContext(ChainContext);
@@ -53,8 +52,9 @@ const Navbar = ({ store }) => {
         else setShowChains(true);
     };
     const handleRedirectToTokenzie = () => {
+        const linkTo = `/asset/tokenise/option_selection`
         if (!isMainStore()) {
-            sessionStorage.setItem("redirect_after_login", "/create-nft");
+            sessionStorage.setItem("redirect_after_login", linkTo);
             // setShowCategory(true);
             let storeEnabled = getEnabledStore(store.advance); // returns enabled chain
             // let nchain: any = getChainId(storeEnabled); // pass enabled chain for storefront
@@ -65,11 +65,11 @@ const Navbar = ({ store }) => {
 
         if (!getUserInfo()) {
             setShowChains(!showChains);
-            sessionStorage.setItem("redirect_after_login", "/create-nft");
+            sessionStorage.setItem("redirect_after_login", linkTo);
             return;
         }
         setShowCategory(true);
-        sessionStorage.setItem("redirect_after_login", "/create-nft");
+        sessionStorage.setItem("redirect_after_login", linkTo);
     };
 
     useEffect(() => {
@@ -151,7 +151,9 @@ const Navbar = ({ store }) => {
                                 Resources
                             </Link>
                             <NestedMenu chain={chain} />
-                            <CollectinMenu />
+                            {/* <CollectinMenu /> */}
+                            <Link className='nav-link' to='/collections'>Collections</Link>
+
                             <Link to={"/marketplace"} className="btn nav-link">
                                 {getUserInfo() ? "Marketplace" : "Enter App"}
                             </Link>
@@ -162,8 +164,8 @@ const Navbar = ({ store }) => {
                     ) : (
                         <div className="nav-links">
                             <NestedMenu chain={chain} />
-                            <CollectinMenu />
-                            {/* <Link className='nav-link' to='/collections'>Collections</Link> */}
+                            {/* <CollectinMenu /> */}
+                            <Link className='nav-link' to='/collections'>Collections</Link>
                             {!getUserInfo() ? (
                                 <button
                                     onClick={handleRedirectToTokenzie}
@@ -171,7 +173,7 @@ const Navbar = ({ store }) => {
                                 >
                                     Tokenise Asset
                                 </button>
-                            ) : location.pathname.includes("create-nft") ? (
+                            ) : location.pathname.includes("asset") ? (
                                 <Link
                                     to={"/marketplace"}
                                     className="btn nav-link"

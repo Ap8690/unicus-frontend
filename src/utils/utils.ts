@@ -849,11 +849,9 @@ export const getMarketPlaceContractAddress = (
         //     return marketPlaceAddressTelos;
         default:
             if(contractType === "721"){
-            console.log("721")
                 return chains[chain].contracts["marketContract"]
             }
             else{
-                console.log("1155")
                 return chains[chain].contracts["market1155"]
             }
     }
@@ -889,7 +887,6 @@ export const getAuctionContractAddress = (
 };
 
 export const getCreateNftContract = (chain: any, contractType = "721") => {
-    console.log(contractType,"type")
     if (chain.toString() === tronChain()) {
         return tronWeb.contract(createNFTAbiT, createNFTAddressT);
     } else {

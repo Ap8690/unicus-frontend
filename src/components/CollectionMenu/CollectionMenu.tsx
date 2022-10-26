@@ -4,11 +4,15 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
 import PageLoader from "../../components/Loading/PageLoader";
+import { getUserInfo } from "../../utils/utils";
+import { useContext } from "react";
+import { ChainContext } from "../../context/ChainContext";
 
 export default function CollectinMenu() {
     let navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    const { showChains, setShowChains } = useContext(ChainContext);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -16,8 +20,15 @@ export default function CollectinMenu() {
         setAnchorEl(null);
         navigate(linkTo);
     };
-
-    
+    const handleCreateCollectionNavigate = (linkTo: string) => {
+        setAnchorEl(null);
+        if (!getUserInfo()) {
+            setShowChains(!showChains);
+            sessionStorage.setItem("redirect_after_login", linkTo);
+            return;
+        }
+        navigate(linkTo);
+    };
 
     return (
         <div>
@@ -44,8 +55,12 @@ export default function CollectinMenu() {
                 <MenuItem onClick={() => handleClose("/collections")}>
                     Collections
                 </MenuItem>
-                <MenuItem onClick={() => handleClose("/create-collection")}>
-                    Create Collections
+                <MenuItem
+                    onClick={() =>
+                        handleCreateCollectionNavigate("/create-collection")
+                    }
+                >
+                    Create Collection
                 </MenuItem>
                 {/* <MenuItem onClick={handleClose}>Logout</MenuItem> */}
             </Menu>

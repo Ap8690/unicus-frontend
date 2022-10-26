@@ -4,7 +4,7 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { ChainContext } from "./context/ChainContext";
 
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 // Components
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
@@ -49,8 +49,8 @@ import ChainModal from "./components/modals/WalletsModal/ChainModal";
 import WalletsModal from "./components/modals/WalletsModal/WalletsModal";
 import CategoriesModal from "./components/modals/Categories/Categories";
 import InstalWallet from "./components/modals/InstallWallet/InstallWallet";
-import {UNICUS_STORE} from "./config";
-import ModalProvider from 'mui-modal-provider';
+import { UNICUS_STORE } from "./config";
+import ModalProvider from "mui-modal-provider";
 import Collections from "./pages/Collections/Collections";
 import CreateCollection from "./pages/CreateCollection/CreateCollection";
 import CollectionPage from "./pages/CollectionPage/CollectionPage";
@@ -60,13 +60,13 @@ require("@solana/wallet-adapter-react-ui/styles.css");
 const App = () => {
     const { showChains, setShowChains, showCategory, setShowCategory } =
         useContext(ChainContext);
-    const { 
+    const {
         walletModal,
         setWalletModal,
         setOpenInstall,
         openInstall,
         walletInstall,
-        validateSession
+        validateSession,
     } = useContext(ConnectWalletContext);
     const userInfo = getUserInfo();
     const { store, setStore } = useContext(StoreContext); // store data
@@ -98,7 +98,7 @@ const App = () => {
         } catch (err: any) {
             //console.log("STORE FETCH ERROR: ", err);
             setLoading(false);
-            window.open(UNICUS_STORE)
+            window.open(UNICUS_STORE);
             //console.log("UNICUS_STORE: ", UNICUS_STORE);
         }
     };
@@ -134,209 +134,237 @@ const App = () => {
         }
     };
     useEffect(() => {
-        validateSession()
+        validateSession();
         if (location.pathname === "/") {
             navigate("/marketplace", { replace: true });
         }
     }, []);
 
-
     return (
         <ModalProvider>
-        <WalletModalProvider>
-            <UserProvider>
-                <TransactionProvider>
-                    <div className="App">
-                        <Navbar store={isMainStore() ? userStore : store} />
-                        
-                        {/* <ScrollToTop /> */}
-                        <Routes>
-                            {isMainStore() ? (
-                                // <Route path="/home" element={<Homepage />} />
-                                <Route path="/marketplace" element={<MarketPlace />} />
+            <WalletModalProvider>
+                <UserProvider>
+                    <TransactionProvider>
+                        <div className="App">
+                            <Navbar store={isMainStore() ? userStore : store} />
 
-                            ) : (
-                                <Route
-                                    path="/home"
-                                    element={<StoreHomepage store={store} />}
-                                />
-                            )}
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/blog" element={<Blog />} />
-                            <Route
-                                path="/readblog/:id"
-                                element={<ReadBlog />}
-                            />
-                            <Route
-                                path="/connect-wallet/*"
-                                element={<ConnectWallet />}
-                            />
-                            <Route
-                                path="/create-nft"
-                                element={<CreateNftSingle />}
-                            />
-                            <Route path="/collections" element={<Collections/>} />
-                            <Route path="/create-collection" element={<CreateCollection/>} />
-                            <Route path="/collection/:id" element={<CollectionPage/>} />
-                            <Route
-                                path="/create-nft/single-item"
-                                element={<CreateNftSingle />}
-                            />
-                            {/* <Route path="/stats/ranking" element={<Ranking />} />
-                              <Route path="/stats/activity" element={<Activity />} /> */}
-                            <Route path="/explore" element={<Explore />} />
-                            <Route
-                                path="/explore/:chainNetwork"
-                                element={<Explore />}
-                            />
-                            <Route
-                                path="/search/:search"
-                                element={<GlobalSearch />}
-                            />
-                            <Route
-                                path="/login/:token/:email"
-                                element={<Explore />}
-                            />{" "}
-                            <Route
-                                path="/reset-password/:token/:email"
-                                element={<Explore />}
-                            />
-                            {!isMainStore() &&
-                                store &&
-                                Object.keys(store).length > 0 && (
-                                    <>
-                                        <Route
-                                            path="/store/settings"
-                                            element={<StoreSettings />}
-                                        />
-                                        <Route
-                                            path="/privacy-policy"
-                                            element={
-                                                <PrivacyPolicy
-                                                    title={"Privacy Policy"}
-                                                    text={
-                                                        store.advance &&
-                                                        store.advance
-                                                            .privacyPolicy !==
-                                                            ""
-                                                            ? store.advance
-                                                                  .privacyPolicy
-                                                            : defaultPrivacyText
-                                                    }
-                                                />
-                                            }
-                                        />
-                                        <Route
-                                            path="/terms"
-                                            element={
-                                                <PrivacyPolicy
-                                                    title={
-                                                        "Terms and Conditions"
-                                                    }
-                                                    text={store && store.advance &&
-                                                        store.advance?.terms &&
-                                                        store.advance.terms !==
-                                                            ""
-                                                            ? store.advance
-                                                                  .terms
-                                                            : defaultPrivacyText
-                                                    }
-                                                />
-                                            }
-                                        />
-                                        <Route
-                                            path="/about-us"
-                                            element={
-                                                <PrivacyPolicy
-                                                    title={"About Us"}
-                                                    text={
-                                                        store.advance.aboutUs &&
-                                                        store.advance.aboutUs !=
-                                                            ""
-                                                            ? store.advance
-                                                                  .aboutUs
-                                                            : defaultPrivacyText
-                                                    }
-                                                />
-                                            }
-                                        />
-                                        <Route
-                                            path="/creators"
-                                            element={
-                                                <PrivacyPolicy
-                                                    title={"Creators"}
-                                                    text={
-                                                        store.advance
-                                                            .creators &&
-                                                        store.advance
-                                                            .creators !== ""
-                                                            ? store.advance
-                                                                  .creators
-                                                            : defaultPrivacyText
-                                                    }
-                                                />
-                                            }
-                                        />
-                                    </>
+                            {/* <ScrollToTop /> */}
+                            <Routes>
+                                {isMainStore() ? (
+                                    // <Route path="/home" element={<Homepage />} />
+                                    <Route
+                                        path="/marketplace"
+                                        element={<MarketPlace />}
+                                    />
+                                ) : (
+                                    <Route
+                                        path="/home"
+                                        element={
+                                            <StoreHomepage store={store} />
+                                        }
+                                    />
                                 )}
-                            <Route
-                                path="/marketplace"
-                                element={<MarketPlace />}
-                            />
-                            {isMainStore() && (
+                                <Route path="/login" element={<Login />} />
                                 <Route
-                                    path="/create-store"
+                                    path="/register"
+                                    element={<Register />}
+                                />
+                                <Route path="/blog" element={<Blog />} />
+                                <Route
+                                    path="/readblog/:id"
+                                    element={<ReadBlog />}
+                                />
+                                <Route
+                                    path="/connect-wallet/*"
+                                    element={<ConnectWallet />}
+                                />
+                                <Route
+                                    path="/asset/tokenise"
+                                    element={<CreateNftSingle />}
+                                />
+                                <Route
+                                    path="/collections"
+                                    element={<Collections />}
+                                />
+                                <Route
+                                    path="/create-collection"
+                                    element={<CreateCollection />}
+                                />
+                                <Route
+                                    path="/collection/:id"
+                                    element={<CollectionPage />}
+                                />
+                                
+                                <Route path="/asset/tokenise/option_selection" element={<CreateNftSelector />}/>
+                                {/* <Route path="/stats/ranking" element={<Ranking />} />
+                              <Route path="/stats/activity" element={<Activity />} /> */}
+                                <Route path="/explore" element={<Explore />} />
+                                <Route
+                                    path="/explore/:chainNetwork"
+                                    element={<Explore />}
+                                />
+                                <Route
+                                    path="/search/:search"
+                                    element={<GlobalSearch />}
+                                />
+                                <Route
+                                    path="/login/:token/:email"
+                                    element={<Explore />}
+                                />{" "}
+                                <Route
+                                    path="/reset-password/:token/:email"
+                                    element={<Explore />}
+                                />
+                                {!isMainStore() &&
+                                    store &&
+                                    Object.keys(store).length > 0 && (
+                                        <>
+                                            <Route
+                                                path="/store/settings"
+                                                element={<StoreSettings />}
+                                            />
+                                            <Route
+                                                path="/privacy-policy"
+                                                element={
+                                                    <PrivacyPolicy
+                                                        title={"Privacy Policy"}
+                                                        text={
+                                                            store.advance &&
+                                                            store.advance
+                                                                .privacyPolicy !==
+                                                                ""
+                                                                ? store.advance
+                                                                      .privacyPolicy
+                                                                : defaultPrivacyText
+                                                        }
+                                                    />
+                                                }
+                                            />
+                                            <Route
+                                                path="/terms"
+                                                element={
+                                                    <PrivacyPolicy
+                                                        title={
+                                                            "Terms and Conditions"
+                                                        }
+                                                        text={
+                                                            store &&
+                                                            store.advance &&
+                                                            store.advance
+                                                                ?.terms &&
+                                                            store.advance
+                                                                .terms !== ""
+                                                                ? store.advance
+                                                                      .terms
+                                                                : defaultPrivacyText
+                                                        }
+                                                    />
+                                                }
+                                            />
+                                            <Route
+                                                path="/about-us"
+                                                element={
+                                                    <PrivacyPolicy
+                                                        title={"About Us"}
+                                                        text={
+                                                            store.advance
+                                                                .aboutUs &&
+                                                            store.advance
+                                                                .aboutUs != ""
+                                                                ? store.advance
+                                                                      .aboutUs
+                                                                : defaultPrivacyText
+                                                        }
+                                                    />
+                                                }
+                                            />
+                                            <Route
+                                                path="/creators"
+                                                element={
+                                                    <PrivacyPolicy
+                                                        title={"Creators"}
+                                                        text={
+                                                            store.advance
+                                                                .creators &&
+                                                            store.advance
+                                                                .creators !== ""
+                                                                ? store.advance
+                                                                      .creators
+                                                                : defaultPrivacyText
+                                                        }
+                                                    />
+                                                }
+                                            />
+                                        </>
+                                    )}
+                                <Route
+                                    path="/marketplace"
+                                    element={<MarketPlace />}
+                                />
+                                {isMainStore() && (
+                                    <Route
+                                        path="/create-store"
+                                        element={
+                                            <CreateStore
+                                                userStore={userStore}
+                                            />
+                                        }
+                                    />
+                                )}
+                                <Route path="/all-nfts" element={<AllNFTs />} />
+                                <Route
+                                    path="/nft/:chain/:contractAddress/:nftId/:nftDbId"
+                                    element={<ViewNft />}
+                                />
+                                <Route
+                                    path="/auctions"
+                                    element={<Auctions />}
+                                />
+                                <Route
+                                    path="/edit-profile"
                                     element={
-                                        <CreateStore userStore={userStore} />
+                                        <EditProfile isLogin={accessToken} />
                                     }
                                 />
+                                <Route path="/profile" element={<Profile />} />
+                                <Route
+                                    path="/profile/:profileState"
+                                    element={<Profile />}
+                                />
+                                {/* <Route path="*" element={<NotFound />} /> */}
+                            </Routes>
+                            <ChainModal
+                                open={showChains}
+                                setOpen={setShowChains}
+                                setWalletModal={setWalletModal}
+                                setShowCategory={setShowCategory}
+                            />
+                            <WalletsModal
+                                open={walletModal}
+                                setOpen={setWalletModal}
+                                chainName={localStorage.getItem("CHAIN")}
+                            />
+                            <CategoriesModal
+                                open={showCategory}
+                                setOpen={setShowCategory}
+                                setWalletModal={setWalletModal}
+                            />
+                            <InstalWallet
+                                open={openInstall}
+                                setOpen={setOpenInstall}
+                                wallet={walletInstall}
+                            />
+                            {!isMainStore() ? (
+                                store?.appearance.showFooter && <Footer />
+                            ) : (
+                                <Footer />
                             )}
-                            <Route path="/all-nfts" element={<AllNFTs />} />
-                            <Route
-                                path="/nft/:chain/:contractAddress/:nftId/:nftDbId"
-                                element={<ViewNft />}
-                            />
-                            <Route path="/auctions" element={<Auctions />} />
-                            <Route
-                                path="/edit-profile"
-                                element={<EditProfile isLogin={accessToken} />}
-                            />
-                            <Route path="/profile" element={<Profile />} />
-                            <Route
-                                path="/profile/:profileState"
-                                element={<Profile />}
-                            />
-                            {/* <Route path="*" element={<NotFound />} /> */}
-                        </Routes>
-                        <ChainModal
-                            open={showChains}
-                            setOpen={setShowChains}
-                            setWalletModal={setWalletModal}
-                            setShowCategory={setShowCategory}
-                        />
-                        <WalletsModal
-                            open={walletModal}
-                            setOpen={setWalletModal}
-                            chainName={localStorage.getItem("CHAIN")}
-                        />
-                        <CategoriesModal
-                            open={showCategory}
-                            setOpen={setShowCategory}
-                            setWalletModal={setWalletModal}
-                        />
-                        <InstalWallet
-                            open={openInstall}
-                            setOpen={setOpenInstall}
-                            wallet={walletInstall}
-                        />
-                        {!isMainStore() ? store?.appearance.showFooter && <Footer /> : <Footer />} 
-
-                    </div>
-                    <Toaster/>
-                </TransactionProvider>
-            </UserProvider>
-        </WalletModalProvider></ModalProvider>
+                        </div>
+                        <Toaster />
+                    </TransactionProvider>
+                </UserProvider>
+            </WalletModalProvider>
+        </ModalProvider>
     );
 };
 

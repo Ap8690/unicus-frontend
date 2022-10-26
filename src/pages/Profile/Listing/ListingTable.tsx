@@ -134,6 +134,9 @@ const Table = ({
     setPage,
     metadata,
 }) => {
+    const handlePageChange = (e: any, v: any) => {
+        setPage(v) 
+    }
     return (
         <div className="table">
             <table>
@@ -194,12 +197,10 @@ const Table = ({
                 )}
             </table>
             <Pagination
-                count={Math.ceil(
-                    Number(metadata?.total) / Number(metadata?.limit)
-                )}
+                count={Math.ceil(Number(metadata?.total) / Number(metadata?.limit))}
                 defaultPage={page}
                 page={page}
-                onChange={(e: any, v: any) => setPage(v)}
+                onChange={handlePageChange}
                 color="primary"
                 sx={{ button: { color: "#ffffff" } }}
             />

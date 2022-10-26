@@ -4,7 +4,13 @@ import Input from "../../components/Input/Input";
 import { CircularProgress } from "@mui/material";
 import uuid from "react-uuid";
 
-const CollectionSearch = ({ state, setState, title }: any) => {
+const CollectionSearch = ({
+    state,
+    setState,
+    title,
+    disableCollection,
+    queryParam,
+}: any) => {
     const focusRef = useRef(null);
     const inputRef = useRef(null);
     const [newItems, setItems] = useState<any>([]);
@@ -13,9 +19,8 @@ const CollectionSearch = ({ state, setState, title }: any) => {
     const [showSuggestion, setSuggestion] = useState(false);
     const handleOnSearch = async () => {
         try {
-          setLoading(true)
+            setLoading(true);
             const res = await getCollectionsSearch(50, 0, searchQuery);
-            console.log("res: ", res.data);
             setItems([...res.data]);
             setLoading(false);
             setSuggestion(true);
@@ -25,7 +30,8 @@ const CollectionSearch = ({ state, setState, title }: any) => {
     };
 
     useEffect(() => {
-        setSuggestion(true)
+        if (disableCollection) return;
+        setSuggestion(true);
         setLoading(true);
         const getData = setTimeout(handleOnSearch, 2000);
 
@@ -38,36 +44,44 @@ const CollectionSearch = ({ state, setState, title }: any) => {
             return;
         }
     };
-    const handleCollectionClick = (it:any) => {
-      setState(it.name)
-      setSearchQuery(it.name) 
-      setSuggestion(false);
-    }
+    const handleCollectionClick = (it: any) => {
+        setState(it.name);
+        setSearchQuery(it.name);
+        setSuggestion(false);
+    };
 
     useEffect(() => {
+        if (disableCollection) return;
         document.addEventListener("click", handleClickOutside);
         return () => {
             document.removeEventListener("click", handleClickOutside);
         };
     }, [showSuggestion]);
+    useEffect(() => {
+        if (queryParam && disableCollection) return setSearchQuery(queryParam);
+    });
     return (
-        <div ref={inputRef}>
-            <Input
-                title={title}
-                placeholder="New Unicus - Collection"
-                state={searchQuery}
-                setState={setSearchQuery}
-                list={"collectionSearch"}
-                ref={focusRef}
-                onClick={() => setSuggestion(true)}
-                text
-            />
-
-            <div className="relative flex flex-col">
+        <div className="relative" ref={inputRef}>
+            <div className="flex">
+                <Input
+                    title={title}
+                    placeholder="New Unicus - Collection"
+                    state={searchQuery}
+                    setState={setSearchQuery}
+                    list={"collectionSearch"}
+                    ref={focusRef}
+                    onClick={() => setSuggestion(true)}
+                    disabled={disableCollection}
+                    text
+                />
+                {/* OR
+                <button className="text-bold">Add a new collection</button> */}
+            </div>
+            <div className="absolute flex flex-col w-full">
                 {showSuggestion &&
                     (loading ? (
-                        <div className="flex justify-center items-center p-2">
-                            Searching collection...{" "}
+                        <div className="flex bg-[#2e2d2d] justify-center items-center p-2">
+                            Searching collection...{"  "}
                             <CircularProgress size={20} />
                         </div>
                     ) : (

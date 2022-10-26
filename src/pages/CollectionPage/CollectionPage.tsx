@@ -4,6 +4,8 @@ import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import { FaDiscord } from "react-icons/fa";
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import CollectionFilter from "./CollectionFilter";
@@ -18,31 +20,32 @@ import uuid from "react-uuid";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Drawer from "@mui/material/Drawer";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
     getCollectionUsingId,
     getCollections,
 } from "../../services/api/supplier";
 import PageLoader from "../../components/Loading/PageLoader";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {getSimpleDate} from "../../utils/date";
+import { getSimpleDate } from "../../utils/date";
 import NotFound from "../../components/404/NotFound";
 import { ChainContext } from "../../context/ChainContext";
-import { getDecimal } from "../../utils/helpers";
-
+import { getDecimal, verifyOwner } from "../../utils/helpers";
+import {Helmet} from 'react-helmet'
 
 const CollectionPage = () => {
     const { id } = useParams();
+    let navigate = useNavigate();
     const [lessDesc, setLessDesc] = useState(true);
-    const [totalAssets,setTotalAssets] = useState<any>(1)
-    const [visibleNfts, setVisiBleNfts] = useState([])
+    const [totalAssets, setTotalAssets] = useState<any>(1);
+    const [visibleNfts, setVisiBleNfts] = useState([]);
     const [pageState, setPageState] = useState("assets");
     const [collection, setCollection] = useState<any>("");
     const [keyword, setKeyword] = useState("");
     const [view, setView] = useState("grid1");
     const [sortBy, setSortBy] = useState("NONE");
     const [loading, setLoading] = useState(true);
-    const [itemLoading,setItemLoading] = useState(true);
+    const [itemLoading, setItemLoading] = useState(true);
     const [nfts, setNfts] = useState([]);
     const [status, setStatus] = useState({
         onSale: false,
@@ -54,55 +57,61 @@ const CollectionPage = () => {
     });
     const [skip, setSkip] = useState(0);
     const [filterDrawer, setFilterDrawer] = useState(false);
-    const { chain } = useContext(ChainContext)
+    const { chain } = useContext(ChainContext);
 
     const searchNfts = (prevData: any[]) => {
-        const regex = new RegExp(keyword.trim(), 'i')
+        const regex = new RegExp(keyword.trim(), "i");
         const newData = prevData.filter((item) => {
-            return regex.test(item.name)
-        })
-        return newData
-    }
+            return regex.test(item.name);
+        });
+        return newData;
+    };
 
     const filterByStatus = (prevData: any[]) => {
         const newData = prevData.filter((item) => {
-            if(status.onAuction && status.onSale) {
-                return item.auctionType === 'Auction' && item.auctionType === 'Sale'
+            if (status.onAuction && status.onSale) {
+                return (
+                    item.auctionType === "Auction" &&
+                    item.auctionType === "Sale"
+                );
             }
-            if(status.onSale) {
-                return item.auctionType === 'Sale'
+            if (status.onSale) {
+                return item.auctionType === "Sale";
             }
-            if(status.onAuction) {
-                return item.auctionType === 'Auction'
+            if (status.onAuction) {
+                return item.auctionType === "Auction";
             }
-            return true
-        })
-        return newData
-    }
+            return true;
+        });
+        return newData;
+    };
 
     const filterByPrice = (prevData: any[]) => {
-        if(priceRange.min > priceRange.max) return prevData
+        if (priceRange.min > priceRange.max) return prevData;
         const newData = prevData.filter((item) => {
-            return item.startBid / getDecimal(chain) >= priceRange.min && item.startBid / getDecimal(chain) <= priceRange.max
-        })
-        return newData
-    }
+            return (
+                item.startBid / getDecimal(chain) >= priceRange.min &&
+                item.startBid / getDecimal(chain) <= priceRange.max
+            );
+        });
+        return newData;
+    };
 
     const applyFilters = () => {
-        const prevData = [...nfts]
-        const newSearchData = keyword.trim() ? searchNfts(prevData) : prevData
-        const newStatusData = filterByStatus(newSearchData)
-        const newPriceData = filterByPrice(newStatusData)
+        const prevData = [...nfts];
+        const newSearchData = keyword.trim() ? searchNfts(prevData) : prevData;
+        const newStatusData = filterByStatus(newSearchData);
+        const newPriceData = filterByPrice(newStatusData);
         //   console.log(newPriceData)
-        setVisiBleNfts(newPriceData)
-    }
+        setVisiBleNfts(newPriceData);
+    };
 
     const getCollectionById = async () => {
         try {
             setLoading(true);
             const collection = await getCollectionUsingId(id);
             setCollection(collection.data);
-            
+
             setLoading(false);
         } catch (err) {
             console.log(err);
@@ -110,16 +119,15 @@ const CollectionPage = () => {
     };
     const fetchCollectionItems = async () => {
         try {
-            setItemLoading(true)
+            setItemLoading(true);
             const g = await getCollections(id, 10, skip);
             // const gdata = await g.data.data[0]
             console.log("g: ", g);
-            setTotalAssets(g.data.total)
-            setNfts([...nfts,...g.data.data]);
-            setVisiBleNfts([...nfts,...g.data.data]);
-            setSkip((prev)=>prev+30)
-            setItemLoading(false)
-
+            setTotalAssets(g.data.total);
+            setNfts([...nfts, ...g.data.data]);
+            setVisiBleNfts([...nfts, ...g.data.data]);
+            setSkip((prev) => prev + 30);
+            setItemLoading(false);
         } catch (err) {
             console.log(err);
         }
@@ -131,14 +139,14 @@ const CollectionPage = () => {
     }, []);
 
     useEffect(() => {
-        applyFilters()
+        applyFilters();
     }, [
-        keyword, 
-        status.onAuction, 
-        status.onSale, 
-        priceRange.min, 
-        priceRange.max
-    ])
+        keyword,
+        status.onAuction,
+        status.onSale,
+        priceRange.min,
+        priceRange.max,
+    ]);
 
     if (loading) {
         return <PageLoader />;
@@ -157,6 +165,11 @@ const CollectionPage = () => {
                     },
                 }}
             >
+                {/* <Helmet>
+                <meta charSet="utf-8" />
+                <title>UnicusOne - Create a new collection</title>
+                <link rel="canonical" href={window.location.href} />
+            </Helmet> */}
                 <div className="text-white text-2xl mb-6 font-semibold relative">
                     Filter
                     <button
@@ -193,7 +206,7 @@ const CollectionPage = () => {
                         <h1 className="text-3xl font-semibold">
                             {collection?.collectionName}
                         </h1>
-                        
+
                         <div className="flex gap-2">
                             {collection?.websiteUrl ? (
                                 <a
@@ -267,14 +280,62 @@ const CollectionPage = () => {
                                     <FaDiscord />
                                 </a>
                             )}
+                            {collection?.instagramUrl ? (
+                                <a
+                                    href={collection?.instagramUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-xl text-white rounded-full aspect-square w-10 p-1 flex items-center justify-center"
+                                >
+                                    <InstagramIcon />
+                                </a>
+                            ) : (
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-xl text-white/50 rounded-full aspect-square w-10 p-1 flex items-center justify-center"
+                                >
+                                    <InstagramIcon />
+                                </a>
+                            )}
+                            {collection?.linkedInUrl ? (
+                                <a
+                                    href={collection?.linkedInUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-xl text-white rounded-full aspect-square w-10 p-1 flex items-center justify-center"
+                                >
+                                    <LinkedInIcon />
+                                </a>
+                            ) : (
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-xl text-white/50 rounded-full aspect-square w-10 p-1 flex items-center justify-center"
+                                >
+                                    <LinkedInIcon />
+                                </a>
+                            )}
                         </div>
                     </div>
-                    <p className="px-8 text-xl font-medium capitalize text-white/70">Category - {collection?.category}</p>
-                    <div className="px-8">
-                    {totalAssets > 1 ? "Assets" : "Asset"} <span className="font-medium text-white/70">{!itemLoading && totalAssets}</span> · Created{" "}
-                        <span className="font-medium text-white/70">{getSimpleDate(collection.createdAt)}</span>
+                    <div className="flex justify-between">
+                        <p className="px-8 text-xl font-medium capitalize text-white/70">
+                            Category - {collection?.category}
+                        </p>
+                        {verifyOwner(collection?.owner) && <div onClick={() => navigate(`/asset/tokenise?collection=${encodeURIComponent(collection?.collectionName)}&category=${encodeURIComponent(collection?.category)}`)} className="mx-8 p-2 rounded-xl cursor-pointer border-2 addAsset font-bold">+ Add Asset</div>}
                     </div>
+                   
                     <div className="px-8">
+                        {totalAssets > 1 ? "Assets" : "Asset"}{" "}
+                        <span className="font-medium text-white/70">
+                            {!itemLoading && totalAssets}
+                        </span>{" "}
+                        · Created{" "}
+                        <span className="font-medium text-white/70">
+                            {getSimpleDate(collection?.createdAt)}
+                        </span>
+                    </div>
+                    {collection.hasOwnProperty('description') && <div className="px-8">
                         {collection?.description.length > 100 ? (
                             <>
                                 {collection?.description.substring(0, 100)}...
@@ -298,7 +359,7 @@ const CollectionPage = () => {
                                 )}
                             </>
                         )}
-                    </div>
+                    </div>}
                 </div>
                 <div className="flex gap-6 p-8 pb-0 relative collection-page-filter">
                     <button
@@ -411,7 +472,9 @@ const CollectionPage = () => {
                                 ))}
                             </div>
                         </InfiniteScroll>
-                        {itemLoading && nfts.length === 0 && <NftSkeletonLoader />}
+                        {itemLoading && nfts.length === 0 && (
+                            <NftSkeletonLoader />
+                        )}
 
                         {!itemLoading && totalAssets === 0 && <NotFound />}
                     </div>
