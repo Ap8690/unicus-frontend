@@ -390,6 +390,7 @@ const CreateNftSingle = () => {
     const cryptoPayment = async () => {
         try {
             //verify collection name
+            console.log("collection: ", collection);
             if (collection) {
                 const verifyCollection = await verifyCollectionName(collection);
                 if (!verifyCollection.data?.status)
@@ -744,9 +745,9 @@ const CreateNftSingle = () => {
         if (localStorage.getItem("price")) {
             setPrice(JSON.parse(localStorage.getItem("price")));
         }
-        if (localStorage.getItem("collection")) {
-            setCollection(JSON.parse(localStorage.getItem("collection")));
-        }
+        // if (localStorage.getItem("collection")) {
+        //     setCollection(JSON.parse(localStorage.getItem("collection")));
+        // }
         if (localStorage.getItem("royalty")) {
             setRoyalty(JSON.parse(localStorage.getItem("royalty")));
         }
