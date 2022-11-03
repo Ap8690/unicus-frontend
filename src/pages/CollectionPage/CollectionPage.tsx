@@ -110,6 +110,7 @@ const CollectionPage = () => {
         try {
             setLoading(true);
             const collection = await getCollectionUsingId(id);
+            console.log(collection)
             setCollection(collection.data);
 
             setLoading(false);
