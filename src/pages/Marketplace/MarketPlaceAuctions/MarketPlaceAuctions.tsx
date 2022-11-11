@@ -32,9 +32,9 @@ const MarketPlaceAuctions = ({ chain }) => {
     })
   }, [currentType,chain]);
 
-  useEffect(() => {
-    getAuctions(10,currentType,chain)
-  },[])
+  // useEffect(() => {
+  //   getAuctions(10,currentType,chain)
+  // },[])
   return (
     <div className="market-place-auctions">
       <MarketPlaceAuctionsNavigator

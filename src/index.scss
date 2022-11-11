@@ -174,9 +174,9 @@ a {
 }
 
 .MuiMenu-paper {
-  background-color: rgba($color: #fff, $alpha: 0.125) !important;
+  background-color: rgba($color: #fff, $alpha: 0.8) !important;
   backdrop-filter: blur(10px);
-  color: #fff !important;
+  color: #000 !important;
   z-index: 11000 !important;
   margin-top: 1rem;
   width: 200px;

@@ -14,9 +14,6 @@ import { Navigation, Pagination } from 'swiper';
 import NftSkeletonLoader from "../../../components/Loading/SkeletonLoading/NftSkeletonLoader";
 import uuid from "react-uuid";
 
-const getTimeString = (days, hours, minutes) => {
-  return `${days}d ${hours}h ${minutes}m`;
-};
 
 // Element for the list
 const Element = ({ element, currentType }) => {
@@ -36,7 +33,14 @@ const Element = ({ element, currentType }) => {
   return (
     <div className="market-place-auction-element">
       <div className="nft-image-size">
-        <img src={element.cloudinaryUrl} alt={element.name} /></div>
+        {!(element.nftId.nftType?.includes("video")) ? (
+                <img src={element.cloudinaryUrl} alt="" className="nft-img cursor-pointer hover:scale-110 ease-in duration-200" />
+            ) : (
+                <video controls className="nft-img  cursor-pointer hover:scale-110 ease-in duration-200 flex justify-center items-center h-full">
+                    <source src={element.cloudinaryUrl} type={element.nftType} />
+                </video>
+            )}
+        </div>
       <h2 className="name">{element.name}</h2>
       <p className="seller-name">
         {element?.sellerInfo.length<10 ? element?.sellerInfo : element?.sellerInfo.slice(0,4) + "..." + element?.sellerInfo.slice(-6)}{" "}

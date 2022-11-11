@@ -232,7 +232,7 @@ export const WalletConnectionProvider = ({ children }) => {
         setChainConnected("");
         navigate("/");
         window.location.reload();
-        toast.error("Session Timeout!");
+        // toast.error("Session Timeout!");
     };
     const validateSession = () => {
         if (Cookies.get(ACCESS_TOKEN) && !Cookies.get("expiry")) {

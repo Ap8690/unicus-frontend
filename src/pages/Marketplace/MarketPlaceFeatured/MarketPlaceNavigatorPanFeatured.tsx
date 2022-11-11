@@ -6,11 +6,23 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import NftSkeletonLoader from "../../../components/Loading/SkeletonLoading/NftSkeletonLoader";
 import uuid from "react-uuid";
+import ImageVideo from "../../../components/Image-Video/Image-Video"
 
-const Element = ({ element }) => (
+const Element = ({ element }) => 
+{
+return (
+
     <div className="market-place-featured-element">
-        <div className="nft-image-size">
-            <img src={element.cloudinaryUrl} alt={element.heading} />
+        <div className="nft-image-size"> 
+            {/* <img src={element.cloudinaryUrl} alt={element.heading} /> */}
+            
+            {!(element.nftType?.includes("video")) ? (
+                <img src={element.cloudinaryUrl} alt="" className="nft-img  cursor-pointer hover:scale-110 ease-in duration-200" />
+            ) : (
+                <video controls className="nft-img flex justify-center items-center h-full  cursor-pointer hover:scale-110 ease-in duration-200">
+                    <source src={element.cloudinaryUrl} type={element.nftType} />
+                </video>
+            )}
         </div>
         <h3 className="heading">
             {element.heading?.length > 15
@@ -19,7 +31,7 @@ const Element = ({ element }) => (
         </h3>
         <p className="text text-center">{element.name}</p>
     </div>
-);
+);}
 const MarketPlaceNavigatorPanFeatured = ({ list, currentScroll, loading }) => {
     // const holderRef = useExplorer(currentScroll);
     const navigate = useNavigate();

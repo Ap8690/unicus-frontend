@@ -13,6 +13,7 @@ const MarketPlaceFeatured = ({ chain, title }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if(featuredNft.length > 0) return 
     getFeaturedNft(10,chain)
     .then((res) => {
       //console.log(res)
@@ -23,6 +24,7 @@ const MarketPlaceFeatured = ({ chain, title }) => {
       //console.log(err);
       setLoading(false)
     });
+
   },[])
 
 
