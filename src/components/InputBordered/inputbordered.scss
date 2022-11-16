@@ -4,7 +4,8 @@
 
 .input-box-bordered{
     @include fn.flex-col(start, flex-start);
-    width: 100%;
+    // width: 100%;
+    width: 25%;
     .title{
         font-weight: 500;
         margin-bottom: 0.25rem;

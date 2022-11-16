@@ -420,3 +420,7 @@ export async function getCollections(id: string, limit:any, skip:any) {
 export async function verifyCollectionName(collectionName: string) {
     return await axios.get(`${BASE_URL}/collection/verify-collection-name/${collectionName}`,axiosConfig())
 }
+
+export async function subscribeEmail(email: string) {
+    return await axios.post(`${BASE_URL}/users/subscribeEmail`,{email},axiosConfig())
+}
