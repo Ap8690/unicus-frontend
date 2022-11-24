@@ -1,7 +1,6 @@
 import userImg from "../../assets/images/Rectangle 8 (1).png";
 import bannerImg from "../../assets/images/allNFTImage.png";
 import {useNavigate} from 'react-router';
-import { getUserById } from "../../services/api/supplier";
 import {trimString} from "../../utils/utils";
 
 const CollectionCard = ({ element }) => {
@@ -10,9 +9,9 @@ const CollectionCard = ({ element }) => {
         <div onClick={() => navigate(`/collection/${element._id}`)} className="market-place-trending-element hover:cursor-pointer">
             <div className="nft-image-size">
                 {element.bannerUrl ? (
-                    <img src={element.bannerUrl} alt={element.name} />
+                    <img className="cursor-pointer hover:scale-110 ease-in duration-200" src={element.bannerUrl} alt={element.name} />
                 ) : (
-                    <img src={bannerImg} alt={"collection-banner"} />
+                    <img className="cursor-pointer hover:scale-110 ease-in duration-200" src={bannerImg} alt={"collection-banner"} />
                 )}
             </div>
             <div className="info">
@@ -21,6 +20,7 @@ const CollectionCard = ({ element }) => {
                         src={element.logoUrl}
                         alt={element.collectionName}
                         className="creator-image"
+                        
                     />
                 ) : (
                     <img

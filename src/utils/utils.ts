@@ -742,8 +742,9 @@ export const getNftContractAddress = (nft: any,type:string) => {
     }
 };
 export const getChainSymbol = (chain: any) => {
+    console.log(chain)
     if (chain) {
-        return chains[chain.toString()].chainSymbol;
+        return chains[chain.toString()]?.chainSymbol;
     }
 };
 

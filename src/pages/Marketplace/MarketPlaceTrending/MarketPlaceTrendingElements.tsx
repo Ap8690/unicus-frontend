@@ -12,7 +12,14 @@ const Element = ({ element }) => {
     return (
         <div className="market-place-trending-element">
             <div className="nft-image-size">
-                <img src={element.cloudinaryUrl} alt={element.name} />
+                {/* <img src={element.cloudinaryUrl} alt={element.name} /> */}
+                {!(element.nftType?.includes("video")) ? (
+                <img src={element.cloudinaryUrl} alt="" className="nft-img  cursor-pointer hover:scale-110 ease-in duration-200" />
+            ) : (
+                <video controls className="nft-img flex justify-center items-center h-full  cursor-pointer hover:scale-110 ease-in duration-200">
+                    <source src={element.cloudinaryUrl} type={element.nftType} />
+                </video>
+            )}
             </div>
             <div className="info">
                 <img
